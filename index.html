@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Aurora</title>
-<meta name="theme-color" content="#f7f7f8">
+<meta name="theme-color" content="#ecebe8">
 <script>
   /* Set the theme before first paint: stored choice, else the system setting. */
   (function () {
@@ -26,9 +26,9 @@
   --brand: #272727;
   color-scheme: light;
   /* Fallbacks for browsers without relative colour: the default brand only. */
-  --bg: #f7f7f8; --surface: #ffffff; --surface-2: #eeeef0; --text: #1b1b1e; --text-muted: #606068;
-  --line: #dfdfe3; --field-line: #818181; --accent: #333336; --fill: #272727; --on-fill: #ffffff;
-  --fill-hover: #424245; --soft: #eeeef0; --good: #2f6b45; --warn: #85580f; --bad: #a3322a;
+  --bg: #ecebe8; --surface: #f5f4f1; --surface-2: #e3e2df; --text: #1b1b1e; --text-muted: #606068;
+  --line: #cecdc9; --field-line: #787878; --accent: #333336; --fill: #272727; --on-fill: #ffffff;
+  --fill-hover: #424245; --soft: #e3e2df; --good: #2f6b45; --warn: #85580f; --bad: #a3322a;
   --scrim: rgb(18 18 20 / 0.45); --shadow: rgb(18 18 20 / 0.16);
   --serif: "Newsreader", Georgia, "Times New Roman", serif;
   --sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -48,7 +48,7 @@
     --fill: oklch(from var(--brand) clamp(0.30, l, 0.80) clamp(0, c, 0.17) h);
     --on-fill: oklch(from var(--fill) clamp(0.14, calc((0.56 - l) * 100), 0.98) 0 h);
     --fill-hover: oklch(from var(--fill) calc(l - 0.05) c h);
-    --soft: oklch(from var(--brand) 0.945 clamp(0, calc(c * 0.15), 0.015) h);
+    --soft: oklch(from var(--brand) 0.91 clamp(0, calc(c * 0.15), 0.015) h);
     --good: oklch(0.42 0.10 155); --warn: oklch(0.47 0.10 70); --bad: oklch(0.45 0.16 28);
     --scrim: oklch(0.2 0 0 / 0.45); --shadow: oklch(0.2 0 0 / 0.16);
   }
@@ -62,6 +62,13 @@
     --soft: oklch(from var(--brand) 0.28 clamp(0, calc(c * 0.2), 0.025) h);
     --good: oklch(0.78 0.12 155); --warn: oklch(0.80 0.12 80); --bad: oklch(0.75 0.14 25);
     --scrim: oklch(0.1 0 0 / 0.6); --shadow: oklch(0.05 0 0 / 0.5);
+  }
+}
+
+/* Pick button text from the fill's actual luminance, including coloured brands. */
+@supports (color: color(from white xyz-d65 round(up, y, 1) y z)) {
+  :root[data-theme="light"] {
+    --on-fill: color(from var(--fill) xyz-d65 calc(0.95047 * round(up, 0.179 - y, 1)) round(up, 0.179 - y, 1) calc(1.08883 * round(up, 0.179 - y, 1)));
   }
 }
 
@@ -708,6 +715,10 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .community-card-meta { color: var(--text-muted); font-size: 13px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; }
 .community-card-meta span { min-width: 0; overflow-wrap: anywhere; }
 .community-card-meta span:last-child { text-align: right; }
+.community-metrics { display: flex; flex-wrap: wrap; gap: 8px 20px; color: var(--text-muted); font-size: 13px; line-height: 1.6; margin-top: 12px; }
+.community-metrics > span { white-space: nowrap; }
+.community-metrics b { color: var(--text); font-weight: 500; }
+.community-detail .community-metrics { margin: -12px 0 24px; }
 .community-use { margin-top: 16px; min-height: 44px; }
 .community-privacy { margin-top: 16px; min-height: 44px; display: flex; align-items: center; color: var(--text-muted); font-size: 13px; }
 .community-author { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 13px; }
@@ -834,13 +845,17 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .plan-summary .fine { margin-top: 14px; }
 .plan-estimate { grid-area: estimate; min-width: 0; padding-top: 28px; border-top: 1px solid var(--line); scroll-margin-top: 96px; }
 .plan-estimate > p { color: var(--text-muted); line-height: 1.6; margin-top: 12px; font-size: 14px; }
-.estimate-example { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); margin-top: 24px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
-.estimate-visual { margin: 0; min-width: 0; display: flex; flex-direction: column; background: var(--surface-2); }
-.estimate-visual img { width: 100%; height: 100%; min-height: 280px; object-fit: cover; flex: 1; }
+.estimate-stage { position: relative; margin-top: 24px; }
+.estimate-example { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
+#estimate-slide { transition: opacity 420ms ease-out; }
+.estimate-visual { margin: 0; min-width: 0; display: flex; flex-direction: column; background: var(--surface-2); touch-action: pan-y pinch-zoom; }
+.estimate-visual[role="button"] { cursor: pointer; }
+.estimate-visual:focus-visible { outline-offset: -4px; }
+.estimate-visual img { width: 100%; height: 100%; min-height: 280px; object-fit: cover; flex: 1; filter: grayscale(1); }
 .estimate-visual figcaption { display: flex; justify-content: space-between; gap: 16px; padding: 14px 20px; color: var(--text-muted); font-size: 12px; }
 .estimate-story { padding: 36px 40px; min-width: 0; }
 .estimate-budget-label { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
-#estimate-result h3 { font-family: var(--serif); font-size: clamp(34px, 3.5vw, 46px); font-weight: 400; line-height: 1.08; letter-spacing: -0.015em; text-wrap: balance; }
+.estimate-result h3 { font-family: var(--serif); font-size: clamp(34px, 3.5vw, 46px); font-weight: 400; line-height: 1.08; letter-spacing: -0.015em; text-wrap: balance; }
 .estimate-scene-settings { color: var(--text-muted); font-size: 15px; line-height: 1.65; margin-top: 16px; max-width: 38ch; }
 .estimate-unit-cost { margin-top: 20px; font-size: 14px; line-height: 1.6; }
 .estimate-unit-cost strong { font-weight: 500; }
@@ -849,18 +864,8 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .estimate-allocation-track { height: 6px; background: var(--line); border-radius: 2px; overflow: hidden; }
 .estimate-allocation-track > span { display: block; height: 100%; background: var(--text); }
 .estimate-allocation-labels { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px; font-size: 12px; color: var(--text-muted); margin-top: 10px; font-variant-numeric: tabular-nums; }
-#use-estimate-settings { min-height: 44px; margin-top: 24px; }
-.estimate-settings { margin-top: 20px; border-bottom: 1px solid var(--line); }
-.estimate-settings summary { cursor: pointer; min-height: 64px; padding: 18px 0; line-height: 1.6; }
-.estimate-settings summary::marker { color: var(--text-muted); }
-.estimate-settings summary > span:first-child { font-weight: 500; margin-left: 6px; }
-#estimate-settings-summary { float: right; color: var(--text-muted); font-size: 13px; max-width: 60%; overflow-wrap: anywhere; }
-.plan-estimate-fields { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(92px, 1fr) minmax(105px, 1fr); gap: 16px; margin: 8px 0 24px; max-width: 760px; }
-.plan-estimate-fields > div { min-width: 0; }
-.plan-estimate-fields label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 8px; }
-.plan-estimate-fields select { width: 100%; min-width: 0; min-height: 44px; background: var(--surface); color: var(--text); border: 1px solid var(--field-line); border-radius: var(--r-sm); padding: 10px; font: inherit; }
+.estimate-use { min-height: 44px; margin-top: 24px; }
 .plan-estimate .plan-estimate-result { color: var(--text); line-height: 1.7; margin-top: 20px; }
-.plan-estimate .estimate-scope { font-size: 12px; max-width: 76ch; margin-top: 16px; }
 .plan-pending { padding: 20px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 0 0 28px; }
 .plan-pending h3, #plan-change-review h3 { font-family: var(--sans); font-size: 16px; font-weight: 600; margin-bottom: 12px; }
 .plan-pending p { color: var(--text-muted); line-height: 1.6; font-size: 14px; margin: 8px 0; }
@@ -875,8 +880,6 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .plan-review-actions .btn { min-height: 44px; }
 @media (max-width: 900px) {
   .plan-layout { gap: 28px; grid-template-columns: minmax(0, 1.25fr) minmax(245px, 1fr); }
-  .plan-estimate-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .plan-estimate-fields > div:first-child { grid-column: 1 / -1; }
 }
 @media (max-width: 700px) {
   .plans-page .plan-current { flex-wrap: wrap; align-items: flex-start; gap: 16px; padding: 20px 0; }
@@ -886,15 +889,16 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .plan-summary { position: static; padding: 24px; }
   .plans-page .opt { gap: 12px; padding: 18px 14px; }
   .plans-page .opt b { font-size: 21px; }
-  .plan-estimate-fields select { font-size: 16px; }
   .plan-summary-credits { font-size: 32px; }
   .estimate-example { grid-template-columns: minmax(0, 1fr); }
   .estimate-visual img { min-height: 0; height: auto; aspect-ratio: 16 / 10; flex: none; }
   .estimate-visual figcaption { padding: 12px 16px; }
   .estimate-story { padding: 28px 24px; }
-  #estimate-result h3 { font-size: 38px; }
+  .estimate-result h3 { font-size: 38px; }
   .estimate-budget-label { margin-bottom: 16px; }
-  #estimate-settings-summary { float: none; display: block; margin-left: 20px; margin-top: 6px; max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #estimate-slide { transition: none !important; }
 }
 
 .prototype-options { margin-top: 16px; color: var(--text-muted); font-size: var(--fs-caption); }
@@ -1114,7 +1118,7 @@ const themePref = () => { try { return localStorage.getItem("aurora-theme") || "
 function applyTheme() {
   const p = themePref(), dark = p === "dark" || (p === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
   document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
-  const m = $('meta[name="theme-color"]'); if (m) m.content = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() || (dark ? "#111413" : "#f2f2ee");
+  const m = $('meta[name="theme-color"]'); if (m) m.content = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() || (dark ? "#101113" : "#ecebe8");
 }
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
 function setTheme(p) { try { localStorage.setItem("aurora-theme", p); } catch (e) {} applyTheme(); renderChrome(); }
@@ -1253,16 +1257,19 @@ const CREATOR_STARTERS = {
 };
 function viewCreate(main) {
   if (!availableModels().length) {
+    clearCommunitySetupIntent();
     main.innerHTML = `<section class="hero"><h1 id="title" tabindex="-1">Describe your scene</h1><p class="lead">Your draft stays here while models are unavailable.</p><div class="composer"><label class="sr" for="prompt">Describe your video</label><textarea id="prompt" rows="4" maxlength="1000">${esc(S.draft.prompt)}</textarea><div class="empty" role="status"><h2>No models available right now</h2><p>You can keep writing. Try again to check the catalog.</p><button class="btn" id="retry-models" type="button">Try again</button></div></div></section>`;
     return () => { $("#prompt").oninput = e => { S.draft.prompt = e.target.value; save(); }; $("#retry-models").onclick = () => route(); };
   }
-  const sourceId = new URLSearchParams(location.hash.split("?")[1] || "").get("scene");
+  const sourceParams = new URLSearchParams(location.hash.split("?")[1] || "");
+  const sourceId = sourceParams.get("scene");
   const source = sourceId ? communityPosts(false).find(p => p.id === sourceId && p.includePrompt && p.prompt) : null;
   const sourceAvailable = source && isModelAvailable(source.model);
   if (sourceId) {
     if (source) { Object.assign(S.draft, { prompt: source.prompt, model: source.model, len: source.len, quality: source.quality, format: source.format, imageName: "", failDemo: false }); normalizeDraft(S.draft); save(); }
+    completeCommunitySetup(sourceId, source, sourceParams.get("setup"), S.draft);
     history.replaceState(null, "", "#/create");
-  }
+  } else clearCommunitySetupIntent();
   const d = normalizeDraft(S.draft), selectedModel = model(d.model);
   main.innerHTML = `
   <section class="hero" aria-labelledby="title">
@@ -1316,10 +1323,13 @@ function renderGallery(tab) {
     body.innerHTML = list.length ? `<div class="grid">${list.map(videoCard).join("")}</div>` : emptyVideos();
   }
 }
-const currentGalleryTab = () => new URLSearchParams(location.hash.split("?")[1] || "").get("gallery") === "community" ? "community" : "videos";
+const currentGalleryTab = () => {
+  const explicit = new URLSearchParams(location.hash.split("?")[1] || "").get("gallery");
+  return explicit === "community" || explicit === "videos" ? explicit : S.videos.length ? "videos" : "community";
+};
 function setGalleryTab(tab) {
   const params = new URLSearchParams(location.hash.split("?")[1] || "");
-  if (tab === "community") params.set("gallery", "community"); else params.delete("gallery");
+  params.set("gallery", tab);
   history.replaceState(null, "", "#/create" + (params.size ? "?" + params.toString() : ""));
   $$(".gtabs button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tab === tab)));
   renderGallery(tab);
@@ -1502,7 +1512,12 @@ function viewPlans(main) {
       <p class="plan-section-note">${sub ? active ? "Compare monthly credit amounts. Review a change before scheduling it for your next payment date." : "Credits are added after your first payment, then each month." : active ? "One payment for extra credits. Your subscription stays the same." : "One payment. No subscription required."}</p>
       <fieldset class="opts" id="opts"><legend class="sr">${sub ? "Choose a monthly plan" : "Choose a credit pack"}</legend>${list.map(o => `<label class="opt"><input type="radio" name="opt" value="${o.id}" ${o.id === picked.id ? "checked" : ""}><span class="dot"></span><span><b class="num">${fmt(o.credits)} credits</b><span class="d">${sub ? active && current?.id === o.id ? "Current plan" : active && S.plan.pendingChange?.id === o.id ? "Scheduled for next payment" : "Each month" : esc(o.note)}</span></span><span class="p num">$${o.usd}<small>${sub ? "per month" : "one payment"}</small></span></label>`).join("")}</fieldset></div>
       <aside class="plan-summary" aria-labelledby="summary-heading"><h2 id="summary-heading">${sub ? active ? "Your selection" : "Monthly credits" : "Extra credits"}</h2><p class="plan-summary-credits num" id="s-big"></p><p class="plan-summary-price num" id="s-price"></p><div id="plan-action"></div><p class="fine muted" id="fine"></p><div id="plan-change-review" hidden></div></aside>
-      <section class="plan-estimate" aria-labelledby="estimate-heading"><h2 id="estimate-heading">What your credits can create</h2><p class="estimate-intro">See how many clips fit into your next project.</p>${models.length ? `<div class="estimate-example"><figure class="estimate-visual"><img src="${IMG.coast}" alt="A bridge over still water, a reference scene" loading="lazy"><figcaption><span>Reference frame</span><span class="num" id="estimate-frame-length"></span></figcaption></figure><div class="estimate-story"><p class="estimate-budget-label" id="estimate-budget-label"></p><div id="estimate-result" role="status" aria-atomic="true"></div><p class="estimate-total" id="estimate-total-footage"></p><div class="estimate-allocation"><div class="estimate-allocation-track" id="estimate-allocation" role="meter" aria-label="Example credit allocation" aria-valuemin="0"><span></span></div><div class="estimate-allocation-labels"><span id="estimate-allocated"></span><span id="estimate-remainder"></span></div></div><button class="btn" id="use-estimate-settings" type="button">Use these settings</button></div></div><details class="estimate-settings" id="estimate-settings"><summary><span>Adjust this example</span><span id="estimate-settings-summary"></span></summary><div class="plan-estimate-fields"><div><label for="estimate-model">Model</label><select id="estimate-model">${models.map(m => `<option value="${esc(m.id)}" ${m.id === estimate.id ? "selected" : ""}>${esc(m.name)}</option>`).join("")}</select></div><div><label for="estimate-quality">Quality</label><select id="estimate-quality"></select></div><div><label for="estimate-length">Length</label><select id="estimate-length"></select></div></div></details><p class="estimate-scope">${sub ? "Based on this monthly allowance only." : "Based on this pack only."} Your existing balance is additional. Review the price before each generation.</p>` : '<p class="plan-estimate-result">No models are available for an estimate right now. Your existing credits remain available.</p>'}</section></div></div>`;
+      <section class="plan-estimate" aria-labelledby="estimate-heading"><h2 id="estimate-heading">What your credits can create</h2><p class="estimate-intro">See how many clips fit into your next project.</p>${models.length ? `
+        <div class="estimate-carousel" id="estimate-carousel" role="region" aria-roledescription="carousel" aria-labelledby="estimate-heading">
+          ${models.length > 1 ? '<p class="sr" id="estimate-browse-help">Select the frame to see another example. Browsing stops automatic changes.</p>' : ""}
+          <div class="estimate-stage"><div class="estimate-example" id="estimate-slide" role="group" aria-roledescription="slide"><figure class="estimate-visual" ${models.length > 1 ? 'role="button" tabindex="0" aria-label="Show next credit example" aria-describedby="estimate-browse-help"' : ""}><img id="estimate-reference" src="${IMG[estimate.img] || IMG.coast}" alt="" loading="lazy"><figcaption><span>Reference frame</span><span class="num" id="estimate-frame-length"></span></figcaption></figure><div class="estimate-story"><p class="estimate-budget-label" id="estimate-budget-label"></p><div class="estimate-result" id="estimate-result" role="status" aria-atomic="true"></div><p class="estimate-total" id="estimate-total-footage"></p><div class="estimate-allocation"><div class="estimate-allocation-track" id="estimate-allocation" role="meter" aria-label="Example credit allocation" aria-valuemin="0"><span></span></div><div class="estimate-allocation-labels"><span id="estimate-allocated"></span><span id="estimate-remainder"></span></div></div><button class="btn estimate-use" id="use-estimate-settings" type="button">Use these settings</button></div></div></div>
+        </div>
+        ` : '<p class="plan-estimate-result">No models are available for an estimate right now. Your existing credits remain available.</p>'}</section></div></div>`;
   return () => {
     const remember = () => {
       const p = new URLSearchParams(location.hash.split("?")[1] || "");
@@ -1512,17 +1527,17 @@ function viewPlans(main) {
     };
     const drawEstimate = () => {
       if (!estimate) return;
-      $("#estimate-quality").innerHTML = estimate.qualities.map(q => `<option value="${esc(q)}" ${q === quality ? "selected" : ""}>${esc(q)}</option>`).join("");
-      $("#estimate-length").innerHTML = estimate.lengths.map(n => `<option value="${n}" ${n === length ? "selected" : ""}>${n} seconds</option>`).join("");
+      $("#estimate-slide").setAttribute("aria-label", estimate.name);
+      const image = $("#estimate-reference"), source = IMG[estimate.img] || IMG.coast;
+      if (image.getAttribute("src") !== source) image.src = source;
       const credits = cost({ model: estimate.id, quality, len: length, format: estimate.formats[0] });
       const valid = Number.isFinite(credits) && credits > 0 && Number.isFinite(picked.credits) && picked.credits > 0;
       const count = valid ? Math.floor(picked.credits / credits) : 0, allocated = count * (credits || 0), remainder = Math.max(0, picked.credits - allocated);
       const seconds = count * length, footage = seconds < 60 ? `${seconds} seconds` : `${Math.floor(seconds / 60)} min${seconds % 60 ? ` ${seconds % 60} sec` : ""}`;
       $("#estimate-budget-label").textContent = `${fmt(picked.credits)} credits${sub ? " each month" : " in this pack"}`;
-      $("#estimate-settings-summary").textContent = `${estimate.name} · ${quality} · ${length} s`;
       $("#estimate-frame-length").textContent = `${length}-second example`;
-      $("#estimate-result").innerHTML = valid ? `<h3>${count ? `<span class="num">${fmt(count)}</span> short video${count === 1 ? "" : "s"}` : `One video needs ${fmt(credits - picked.credits)} more credits`}</h3><p class="estimate-scene-settings">${length}-second clips at ${esc(quality)} with ${esc(estimate.name)}.</p><p class="estimate-unit-cost"><strong class="num">${fmt(credits)} credits per video.</strong>${count ? "" : ` This ${sub ? "allowance" : "pack"} is ${fmt(credits - picked.credits)} credits short.`}</p>` : '<h3>Estimate unavailable</h3><p>Choose another model or setting to see an estimate.</p>';
-      $("#estimate-total-footage").textContent = valid && count ? `${footage} of generated clips in total.` : valid ? "Choose more credits or adjust the example below." : "";
+      $("#estimate-result").innerHTML = valid ? `<h3>${count ? `<span class="num">${fmt(count)}</span> short video${count === 1 ? "" : "s"}` : `One video needs ${fmt(credits - picked.credits)} more credits`}</h3><p class="estimate-scene-settings">${length}-second clips at ${esc(quality)} with ${esc(estimate.name)}.</p><p class="estimate-unit-cost"><strong class="num">${fmt(credits)} credits per video.</strong>${count ? "" : ` This ${sub ? "allowance" : "pack"} is ${fmt(credits - picked.credits)} credits short.`}</p>` : '<h3>Estimate unavailable</h3><p>Browse another example to see an estimate.</p>';
+      $("#estimate-total-footage").textContent = valid && count ? `${footage} of generated clips in total.` : valid ? "Browse another example or choose more credits." : "";
       $("#estimate-allocation").setAttribute("aria-valuemax", String(picked.credits));
       $("#estimate-allocation").setAttribute("aria-valuenow", String(valid ? allocated : 0));
       $("#estimate-allocation").setAttribute("aria-valuetext", valid ? `${allocated} credits for ${count} videos; ${remainder} credits would remain` : "Estimate unavailable");
@@ -1555,16 +1570,90 @@ function viewPlans(main) {
     };
     $$("[data-ptab]").forEach(b => b.onclick = () => go("plans?tab=" + b.dataset.ptab));
     $("#opts").onchange = e => { picked = list.find(o => o.id === e.target.value) || picked; remember(); draw(); };
-    $("#estimate-model")?.addEventListener("change", e => { estimate = models.find(m => m.id === e.target.value); quality = estimate.qualities.includes(quality) ? quality : estimate.qualities[0]; length = estimate.lengths.includes(length) ? length : estimate.lengths[0]; remember(); drawEstimate(); });
-    $("#estimate-quality")?.addEventListener("change", e => { quality = e.target.value; remember(); drawEstimate(); });
-    $("#estimate-length")?.addEventListener("change", e => { length = Number(e.target.value); remember(); drawEstimate(); });
+    const carousel = $("#estimate-carousel"), slide = $("#estimate-slide"), visual = $(".estimate-visual");
+    const motion = matchMedia("(prefers-reduced-motion: reduce)");
+    let rotationTimer = null, transitionTimer = null, transitionFrame = null, pendingUpdate = null;
+    let inView = false, hovering = false, autoStopped = false, disposed = false;
+    const armRotation = () => {
+      clearTimeout(rotationTimer); rotationTimer = null;
+      if (!disposed && models.length > 1 && inView && !hovering && !autoStopped && !motion.matches && !document.hidden && !transitionTimer)
+        rotationTimer = setTimeout(() => browseExample(1, true), 8000);
+    };
+    const finishTransition = () => {
+      clearTimeout(transitionTimer); transitionTimer = null;
+      cancelAnimationFrame(transitionFrame); transitionFrame = null;
+      if (pendingUpdate && !disposed) pendingUpdate();
+      pendingUpdate = null;
+      if (slide) { slide.style.opacity = ""; slide.style.transition = ""; }
+      armRotation();
+    };
+    const browseExample = (direction, automatic = false) => {
+      if (models.length < 2 || transitionTimer || disposed) return;
+      clearTimeout(rotationTimer); rotationTimer = null;
+      if (!automatic) autoStopped = true;
+      $("#estimate-result").setAttribute("aria-live", automatic ? "off" : "polite");
+      const update = () => {
+        const index = models.findIndex(m => m.id === estimate.id);
+        estimate = models[(index + direction + models.length) % models.length];
+        quality = estimate.qualities.includes(quality) ? quality : estimate.qualities[0];
+        length = estimate.lengths.includes(length) ? length : estimate.lengths[0];
+        remember(); drawEstimate(); pendingUpdate = null;
+      };
+      if (motion.matches) { update(); armRotation(); return; }
+      pendingUpdate = update;
+      slide.style.transition = "opacity 180ms ease-in"; slide.style.opacity = "0";
+      transitionTimer = setTimeout(() => {
+        if (disposed) return;
+        update(); slide.getBoundingClientRect();
+        slide.style.transition = "opacity 420ms ease-out";
+        transitionFrame = requestAnimationFrame(() => { transitionFrame = null; if (!disposed) slide.style.opacity = "1"; });
+        transitionTimer = setTimeout(finishTransition, 450);
+      }, 190);
+    };
+    visual?.addEventListener("click", () => { if (!window.getSelection()?.toString()) browseExample(1); });
+    carousel?.addEventListener("keydown", e => {
+      if (e.altKey || e.ctrlKey || e.metaKey || e.target.closest("input, select, textarea")) return;
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") { e.preventDefault(); browseExample(e.key === "ArrowLeft" ? -1 : 1); }
+      else if (e.target === visual && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); browseExample(1); }
+    });
+    carousel?.addEventListener("mouseenter", () => { hovering = true; armRotation(); });
+    carousel?.addEventListener("mouseleave", () => { hovering = false; armRotation(); });
+    carousel?.addEventListener("focusin", () => { autoStopped = true; armRotation(); });
+    const onVisibility = () => armRotation();
+    const onMotion = () => { if (motion.matches) finishTransition(); armRotation(); };
+    document.addEventListener("visibilitychange", onVisibility);
+    motion.addEventListener("change", onMotion);
+    const observer = carousel && models.length > 1 ? new IntersectionObserver(entries => {
+      inView = entries[0].isIntersecting && entries[0].intersectionRatio >= 0.35;
+      armRotation();
+    }, { threshold: [0, 0.35] }) : null;
+    if (observer) observer.observe(carousel);
+    let touch = null;
+    let suppressClickUntil = 0;
+    visual?.addEventListener("touchstart", e => {
+      touch = e.touches.length === 1 ? { id: e.touches[0].identifier, x: e.touches[0].clientX, y: e.touches[0].clientY } : null;
+    }, { passive: true });
+    visual?.addEventListener("touchend", e => {
+      const end = touch && Array.from(e.changedTouches).find(t => t.identifier === touch.id);
+      if (end && !e.touches.length) {
+        const x = end.clientX - touch.x, y = end.clientY - touch.y;
+        if (Math.abs(x) >= 50 && Math.abs(x) > Math.abs(y) * 1.4) { suppressClickUntil = performance.now() + 500; browseExample(x < 0 ? 1 : -1); }
+      }
+      touch = null;
+    }, { passive: true });
+    visual?.addEventListener("touchcancel", () => { touch = null; }, { passive: true });
+    visual?.addEventListener("click", e => { if (performance.now() < suppressClickUntil) { suppressClickUntil = 0; e.stopImmediatePropagation(); } }, true);
     $("#use-estimate-settings")?.addEventListener("click", () => {
       if (!estimate || !isModelAvailable(estimate.id)) { toast("This model is unavailable. Choose another model."); route({ preserve: true }); return; }
       Object.assign(S.draft, { model: estimate.id, quality, len: length, format: estimate.formats.includes(S.draft.format) ? S.draft.format : estimate.formats[0], failDemo: false });
       normalizeDraft(S.draft); save(); go("create"); toast("Settings added to your draft. Review your scene and cost before generating.");
     });
     initPendingPlanChange(); draw();
-    return () => { if (checkoutCleanup) checkoutCleanup(); };
+    return () => {
+      disposed = true; clearTimeout(rotationTimer); finishTransition(); observer?.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility); motion.removeEventListener("change", onMotion);
+      if (checkoutCleanup) checkoutCleanup();
+    };
   };
 }
 function checkout(o, kind) {
@@ -1640,7 +1729,7 @@ function viewSignin(main) {
     (step === 1 ? $("#em") : $("#cd")).focus();
     $("#sf").onsubmit = e => { e.preventDefault();
       if (step === 1) { const v = $("#em").value.trim(); if (!/^\S+@\S+\.\S+$/.test(v)) { $("#e").hidden = false; $("#em").setAttribute("aria-invalid", "true"); $("#em").focus(); return; } email = v; step = 2; draw(); }
-      else { if (!/^\d{6}$/.test($("#cd").value)) { $("#e").hidden = false; $("#cd").focus(); return; } if (S.user.email !== email) { S = seed(); S.balance = 0; S.transactions = []; S.videos = []; S.nextTransactionId = 1; S.draft.prompt = ""; S.user = { name: "New creator", initials: "NC", email, notifications: { completed: true, receipts: true } }; } S.signedIn = true; save(); go(afterSignIn); afterSignIn = "create"; toast("Signed in."); } };
+      else { if (!/^\d{6}$/.test($("#cd").value)) { $("#e").hidden = false; $("#cd").focus(); return; } if (S.user.email !== email) { S = seed(); S.balance = 0; S.transactions = []; S.videos = []; S.nextTransactionId = 1; S.draft.prompt = ""; S.user = { name: "New creator", initials: "NC", email, notifications: { completed: true, receipts: true } }; } S.signedIn = true; save(); go(communitySetupContinuation(afterSignIn)); afterSignIn = "create"; toast("Signed in."); } };
     if (step === 2) { $("#resend").onclick = () => toast("Check your inbox for your verification code."); $("#change").onclick = () => { step = 1; draw(); }; }
   };
   main.innerHTML = "";
@@ -1811,10 +1900,96 @@ const COMMUNITY_SAMPLES = [
 const getPublishedPost = videoId => S.posts.find(p => p.videoId === videoId);
 const communityPosts = mine => mine ? (S.signedIn ? [...S.posts].reverse() : []) : [...S.posts].reverse().concat(COMMUNITY_SAMPLES);
 const publicInitials = name => name.split(/\s+/).slice(0, 2).map(w => [...w][0] || "").join("").toUpperCase();
+const COMMUNITY_ACTIVITY_STORE = "aurora-community-activity-v1";
+const COMMUNITY_SETUP_INTENT = "aurora-community-setup-intent-v1";
+let communityActivityFallback = { viewedPosts: [], setupEvents: [] }, communitySetupFallback = null;
+function communityActivity() {
+  let activity;
+  try { activity = JSON.parse(localStorage.getItem(COMMUNITY_ACTIVITY_STORE)); } catch (e) {}
+  if (!activity || !Array.isArray(activity.viewedPosts) || !Array.isArray(activity.setupEvents)) activity = communityActivityFallback;
+  return activity;
+}
+function saveCommunityActivity(activity) {
+  communityActivityFallback = activity;
+  try { localStorage.setItem(COMMUNITY_ACTIVITY_STORE, JSON.stringify(activity)); } catch (e) {}
+}
+function communityCounts(id) {
+  const activity = communityActivity();
+  return { views: activity.viewedPosts.includes(id) ? 1 : 0, promptUses: activity.setupEvents.filter(e => e?.postId === id).length };
+}
+function communityMetricItems(p) {
+  const counts = communityCounts(p.id);
+  const metric = (key, label) => `<span><b class="num" data-community-count="${key}">${fmt(counts[key])}</b> <span data-community-label="${key}">${label}</span></span>`;
+  return `${metric("views", counts.views === 1 ? "view" : "views")}${p.includePrompt && p.prompt ? metric("promptUses", counts.promptUses === 1 ? "prompt use" : "prompt uses") : ""}`;
+}
+function communityMetrics(p, live = false) {
+  return `<p class="community-metrics" data-community-post="${esc(p.id)}" ${live ? 'aria-live="polite" aria-atomic="true"' : ""}>${communityMetricItems(p)}</p>`;
+}
+function refreshCommunityMetrics(id) {
+  const p = communityPosts(false).find(post => post.id === id);
+  if (p) $$(".community-metrics").filter(el => el.dataset.communityPost === id).forEach(el => { el.innerHTML = communityMetricItems(p); });
+}
+function recordCommunityView(id) {
+  if (!communityPosts(false).some(p => p.id === id)) return;
+  const activity = communityActivity();
+  if (activity.viewedPosts.includes(id)) return;
+  activity.viewedPosts.push(id); saveCommunityActivity(activity); refreshCommunityMetrics(id);
+}
+function communitySetupIntent() {
+  try { return JSON.parse(sessionStorage.getItem(COMMUNITY_SETUP_INTENT)) || communitySetupFallback; } catch (e) { return communitySetupFallback; }
+}
+function clearCommunitySetupIntent() {
+  communitySetupFallback = null;
+  try { sessionStorage.removeItem(COMMUNITY_SETUP_INTENT); } catch (e) {}
+}
+function countableCommunitySetup(p) {
+  return Boolean(p?.includePrompt && typeof p.prompt === "string" && p.prompt.trim() && p.prompt.length <= 1000);
+}
+function beginCommunitySetup(id) {
+  clearCommunitySetupIntent();
+  const post = communityPosts(false).find(p => p.id === id);
+  let destination = "create?scene=" + encodeURIComponent(id);
+  if (countableCommunitySetup(post)) {
+    const token = globalThis.crypto?.randomUUID?.() || `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+    const intent = { token, postId: id };
+    communitySetupFallback = intent;
+    try { sessionStorage.setItem(COMMUNITY_SETUP_INTENT, JSON.stringify(intent)); } catch (e) {}
+    destination += "&setup=" + encodeURIComponent(token);
+  }
+  go(destination);
+}
+function completeCommunitySetup(id, p, token, draft) {
+  const intent = communitySetupIntent();
+  clearCommunitySetupIntent();
+  if (!intent || intent.postId !== id || intent.token !== token || !countableCommunitySetup(p)) return;
+  if (draft.prompt !== p.prompt) return;
+  const activity = communityActivity();
+  if (activity.setupEvents.some(event => event?.id === token)) return;
+  activity.setupEvents.push({ id: token, postId: id }); saveCommunityActivity(activity);
+}
+function communitySetupContinuation(fallback) {
+  const intent = communitySetupIntent();
+  if (!intent) return fallback;
+  const p = communityPosts(false).find(post => post.id === intent.postId);
+  const params = new URLSearchParams(fallback.split("?")[1] || "");
+  const matching = fallback === "create" || (fallback.split("?")[0] === "create" && params.get("scene") === intent.postId && params.get("setup") === intent.token);
+  if (!matching || !countableCommunitySetup(p)) { clearCommunitySetupIntent(); return fallback; }
+  return `create?scene=${encodeURIComponent(intent.postId)}&setup=${encodeURIComponent(intent.token)}`;
+}
+document.addEventListener("click", e => {
+  const link = e.target.closest("a.community-use");
+  if (!link || e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+  e.preventDefault();
+  beginCommunitySetup(new URLSearchParams(link.hash.split("?")[1] || "").get("scene"));
+});
+window.addEventListener("hashchange", () => {
+  if (!["create", "signin"].includes(currentRoute().name)) clearCommunitySetupIntent();
+});
+if (!["create", "signin"].includes(currentRoute().name)) clearCommunitySetupIntent();
 function communityCards(limit = 6, mine = false) {
   const posts = communityPosts(mine).slice(0, limit);
   if (!posts.length) return `<section class="publication-empty"><h2>${mine ? "Your scenes can find an audience" : "No published scenes yet"}</h2><p>${mine ? "Publish a finished video from its result page. You choose whether to share the prompt." : "Published videos will appear here."}</p><a class="btn" href="${S.signedIn ? "#/history" : "#/signin"}">${S.signedIn ? "Choose a video" : "Sign in"}</a></section>`;
-  return `<div class="community-grid">${posts.map(p => `<article class="community-card"><a class="thumb" href="#/community/${p.id}" aria-label="View ${esc(p.caption)}"><img src="${IMG[p.img]}" alt="" loading="lazy"><span class="badge num">${tc(p.len)}</span></a><div class="community-author"><span class="community-initials" aria-hidden="true">${esc(publicInitials(p.author))}</span><span>${esc(p.author)}</span></div><h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span><span class="num">${p.len} s · ${esc(p.quality)} · ${esc(p.format)}</span></p>${p.includePrompt && p.prompt ? `<a class="btn community-use" href="#/create?scene=${encodeURIComponent(p.id)}" aria-label="Use the setup for ${esc(p.caption)}">Use this setup</a>` : '<p class="community-privacy">Prompt kept private</p>'}</article>`).join("")}</div>`;
+  return `<div class="community-grid">${posts.map(p => `<article class="community-card"><a class="thumb" href="#/community/${p.id}" aria-label="View ${esc(p.caption)}"><img src="${IMG[p.img]}" alt="" loading="lazy"><span class="badge num">${tc(p.len)}</span></a><div class="community-author"><span class="community-initials" aria-hidden="true">${esc(publicInitials(p.author))}</span><span>${esc(p.author)}</span></div><h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span><span class="num">${p.len} s · ${esc(p.quality)} · ${esc(p.format)}</span></p>${communityMetrics(p)}${p.includePrompt && p.prompt ? `<a class="btn community-use" href="#/create?scene=${encodeURIComponent(p.id)}" aria-label="Use the setup for ${esc(p.caption)}">Use this setup</a>` : '<p class="community-privacy">Prompt kept private</p>'}</article>`).join("")}</div>`;
 }
 function unpublishPost(id) {
   const post = S.posts.find(p => p.id === id);
@@ -1879,13 +2054,13 @@ function viewCommunity(main, arg) {
   const p = communityPosts(false).find(x => x.id === arg);
   if (!p) { main.innerHTML = '<div class="page"><h1 id="title" tabindex="-1">Publication unavailable</h1><div class="publication-empty"><p>The creator may have removed this scene.</p><a class="btn" href="#/community">Back to community</a></div></div>'; return null; }
   const own = S.signedIn && S.posts.some(x => x.id === p.id);
-  main.innerHTML = `<div class="page"><a class="linkbtn" href="#/community">Back to community</a><div class="community-detail"><div><div class="player"><img src="${IMG[p.img]}" alt="Scene preview: ${esc(p.caption)}"><button class="play" type="button" id="community-play" aria-label="Play preview">${icon("play", 24)}</button></div><div class="community-preview-strip">${[0, 1, 2, 3].map(i => `<figure><img src="${IMG[p.img]}" alt=""><figcaption class="num">${tc(Math.floor(p.len * i / 4))}</figcaption></figure>`).join("")}</div></div><aside><h1 id="title" tabindex="-1">${esc(p.caption)}</h1><div class="community-author"><span class="community-initials" aria-hidden="true">${esc(publicInitials(p.author))}</span>${esc(p.author)}</div><dl class="facts"><div><dt>Model</dt><dd>${esc(recordModel(p).name)}</dd></div><div><dt>Length</dt><dd class="num">${p.len} s</dd></div><div><dt>Frame</dt><dd>${esc(p.quality)} · ${esc(p.format)}</dd></div></dl><section class="community-prompt"><h2>${p.includePrompt ? "Creator’s prompt" : "A private prompt"}</h2><p>${p.includePrompt ? esc(p.prompt) : "The creator has chosen not to share the prompt."}</p>${p.includePrompt ? `<button class="btn primary" id="use-community-prompt" type="button">${S.signedIn ? "Use this setup" : "Sign in to use this setup"}</button>` : '<a class="btn" href="#/create">Create your own scene</a>'}</section>${own ? `<div class="row"><a class="linkbtn" href="#/video/${p.videoId}">Your original video</a><a class="linkbtn" id="publication-settings" href="#/video/${p.videoId}?publish=1">Publication settings</a><button class="linkbtn" id="unpublish-video" type="button">Unpublish</button></div>` : ""}</aside></div></div>`;
+  main.innerHTML = `<div class="page"><a class="linkbtn" href="#/community">Back to community</a><div class="community-detail"><div><div class="player"><img src="${IMG[p.img]}" alt="Scene preview: ${esc(p.caption)}"><button class="play" type="button" id="community-play" aria-label="Play preview">${icon("play", 24)}</button></div><div class="community-preview-strip">${[0, 1, 2, 3].map(i => `<figure><img src="${IMG[p.img]}" alt=""><figcaption class="num">${tc(Math.floor(p.len * i / 4))}</figcaption></figure>`).join("")}</div></div><aside><h1 id="title" tabindex="-1">${esc(p.caption)}</h1><div class="community-author"><span class="community-initials" aria-hidden="true">${esc(publicInitials(p.author))}</span>${esc(p.author)}</div>${communityMetrics(p, true)}<dl class="facts"><div><dt>Model</dt><dd>${esc(recordModel(p).name)}</dd></div><div><dt>Length</dt><dd class="num">${p.len} s</dd></div><div><dt>Frame</dt><dd>${esc(p.quality)} · ${esc(p.format)}</dd></div></dl><section class="community-prompt"><h2>${p.includePrompt ? "Creator’s prompt" : "A private prompt"}</h2><p>${p.includePrompt ? esc(p.prompt) : "The creator has chosen not to share the prompt."}</p>${p.includePrompt ? `<button class="btn primary" id="use-community-prompt" type="button">${S.signedIn ? "Use this setup" : "Sign in to use this setup"}</button>` : '<a class="btn" href="#/create">Create your own scene</a>'}</section>${own ? `<div class="row"><a class="linkbtn" href="#/video/${p.videoId}">Your original video</a><a class="linkbtn" id="publication-settings" href="#/video/${p.videoId}?publish=1">Publication settings</a><button class="linkbtn" id="unpublish-video" type="button">Unpublish</button></div>` : ""}</aside></div></div>`;
   return () => {
     let timer = null, frame = 0;
     const stop = () => { clearInterval(timer); timer = null; $("#community-play").innerHTML = icon("play", 24); $("#community-play").setAttribute("aria-label", "Play preview"); $$(".community-preview-strip figure").forEach(e => e.classList.remove("now")); };
-    $("#community-play").onclick = () => { if (timer) { stop(); return; } frame = 0; $("#community-play").innerHTML = icon("pause", 24); $("#community-play").setAttribute("aria-label", "Pause preview"); $$(".community-preview-strip figure")[0].classList.add("now"); timer = setInterval(() => { frame++; if (frame >= 4) { stop(); return; } $$(".community-preview-strip figure").forEach((e, i) => e.classList.toggle("now", i === frame)); }, REDUCED ? 500 : 1000); };
+    $("#community-play").onclick = () => { if (timer) { stop(); return; } frame = 0; recordCommunityView(p.id); $("#community-play").innerHTML = icon("pause", 24); $("#community-play").setAttribute("aria-label", "Pause preview"); $$(".community-preview-strip figure")[0].classList.add("now"); timer = setInterval(() => { frame++; if (frame >= 4) { stop(); return; } $$(".community-preview-strip figure").forEach((e, i) => e.classList.toggle("now", i === frame)); }, REDUCED ? 500 : 1000); };
     $("#unpublish-video")?.addEventListener("click", () => unpublishPost(p.id));
-    $("#use-community-prompt")?.addEventListener("click", () => { go("create?scene=" + encodeURIComponent(p.id)); });
+    $("#use-community-prompt")?.addEventListener("click", () => beginCommunitySetup(p.id));
     return () => clearInterval(timer);
   };
 }
