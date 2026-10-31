@@ -105,12 +105,14 @@ main:focus, [tabindex="-1"]:focus { outline: none; }
 .nav a:hover { color: var(--text); }
 .nav a[href="#/community"] { color: var(--text); font-weight: 600; }
 .nav a[aria-current="page"] { background: var(--surface-2); color: var(--text); }
-.bal { display: inline-flex; gap: 16px; align-items: center; min-height: 44px; padding: 8px 14px; border: 1px solid var(--field-line); border-radius: var(--r-pill); font-weight: 600; }
-.balance-amount { display: inline-flex; gap: 6px; align-items: baseline; white-space: nowrap; }
+.bal { display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 12px; align-items: center; flex: none; width: 224px; height: 52px; min-height: 52px; padding: 8px 12px; border: 1px solid var(--field-line); border-radius: var(--r-pill); font-weight: 600; }
+.balance-amount { display: inline-flex; gap: 6px; align-items: center; justify-content: center; min-width: 0; white-space: nowrap; }
+.balance-amount #bal-n { font-size: 15px; }
 .balance-amount > .ic { color: var(--text-muted); }
-.header-plan { display: flex; flex-direction: column; gap: 3px; border-left: 1px solid var(--line); padding-left: 14px; font-size: 12px; line-height: 1.25; white-space: nowrap; }
+.header-plan { display: flex; flex-direction: column; justify-content: center; gap: 2px; align-self: stretch; min-width: 0; border-left: 1px solid var(--line); padding-left: 12px; font-size: 12px; line-height: 1.25; white-space: nowrap; }
 .header-plan > span { color: var(--text-muted); font-weight: 400; }
 .header-plan > b { font-weight: 500; }
+.header-plan > b:only-child { font-size: 12px; }
 .bal:hover { background: var(--surface-2); }
 .acct { position: relative; }
 .avatar { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--field-line); background: var(--surface); font-weight: 600; font-size: 13px; }
@@ -593,14 +595,17 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .landing-steps h3 { font-family: var(--sans); font-size: 16px; font-weight: 600; }
 .landing-steps p { color: var(--text-muted); line-height: 1.6; margin-top: 4px; font-size: 14px; }
 .landing-models { margin-top: 24px; }
-.landing-model-row { display: grid; grid-template-columns: 56px minmax(180px, 1fr) minmax(160px, 1fr) auto; gap: 24px; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--line); }
-.landing-model-row img { width: 56px; height: 56px; object-fit: cover; border-radius: var(--r-sm); }
+.landing-model-row { display: grid; grid-template-columns: 56px minmax(0, 1fr) minmax(0, 1fr) 44px; gap: 24px; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.landing-model-media { position: relative; display: grid; place-items: center; width: 56px; height: 56px; overflow: hidden; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface-2); }
+.landing-model-monogram { font-family: var(--serif); font-size: 28px; line-height: 1; color: var(--text-muted); }
+.landing-model-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.landing-model-media img[hidden] { display: none; }
+.landing-model-name { min-width: 0; overflow-wrap: anywhere; }
 .landing-model-row h3 { font-family: var(--sans); font-weight: 600; font-size: 16px; }
 .landing-model-row p { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
 .landing-model-row .landing-model-settings { font-size: 14px; line-height: 1.6; }
-.landing-model-row .landing-model-role { color: var(--text-muted); font-size: 13px; text-align: right; }
+.landing-model-row .landing-model-role { display: flex; justify-content: center; }
 .landing-model-role a { display: inline-flex; align-items: center; min-height: 44px; }
-.landing-model-row.without-preview { grid-template-columns: minmax(180px, 1fr) minmax(160px, 1fr) auto; }
 .landing-faq { display: grid; grid-template-columns: minmax(200px, 1fr) minmax(0, 1.5fr); gap: 48px; }
 .landing-faq details { padding: 20px 0; border-bottom: 1px solid var(--line); }
 .landing-faq details:first-child { padding-top: 0; }
@@ -609,9 +614,7 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 @media (max-width: 900px) {
   .landing-hero { gap: 32px; }
   .landing-workflow { gap: 32px; }
-  .landing-model-row { gap: 16px; grid-template-columns: 48px minmax(160px, 1fr) minmax(140px, 1fr); }
-  .landing-model-role { display: none; }
-  .landing-model-role:has(a) { display: block; grid-column: 2 / -1; text-align: left; }
+  .landing-model-row { gap: 16px; }
 }
 @media (max-width: 700px) {
   .landing { padding: 0 16px 40px; }
@@ -624,12 +627,11 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .landing-steps { margin-top: 28px; }
   .landing-section { padding: 32px 0; }
   .landing-section h2 { font-size: 29px; }
-  .landing-model-row { grid-template-columns: 48px minmax(0, 1fr); }
-  .landing-model-row:has(.landing-model-role a) { position: relative; padding-right: 56px; }
-  .landing-model-row .landing-model-settings { grid-column: 2; margin-top: -10px; }
-  .landing-model-role:has(a) { display: block; position: absolute; grid-column: auto; top: 20px; right: 0; }
-  .landing-model-row.without-preview { grid-template-columns: minmax(0, 1fr); }
-  .landing-model-row.without-preview .landing-model-settings { grid-column: 1; margin-top: 0; }
+  .landing-model-row { grid-template-columns: 56px minmax(0, 1fr) 44px; row-gap: 8px; align-items: start; }
+  .landing-model-media { grid-column: 1; grid-row: 1 / span 2; }
+  .landing-model-name { grid-column: 2; grid-row: 1; }
+  .landing-model-row .landing-model-settings { grid-column: 2; grid-row: 2; }
+  .landing-model-role { grid-column: 3; grid-row: 1; }
   .landing-faq > div { margin-top: 24px; }
   .landing-actions { gap: 20px; }
 }
@@ -707,6 +709,13 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .publication-action:active { background: var(--surface); color: var(--text); }
 .publication-action .ic { flex: none; }
 .community-detail .publication-actions { justify-content: flex-start; margin: 24px 0 0; gap: 8px; }
+.video-icon-action { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; }
+.history-publication-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 12px; }
+.history-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+.history-actions .publication-actions { margin-left: 0; }
+.vside .video-actions { display: flex; flex-direction: row; align-items: center; flex-wrap: wrap; gap: 8px; }
+.publication .publication-icon-actions { gap: 8px; }
+@media (max-width: 760px) { .hist .history-publication { display: block; } }
 .community-privacy { margin-top: 16px; min-height: 44px; display: flex; align-items: center; color: var(--text-muted); font-size: 13px; }
 .community-author { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 13px; }
 .community-initials { width: 28px; height: 28px; border-radius: var(--r-sm); background: var(--surface-2); display: grid; place-items: center; font-size: 11px; font-weight: 600; flex: none; }
@@ -735,12 +744,21 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .publication .row, .community-detail .row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
 .publication .row > *, .community-detail .row > * { max-width: 100%; white-space: normal; }
 .publication .linkbtn, .community-detail .row .linkbtn, body[data-view="community"] .page > .linkbtn { display: inline-flex; align-items: center; min-height: 44px; }
-.publish-panel { background: var(--surface-2); border-radius: var(--r-md); padding: 20px; margin-top: 20px; }
-.publish-panel[hidden] { display: none; }
-.publish-panel label[for] { display: block; font-weight: 500; margin-bottom: 8px; }
-.publish-panel .publication-share { display: flex; align-items: center; gap: 10px; margin: 16px 0; min-height: 44px; cursor: pointer; }
+.publication-popover { position: fixed; inset: auto; z-index: 90; width: min(380px, calc(100vw - 32px)); margin: 0; padding: 24px; overflow-y: auto; background: var(--surface); color: var(--text); border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: 0 16px 48px var(--shadow); }
+.publication-popover[hidden] { display: none; }
+.publication-popover-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.publication-popover-head h2 { min-width: 0; margin: 0; font-size: 26px; line-height: 1.2; }
+.publication-popover-close { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; background: transparent; color: var(--text-muted); border: 0; border-radius: var(--r-sm); }
+.publication-popover-close:hover { background: var(--surface-2); color: var(--text); }
+.publication-as { margin: 0 0 24px; color: var(--text-muted); font-size: var(--fs-caption); overflow-wrap: anywhere; }
+.publication-as strong { color: var(--text); font-weight: 500; }
+.publication-title-label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 500; }
+.publication-popover input[type="text"] { width: 100%; min-height: 44px; font-size: 16px; }
+.publication-popover .publication-share { display: flex; align-items: center; gap: 10px; margin: 16px 0 4px; min-height: 44px; font-size: 14px; cursor: pointer; }
 .publication-share input { width: 18px; height: 18px; accent-color: var(--fill); flex: none; }
-.publish-panel .err { color: var(--bad); }
+.publication-consent { margin: 0 0 24px 28px; font-size: var(--fs-caption); color: var(--text-muted); line-height: 1.5; }
+.publication-popover-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 12px; }
+.publication-popover .err { margin-top: 8px; color: var(--bad); font-size: var(--fs-caption); }
 .publication-empty { padding: 40px 0; border-top: 1px solid var(--line); }
 .publication-empty h2 { font-size: 28px; }
 .publication-empty p { color: var(--text-muted); max-width: 48ch; margin: 12px 0 24px; }
@@ -749,7 +767,7 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .community-grid { grid-template-columns: 1fr; gap: 32px; }
   .community-card .thumb { aspect-ratio: 16 / 10; }
   .community-detail { gap: 28px; }
-  .publish-panel { padding: 16px; }
+  .publication-popover { padding: 20px; }
   body[data-view="community"] .account-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; }
   body[data-view="community"] .account-heading > div { display: contents; }
   body[data-view="community"] .account-heading .sub { grid-column: 1 / -1; grid-row: 2; margin-top: 0; }
@@ -913,6 +931,13 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .thumb .badge { display: inline-flex; gap: 8px; align-items: center; max-width: calc(100% - 20px); }
 .hist-preview-credit { display: block; margin-top: 4px; font-size: 12px; color: var(--text-muted); }
 
+.thumbnail-live-preview { position: absolute; z-index: 0; overflow: hidden; pointer-events: none !important; opacity: 0; transition: opacity 180ms ease-out; border-radius: inherit; }
+.thumbnail-live-preview.is-ready { opacity: 1; }
+.thumbnail-live-preview > video, .thumbnail-live-preview > iframe, .thumbnail-live-preview > div { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none !important; }
+.thumbnail-live-preview > video { object-fit: cover; }
+.thumb:has(.thumbnail-live-preview) > .badge { z-index: 1; }
+@media (prefers-reduced-motion: reduce) { .thumbnail-live-preview { transition: none; } }
+
 .prototype-options { margin-top: 16px; color: var(--text-muted); font-size: var(--fs-caption); }
 .prototype-options summary { cursor: pointer; padding: 8px 0; }
 body:not(.review-mode) .prototype-options, body:not(.review-mode) .model-notice { display: none; }
@@ -934,12 +959,6 @@ body:not(.review-mode) .prototype-options, body:not(.review-mode) .model-notice 
   .public-nav .btn { padding: 9px 14px; }
   .site-foot .prototype-label { flex-basis: 100%; }
 }
-@media (min-width: 761px) and (max-width: 900px) { .top-in { gap: 12px; padding-left: 20px; padding-right: 20px; } .nav a { padding: 8px 9px; } }
-@media (max-width: 1050px) {
-  .bal { flex-direction: column; gap: 4px; padding: 7px 12px; }
-  .header-plan { flex-direction: row; gap: 5px; padding-left: 0; border-left: 0; font-size: 11px; }
-}
-@media (min-width: 761px) and (max-width: 900px) { .nav a { padding-left: 7px; padding-right: 7px; } }
 @media (max-width: 1100px) {
   .hist thead { display: none; }
   .hist, .hist tbody, .hist tr, .hist td { display: block; }
@@ -959,9 +978,12 @@ body:not(.review-mode) .prototype-options, body:not(.review-mode) .model-notice 
 @media (max-width: 760px), (pointer: coarse) and (max-width: 1000px) {
   input[type="text"], input[type="email"], input[type="search"], select { font-size: 16px; }
   .chip, .seg > button, .seg label > span { min-height: 44px; }
+  .composer .foot { position: static; }
+}
+@media (max-width: 1000px) {
   .top-in { padding: 10px 16px; gap: 12px; }
   .top .nav, .top .acct { display: none; }
-  .bal { margin-left: auto; }
+  .bal { margin-left: auto; width: 200px; grid-template-columns: 72px minmax(0, 1fr); gap: 10px; padding-left: 10px; padding-right: 10px; }
   .mobile-nav-btn { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 44px; height: 44px; padding: 0; border: 1px solid var(--field-line); border-radius: var(--r-pill); background: var(--surface); color: var(--text); }
   .mobile-nav-btn:hover, .mobile-nav-btn[aria-expanded="true"] { background: var(--surface-2); }
   .mobile-navigation { display: block; position: absolute; top: 100%; left: 0; right: 0; max-height: calc(100vh - 100px); max-height: calc(100dvh - 100px); overflow-y: auto; overscroll-behavior: contain; padding: 8px 16px 20px; background: var(--bg); border-bottom: 1px solid var(--line); box-shadow: 0 16px 32px var(--shadow); }
@@ -982,7 +1004,22 @@ body:not(.review-mode) .prototype-options, body:not(.review-mode) .model-notice 
   .mobile-theme .seg > button { min-height: 44px; flex: 1; }
   .mobile-signout { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 12px; border: 0; border-radius: var(--r-sm); background: none; font-size: 15px; }
   .mobile-signout:hover { background: var(--surface-2); }
-  .composer .foot { position: static; }
+}
+@media (max-width: 600px) {
+  .bal { width: 168px; height: 48px; min-height: 48px; grid-template-columns: 60px minmax(0, 1fr); gap: 8px; padding: 8px; }
+  .balance-amount { gap: 2px; }
+  .balance-amount #bal-n { font-size: 14px; }
+  .balance-amount > .ic { width: 14px; height: 14px; }
+  .header-plan { padding-left: 8px; font-size: 11px; }
+}
+@media (max-width: 360px) {
+  .top-in { gap: 10px; }
+  .bal { width: 144px; grid-template-columns: 54px minmax(0, 1fr); gap: 6px; padding-left: 6px; padding-right: 6px; }
+  .balance-amount { gap: 2px; }
+  .balance-amount #bal-n { font-size: 13px; }
+  .balance-amount > .ic { width: 12px; height: 12px; }
+  .header-plan { padding-left: 6px; }
+  .header-plan > b { font-size: 10.5px; }
 }
 @media (max-width: 760px) {
   .settings { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; padding: 20px 16px; }
@@ -1056,6 +1093,7 @@ const ICONS = {
   eyeOff: '<path d="M1.5 8s2.3-4 6.5-4 6.5 4 6.5 4-2.3 4-6.5 4S1.5 8 1.5 8Z"/><circle cx="8" cy="8" r="2"/><path d="m2 2 12 12"/>',
   sliders: '<path d="M2 4h3m3 0h6M2 8h7m3 0h2M2 12h2m3 0h7M6.5 2.5v3M10.5 6.5v3M5.5 10.5v3"/>',
   setup: '<path d="M7 3h6a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H7M1.5 8H9m0 0L6 5m3 3-3 3"/>',
+  external: '<path d="M9 2h5v5M14 2 7 9M6 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3"/>',
   reuse: '<path d="M12.5 6A4.8 4.8 0 0 0 4 4.5L2 6.5M2 3v3.5h3.5M3.5 10a4.8 4.8 0 0 0 8.5 1.5l2-2M14 13V9.5h-3.5"/>',
   duration: '<circle cx="8" cy="8" r="5.5"/><path d="M8 4.5V8l2.5 1.5"/>',
   resolution: '<path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/><path d="M5.5 6.5v3M10.5 6.5v3M5.5 8h5"/>',
@@ -1279,7 +1317,7 @@ function confirmedThumbnailMarkup(record, { compact = false, badge = false } = {
   const example = recordOfficialExample(record), poster = example && officialPoster(example);
   if (!poster) return `<span class="preview-unavailable-label">${compact ? "No preview" : "Preview unavailable"}</span>`;
   const seconds = Number(example.len), time = Number.isFinite(seconds) && seconds > 0 ? tc(Math.round(seconds)) : "";
-  return `<img src="${esc(poster)}" alt="" loading="lazy">${badge ? `<span class="badge">Model example${time ? ` <span class="num">${time}</span>` : ""}</span>` : ""}`;
+  return `<img src="${esc(poster)}" data-hover-example="${esc(example.id)}" alt="" loading="lazy">${badge ? `<span class="badge">Model example${time ? ` <span class="num">${time}</span>` : ""}</span>` : ""}`;
 }
 function officialMediaMarkup(example, { id = "official-media", playerId = "official-player", playId = "official-play", errorId = "official-media-error", mediaIdPrefix = "official-example", playerClass = "", showMetadata = true } = {}) {
   if (!example) return previewUnavailableMarkup(null, { id: playerId });
@@ -1436,13 +1474,16 @@ function toast(msg, action, ttl = 5000) {
    ========================================================================== */
 const NAV = [["create", "Create"], ["community", "Community"], ["history", "History"], ["plans", "Plans"], ["referrals", "Referrals"]];
 let menuOpen = false, mobileNavOpen = false;
-const mobileChrome = matchMedia("(max-width: 760px), (pointer: coarse) and (max-width: 1000px)");
+const mobileChrome = matchMedia("(max-width: 1000px)");
+const walletCompact = new Intl.NumberFormat("en-US", { notation: "compact", maximumSignificantDigits: 2 });
+const walletAmount = value => Math.abs(value) >= 10000 ? walletCompact.format(value) : fmt(value);
+const walletLabel = () => `Balance ${fmt(S.balance)} credits.${S.plan?.state === "active" ? ` Monthly plan: ${fmt(S.plan.credits)} credits per month. Manage subscription.` : ` Free.${S.plan ? " Subscription cancelled." : ""} Open credits and plans.`}`;
 function renderChrome() {
   const r = currentRoute().name;
   const signed = S.signedIn;
   $("#top").innerHTML = `<div class="top-in"><a class="logo" href="${signed ? "#/create" : "#/home"}" aria-label="Aurora, home">Aurora</a>${signed ? `
     <nav class="nav" aria-label="Main">${NAV.map(([k, l]) => `<a href="#/${k}" ${r === k || (k === "history" && r === "video") ? 'aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
-    <a class="bal" href="${S.plan?.state === "active" ? "#/account/billing" : "#/plans"}" aria-label="Balance ${fmt(S.balance)} credits.${S.plan?.state === "active" ? ` Monthly plan: ${fmt(S.plan.credits)} credits per month. Manage subscription.` : (S.plan ? " Subscription cancelled." : "") + " Open credits and plans."}"><span class="balance-amount"><b class="num" id="bal-n">${fmt(S.balance)}</b>${icon("credits", 16)}</span>${S.plan ? `<span class="header-plan" id="header-plan"><span>${S.plan.state === "active" ? "Monthly" : "Subscription"}</span><b class="num">${S.plan.state === "active" ? `${fmt(S.plan.credits)}/month` : "Cancelled"}</b></span>` : ""}</a>
+    <a class="bal" href="${S.plan?.state === "active" ? "#/account/billing" : "#/plans"}" aria-label="${walletLabel()}" title="${fmt(S.balance)} credits"><span class="balance-amount"><b class="num" id="bal-n">${walletAmount(S.balance)}</b>${icon("credits", 16)}</span><span class="header-plan" id="header-plan">${S.plan?.state === "active" ? `<span>Monthly</span><b class="num">${walletAmount(S.plan.credits)}/month</b>` : "<b>Free</b>"}</span></a>
     <div class="acct"><button class="avatar" id="acct-btn" type="button" aria-expanded="${menuOpen}" aria-controls="menu" aria-label="Account menu">${esc(accountUser().initials)}</button>
       <div class="menu" id="menu" ${menuOpen ? "" : "hidden"}>
         <div class="who"><b>${esc(accountUser().name)}</b><span>${esc(accountUser().email)}</span></div>
@@ -1490,6 +1531,7 @@ function signInDestination(destination = "create") {
 }
 let disposeView = null;
 function route(options = {}) {
+  closePublicationPanel({ restore: false });
   hideCommunityMetricTooltip();
   const previousFocus = options.preserve ? document.activeElement?.id : null;
   const previousHref = options.preserve ? document.activeElement?.getAttribute("href") : null;
@@ -1548,7 +1590,10 @@ function updateCard(v) {
   });
   if (v.status !== "generating" && currentRoute().name === "video" && String(currentRoute().arg) === String(v.id)) route({ preserve: true });
 }
-function renderBalance() { const b = $("#bal-n"); if (b) b.textContent = fmt(S.balance); }
+function renderBalance() {
+  const b = $("#bal-n");
+  if (b) { b.textContent = walletAmount(S.balance); const wallet = b.closest(".bal"); wallet.setAttribute("aria-label", walletLabel()); wallet.title = `${fmt(S.balance)} credits`; }
+}
 
 /* ==========================================================================
    VIEWS
@@ -1723,7 +1768,7 @@ function showAttached(name, url) {
 const historyPublication = v => {
   if (v.status !== "ready") return `<td class="history-publication"><small>${v.status === "failed" ? "Not available" : "Available when ready"}</small></td>`;
   const post = getPublishedPost(v.id);
-  return `<td class="history-publication"><div><span class="history-publication-label">${post ? "Published" : "Private"}</span><small>Prompt ${post?.includePrompt ? "shared" : "private"}</small></div><a data-publication-settings="${v.id}" href="#/video/${v.id}?publish=1">${post ? "Publication settings" : "Publish"}</a></td>`;
+  return `<td class="history-publication"><div class="history-publication-inner"><div><span class="history-publication-label">${post ? "Published" : "Private"}</span><small>Prompt ${post?.includePrompt ? "shared" : "private"}</small></div><div class="history-actions" role="group" aria-label="Video actions"><button class="btn video-icon-action" type="button" data-video-reuse="${v.id}" aria-label="Use this setup">${icon("setup", 18)}</button>${post ? publicationActionsMarkup(post, { history: true }) : `<a class="btn video-icon-action" data-publication-settings="${v.id}" href="#/video/${v.id}?publish=1" aria-label="Publish video" aria-controls="publish-panel" aria-expanded="false">${icon("eye", 18)}</a>`}</div></div></td>`;
 };
 const histRow = v => `<tr data-vid="${v.id}"><td class="t"><div class="hist-scene"><a class="thumb" href="#/video/${v.id}" tabindex="-1" aria-hidden="true">${v.status === "ready" ? confirmedThumbnailMarkup(v, { compact: true }) : `<span class="gen-t" style="position:absolute;inset:0;display:grid;place-items:center;font-size:13px;color:var(--text-muted)">${v.status === "failed" ? "Failed" : "Rendering"}</span>`}</a><div class="hist-title-group"><a href="#/video/${v.id}">${esc(titleOf(v.prompt))}</a><small class="hist-mobile-meta"><span>${esc(recordModel(v).name)}</span>${v.status === "ready" && recordOfficialExample(v) ? '<span class="hist-preview-credit">Model example</span>' : ""}${videoFactsMarkup(v)}</small></div></div></td>
   <td class="hm">${esc(recordModel(v).name)}</td><td class="hm num">${v.len} s, ${esc(v.quality)}, ${esc(v.format)}</td><td class="r num">${v.status === "failed" ? "—" : fmt(v.credits)}</td><td class="hm">${esc(v.when)}</td><td class="hist-status"><span class="st ${v.status}">${v.status === "ready" ? "Ready" : v.status === "failed" ? "Failed" : "Rendering"}</span></td>${historyPublication(v)}</tr>`;
@@ -1769,16 +1814,16 @@ function viewVideo(main, arg) {
   <aside class="vside"><h1 id="title" tabindex="-1">${esc(titleOf(v.prompt))}</h1><p class="prompt">${esc(v.prompt)}</p>
     <dl class="facts"><div><dt>Model</dt><dd>${esc(recordModel(v).name)}</dd></div><div><dt>Length</dt><dd class="num">${v.len} s</dd></div><div><dt>Quality and format</dt><dd class="num">${v.quality}, ${v.format}</dd></div><div><dt>Credits used</dt><dd class="num">${v.refunded ? "0 · credits returned" : fmt(v.credits)}</dd></div><div><dt>Created</dt><dd>${esc(v.when)}</dd></div></dl>
     <a class="account-link" href="#/account/credits">View credit activity</a>
-    <div class="acts">${shown && mediaAction ? `<a class="btn primary" id="dl" href="${esc(mediaAction.url)}" target="_blank" rel="noopener noreferrer">${example?.mediaType === "video" ? icon("download") : ""}${mediaAction.label}</a>` : ""}
-      <div class="row"><button class="btn" type="button" id="reuse">Use this prompt</button><button class="btn danger" type="button" id="del">${icon("trash")}Delete</button></div></div>
+    <div class="acts video-actions" role="group" aria-label="Video actions">${shown && mediaAction ? `<a class="btn primary video-icon-action" id="dl" href="${esc(mediaAction.url)}" target="_blank" rel="noopener noreferrer" aria-label="${mediaAction.label}">${icon(example?.mediaType === "video" ? "download" : "external", 18)}</a>` : ""}
+      <button class="btn video-icon-action" type="button" id="reuse" aria-label="Use this setup">${icon("setup", 18)}</button><button class="btn danger video-icon-action" type="button" id="del" aria-label="Delete video">${icon("trash", 18)}</button></div>
     ${shown ? publicationMarkup(v) : ""}
   </aside></div></div>`;
   return () => {
-    if (shown) initPublication(v);
+    initPublication(v);
     const disposeMedia = example ? initOfficialMedia(example, { id: "video-example-media" }) : null;
-    $("#reuse").onclick = () => { Object.assign(S.draft, { prompt: v.prompt, model: v.model, len: v.len, quality: v.quality, format: v.format, failDemo: false }); normalizeDraft(S.draft); save(); go("create"); toast(isModelAvailable(v.model) ? "Prompt and settings restored." : "Prompt restored. The original model is unavailable. Review the new model and settings."); };
-    $("#del").onclick = () => { const i = S.videos.findIndex(x => x.id === v.id), copy = S.videos[i], published = S.posts.filter(p => p.videoId === v.id); S.posts = S.posts.filter(p => p.videoId !== v.id); S.videos.splice(i, 1); save(); go("history");
-      toast(published.length ? "Video deleted and publication removed." : "Video deleted.", { label: "Undo", fn: () => { S.videos.splice(i, 0, copy); S.posts.push(...published); save(); if (currentRoute().name === "history") route(); } }); };
+    $("#reuse").onclick = () => reuseVideoSettings(v);
+    $("#del").onclick = () => { const i = S.videos.findIndex(x => x.id === v.id), copy = S.videos[i], published = S.posts.map((post, index) => ({ post, index })).filter(entry => entry.post.videoId === v.id); S.posts = S.posts.filter(p => p.videoId !== v.id); S.videos.splice(i, 1); save(); go("history");
+      toast(published.length ? "Video deleted and publication removed." : "Video deleted.", { label: "Undo", fn: () => { if (!S.signedIn || S.videos.some(video => video.id === copy.id)) return; S.videos.splice(i, 0, copy); published.forEach(({ post, index }) => { if (!S.posts.some(p => p.id === post.id)) S.posts.splice(Math.min(index, S.posts.length), 0, post); }); save(); if (currentRoute().name === "history") { route(); ($(`tr[data-vid="${copy.id}"] .hist-title-group > a`) || $("#title"))?.focus({ preventScroll: true }); } } }); };
     return () => disposeMedia?.();
   };
 }
@@ -1810,16 +1855,15 @@ function viewPlans(main) {
   let activeExample = examples.find(example => example.id === params.get("example") && example.model === estimate?.id) || examples.find(example => example.model === estimate?.id) || null;
   let quality = estimate?.qualities.includes(params.get("quality")) ? params.get("quality") : estimate?.qualities.includes(S.draft.quality) ? S.draft.quality : estimate?.qualities[0];
   let length = estimate?.lengths.includes(Number(params.get("length"))) ? Number(params.get("length")) : estimate?.lengths.includes(Number(S.draft.len)) ? Number(S.draft.len) : estimate?.lengths[0];
-  main.innerHTML = `<div class="page plans-page"><header><h1 id="title" tabindex="-1">Credits & plans</h1><p class="sub">You have <span class="num">${fmt(S.balance)}</span> credits. Add more when you need them, or choose a monthly plan.</p></header>
+  main.innerHTML = `<div class="page plans-page"><header><h1 id="title" tabindex="-1">Credits & plans</h1><p class="sub"><span class="num">${fmt(S.balance)}</span> credits available</p></header>
     ${S.plan ? `<section class="plan-current" aria-labelledby="current-plan-heading"><div><span class="plan-state">${active ? "Active subscription" : "Subscription cancelled"}</span><h2 id="current-plan-heading"><span class="num">${fmt(S.plan.credits)}</span> credits a month</h2><p>${active ? `$${S.plan.usd} per month. Next payment: $${S.plan.pendingChange?.usd ?? S.plan.usd} on ${accountDate(S.plan.nextBillingAt)}.` : "No future payments are scheduled. Your available credits are unchanged."}</p></div><a class="btn" id="manage-current-plan" href="#/account/billing">${active ? "Manage subscription" : "View subscription"}</a></section>${pendingPlanMarkup()}` : ""}
     <div class="plan-layout"><div class="plan-options"><nav class="seg plan-tabs" aria-label="Purchase type">${[["packs", "Credit packs"], ["subs", "Monthly subscription"]].map(([id, label]) => `<button type="button" data-ptab="${id}" aria-pressed="${tab === id}">${label}</button>`).join("")}</nav>
-      <p class="plan-section-note">${sub ? active ? "Compare monthly credit amounts. Review a change before scheduling it for your next payment date." : "Credits are added after your first payment, then each month." : active ? "One payment for extra credits. Your subscription stays the same." : "One payment. No subscription required."}</p>
       <fieldset class="opts" id="opts"><legend class="sr">${sub ? "Choose a monthly plan" : "Choose a credit pack"}</legend>${list.map(o => `<label class="opt"><input type="radio" name="opt" value="${o.id}" ${o.id === picked.id ? "checked" : ""}><span class="dot"></span><span><b class="num">${fmt(o.credits)} credits</b><span class="d">${sub ? active && current?.id === o.id ? "Current plan" : active && S.plan.pendingChange?.id === o.id ? "Scheduled for next payment" : "Each month" : esc(o.note)}</span></span><span class="p num">$${o.usd}<small>${sub ? "per month" : "one payment"}</small></span></label>`).join("")}</fieldset></div>
       <aside class="plan-summary" aria-labelledby="summary-heading"><h2 id="summary-heading">${sub ? active ? "Your selection" : "Monthly credits" : "Extra credits"}</h2><p class="plan-summary-credits num" id="s-big"></p><p class="plan-summary-price num" id="s-price"></p><div id="plan-action"></div><p class="fine muted" id="fine"></p><div id="plan-change-review" hidden></div></aside>
-      <section class="plan-estimate" aria-labelledby="estimate-heading"><h2 id="estimate-heading">What your credits can create</h2><p class="estimate-intro">See how many clips fit into your next project.</p>${models.length ? `
+      <section class="plan-estimate" aria-labelledby="estimate-heading"><h2 id="estimate-heading">What your credits can create</h2>${models.length ? `
         <div class="estimate-carousel" id="estimate-carousel" role="region" aria-roledescription="carousel" aria-labelledby="estimate-heading">
           ${examples.length > 1 && activeExample ? '<p class="sr" id="estimate-browse-help">Select the frame to see another example. Browsing stops automatic changes.</p>' : ""}
-          <div class="estimate-stage"><div class="estimate-example" id="estimate-slide" role="group" aria-roledescription="slide"><figure class="estimate-visual" ${examples.length > 1 && activeExample ? 'role="button" tabindex="0" aria-label="Show next credit example" aria-describedby="estimate-browse-help"' : ""}><img id="estimate-reference" ${activeExample ? `src="${officialPoster(activeExample)}"` : ""} alt="" loading="lazy"><figcaption><span id="estimate-frame-label">Reference frame</span><span class="num" id="estimate-frame-length"></span></figcaption></figure><div class="estimate-story"><p class="estimate-budget-label" id="estimate-budget-label"></p><div class="estimate-result" id="estimate-result" role="status" aria-atomic="true"></div><p class="estimate-total" id="estimate-total-footage"></p><div class="estimate-allocation"><div class="estimate-allocation-track" id="estimate-allocation" role="meter" aria-label="Example credit allocation" aria-valuemin="0"><span></span></div><div class="estimate-allocation-labels"><span id="estimate-allocated"></span><span id="estimate-remainder"></span></div></div><button class="btn estimate-use" id="use-estimate-settings" type="button">Use these settings</button><a class="estimate-source linkbtn" id="estimate-example-link" hidden>Watch model example</a></div></div></div>
+          <div class="estimate-stage"><div class="estimate-example" id="estimate-slide" role="group" aria-roledescription="slide"><figure class="estimate-visual" ${examples.length > 1 && activeExample ? 'role="button" tabindex="0" aria-label="Show next credit example" aria-describedby="estimate-browse-help"' : ""}><img id="estimate-reference" data-hover-example="${activeExample?.id || ""}" ${activeExample ? `src="${officialPoster(activeExample)}"` : ""} alt="" loading="lazy"><figcaption><span id="estimate-frame-label">Reference frame</span><span class="num" id="estimate-frame-length"></span></figcaption></figure><div class="estimate-story"><p class="estimate-budget-label" id="estimate-budget-label"></p><div class="estimate-result" id="estimate-result" role="status" aria-atomic="true"></div><p class="estimate-total" id="estimate-total-footage"></p><div class="estimate-allocation"><div class="estimate-allocation-track" id="estimate-allocation" role="meter" aria-label="Example credit allocation" aria-valuemin="0"><span></span></div><div class="estimate-allocation-labels"><span id="estimate-allocated"></span><span id="estimate-remainder"></span></div></div><button class="btn estimate-use" id="use-estimate-settings" type="button">Use these settings</button><a class="estimate-source linkbtn" id="estimate-example-link" hidden>Watch model example</a></div></div></div>
         </div>
         ` : '<p class="plan-estimate-result">No models are available for an estimate right now. Your existing credits remain available.</p>'}</section></div></div>`;
   return () => {
@@ -1839,7 +1883,7 @@ function viewPlans(main) {
       $("#estimate-slide").classList.toggle("without-media", !source);
       if (source && image.getAttribute("src") !== source) image.src = source;
       else if (!source) image.removeAttribute("src");
-      image.dataset.official = String(Boolean(example));
+      image.dataset.official = String(Boolean(example)); image.dataset.hoverExample = example?.id || "";
       image.alt = example?.alt || "";
       $("#estimate-frame-label").textContent = "Model example";
       const exampleLink = $("#estimate-example-link");
@@ -2135,13 +2179,25 @@ function viewHome(main) {
   const sceneFrames = ["example-kling-portrait", "example-kling-product", "example-runway-kitchen", "example-kling-truck"]
     .map(id => OFFICIAL_EXAMPLES.find(example => example.id === id))
     .map(example => ({ ...example, src: IMG[example.img], modelLabel: recordModel(example).name }));
+  const modelRows = availableModels().filter(m => m.featured !== false).slice(0, 3).map(m => {
+    const example = officialExample(m.id), poster = example ? officialPoster(example) : "", detailsUrl = modelDetailsUrl(m.id);
+    const initial = m.name.trim().slice(0, 1).toUpperCase();
+    const action = example ? `<a class="landing-example-watch" href="#/community/${example.id}" aria-label="Watch ${esc(m.name)} model example" title="Watch ${esc(m.name)} model example">${icon("play", 20)}</a>`
+      : detailsUrl ? `<a class="landing-example-watch" href="${esc(detailsUrl)}" target="_blank" rel="noopener noreferrer" aria-label="View ${esc(m.name)} details" title="View ${esc(m.name)} details">${icon("external", 20)}</a>` : "";
+    return `<article class="landing-model-row" data-model="${esc(m.id)}"><div class="landing-model-media" aria-hidden="true"><span class="landing-model-monogram">${esc(initial)}</span>${poster ? `<img src="${esc(poster)}" alt="">` : ""}</div><div class="landing-model-name"><h3>${esc(m.name)}</h3><p>${esc(m.provider)}</p></div><div class="landing-model-settings">${m.qualities.join(" / ")}<br><span class="muted">${m.formats.join(" · ")}</span></div><span class="landing-model-role">${action}</span></article>`;
+  }).join("");
   main.innerHTML = `<div class="landing"><section class="landing-hero" aria-labelledby="title"><div><h1 id="title" tabindex="-1">Your next scene starts here.</h1><p class="landing-intro">Short videos for social posts, product stories and B-roll.</p><div class="landing-actions"><a class="btn primary" href="${S.signedIn ? "#/create" : "#/signin"}">${S.signedIn ? "Create a video" : "Start creating"}</a><a class="btn" href="#/community">Explore community</a></div>${REVIEW ? '<div class="landing-caption"><button class="linkbtn" id="explore-demo" type="button">Explore workspace</button></div>' : ""}</div>
-    <div class="landing-film"><div class="landing-frame" id="landing-frame" role="button" tabindex="0" aria-label="Show next scene frame. Current scene: ${sceneFrames[0].alt}" aria-describedby="landing-frame-help"><img id="landing-scene" src="${sceneFrames[0].src}" alt="${sceneFrames[0].alt}"></div><p class="sr" id="landing-frame-help">Choose a preview, or select the large frame for the next scene. Browsing stops automatic changes.</p><div class="landing-frame-note"><span id="landing-scene-category">${sceneFrames[0].category}</span><span id="landing-scene-model">${sceneFrames[0].modelLabel}</span></div><div class="landing-filmstrip">${sceneFrames.map((scene, i) => `<button class="landing-scene-choice${i === 0 ? " is-current" : ""}" type="button" data-scene-index="${i}" aria-label="Show ${esc(scene.caption)}" aria-controls="landing-frame" aria-pressed="${i === 0}"><img src="${scene.src}" alt=""><span class="landing-scene-caption">${scene.category}</span></button>`).join("")}</div><p class="landing-example-action"><a class="landing-example-watch" id="landing-example-link" href="#/community/${sceneFrames[0].id}" aria-label="Watch ${esc(sceneFrames[0].modelLabel)} model example" title="Watch ${esc(sceneFrames[0].modelLabel)} model example">${icon("play", 20)}</a></p></div></section>
+    <div class="landing-film"><div class="landing-frame" id="landing-frame" role="button" tabindex="0" aria-label="Show next scene frame. Current scene: ${sceneFrames[0].alt}" aria-describedby="landing-frame-help"><img id="landing-scene" src="${sceneFrames[0].src}" data-hover-example="${sceneFrames[0].id}" alt="${sceneFrames[0].alt}"></div><p class="sr" id="landing-frame-help">Choose a preview, or select the large frame for the next scene. Browsing stops automatic changes.</p><div class="landing-frame-note"><span id="landing-scene-category">${sceneFrames[0].category}</span><span id="landing-scene-model">${sceneFrames[0].modelLabel}</span></div><div class="landing-filmstrip">${sceneFrames.map((scene, i) => `<button class="landing-scene-choice${i === 0 ? " is-current" : ""}" type="button" data-scene-index="${i}" aria-label="Show ${esc(scene.caption)}" aria-controls="landing-frame" aria-pressed="${i === 0}"><img src="${scene.src}" alt=""><span class="landing-scene-caption">${scene.category}</span></button>`).join("")}</div><p class="landing-example-action"><a class="landing-example-watch" id="landing-example-link" href="#/community/${sceneFrames[0].id}" aria-label="Watch ${esc(sceneFrames[0].modelLabel)} model example" title="Watch ${esc(sceneFrames[0].modelLabel)} model example">${icon("play", 20)}</a></p></div></section>
     <section class="landing-section"><h2>From prompt to video.</h2><div class="landing-workflow"><div class="landing-prompt"><span class="landing-prompt-label">Your prompt</span><blockquote>“Green hills beneath a pale sky. A slow camera push. Soft light. Quiet wind.”</blockquote><div class="landing-prompt-controls">${videoFactsMarkup({ len: 8, format: "16:9" })}</div></div><ol class="landing-steps"><li><div><h3>Describe the shot</h3><p>Write a prompt or add a reference image.</p></div></li><li><div><h3>Choose your settings</h3><p>Pick a model, length and frame. Check the price.</p></div></li><li><div><h3>Keep or publish</h3><p>Your video is saved in History. Share it in Community, with or without its prompt.</p></div></li></ol></div></section>
-    <section class="landing-section"><h2>Choose your model</h2><div class="landing-models">${availableModels().filter(m => m.featured !== false).slice(0, 3).map(m => `<article class="landing-model-row ${officialExample(m.id) ? "" : "without-preview"}">${officialExample(m.id) ? `<img src="${officialPoster(officialExample(m.id))}" alt="">` : ""}<div><h3>${esc(m.name)}</h3><p>${esc(m.provider)}</p></div><div class="landing-model-settings">${m.qualities.join(" / ")}<br><span class="muted">${m.formats.join(" · ")}</span></div><span class="landing-model-role">${officialExample(m.id) ? `<a class="landing-example-watch" href="#/community/${officialExample(m.id).id}" aria-label="Watch ${esc(m.name)} model example" title="Watch ${esc(m.name)} model example">${icon("play", 20)}</a>` : (m.inputs || ["text"]).includes("image") ? "Text or image to video" : "Text to video"}</span></article>`).join("")}</div></section>
+    <section class="landing-section"><h2>Choose your model</h2><div class="landing-models">${modelRows}</div></section>
     <section class="landing-section landing-faq"><h2>Before you start</h2><div><details><summary>Can I buy credits without a subscription?</summary><p>Yes. Choose a credit pack or a monthly plan.</p></details><details><summary>Which settings are available?</summary><p>Length, resolution and frame shape depend on the model.</p></details><details><summary>Where are my videos?</summary><p>In History. You choose what to publish in Community.</p></details></div></section></div>`;
   return () => {
     $("#explore-demo")?.addEventListener("click", () => { if (S.signedIn) go("account/overview"); else enterDemoAccount(); });
+    $$(".landing-model-media img").forEach(poster => {
+      const showIdentity = () => { poster.hidden = true; };
+      poster.addEventListener("error", showIdentity);
+      if (poster.complete && !poster.naturalWidth) showIdentity();
+    });
     const showcase = $(".landing-film"), target = $("#landing-frame"), image = $("#landing-scene"), choices = $$(".landing-scene-choice", showcase), motion = matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0, requestedFrame = 0, inView = false, hovering = false, stopped = false, disposed = false;
     let rotationTimer = null, transitionTimer = null, transitionFrame = null, pendingUpdate = null;
@@ -2169,7 +2225,7 @@ function viewHome(main) {
       const update = () => {
         frame = requestedFrame;
         const scene = sceneFrames[frame];
-        image.src = scene.src; image.alt = scene.alt;
+        image.src = scene.src; image.alt = scene.alt; image.dataset.hoverExample = scene.id;
         $("#landing-scene-category").textContent = scene.category;
         $("#landing-scene-model").textContent = scene.modelLabel;
         $("#landing-example-link").href = "#/community/" + scene.id;
@@ -2275,9 +2331,17 @@ function communityPublisherMarkup(p) {
     : `<div class="community-author"><span class="community-initials" aria-hidden="true">${esc(publicInitials(p.author))}</span><span>${esc(p.author)}</span></div>`;
 }
 const ownsPublication = post => Boolean(post && !post.official && S.signedIn && S.posts.some(own => own.id === post.id));
-function publicationActionsMarkup(post, { detail = false } = {}) {
+function publicationActionsMarkup(post, { detail = false, history = false } = {}) {
   if (!ownsPublication(post)) return "";
-  return `<div class="publication-actions" role="group" aria-label="Publication actions" data-publication-post="${esc(post.id)}"><a class="publication-action" data-publication-action="original" href="#/video/${post.videoId}" aria-label="Your original video">${icon("create", 18)}</a><button class="publication-action" ${detail ? 'id="publication-settings"' : ""} data-publication-action="settings" type="button" aria-label="Publication settings">${icon("sliders", 18)}</button><button class="publication-action" ${detail ? 'id="unpublish-video"' : ""} data-publication-action="unpublish" type="button" aria-label="Unpublish from Community">${icon("eyeOff", 18)}</button></div>`;
+  const original = history ? "" : `<a class="publication-action" data-publication-action="original" href="#/video/${post.videoId}" aria-label="Your original video">${icon("create", 18)}</a>`;
+  const settings = history ? `<a class="publication-action" data-publication-action="settings" data-publication-settings="${post.videoId}" href="#/video/${post.videoId}?publish=1" aria-label="Publication settings" aria-controls="publish-panel" aria-expanded="false">${icon("sliders", 18)}</a>` : `<button class="publication-action" ${detail ? 'id="publication-settings"' : ""} data-publication-action="settings" data-publication-settings="${post.videoId}" type="button" aria-label="Publication settings" aria-controls="publish-panel" aria-expanded="false">${icon("sliders", 18)}</button>`;
+  return `<div class="publication-actions" role="group" aria-label="Publication actions" data-publication-post="${esc(post.id)}">${original}${settings}<button class="publication-action" ${detail ? 'id="unpublish-video"' : ""} data-publication-action="unpublish" type="button" aria-label="Unpublish from Community">${icon("eyeOff", 18)}</button></div>`;
+}
+function reuseVideoSettings(video, { readyOnly = false } = {}) {
+  if (!S.signedIn || !video || !S.videos.some(v => v.id === video.id) || (readyOnly && video.status !== "ready")) return;
+  Object.assign(S.draft, { prompt: video.prompt, model: video.model, len: video.len, quality: video.quality, format: video.format, imageName: "", failDemo: false });
+  normalizeDraft(S.draft); save(); go("create");
+  toast(isModelAvailable(video.model) ? "Prompt and settings restored." : "Prompt restored. The original model is unavailable. Review the new model and settings.");
 }
 const COMMUNITY_ACTIVITY_STORE = "aurora-community-activity-v1";
 const COMMUNITY_SETUP_INTENT = "aurora-community-setup-intent-v1";
@@ -2343,15 +2407,15 @@ function dismissCommunityMetricTooltipSoon() {
   communityMetricDismiss = setTimeout(hideCommunityMetricTooltip, 120);
 }
 document.addEventListener("mouseover", e => {
-  const button = e.target.closest(".community-metric, .publication-action, .community-use, #use-community-prompt");
+  const button = e.target.closest(".community-metric, .publication-action, .community-use, #use-community-prompt, .video-icon-action");
   if (button) showCommunityMetricTooltip(button);
   else if (communityMetricTooltip.contains(e.target)) { clearTimeout(communityMetricDismiss); communityMetricDismiss = null; }
 });
 document.addEventListener("mouseout", e => {
-  const button = e.target.closest(".community-metric, .publication-action, .community-use, #use-community-prompt");
+  const button = e.target.closest(".community-metric, .publication-action, .community-use, #use-community-prompt, .video-icon-action");
   if ((button && !button.contains(e.relatedTarget)) || (communityMetricTooltip.contains(e.target) && !communityMetricTooltip.contains(e.relatedTarget))) dismissCommunityMetricTooltipSoon();
 });
-document.addEventListener("focusin", e => { const button = e.target.closest(".community-metric, .publication-action, .community-use, #use-community-prompt"); if (button) showCommunityMetricTooltip(button); });
+document.addEventListener("focusin", e => { const button = e.target.closest(".community-metric, .publication-action, .community-use, #use-community-prompt, .video-icon-action"); if (button) showCommunityMetricTooltip(button); });
 document.addEventListener("focusout", e => { if (e.target === communityMetricAnchor) hideCommunityMetricTooltip(); });
 document.addEventListener("click", e => {
   const button = e.target.closest(".community-metric");
@@ -2367,8 +2431,12 @@ document.addEventListener("click", e => {
   const post = S.posts.find(p => p.id === action.closest(".publication-actions")?.dataset.publicationPost);
   hideCommunityMetricTooltip();
   if (!ownsPublication(post)) { e.preventDefault(); return; }
-  if (action.dataset.publicationAction === "settings") { e.preventDefault(); go(`video/${post.videoId}?publish=1`); }
-  else if (action.dataset.publicationAction === "unpublish") { e.preventDefault(); unpublishPost(post.id); }
+  if (action.dataset.publicationAction === "unpublish") { e.preventDefault(); unpublishPost(post.id); }
+});
+document.addEventListener("click", e => {
+  const trigger = e.target.closest("[data-video-reuse]");
+  if (!trigger) return;
+  reuseVideoSettings(S.videos.find(v => String(v.id) === trigger.dataset.videoReuse), { readyOnly: true });
 });
 function recordCommunityView(id) {
   if (!communityPosts(false).some(p => p.id === id)) return;
@@ -2434,7 +2502,7 @@ function communityCards(limit = 6, mine = false) {
   return `<div class="community-grid">${posts.map(p => {
     const preview = recordOfficialExample(p), poster = officialPoster(preview), setupAvailable = isModelAvailable(p.model);
     const promptAction = p.includePrompt && p.prompt ? `<a class="btn community-use" href="#/create?scene=${encodeURIComponent(p.id)}" aria-label="Use the ${setupAvailable ? "setup" : "prompt"} for ${esc(p.caption)}" data-community-tooltip="${setupAvailable ? "Use this setup" : "Use prompt"}">${icon("setup", 18)}</a>` : `<p class="community-privacy"><button class="community-metric" type="button" data-community-metric="private" aria-label="Private prompt">${icon("lock", 16)}</button></p>`;
-    return `<article class="community-card" ${p.official ? 'data-official-example="true"' : ""}><a class="thumb ${poster ? "" : "community-no-preview"}" href="#/community/${p.id}" aria-label="View ${esc(p.caption)}">${poster ? `<img src="${esc(poster)}" alt="${esc(preview.alt)}" loading="lazy">${Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}` : '<span>Preview unavailable</span>'}</a>${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${preview ? videoFactsMarkup(preview) : ""}</p>${communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div></article>`;
+    return `<article class="community-card" ${p.official ? 'data-official-example="true"' : ""}><a class="thumb ${poster ? "" : "community-no-preview"}" href="#/community/${p.id}" aria-label="View ${esc(p.caption)}">${poster ? `<img src="${esc(poster)}" data-hover-example="${esc(preview.id)}" alt="${esc(preview.alt)}" loading="lazy">${Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}` : '<span>Preview unavailable</span>'}</a>${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${preview ? videoFactsMarkup(preview) : ""}</p>${communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div></article>`;
   }).join("")}</div>`;
 }
 function unpublishPost(id) {
@@ -2452,50 +2520,118 @@ function unpublishPost(id) {
 }
 function publicationMarkup(v) {
   const post = getPublishedPost(v.id);
-  return `<section class="publication" aria-labelledby="publication-title"><h2 id="publication-title">${post ? "Shared with the community" : "Share your scene"}</h2><span class="publication-state">${post ? "Published" : "Private video"}</span>${post ? `<p>People can find this scene in the community. ${post.includePrompt ? "Your prompt is shared." : "Your prompt is private."}</p><div class="row"><a class="btn" id="view-publication" href="#/community/${post.id}">View publication</a><button class="btn" id="edit-publication-settings" type="button" aria-controls="publish-panel" aria-expanded="false">Publication settings</button><button class="linkbtn" id="unpublish-video" type="button">Unpublish</button></div>` : `<p>Your video stays private until you choose to publish it.</p><button class="btn" id="publish-video" type="button" aria-controls="publish-panel" aria-expanded="false">Publish</button>`}<div class="publish-panel" id="publish-panel" hidden><label for="publish-title">Public title</label><input id="publish-title" type="text" maxlength="120" value="${esc(post ? post.caption : titleOf(v.prompt))}" aria-describedby="publish-error"><p class="err" id="publish-error" role="alert" hidden>Enter a public title with 1 to 120 characters.</p><label class="publication-share"><input id="publish-share-prompt" type="checkbox" aria-describedby="publish-privacy" ${post?.includePrompt ? "checked" : ""}>Include my prompt</label><p id="publish-privacy">Your title and name ${post ? "are" : "will be"} public. Include your prompt only if you want anyone to read and reuse it.</p><div class="row"><button class="btn primary" id="confirm-publish" type="button">${post ? "Save changes" : "Publish scene"}</button><button class="btn" id="cancel-publish" type="button">${post ? "Cancel" : "Keep private"}</button></div></div></section>`;
+  const actions = post ? `<div class="row publication-icon-actions" role="group" aria-label="Publication actions"><a class="btn video-icon-action" id="view-publication" href="#/community/${post.id}" aria-label="View publication">${icon("eye", 18)}</a><button class="btn video-icon-action" id="edit-publication-settings" data-publication-settings="${v.id}" type="button" aria-controls="publish-panel" aria-expanded="false" aria-label="Publication settings">${icon("sliders", 18)}</button><button class="btn video-icon-action" id="unpublish-video" type="button" aria-label="Unpublish from Community">${icon("eyeOff", 18)}</button></div>` : `<button class="btn video-icon-action" id="publish-video" data-publication-settings="${v.id}" type="button" aria-controls="publish-panel" aria-expanded="false" aria-label="Publish video">${icon("eye", 18)}</button>`;
+  return `<section class="publication" aria-labelledby="publication-title"><h2 id="publication-title">Publication</h2><span class="publication-state">${post ? `Published · Prompt ${post.includePrompt ? "shared" : "private"}` : "Private"}</span>${actions}</section>`;
 }
-function initPublication(v) {
-  const trigger = $("#edit-publication-settings") || $("#publish-video");
-  const openPanel = (scroll = false) => {
-    const post = getPublishedPost(v.id);
-    $("#publish-title").value = post ? post.caption : titleOf(v.prompt);
-    $("#publish-share-prompt").checked = Boolean(post?.includePrompt);
-    $("#publish-error").hidden = true;
-    $("#publish-title").removeAttribute("aria-invalid");
-    $("#publish-panel").hidden = false;
-    trigger.hidden = true;
-    trigger.setAttribute("aria-expanded", "true");
-    if (scroll) $(".publication").scrollIntoView({ block: "start", behavior: "auto" });
-    $("#publish-title").focus({ preventScroll: scroll });
-  };
-  trigger?.addEventListener("click", () => openPanel());
-  $("#cancel-publish")?.addEventListener("click", () => { $("#publish-panel").hidden = true; trigger.hidden = false; trigger.setAttribute("aria-expanded", "false"); trigger.focus(); });
-  $("#publish-title")?.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); $("#confirm-publish").click(); } });
-  $("#publish-panel")?.addEventListener("keydown", e => { if (e.key === "Escape") { e.preventDefault(); $("#cancel-publish").click(); } });
-  $("#confirm-publish")?.addEventListener("click", () => {
-    const caption = $("#publish-title").value.trim();
-    if (!caption || caption.length > 120) { $("#publish-error").hidden = false; $("#publish-title").setAttribute("aria-invalid", "true"); $("#publish-title").focus(); return; }
-    if (!S.signedIn || v.status !== "ready") return;
-    const includePrompt = $("#publish-share-prompt").checked;
-    const existing = getPublishedPost(v.id);
-    if (existing) {
-      existing.caption = caption;
-      existing.includePrompt = includePrompt;
-      if (includePrompt) existing.prompt = v.prompt;
-      else delete existing.prompt;
-      save(); route({ preserve: true }); $("#edit-publication-settings")?.focus({ preventScroll: true }); toast("Publication settings saved.");
-      return;
-    }
-    const post = { id: `post-${Date.now().toString(36)}-${v.id}`, videoId: v.id, author: accountUser().name, caption, includePrompt, model: v.model, modelName: recordModel(v).name, providerName: recordModel(v).provider, len: v.len, quality: v.quality, format: v.format, img: v.img, exampleId: recordOfficialExample(v)?.id || null, createdAt: new Date().toISOString() };
-    if (includePrompt) post.prompt = v.prompt;
-    S.posts.push(post); save(); route({ preserve: true }); $("#view-publication")?.focus({ preventScroll: true }); toast("Your scene is published.", { label: "View", fn: () => go("community/" + post.id) });
+const publicationPanel = document.createElement("section");
+publicationPanel.id = "publish-panel";
+publicationPanel.className = "publication-popover";
+publicationPanel.hidden = true;
+publicationPanel.setAttribute("aria-labelledby", "publish-popover-title");
+const nativePublicationPopover = typeof publicationPanel.showPopover === "function";
+if (nativePublicationPopover) publicationPanel.setAttribute("popover", "auto");
+document.body.appendChild(publicationPanel);
+let publicationContext = null;
+const readyPublicationVideo = id => S.signedIn ? S.videos.find(v => String(v.id) === String(typeof id === "object" ? id?.id : id) && v.status === "ready") : null;
+function publicationCaller(context) {
+  if (context.trigger?.isConnected) return context.trigger;
+  return (context.selector && $(context.selector)) || $(`[data-publication-settings="${context.videoId}"]`) || $("#title");
+}
+function restorePublicationContext(context, { selections = false } = {}) {
+  if (!context || location.hash !== context.path) return;
+  if (selections) context.selections.forEach(selection => {
+    const field = document.getElementById(selection.id);
+    if (field?.value === selection.value) field.setSelectionRange(selection.start, selection.end, selection.direction);
   });
+  publicationCaller(context)?.focus({ preventScroll: true });
+  window.scrollTo(context.scrollX, context.scrollY);
+}
+function closePublicationPanel({ restore = true } = {}) {
+  const context = publicationContext;
+  if (!context) return;
+  publicationContext = null;
+  context.trigger?.setAttribute("aria-expanded", "false");
+  if (publicationPanel.contains(document.activeElement)) document.activeElement.blur();
+  if (nativePublicationPopover && publicationPanel.matches(":popover-open")) publicationPanel.hidePopover();
+  publicationPanel.hidden = true;
+  if (restore) restorePublicationContext(context);
+}
+function positionPublicationPanel() {
+  if (!publicationContext || publicationPanel.hidden) return;
+  const viewport = window.visualViewport;
+  const x = viewport?.offsetLeft || 0, y = viewport?.offsetTop || 0;
+  const width = viewport?.width || innerWidth, height = viewport?.height || innerHeight, margin = 16;
+  publicationPanel.style.maxWidth = `${Math.max(0, width - margin * 2)}px`;
+  publicationPanel.style.maxHeight = `${Math.max(0, height - margin * 2)}px`;
+  const panel = publicationPanel.getBoundingClientRect();
+  const trigger = publicationCaller(publicationContext)?.getBoundingClientRect() || { left: x + margin, right: x + margin, top: y + margin, bottom: y + margin };
+  const below = trigger.bottom + 8, above = trigger.top - panel.height - 8;
+  const top = below + panel.height <= y + height - margin ? below : above >= y + margin ? above : Math.max(y + margin, Math.min(y + height - panel.height - margin, below));
+  publicationPanel.style.left = `${Math.max(x + margin, Math.min(x + width - panel.width - margin, trigger.right - panel.width))}px`;
+  publicationPanel.style.top = `${Math.max(y + margin, Math.min(y + height - panel.height - margin, top))}px`;
+}
+function openPublicationSettings(id, trigger = null) {
+  const video = readyPublicationVideo(id);
+  if (!video) return false;
+  if (publicationContext?.trigger === trigger && publicationContext.videoId === video.id) { closePublicationPanel(); return false; }
+  closePublicationPanel({ restore: false });
+  hideCommunityMetricTooltip();
+  const post = getPublishedPost(video.id);
+  publicationContext = { videoId: video.id, trigger, selector: trigger?.id ? `#${CSS.escape(trigger.id)}` : null, path: location.hash, scrollX, scrollY,
+    selections: $$("#main input[id], #main textarea[id]").filter(field => field.selectionStart !== null).map(field => ({ id: field.id, value: field.value, start: field.selectionStart, end: field.selectionEnd, direction: field.selectionDirection })) };
+  trigger?.setAttribute("aria-expanded", "true");
+  publicationPanel.innerHTML = `<header class="publication-popover-head"><h2 id="publish-popover-title">${post ? "Publication settings" : "Publish video"}</h2><button class="publication-popover-close" id="close-publish" type="button" aria-label="Close publication settings">${icon("x", 18)}</button></header><p class="publication-as">Publish as <strong>${esc(accountUser().name)}</strong></p><form id="publication-form" novalidate><label class="publication-title-label" for="publish-title">Public title</label><input id="publish-title" type="text" maxlength="120" value="${esc(post ? post.caption : titleOf(video.prompt))}" aria-describedby="publish-error"><p class="err" id="publish-error" role="alert" hidden>Enter a public title with 1 to 120 characters.</p><label class="publication-share"><input id="publish-share-prompt" type="checkbox" aria-describedby="publish-privacy" ${post?.includePrompt ? "checked" : ""}>Share my prompt</label><p class="publication-consent" id="publish-privacy">Creators can read and reuse it.</p><div class="publication-popover-actions"><button class="btn" id="cancel-publish" type="button">Cancel</button><button class="btn primary" id="confirm-publish" type="submit">${post ? "Save changes" : "Publish"}</button></div></form>`;
+  publicationPanel.hidden = false;
+  if (nativePublicationPopover) publicationPanel.showPopover();
+  positionPublicationPanel();
+  $("#publish-title").focus({ preventScroll: true });
+  $("#publish-title").oninput = event => {
+    const field = event.target;
+    if (field.getAttribute("aria-invalid") === "true" && field.value.trim().length > 0 && field.value.trim().length <= 120) {
+      $("#publish-error").hidden = true; field.removeAttribute("aria-invalid"); positionPublicationPanel();
+    }
+  };
+  $("#cancel-publish").onclick = $("#close-publish").onclick = () => closePublicationPanel();
+  $("#publication-form").onsubmit = event => {
+    event.preventDefault();
+    const caption = $("#publish-title").value.trim();
+    if (!caption || caption.length > 120) { $("#publish-error").hidden = false; $("#publish-title").setAttribute("aria-invalid", "true"); positionPublicationPanel(); $("#publish-title").focus({ preventScroll: true }); return; }
+    const current = readyPublicationVideo(publicationContext?.videoId);
+    if (!current) { closePublicationPanel(); return; }
+    const includePrompt = $("#publish-share-prompt").checked;
+    const existing = getPublishedPost(current.id);
+    if (existing) { existing.caption = caption; existing.includePrompt = includePrompt; if (includePrompt) existing.prompt = current.prompt; else delete existing.prompt; }
+    else {
+      const published = { id: `post-${Date.now().toString(36)}-${current.id}`, videoId: current.id, author: accountUser().name, caption, includePrompt, model: current.model, modelName: recordModel(current).name, providerName: recordModel(current).provider, len: current.len, quality: current.quality, format: current.format, img: current.img, exampleId: recordOfficialExample(current)?.id || null, createdAt: new Date().toISOString() };
+      if (includePrompt) published.prompt = current.prompt;
+      S.posts.push(published);
+    }
+    const context = publicationContext;
+    closePublicationPanel({ restore: false }); save(); route({ preserve: true }); restorePublicationContext(context, { selections: true });
+    if (existing) toast("Publication settings saved.");
+    else { const published = getPublishedPost(current.id); toast("Your scene is published.", { label: "View", fn: () => go("community/" + published.id) }); }
+  };
+  return true;
+}
+publicationPanel.addEventListener("keydown", event => { if (event.key === "Escape") { event.preventDefault(); closePublicationPanel(); } });
+publicationPanel.addEventListener("toggle", event => { if (event.newState === "closed" && publicationContext && !publicationPanel.matches(":popover-open")) closePublicationPanel({ restore: false }); });
+document.addEventListener("pointerdown", event => { if (publicationContext && !publicationPanel.contains(event.target) && !publicationContext.trigger?.contains(event.target)) closePublicationPanel({ restore: false }); }, true);
+document.addEventListener("click", event => {
+  const trigger = event.target.closest("[data-publication-settings]");
+  if (!trigger || event.defaultPrevented || event.button !== 0 || (trigger.tagName === "A" && (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey))) return;
+  event.preventDefault(); openPublicationSettings(trigger.dataset.publicationSettings, trigger);
+});
+window.addEventListener("scroll", positionPublicationPanel, true);
+window.addEventListener("resize", positionPublicationPanel);
+window.visualViewport?.addEventListener("resize", positionPublicationPanel);
+window.visualViewport?.addEventListener("scroll", positionPublicationPanel);
+function initPublication(v) {
   $("#unpublish-video")?.addEventListener("click", () => unpublishPost(getPublishedPost(v.id)?.id));
   const params = new URLSearchParams(location.hash.split("?")[1] || "");
-  if (params.get("publish") === "1" && v.status === "ready") {
+  if (params.get("publish") === "1") {
     params.delete("publish");
     history.replaceState(null, "", location.hash.split("?")[0] + (params.size ? "?" + params.toString() : ""));
-    openPanel(true);
+    openPublicationSettings(v, $("#edit-publication-settings") || $("#publish-video"));
   }
 }
 function viewCommunity(main, arg) {
@@ -2551,6 +2687,237 @@ function initModelPicker() {
   };
   return () => { if (dialog.open) dialog.close(); };
 }
+
+/* Silent, disposable previews of exact OFFICIAL_EXAMPLES. Explicit player analytics stay separate.
+   hls.js stable pin verified 2026-11-01: github.com/video-dev/hls.js/releases/tag/v1.7.4.
+   Mux URL format: mux.com/docs/guides/play-your-videos. YouTube mute API: developers.google.com/youtube/iframe_api_reference. */
+const hoverPreviewController = (() => {
+  const HOOK = "img[data-hover-example]", HOVER_DELAY = 180, SETTLE_DELAY = 700, VISIBLE_RATIO = 0.68;
+  const HLS_URL = "https://cdn.jsdelivr.net/npm/hls.js@1.7.4/dist/hls.min.js";
+  const HLS_INTEGRITY = "sha384-p9vgU/7IYJWd3I4STrtqxqR/2cAQlhIX7D/HrTnIMEjjcUox165b7se7sxmm3zDg";
+  const fine = matchMedia("(hover: hover) and (pointer: fine)"), coarse = matchMedia("(pointer: coarse)");
+  const motion = matchMedia("(prefers-reduced-motion: reduce)"), connection = navigator.connection;
+  const failures = new Map();
+  let active = null, hoverImage = null, hoverTimer = null, settleTimer = null, disposed = false;
+  const blocked = () => {
+    if (document.hidden || motion.matches || connection?.saveData) return true;
+    if (document.activeElement?.matches("input,textarea,select,[contenteditable='true']")) return true;
+    return ["#publish-panel", "#mobile-navigation", "#menu", "dialog[open]"].some(selector => {
+      const el = document.querySelector(selector);
+      return el && !el.hidden && el.getClientRects().length;
+    });
+  };
+  const allowed = () => !disposed && !blocked();
+  const exampleFor = image => OFFICIAL_EXAMPLES.find(example => example.official && example.id === image?.dataset.hoverExample);
+  const hostFor = image => image?.closest(".thumb,#landing-frame,.estimate-visual") || image?.parentElement;
+  const mobileImage = image => Boolean(image?.closest(".community-card .thumb,.vcard .thumb")) && !image.closest(".hist");
+  const rectVisibility = image => {
+    const r = image.getBoundingClientRect(), top = Math.max(0, document.querySelector("#top")?.getBoundingClientRect().bottom || 0);
+    const width = Math.max(0, Math.min(innerWidth, r.right) - Math.max(0, r.left));
+    const height = Math.max(0, Math.min(innerHeight, r.bottom) - Math.max(top, r.top));
+    return { rect: r, ratio: r.width > 0 && r.height > 0 ? width * height / (r.width * r.height) : 0, top };
+  };
+  const eligible = image => {
+    if (!image?.isConnected || !exampleFor(image) || !image.getClientRects().length || image.closest("[hidden]")) return false;
+    const r = rectVisibility(image);
+    return r.rect.width > 0 && r.rect.height > 0 && r.ratio > 0 && (failures.get(image.dataset.hoverExample) || 0) < Date.now();
+  };
+  const live = session => active === session && !session.abort.signal.aborted && allowed() && session.image.isConnected && session.image.dataset.hoverExample === session.example.id;
+  const clearTimers = () => { clearTimeout(hoverTimer); clearTimeout(settleTimer); hoverTimer = settleTimer = null; };
+  const release = () => {
+    const previous = active; active = null;
+    if (!previous) return;
+    previous.abort.abort(); clearTimeout(previous.timeout); clearInterval(previous.muteTimer);
+    if (previous.video) {
+      previous.video.onloadeddata = previous.video.onplaying = previous.video.onerror = null;
+      if (previous.frameRequest !== undefined && previous.video.cancelVideoFrameCallback) previous.video.cancelVideoFrameCallback(previous.frameRequest);
+      previous.video.pause(); previous.video.removeAttribute("src"); previous.video.load();
+    }
+    try { previous.hls?.stopLoad(); previous.hls?.destroy(); } catch (_) {}
+    try { previous.youtube?.pauseVideo(); previous.youtube?.destroy(); } catch (_) {}
+    const iframe = previous.layer.querySelector("iframe");
+    if (iframe) iframe.src = "about:blank";
+    previous.layer.remove();
+    if (previous.positionAdded && previous.host.style.position === "relative") previous.host.style.position = previous.originalPosition;
+    previous.image.removeAttribute("data-preview-state");
+  };
+  const stop = () => { clearTimers(); release(); };
+  const fail = session => {
+    if (active !== session) return;
+    failures.set(session.example.id, Date.now() + 30000);
+    release();
+  };
+  const reveal = session => {
+    if (!live(session)) return;
+    clearTimeout(session.timeout);
+    session.image.dataset.previewState = "playing";
+    session.layer.classList.add("is-ready");
+  };
+  const alignLayer = session => {
+    const image = session.image.getBoundingClientRect(), host = session.host.getBoundingClientRect();
+    Object.assign(session.layer.style, { left: `${image.left - host.left - session.host.clientLeft + session.host.scrollLeft}px`, top: `${image.top - host.top - session.host.clientTop + session.host.scrollTop}px`, width: `${image.width}px`, height: `${image.height}px` });
+  };
+  const mediaSource = (example, image) => {
+    let url;
+    try { url = new URL(example.mediaUrl); } catch (_) { return null; }
+    if (url.protocol !== "https:") return null;
+    if (example.mediaType === "video") return { type: "video", url: url.href };
+    if (example.mediaType !== "embed") return null;
+    if (url.hostname === "player.mux.com" && /^\/[A-Za-z0-9]+$/.test(url.pathname)) return { type: "hls", url: `https://stream.mux.com${url.pathname}.m3u8` };
+    if (["www.youtube.com", "www.youtube-nocookie.com"].includes(url.hostname) && /^\/embed\/[A-Za-z0-9_-]{11}$/.test(url.pathname)) {
+      const r = image.getBoundingClientRect();
+      return r.width >= 200 && r.height >= 200 ? { type: "youtube", id: url.pathname.split("/").pop() } : null;
+    }
+    return null;
+  };
+  const loadHls = async session => {
+    if (typeof window.Hls === "function") return window.Hls;
+    const response = await fetch(HLS_URL, { signal: session.abort.signal, integrity: HLS_INTEGRITY, credentials: "omit" });
+    if (!response.ok) throw new Error("HLS library unavailable");
+    const source = await response.text();
+    if (!live(session)) throw new DOMException("Preview cancelled", "AbortError");
+    const script = document.createElement("script"); script.textContent = source;
+    document.head.appendChild(script); script.remove();
+    if (typeof window.Hls !== "function") throw new Error("HLS unavailable");
+    return window.Hls;
+  };
+  const startVideo = async (session, source) => {
+    const video = document.createElement("video"); session.video = video;
+    video.className = "thumbnail-live-video"; video.muted = true; video.defaultMuted = true; video.volume = 0;
+    video.playsInline = true; video.loop = true; video.preload = "none"; video.controls = false;
+    video.setAttribute("muted", ""); video.setAttribute("playsinline", ""); video.setAttribute("aria-hidden", "true"); video.tabIndex = -1;
+    video.addEventListener("volumechange", () => { if (!video.muted || video.volume !== 0) { video.muted = true; video.volume = 0; } }, { signal: session.abort.signal });
+    const firstFrame = () => {
+      if (!live(session) || video.readyState < 2 || !video.videoWidth) return;
+      if (session.frameRequest !== undefined || session.layer.classList.contains("is-ready")) return;
+      if (video.requestVideoFrameCallback) session.frameRequest = video.requestVideoFrameCallback(() => { session.frameRequest = undefined; reveal(session); });
+      else reveal(session);
+    };
+    video.onloadeddata = video.onplaying = firstFrame;
+    video.onerror = () => fail(session);
+    session.layer.appendChild(video);
+    const play = () => {
+      if (!live(session)) return;
+      video.muted = true; video.defaultMuted = true; video.volume = 0;
+      video.play().then(firstFrame).catch(() => { if (live(session)) fail(session); });
+    };
+    if (source.type === "video") { video.src = source.url; play(); return; }
+    const native = video.canPlayType("application/vnd.apple.mpegurl") && (!window.MediaSource || "ManagedMediaSource" in window);
+    if (native) { video.src = source.url; play(); return; }
+    const Hls = await loadHls(session);
+    if (!live(session)) return;
+    if (!Hls.isSupported()) { fail(session); return; }
+    session.hls = new Hls({ autoStartLoad: false, startLevel: 0, capLevelToPlayerSize: true, maxBufferLength: 5, maxMaxBufferLength: 10, backBufferLength: 0 });
+    session.hls.on(Hls.Events.ERROR, (_, data) => { if (data.fatal) fail(session); });
+    session.hls.on(Hls.Events.MANIFEST_PARSED, () => { if (live(session)) { session.hls.startLoad(0); play(); } });
+    session.hls.on(Hls.Events.MEDIA_ATTACHED, () => { if (live(session)) session.hls.loadSource(source.url); });
+    session.hls.attachMedia(video);
+  };
+  const loadYouTube = session => {
+    if (typeof window.YT?.Player === "function") return Promise.resolve(window.YT);
+    return new Promise((resolve, reject) => {
+      const previous = window.onYouTubeIframeAPIReady, script = document.createElement("script");
+      const cleanup = () => { script.remove(); if (window.onYouTubeIframeAPIReady === ready) window.onYouTubeIframeAPIReady = previous; };
+      const ready = () => { cleanup(); try { previous?.(); } catch (_) {} resolve(window.YT); };
+      window.onYouTubeIframeAPIReady = ready;
+      script.src = "https://www.youtube.com/iframe_api"; script.async = true;
+      script.onerror = () => { cleanup(); reject(new Error("YouTube unavailable")); };
+      session.abort.signal.addEventListener("abort", () => { cleanup(); reject(new DOMException("Preview cancelled", "AbortError")); }, { once: true });
+      document.head.appendChild(script);
+    });
+  };
+  const startYouTube = async (session, source) => {
+    const YT = await loadYouTube(session);
+    if (!live(session)) return;
+    const mount = document.createElement("div"); session.layer.appendChild(mount);
+    session.youtube = new YT.Player(mount, { host: "https://www.youtube-nocookie.com", width: "100%", height: "100%", videoId: source.id,
+      playerVars: { autoplay: 0, controls: 0, disablekb: 1, fs: 0, playsinline: 1, loop: 1, playlist: source.id, ...(location.origin !== "null" ? { origin: location.origin } : {}) },
+      events: {
+        onReady: event => {
+          if (!live(session)) { try { event.target.destroy(); } catch (_) {} return; }
+          const player = event.target, iframe = player.getIframe();
+          iframe.setAttribute("aria-hidden", "true"); iframe.tabIndex = -1; iframe.allow = "autoplay"; iframe.referrerPolicy = "strict-origin-when-cross-origin";
+          player.mute(); player.setVolume(0);
+          // Do not request playback until the API confirms both muted state and zero volume.
+          session.muteTimer = setInterval(() => {
+            if (!live(session)) return;
+            if (player.isMuted() && player.getVolume() === 0) { clearInterval(session.muteTimer); session.muteTimer = null; player.playVideo(); }
+          }, 40);
+        },
+        onStateChange: event => { if (!live(session)) return; if (event.data === 1) { if (event.target.isMuted() && event.target.getVolume() === 0) reveal(session); else fail(session); } },
+        onError: () => fail(session)
+      }
+    });
+  };
+  const begin = image => {
+    if (!allowed() || !eligible(image)) return;
+    const example = exampleFor(image), source = mediaSource(example, image);
+    if (!source || (active?.image === image && active.example.id === example.id)) return;
+    release();
+    const host = hostFor(image), layer = document.createElement("div"), abort = new AbortController();
+    layer.className = "thumbnail-live-preview"; layer.setAttribute("aria-hidden", "true"); layer.dataset.example = example.id;
+    const session = { image, host, layer, example, abort, originalPosition: host.style.position, positionAdded: getComputedStyle(host).position === "static" };
+    active = session;
+    if (session.positionAdded) host.style.position = "relative";
+    alignLayer(session); host.insertBefore(layer, image.nextSibling);
+    image.dataset.previewState = "loading";
+    session.timeout = setTimeout(() => fail(session), 10000);
+    Promise.resolve(source.type === "youtube" ? startYouTube(session, source) : startVideo(session, source)).catch(() => { if (live(session)) fail(session); });
+  };
+  const scheduleHover = image => {
+    if (!fine.matches || !allowed() || !eligible(image)) return;
+    if (hoverImage === image && (hoverTimer || active?.image === image)) return;
+    clearTimeout(hoverTimer); release(); hoverImage = image;
+    hoverTimer = setTimeout(() => { hoverTimer = null; if (fine.matches && hoverImage === image) begin(image); }, HOVER_DELAY);
+  };
+  const chooseMobile = () => {
+    if (!coarse.matches || fine.matches || !allowed()) return;
+    const center = innerHeight / 2;
+    const candidates = [...document.querySelectorAll(HOOK)].filter(image => mobileImage(image) && eligible(image)).map(image => ({ image, ...rectVisibility(image) }))
+      .filter(item => item.rect.width >= 130 && item.rect.height >= 80 && item.ratio >= VISIBLE_RATIO)
+      .sort((a, b) => Math.abs(a.rect.top + a.rect.height / 2 - center) - Math.abs(b.rect.top + b.rect.height / 2 - center));
+    if (candidates[0]) begin(candidates[0].image);
+  };
+  const armMobile = () => { clearTimeout(settleTimer); settleTimer = null; if (coarse.matches && !fine.matches && allowed()) settleTimer = setTimeout(() => { settleTimer = null; chooseMobile(); }, SETTLE_DELAY); };
+  const candidateAt = target => {
+    if (!(target instanceof Element)) return null;
+    if (target.matches(HOOK)) return target;
+    return target.closest(".thumb,#landing-frame,.estimate-visual")?.querySelector(HOOK) || null;
+  };
+  document.addEventListener("pointerover", event => { if (event.pointerType !== "touch") scheduleHover(candidateAt(event.target)); }, { passive: true });
+  document.addEventListener("pointermove", event => { if (event.pointerType !== "touch" && !active) scheduleHover(candidateAt(event.target)); }, { passive: true });
+  document.addEventListener("pointerout", event => {
+    const host = hostFor(hoverImage);
+    if (host && !host.contains(event.relatedTarget)) { clearTimeout(hoverTimer); hoverTimer = null; hoverImage = null; release(); }
+  }, { passive: true });
+  document.addEventListener("scroll", () => { stop(); hoverImage = null; armMobile(); }, { passive: true, capture: true });
+  document.addEventListener("pointerdown", () => { stop(); hoverImage = null; }, { passive: true, capture: true });
+  document.addEventListener("click", () => { stop(); hoverImage = null; armMobile(); }, { passive: true, capture: true });
+  document.addEventListener("focusin", () => { stop(); hoverImage = null; }, true);
+  document.addEventListener("focusout", () => queueMicrotask(armMobile), true);
+  document.addEventListener("toggle", () => { stop(); armMobile(); }, true);
+  document.addEventListener("visibilitychange", () => { stop(); hoverImage = null; armMobile(); });
+  window.addEventListener("hashchange", () => { stop(); hoverImage = null; armMobile(); });
+  window.addEventListener("resize", () => { stop(); hoverImage = null; armMobile(); });
+  window.addEventListener("pagehide", () => { stop(); hoverImage = null; });
+  window.addEventListener("pageshow", armMobile);
+  for (const query of [fine, coarse, motion]) query.addEventListener("change", () => { stop(); hoverImage = null; armMobile(); });
+  connection?.addEventListener?.("change", () => { stop(); armMobile(); });
+  const observer = new MutationObserver(records => {
+    if (active && (!active.image.isConnected || active.image.dataset.hoverExample !== active.example.id || blocked())) release();
+    let changed = false;
+    for (const record of records) {
+      if (record.type === "attributes") {
+        if (record.target.matches(HOOK)) { changed = true; if (record.target === hoverImage && fine.matches) { const image = hoverImage; stop(); hoverImage = null; scheduleHover(image); } }
+        else if (record.target.matches("#publish-panel,#mobile-navigation,#menu,dialog")) changed = true;
+      } else if ([...record.addedNodes, ...record.removedNodes].some(node => node instanceof Element && (node.matches(HOOK + ",#publish-panel,#mobile-navigation,#menu,dialog") || node.querySelector(HOOK + ",#publish-panel,#mobile-navigation,#menu,dialog")))) changed = true;
+    }
+    if (changed) armMobile();
+  });
+  observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["data-hover-example", "src", "hidden", "open", "aria-expanded"] });
+  armMobile();
+  return { stop, destroy() { disposed = true; stop(); observer.disconnect(); } };
+})();
 
 
 save();
