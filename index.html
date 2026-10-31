@@ -195,21 +195,11 @@ legend { padding: 0; font-size: var(--fs-caption); color: var(--text-muted); mar
 .attached button { border: 0; background: none; padding: 4px; display: grid; place-items: center; border-radius: 50%; color: var(--text-muted); }
 .attached button:hover { color: var(--text); background: var(--surface-2); }
 .attached[hidden] { display: none; }
-.models { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding: 14px 14px 0; border-top: 1px solid var(--line); }
-.model { position: relative; display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; align-items: center; padding: 8px; border: 1px solid var(--line); border-radius: var(--r-md); cursor: pointer; }
-.model:hover { border-color: var(--field-line); }
-.model input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
-.model .m-img { width: 76px; aspect-ratio: 4/3; border-radius: var(--r-sm); overflow: hidden; background: var(--surface-2); }
-.model .m-img img { width: 100%; height: 100%; object-fit: cover; }
-.model b { display: block; font-weight: 600; font-size: 15px; }
-.model .m-tag { display: block; color: var(--text-muted); font-size: var(--fs-caption); line-height: 1.35; }
-.model .m-price { display: block; margin-top: 4px; font-size: var(--fs-caption); font-weight: 500; }
-.model:has(input:checked) { border-color: var(--accent); background: var(--soft); box-shadow: inset 0 0 0 1px var(--accent); }
-.model:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
-.model .sel { grid-column: 2; font-size: 12px; font-weight: 600; display: none; align-items: center; gap: 4px; color: var(--accent); margin-top: -4px; }
-.model:has(input:checked) .sel { display: inline-flex; }
 .settings { display: grid; grid-template-columns: auto auto auto; justify-content: space-between; gap: 18px 24px; padding: 18px 14px 14px; }
 .set .ruler { margin-top: 10px; min-width: 250px; }
+.duration-range { display: flex; justify-content: space-between; color: var(--text-muted); font-size: 12px; margin-top: 6px; }
+.image-compatibility { padding: 0 22px 16px; }
+.history-model { min-height: 44px; max-width: 100%; border: 1px solid var(--field-line); border-radius: var(--r-sm); background: var(--surface); color: var(--text); padding: 10px 36px 10px 12px; font: inherit; }
 .ticks { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; margin-top: 4px; font-size: 12px; color: var(--text-muted); text-align: center; }
 .strip { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; height: 14px; }
 .strip i { background: var(--line); border-radius: 2px; transition: background-color 150ms ease-out; }
@@ -400,7 +390,6 @@ dialog .btns { display: flex; gap: 10px; justify-content: flex-end; }
   .sum { position: static; }
   .ideas { grid-template-columns: minmax(0, 1fr); }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .models { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 760px) {
   :root { --fs-h1: 34px; }
@@ -411,6 +400,7 @@ dialog .btns { display: flex; gap: 10px; justify-content: flex-end; }
   .notice-in { padding: 8px 16px; }
   .hero { padding: 24px 16px 0; }
   .lead { font-size: 16px; margin-bottom: 20px; }
+  .history-model { width: 100%; font-size: 16px; }
   .creator-starts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0 0 20px; }
   .creator-starts > span { grid-column: 1 / -1; }
   .creator-starts button { display: flex; flex-direction: column; justify-content: center; gap: 2px; border: 1px solid var(--field-line); border-radius: var(--r-sm); min-height: 52px; text-decoration: none; }
@@ -676,12 +666,6 @@ dialog .btns { display: flex; gap: 10px; justify-content: flex-end; }
   .avatar { width: 44px; height: 44px; }
   .menu .item, .seg > button, .seg label > span, .chip { min-height: 44px; }
   .gtabs button { min-height: 44px; }
-  .models { gap: 8px; padding: 10px 10px 0; }
-  .model { grid-template-columns: 48px minmax(0, 1fr) auto; gap: 8px; min-height: 78px; padding: 10px; }
-  .model .m-img { width: 48px; }
-  .model .m-tag { display: none; }
-  .model .m-price { font-size: 12px; margin-top: 2px; }
-  .model .sel { grid-column: 3; grid-row: 1; font-size: 11px; margin: 0; }
   .composer .foot { position: sticky; bottom: calc(66px + env(safe-area-inset-bottom, 0px)); z-index: 20; display: grid; grid-template-columns: minmax(0, 1fr) auto; padding: 12px; gap: 12px; background: var(--surface); border-bottom: 1px solid var(--line); }
   .composer .foot .go { width: auto; font-size: 14px; padding: 12px 16px; }
   .composer .price b { font-size: 23px; }
@@ -762,6 +746,107 @@ dialog .btns { display: flex; gap: 10px; justify-content: flex-end; }
   .vside > .account-link { order: 5; }
 }
 
+.model-picker { display: flex; align-items: center; justify-content: space-between; gap: 20px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 20px 22px; }
+.model-picker > div { min-width: 0; }
+.model-picker strong { display: block; font-size: 17px; font-weight: 600; overflow-wrap: anywhere; }
+.model-picker p { color: var(--text-muted); font-size: 13px; margin-top: 6px; }
+.model-picker .btn { flex: none; min-height: 44px; }
+.catalog-label { display: block; color: var(--text-muted); font-size: 12px; margin-bottom: 6px; }
+.catalog-dialog { width: min(680px, calc(100vw - 32px)); max-width: none; max-height: min(820px, calc(100dvh - 48px)); padding: 0; background: var(--surface); color: var(--text); border: 1px solid var(--line); overflow: hidden; }
+.catalog-dialog[open] { display: flex; flex-direction: column; }
+.catalog-dialog::backdrop { background: var(--scrim); }
+.catalog-dialog header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 24px; }
+.catalog-dialog h2 { font-size: 30px; }
+.catalog-dialog header p { font-size: 14px; color: var(--text-muted); margin-top: 8px; }
+.catalog-close { display: grid; place-items: center; width: 44px; height: 44px; flex: none; border: 1px solid var(--field-line); border-radius: var(--r-sm); background: var(--surface); color: var(--text); }
+.catalog-close:hover { background: var(--surface-2); }
+.catalog-toolbar { padding: 0 24px 16px; border-bottom: 1px solid var(--line); }
+.catalog-toolbar input, .catalog-toolbar select { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--field-line); border-radius: var(--r-sm); background: var(--surface); color: var(--text); font: inherit; min-width: 0; }
+.catalog-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+.catalog-filters > div { min-width: 0; }
+.catalog-filters label { display: block; margin-bottom: 8px; font-size: 13px; }
+.catalog-count { margin-top: 16px; color: var(--text-muted); font-size: 13px; }
+.catalog-results { overflow-y: auto; overscroll-behavior: contain; min-height: 0; max-height: 55dvh; }
+.catalog-option { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; width: 100%; min-height: 100px; padding: 18px 24px; border: 0; border-bottom: 1px solid var(--line); background: var(--surface); color: var(--text); text-align: left; }
+.catalog-option:hover, .catalog-option[aria-pressed="true"] { background: var(--surface-2); }
+.catalog-option:focus-visible { outline-offset: -3px; }
+.catalog-option-main, .catalog-option-side { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.catalog-option-main strong { font-size: 16px; font-weight: 600; overflow-wrap: anywhere; }
+.catalog-option-main > span, .catalog-option-main small { color: var(--text-muted); font-size: 13px; overflow-wrap: anywhere; }
+.catalog-option-side { align-items: flex-end; font-size: 13px; text-align: right; }
+.catalog-option-side b { font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.catalog-empty { padding: 28px 24px; }
+.catalog-empty h3 { font-family: var(--sans); font-size: 16px; font-weight: 600; }
+.catalog-empty p { color: var(--text-muted); margin: 12px 0 20px; font-size: 14px; }
+@media (max-width: 760px) {
+  .model-picker { padding: 16px; gap: 12px; }
+  .model-picker strong { font-size: 16px; }
+  .model-picker .btn { font-size: 13px; padding: 10px 12px; }
+  .catalog-dialog header { padding: 20px 16px; }
+  .catalog-dialog h2 { font-size: 27px; }
+  .catalog-toolbar { padding: 0 16px 16px; }
+  .catalog-toolbar input, .catalog-toolbar select { font-size: 16px; }
+  .catalog-filters { gap: 12px; }
+  .catalog-option { padding: 16px; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+  .catalog-option-side { flex-direction: row; justify-content: space-between; align-items: center; text-align: left; }
+}
+
+.plans-page .plan-current { display: flex; justify-content: space-between; gap: 24px; align-items: center; padding: 24px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+.plan-current h2 { font-size: 28px; margin: 6px 0 8px; }
+.plan-current p, .plan-section-note { color: var(--text-muted); line-height: 1.6; }
+.plan-current > .btn { flex: none; }
+.plan-state { font-size: 13px; font-weight: 600; }
+.plan-layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(260px, 1fr); grid-template-areas: "options summary" "estimate summary"; gap: 32px 48px; align-items: start; }
+.plan-options, .plan-summary { min-width: 0; }
+.plan-options { grid-area: options; }
+.plan-tabs { margin-bottom: 20px; }
+.plan-tabs > button { min-height: 44px; }
+.plan-section-note { margin: 0 0 20px; font-size: 14px; }
+.plans-page .opts { margin: 0; }
+.plans-page .opt { min-width: 0; }
+.plans-page .opt .d { display: block; margin-top: 6px; }
+.plan-summary { grid-area: summary; position: sticky; top: 96px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 28px; }
+.plan-summary h2, .plan-estimate h2 { font-size: 25px; }
+.plan-summary-credits { font-family: var(--serif); font-size: 34px; line-height: 1.2; margin: 20px 0 12px; }
+.plan-summary-price { color: var(--text-muted); margin-bottom: 24px; }
+#plan-action .btn { width: 100%; min-height: 44px; }
+.plan-summary .fine { margin-top: 14px; }
+.plan-estimate { grid-area: estimate; min-width: 0; padding-top: 28px; border-top: 1px solid var(--line); }
+.plan-estimate > p { color: var(--text-muted); line-height: 1.6; margin-top: 12px; font-size: 14px; }
+.plan-estimate-fields { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(92px, 1fr) minmax(105px, 1fr); gap: 16px; margin-top: 20px; }
+.plan-estimate-fields > div { min-width: 0; }
+.plan-estimate-fields label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+.plan-estimate-fields select { width: 100%; min-width: 0; min-height: 44px; background: var(--surface); color: var(--text); border: 1px solid var(--field-line); border-radius: var(--r-sm); padding: 10px; font: inherit; }
+.plan-estimate .plan-estimate-result { color: var(--text); line-height: 1.7; margin-top: 20px; }
+.plan-pending { padding: 20px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 0 0 28px; }
+.plan-pending h3, #plan-change-review h3 { font-family: var(--sans); font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+.plan-pending p { color: var(--text-muted); line-height: 1.6; font-size: 14px; margin: 8px 0; }
+.plan-pending .linkbtn { min-height: 44px; margin-top: 4px; }
+#plan-change-review { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 24px; }
+#plan-change-review[hidden] { display: none; }
+#plan-change-review dl { display: grid; gap: 16px; }
+#plan-change-review dt { color: var(--text-muted); font-size: 13px; margin-bottom: 6px; }
+#plan-change-review dd { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+#plan-change-review > p { color: var(--text-muted); font-size: 13px; line-height: 1.65; margin: 20px 0; }
+.plan-review-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.plan-review-actions .btn { min-height: 44px; }
+@media (max-width: 900px) {
+  .plan-layout { gap: 28px; grid-template-columns: minmax(0, 1.25fr) minmax(245px, 1fr); }
+  .plan-estimate-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .plan-estimate-fields > div:first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 700px) {
+  .plans-page .plan-current { flex-wrap: wrap; align-items: flex-start; gap: 16px; padding: 20px 0; }
+  .plan-current h2 { font-size: 26px; }
+  .plan-layout { display: flex; flex-direction: column; gap: 28px; }
+  .plan-options, .plan-summary, .plan-estimate { width: 100%; }
+  .plan-summary { position: static; padding: 24px; }
+  .plans-page .opt { gap: 12px; padding: 18px 14px; }
+  .plans-page .opt b { font-size: 21px; }
+  .plan-estimate-fields select { font-size: 16px; }
+  .plan-summary-credits { font-size: 32px; }
+}
+
 .prototype-options { margin-top: 16px; color: var(--text-muted); font-size: var(--fs-caption); }
 .prototype-options summary { cursor: pointer; padding: 8px 0; }
 body:not(.review-mode) .prototype-options, body:not(.review-mode) .model-notice { display: none; }
@@ -806,13 +891,7 @@ document.body.classList.toggle("review-mode", REVIEW);
 const CONFIG = {
   creditUsd: 0.01,
   user: { name: "Alex Kim", initials: "AK", email: "alex@example.com" },
-  models: [
-    { id: "runway", name: "Runway Gen-4.5", provider: "Runway", tag: "Text or image to video", img: "coast", qualities: ["720p"], lengths: [5, 8, 10], formats: ["16:9", "9:16"], rates: { "720p": 24 } },
-    { id: "seedance", name: "Seedance 2.0 Mini", provider: "BytePlus", tag: "A starting point for drafts", img: "forest", qualities: ["480p", "720p"], lengths: [5, 8, 10], formats: ["16:9", "9:16", "1:1"], rates: { "480p": 8, "720p": 14 } },
-    { id: "kling", name: "Kling 3.0", provider: "Kling", tag: "More resolution options", img: "city", qualities: ["720p", "1080p", "4K"], lengths: [5, 8, 10], formats: ["16:9", "9:16", "1:1"], rates: { "720p": 30, "1080p": 45, "4K": 80 } },
-  ],
-  lengths: [5, 8, 10],
-  qualities: ["480p", "720p", "1080p", "4K"],
+  models: [{"id": "runway", "name": "Runway Gen-4.5", "providerId": "runway", "provider": "Runway", "tag": "Text or image to video", "img": "coast", "status": "available", "featured": true, "inputs": ["text", "image"], "qualities": ["720p"], "lengths": [5, 8, 10], "formats": ["16:9", "9:16"], "rates": {"720p": 24}}, {"id": "seedance", "name": "Seedance 2.0 Mini", "providerId": "byteplus", "provider": "BytePlus", "tag": "A starting point for drafts", "img": "forest", "status": "available", "featured": true, "inputs": ["text", "image"], "qualities": ["480p", "720p"], "lengths": [5, 8, 10], "formats": ["16:9", "9:16", "1:1"], "rates": {"480p": 8, "720p": 14}}, {"id": "kling", "name": "Kling 3.0", "providerId": "kling", "provider": "Kling", "tag": "More resolution options", "img": "city", "status": "available", "featured": true, "inputs": ["text", "image"], "qualities": ["720p", "1080p", "4K"], "lengths": [5, 8, 10], "formats": ["16:9", "9:16", "1:1"], "rates": {"720p": 30, "1080p": 45, "4K": 80}}],
   formats: [{ id: "16:9", cls: "f169" }, { id: "9:16", cls: "f916" }, { id: "1:1", cls: "f11" }],
   packs: [
     { id: "p1", credits: 500,  usd: 5,  note: "A few tries" },
@@ -839,7 +918,7 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const fmt = n => Number(n).toLocaleString("en-US");
 const usd = c => "$" + (c * CONFIG.creditUsd).toFixed(2);
-const tc = s => "00:" + String(s).padStart(2, "0");
+const tc = s => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ICONS = {
   mic: '<path d="M8 1.8a2.2 2.2 0 0 0-2.2 2.2v4a2.2 2.2 0 0 0 4.4 0V4A2.2 2.2 0 0 0 8 1.8Z"/><path d="M3.5 7.8a4.5 4.5 0 0 0 9 0M8 12.3v2"/>',
@@ -860,8 +939,26 @@ const ICONS = {
   account: '<circle cx="8" cy="5" r="2.5"/><path d="M3 14v-1a5 5 0 0 1 10 0v1"/>',
 };
 const icon = (n, s = 16) => `<svg class="ic" width="${s}" height="${s}" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]}</svg>`;
-const model = id => CONFIG.models.find(m => m.id === id);
-const cost = d => model(d.model).rates[d.quality] * d.len;
+/* Catalog metadata is separate from UI and historical generation records. */
+const rawModel = id => CONFIG.models.find(m => m.id === id);
+const availableModels = () => CONFIG.models.filter(m => !["retired", "unavailable"].includes(m.status) &&
+  m.qualities?.length && m.lengths?.length && m.formats?.length &&
+  m.qualities.every(q => Number.isFinite(m.rates?.[q]) && m.rates[q] > 0) &&
+  m.lengths.every(n => Number.isInteger(n) && n > 0));
+const isModelAvailable = id => availableModels().some(m => m.id === id);
+const model = id => rawModel(id) || { id, name: "Unavailable model", provider: "", tag: "No longer in the catalog", img: "studio", qualities: [], lengths: [], formats: [], rates: {}, inputs: [], status: "retired" };
+const recordModel = record => ({ ...model(record.model), name: record.modelName || model(record.model).name, provider: record.providerName || model(record.model).provider });
+const cost = d => {
+  const m = rawModel(d.model);
+  if (!isModelAvailable(d.model) || !m.qualities.includes(d.quality) || !m.lengths.includes(Number(d.len)) || !m.formats.includes(d.format)) return null;
+  return Math.ceil(m.rates[d.quality] * Number(d.len));
+};
+const frameRatio = format => /^\d+(?:\.\d+)?:\d+(?:\.\d+)?$/.test(format || "") ? format.replace(":", "/") : "16/9";
+function starterModel(format) {
+  return availableModels().filter(m => m.formats.includes(format) && (m.inputs || ["text"]).includes("text"))
+    .sort((a, b) => Math.min(...a.qualities.map(q => a.rates[q])) - Math.min(...b.qualities.map(q => b.rates[q])))[0];
+}
+
 const cells = (n, on) => Array.from({ length: n }, (_, i) => `<i class="${i < on ? "on" : ""}"></i>`).join("");
 const titleOf = p => { const t = (p || "").trim().split(/(?<=[.!?])\s/)[0]; return t ? (t.length > 52 ? t.slice(0, 50).trim() + "…" : t) : "Untitled video"; };
 
@@ -880,11 +977,12 @@ const seedVideos = () => [
 ];
 function seed() {
   const videos = seedVideos();
+  videos.forEach(v => { v.modelName = recordModel(v).name; v.providerName = model(v.model).provider; });
   const transactions = [{ id: "TX-0001", createdAt: "2026-10-19T12:00:00Z", kind: "purchase", label: "3,000 credit pack", delta: 3000, balanceAfter: 3000, status: "completed", usd: 22, note: "Sample purchase · card ending 4242" }];
   let balance = 3000;
   for (const v of [...videos].reverse()) {
     balance -= v.credits;
-    transactions.push({ id: `TX-${String(transactions.length + 1).padStart(4, "0")}`, createdAt: v.createdAt, kind: "generation", label: `${model(v.model).name} · ${v.len} s · ${v.quality}`, delta: -v.credits, balanceAfter: balance, status: "completed", videoId: v.id });
+    transactions.push({ id: `TX-${String(transactions.length + 1).padStart(4, "0")}`, createdAt: v.createdAt, kind: "generation", label: `${recordModel(v).name} · ${v.len} s · ${v.quality}`, delta: -v.credits, balanceAfter: balance, status: "completed", videoId: v.id });
     if (v.refunded) { balance += v.credits; transactions.push({ id: `TX-${String(transactions.length + 1).padStart(4, "0")}`, createdAt: v.createdAt, kind: "refund", label: "Credits returned after a failed generation", delta: v.credits, balanceAfter: balance, status: "completed", videoId: v.id, note: "Proposed demo rule: failed generations return credits." }); }
   }
   return { v: 2, signedIn: false, balance, plan: null, nextId: 7, nextTransactionId: transactions.length + 1, noticeOff: false,
@@ -892,10 +990,12 @@ function seed() {
     draft: { prompt: "Green hills with patches of snow under a white sky. Slow push-in from a black gravel field, soft wind, quiet and still.", model: "runway", len: 8, quality: "720p", format: "16:9", imageName: "", failDemo: false }, videos };
 }
 function normalizeDraft(d) {
-  if (!model(d.model)) d.model = "runway";
+  if (!availableModels().length) { d.prompt = String(d.prompt || "").slice(0, 1000); return d; }
+  if (!isModelAvailable(d.model)) d.model = availableModels()[0].id;
   const m = model(d.model);
   if (!m.qualities.includes(d.quality)) d.quality = m.qualities.includes("720p") ? "720p" : m.qualities[0];
   if (!m.lengths.includes(Number(d.len))) d.len = m.lengths[0];
+  d.len = Number(d.len);
   if (!m.formats.includes(d.format)) d.format = m.formats[0];
   d.prompt = String(d.prompt || "").slice(0, 1000);
   return d;
@@ -905,7 +1005,7 @@ function migrateState(j) {
   j.user = { ...CONFIG.user, ...j.user, notifications: { completed: true, receipts: true, ...j.user?.notifications } };
   j.posts = Array.isArray(j.posts) ? j.posts : [];
   j.videos = Array.isArray(j.videos) ? j.videos : [];
-  j.videos.forEach(v => { if (v.model === "veo") v.model = v.quality === "4K" ? "kling" : "runway"; if (!model(v.model)) v.model = "runway"; });
+  j.videos.forEach(v => { if (v.model === "veo") v.model = v.quality === "4K" ? "kling" : "runway"; if (!v.modelName && rawModel(v.model)) v.modelName = recordModel(v).name; });
   j.draft = normalizeDraft(j.draft || seed().draft);
   if (!Array.isArray(j.transactions)) j.transactions = [{ id: "TX-0001", createdAt: new Date().toISOString(), kind: "opening", label: "Balance brought forward", delta: Number(j.balance) || 0, balanceAfter: Number(j.balance) || 0, status: "completed", note: "Saved demo balance from the earlier prototype." }];
   j.nextTransactionId = Math.max(Number(j.nextTransactionId) || 1, ...j.transactions.map(t => Number(String(t.id).replace(/\D/g, "")) + 1));
@@ -929,6 +1029,7 @@ function addTransaction({ delta, kind, label, status = "completed", ...extra }) 
 }
 function cancelSubscription() {
   if (!S.plan || S.plan.state === "cancelled") return;
+  delete S.plan.pendingChange;
   S.plan.state = "cancelled"; S.plan.cancelledAt = new Date().toISOString(); save();
 }
 function enterDemoAccount() { S = seed(); S.signedIn = true; save(); go("account/overview"); }
@@ -1070,7 +1171,7 @@ const thumb = (v, link = true) => {
   const badge = v.status === "ready" ? `<span class="badge num">${tc(v.len)}</span>` : "";
   return link ? `<a class="thumb" href="#/video/${v.id}" aria-label="Open ${esc(titleOf(v.prompt))}">${inner}${badge}</a>` : `<div class="thumb">${inner}${badge}</div>`;
 };
-const videoCard = v => `<article class="vcard" data-vid="${v.id}">${thumb(v)}<h3>${esc(titleOf(v.prompt))}</h3><p class="meta"><span class="num">${model(v.model).name}, ${v.len} s</span>${v.status === "failed" ? `<button class="linkbtn" type="button" data-retry="${v.id}">Try again</button>` : v.status === "generating" ? "<span>Rendering</span>" : `<span>${esc(v.when)}</span>`}</p></article>`;
+const videoCard = v => `<article class="vcard" data-vid="${v.id}">${thumb(v)}<h3>${esc(titleOf(v.prompt))}</h3><p class="meta"><span class="num">${esc(recordModel(v).name)}, ${v.len} s</span>${v.status === "failed" ? `<button class="linkbtn" type="button" data-retry="${v.id}">Try again</button>` : v.status === "generating" ? "<span>Rendering</span>" : `<span>${esc(v.when)}</span>`}</p></article>`;
 
 /* ----- Create ----- */
 const CREATOR_STARTERS = {
@@ -1079,8 +1180,13 @@ const CREATOR_STARTERS = {
   broll: { label: "B-roll", format: "16:9", prompt: "Morning light falls across a creator's desk. Hands open a notebook beside a camera and a cup of coffee. A slow overhead camera move with natural colours." },
 };
 function viewCreate(main) {
+  if (!availableModels().length) {
+    main.innerHTML = `<section class="hero"><h1 id="title" tabindex="-1">Describe your scene</h1><p class="lead">Your draft stays here while models are unavailable.</p><div class="composer"><label class="sr" for="prompt">Describe your video</label><textarea id="prompt" rows="4" maxlength="1000">${esc(S.draft.prompt)}</textarea><div class="empty" role="status"><h2>No models available right now</h2><p>You can keep writing. Try again to check the catalog.</p><button class="btn" id="retry-models" type="button">Try again</button></div></div></section>`;
+    return () => { $("#prompt").oninput = e => { S.draft.prompt = e.target.value; save(); }; $("#retry-models").onclick = () => route(); };
+  }
   const sourceId = new URLSearchParams(location.hash.split("?")[1] || "").get("scene");
   const source = sourceId ? communityPosts(false).find(p => p.id === sourceId && p.includePrompt && p.prompt) : null;
+  const sourceAvailable = source && isModelAvailable(source.model);
   if (sourceId) {
     if (source) { Object.assign(S.draft, { prompt: source.prompt, model: source.model, len: source.len, quality: source.quality, format: source.format, imageName: "", failDemo: false }); normalizeDraft(S.draft); save(); }
     history.replaceState(null, "", "#/create");
@@ -1098,24 +1204,20 @@ function viewCreate(main) {
       <div class="tools">
         <span class="count num"><span id="count">${d.prompt.length}</span> / 1,000</span>
         <span class="attached" id="attached" hidden></span>
-        <button class="chip" type="button" id="btn-image">${icon("image")}Add image</button>
+        <button class="chip" type="button" id="btn-image" ${!(selectedModel.inputs || ["text", "image"]).includes("image") ? "disabled" : ""}>${icon("image")}Add image</button>
         <input type="file" id="file" accept="image/*" hidden>
         <button class="chip" type="button" id="btn-speak" aria-pressed="false">${icon("mic")}<span>Speak</span></button>
       </div>
-      <fieldset class="models"><legend class="sr">Model</legend>
-        ${CONFIG.models.map(m => `<label class="model"><input type="radio" name="model" value="${m.id}" ${d.model === m.id ? "checked" : ""}>
-          <span class="m-img"><img src="${IMG[m.img]}" alt=""></span>
-          <span><b>${m.name}</b><span class="model-provider">${m.provider}</span><span class="m-tag">${m.tag}</span><span class="m-price num"><span data-rate="${m.id}">${m.rates[m.qualities.includes(d.quality) ? d.quality : m.qualities[0]]}</span> credits per second</span></span>
-          <span class="sel">${icon("check", 14)}Selected</span></label>`).join("")}
-      </fieldset>
+      <p class="err image-compatibility" id="image-compatibility" role="alert" hidden>This model uses text only. Remove your image or choose a model that accepts images.</p>
+      ${renderModelPicker(d)}
       <div class="settings">
         <fieldset class="set"><legend>Length</legend>
           <div class="seg">${selectedModel.lengths.map(n => `<label><input type="radio" name="len" value="${n}" ${d.len === n ? "checked" : ""}><span class="num">${n} s</span></label>`).join("")}</div>
-          <div class="ruler" aria-hidden="true"><div class="strip" id="strip">${cells(10, d.len)}</div><div class="ticks num"><span style="grid-column:5">5</span><span style="grid-column:8">8</span><span style="grid-column:10">10</span></div></div></fieldset>
+          <div class="ruler" aria-hidden="true"><div class="strip" id="strip" style="grid-template-columns:repeat(${Math.min(20, Math.max(...selectedModel.lengths))},1fr)">${cells(Math.min(20, Math.max(...selectedModel.lengths)), Math.ceil(d.len / Math.max(...selectedModel.lengths) * Math.min(20, Math.max(...selectedModel.lengths))))}</div><div class="duration-range num"><span>${Math.min(...selectedModel.lengths)} s</span><span>${Math.max(...selectedModel.lengths)} s</span></div></div></fieldset>
         <fieldset class="set"><legend>Quality</legend>
-          <div class="seg">${selectedModel.qualities.map(q => `<label><input type="radio" name="quality" value="${q}" ${d.quality === q ? "checked" : ""}><span>${q}</span></label>`).join("")}</div></fieldset>
+          <div class="seg">${selectedModel.qualities.map(q => `<label><input type="radio" name="quality" value="${esc(q)}" ${d.quality === q ? "checked" : ""}><span>${esc(q)}</span></label>`).join("")}</div></fieldset>
         <fieldset class="set"><legend>Format</legend>
-          <div class="seg">${CONFIG.formats.filter(f => selectedModel.formats.includes(f.id)).map(f => `<label><input type="radio" name="format" value="${f.id}" ${d.format === f.id ? "checked" : ""}><span><i class="glyph ${f.cls}"></i><span class="num">${f.id}</span></span></label>`).join("")}</div></fieldset>
+          <div class="seg">${selectedModel.formats.map(id => `<label><input type="radio" name="format" value="${esc(id)}" ${d.format === id ? "checked" : ""}><span>${CONFIG.formats.some(f => f.id === id) ? `<i class="glyph ${CONFIG.formats.find(f => f.id === id).cls}"></i>` : ""}<span class="num">${esc(id)}</span></span></label>`).join("")}</div></fieldset>
       </div>
       <div class="foot">
         <div class="price" aria-live="polite"><b class="num" id="p-total"></b><small class="num" id="p-sub"></small></div>
@@ -1130,7 +1232,7 @@ function viewCreate(main) {
     <div class="gtabs"><button type="button" data-tab="videos" aria-pressed="${currentGalleryTab() === "videos"}">Your videos</button><button type="button" data-tab="community" aria-pressed="${currentGalleryTab() === "community"}">Community</button><a class="all linkbtn" href="#/history">All history</a></div>
     <div id="g-body"></div>
   </section>`;
-  return () => { const cleanup = initCreate(); if (sourceId) toast(source ? "Prompt and settings added. Edit the scene and review the cost." : "This setup is unavailable. Your draft is unchanged."); return cleanup; };
+  return () => { const cleanup = initCreate(); if (sourceId) toast(source ? (sourceAvailable ? "Prompt and settings added. Edit the scene and review the cost." : "Prompt added. The original model is unavailable. Review the new model and settings.") : "This setup is unavailable. Your draft is unchanged."); return cleanup; };
 }
 function renderGallery(tab) {
   const body = $("#g-body"); if (!body) return;
@@ -1158,15 +1260,23 @@ function updatePrice() {
   $("#p-sub").className = "num" + (enough ? "" : " warn");
   $("#p-sub").textContent = enough ? `${d.len} s × ${m.rates[d.quality]} credits · ${fmt(left)} left` : `${d.len} s × ${m.rates[d.quality]} credits · you have ${fmt(S.balance)}`;
   const go_ = $("#go"); go_.dataset.mode = enough ? "gen" : "buy"; go_.innerHTML = enough ? "Generate video" : "Buy credits";
-  CONFIG.models.forEach(x => { const el = $(`[data-rate="${x.id}"]`); if (el) el.textContent = x.rates[x.qualities.includes(d.quality) ? d.quality : x.qualities[0]]; });
-  $$("#strip i").forEach((el, i) => el.classList.toggle("on", i < d.len));
+  const inputs = m.inputs || ["text", "image"];
+  const missingImage = !d.imageName && inputs.includes("image") && !inputs.includes("text");
+  const incompatible = (Boolean(d.imageName) && !inputs.includes("image")) || missingImage;
+  $("#image-compatibility").textContent = missingImage ? "Add a reference image to use this model." : "This model uses text only. Remove your image or choose a model that accepts images.";
+  go_.disabled = incompatible || c === null; $("#image-compatibility").hidden = !incompatible;
+  const max = Math.max(...m.lengths), total = Math.min(20, max), filled = Math.ceil(d.len / max * total);
+  $$("#strip i").forEach((el, i) => el.classList.toggle("on", i < filled));
 }
 function initCreate() {
   const f = $("#composer"), ta = $("#prompt"), err = $("#prompt-err");
   updatePrice(); renderGallery(currentGalleryTab());
+  const disposePicker = initModelPicker();
   $$("[data-starter]").forEach(b => b.addEventListener("click", () => {
     const example = CREATOR_STARTERS[b.dataset.starter], previous = { ...S.draft };
-    Object.assign(S.draft, { prompt: example.prompt, model: "seedance", len: 5, quality: "720p", format: example.format, imageName: "", failDemo: false });
+    const candidate = starterModel(example.format);
+    if (!candidate) { toast("No available model supports this example's format. Choose another starting point."); return; }
+    Object.assign(S.draft, { prompt: example.prompt, model: candidate.id, len: 5, quality: "720p", format: example.format, imageName: "", failDemo: false });
     normalizeDraft(S.draft); save(); route({ preserve: true }); $("#prompt").focus();
     toast(`${example.label} example added. Edit it before generating.`, { label: "Undo", fn: () => { S.draft = previous; save(); if (currentRoute().name === "create") { route({ preserve: true }); $("#prompt").focus(); } else go("create"); } });
   }));
@@ -1188,11 +1298,13 @@ function initCreate() {
   f.addEventListener("submit", e => {
     e.preventDefault();
     const d = S.draft, c = cost(d);
+    const inputs = model(d.model).inputs || ["text", "image"];
+    if (c === null || (d.imageName && !inputs.includes("image")) || (!d.imageName && inputs.includes("image") && !inputs.includes("text"))) { toast("Review your model, image and settings before generating."); route(); return; }
     if (!d.prompt.trim()) { err.hidden = false; ta.setAttribute("aria-invalid", "true"); ta.focus(); return; }
     if (c > S.balance) { go("plans"); toast(`You need ${fmt(c - S.balance)} more credits for this video.`); return; }
     const id = S.nextId++;
     addTransaction({ kind: "generation", label: `${model(d.model).name} · ${d.len} s · ${d.quality}`, delta: -c, videoId: id, note: "Demo credits used at launch." });
-    S.videos.unshift({ id, prompt: d.prompt.trim(), model: d.model, len: d.len, quality: d.quality, format: d.format, credits: c, status: "generating", filled: 0, img: POOL[id % POOL.length], when: "Just now", createdAt: new Date().toISOString(), failDemo: d.failDemo });
+    S.videos.unshift({ id, prompt: d.prompt.trim(), model: d.model, modelName: model(d.model).name, providerName: model(d.model).provider, len: d.len, quality: d.quality, format: d.format, credits: c, status: "generating", filled: 0, img: POOL[id % POOL.length], when: "Just now", createdAt: new Date().toISOString(), failDemo: d.failDemo });
     d.failDemo = false; $("#fail-generation").checked = false;
     save(); renderBalance(); updatePrice(); setGalleryTab("videos"); ensureTicker();
     $$(".gtabs button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tab === "videos")));
@@ -1204,39 +1316,49 @@ function initCreate() {
     const retry = e.target.closest("[data-retry]");
     if (retry) { const v = S.videos.find(x => x.id === Number(retry.dataset.retry)); Object.assign(S.draft, { prompt: v.prompt, model: v.model, len: v.len, quality: v.quality, format: v.format, failDemo: false }); normalizeDraft(S.draft); save(); route(); toast("Settings restored. Press Generate video to try again."); }
   });
-  return () => { if (rec) clearTimeout(rec); };
+  return () => { if (rec) clearTimeout(rec); disposePicker?.(); };
 }
 function showAttached(name, url) {
   const el = $("#attached"); if (!el) return;
   el.hidden = false;
   el.innerHTML = `${url ? `<img src="${url}" alt="">` : ""}<span>${esc(name)}</span><button type="button" aria-label="Remove image">${icon("x", 14)}</button>`;
-  $("button", el).onclick = () => { S.draft.imageName = ""; if (attachedUrl) URL.revokeObjectURL(attachedUrl); attachedUrl = ""; save(); el.hidden = true; $("#file").value = ""; $("#btn-image").focus(); };
+  $("button", el).onclick = () => { S.draft.imageName = ""; if (attachedUrl) URL.revokeObjectURL(attachedUrl); attachedUrl = ""; save(); el.hidden = true; $("#file").value = ""; updatePrice(); $("#browse-models").focus(); };
 }
 
 /* ----- History ----- */
 const histRow = v => `<tr data-vid="${v.id}"><td class="t"><a class="thumb" href="#/video/${v.id}" tabindex="-1" aria-hidden="true">${v.status === "ready" ? `<img src="${IMG[v.img]}" alt="" loading="lazy">` : `<span class="gen-t" style="position:absolute;inset:0;display:grid;place-items:center;font-size:13px;color:var(--text-muted)">${v.status === "failed" ? "Failed" : "Rendering"}</span>`}</a><a href="#/video/${v.id}">${esc(titleOf(v.prompt))}</a></td>
-  <td class="hm">${model(v.model).name}</td><td class="hm num">${v.len} s, ${v.quality}, ${v.format}</td><td class="r num">${v.status === "failed" ? "—" : fmt(v.credits)}</td><td class="hm">${esc(v.when)}</td><td><span class="st ${v.status}">${v.status === "ready" ? "Ready" : v.status === "failed" ? "Failed" : "Rendering"}</span></td></tr>`;
+  <td class="hm">${esc(recordModel(v).name)}</td><td class="hm num">${v.len} s, ${v.quality}, ${v.format}</td><td class="r num">${v.status === "failed" ? "—" : fmt(v.credits)}</td><td class="hm">${esc(v.when)}</td><td><span class="st ${v.status}">${v.status === "ready" ? "Ready" : v.status === "failed" ? "Failed" : "Rendering"}</span></td></tr>`;
 let hFilter = "all", hQuery = "";
 function viewHistory(main) {
+  const params = new URLSearchParams(location.hash.split("?")[1] || "");
+  const historyModels = [...new Map(S.videos.map(v => [v.model, recordModel(v).name])).entries()];
+  hFilter = historyModels.some(([id]) => id === params.get("model")) ? params.get("model") : "all";
+  hQuery = params.get("q") || "";
   main.innerHTML = `<div class="page"><header><h1 id="title" tabindex="-1">History</h1><p class="sub">Every video you made, with what it cost.</p></header>
-  <div class="filters"><div class="seg" role="group" aria-label="Model">${[["all", "All models"], ...CONFIG.models.map(m => [m.id, m.name])].map(([k, l]) => `<button type="button" data-f="${k}" aria-pressed="${hFilter === k}">${l}</button>`).join("")}</div>
+  <div class="filters"><label class="sr" for="history-model">Filter by model</label><select class="history-model" id="history-model">${[["all", "All models"], ...historyModels].map(([k, l]) => `<option value="${esc(k)}" ${hFilter === k ? "selected" : ""}>${esc(l)}</option>`).join("")}</select>
   <label class="sr" for="q">Search your prompts</label><input class="search" id="q" type="search" placeholder="Search your prompts" value="${esc(hQuery)}"></div>
   <div id="h-body"></div></div>`;
-  return () => { drawHistory(); $("#q").addEventListener("input", e => { hQuery = e.target.value; drawHistory(); });
-    $(".filters .seg").addEventListener("click", e => { const b = e.target.closest("[data-f]"); if (!b) return; hFilter = b.dataset.f; $$(".filters .seg button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); drawHistory(); }); };
+  return () => { drawHistory(); $("#q").addEventListener("input", e => { hQuery = e.target.value; saveHistoryFilters(); drawHistory(); });
+    $("#history-model").addEventListener("change", e => { hFilter = e.target.value; saveHistoryFilters(); drawHistory(); }); };
+}
+function saveHistoryFilters() {
+  const params = new URLSearchParams();
+  if (hFilter !== "all") params.set("model", hFilter);
+  if (hQuery) params.set("q", hQuery);
+  history.replaceState(null, "", "#/history" + (params.size ? "?" + params.toString() : ""));
 }
 function drawHistory() {
   const list = S.videos.filter(v => (hFilter === "all" || v.model === hFilter) && (!hQuery || v.prompt.toLowerCase().includes(hQuery.toLowerCase())));
   $("#h-body").innerHTML = list.length ? `<table class="hist"><thead><tr><th scope="col">Video</th><th scope="col" class="hm">Model</th><th scope="col" class="hm">Settings</th><th scope="col" class="r">Credits</th><th scope="col" class="hm">Created</th><th scope="col">Status</th></tr></thead><tbody>${list.map(histRow).join("")}</tbody></table>`
     : `<div class="empty"><h2>${S.videos.length ? "No videos match" : "No videos yet"}</h2><p>${S.videos.length ? "Try another model or a different word." : "Describe a scene to make your first video."}</p>${S.videos.length ? `<button class="btn" type="button" id="clear">Clear filters</button>` : `<a class="btn primary" href="#/create">Create a video</a>`}</div>`;
-  $("#clear")?.addEventListener("click", () => { hFilter = "all"; hQuery = ""; route(); });
+  $("#clear")?.addEventListener("click", () => { hFilter = "all"; hQuery = ""; saveHistoryFilters(); route(); });
 }
 
 /* ----- Video ----- */
 function viewVideo(main, arg) {
   const v = S.videos.find(x => String(x.id) === String(arg));
   if (!v) { main.innerHTML = `<div class="page"><div class="empty"><h2 id="title" tabindex="-1">This video is gone</h2><p>It may have been deleted.</p><a class="btn primary" href="#/history">Back to history</a></div></div>`; return; }
-  const ratio = { "16:9": "16/9", "9:16": "9/16", "1:1": "1/1" }[v.format];
+  const ratio = frameRatio(v.format);
   const shown = v.status === "ready";
   main.innerHTML = `<div class="page"><nav class="crumb" aria-label="Back"><a href="#/history">← History</a></nav>
   <div class="vgrid"><div>
@@ -1248,7 +1370,7 @@ function viewVideo(main, arg) {
     <div class="sheet">${Array.from({ length: v.len }, (_, i) => `<figure class="cell" style="margin:0"><div class="frame"><img src="${IMG[v.img]}" alt="" loading="lazy" style="--s:${(1 + i * (0.8 / Math.max(1, v.len - 1))).toFixed(3)}"></div><figcaption class="num">${tc(i)}</figcaption></figure>`).join("")}</div></details>` : ""}
   </div>
   <aside class="vside"><h1 id="title" tabindex="-1">${esc(titleOf(v.prompt))}</h1><p class="prompt">${esc(v.prompt)}</p>
-    <dl class="facts"><div><dt>Model</dt><dd>${model(v.model).name}</dd></div><div><dt>Length</dt><dd class="num">${v.len} s</dd></div><div><dt>Quality and format</dt><dd class="num">${v.quality}, ${v.format}</dd></div><div><dt>Credits used</dt><dd class="num">${v.refunded ? "0 · credits returned" : fmt(v.credits)}</dd></div><div><dt>Created</dt><dd>${esc(v.when)}</dd></div></dl>
+    <dl class="facts"><div><dt>Model</dt><dd>${esc(recordModel(v).name)}</dd></div><div><dt>Length</dt><dd class="num">${v.len} s</dd></div><div><dt>Quality and format</dt><dd class="num">${v.quality}, ${v.format}</dd></div><div><dt>Credits used</dt><dd class="num">${v.refunded ? "0 · credits returned" : fmt(v.credits)}</dd></div><div><dt>Created</dt><dd>${esc(v.when)}</dd></div></dl>
     <a class="account-link" href="#/account/credits">View credit activity</a>
     <div class="acts">${shown ? `<button class="btn primary" type="button" id="dl">${icon("download")}Download MP4</button>` : ""}
       <div class="row"><button class="btn" type="button" id="reuse">Use this prompt</button><button class="btn danger" type="button" id="del">${icon("trash")}Delete</button></div></div>
@@ -1265,78 +1387,123 @@ function viewVideo(main, arg) {
       let i = 0; mark(0); tick = setInterval(() => { i++; if (i >= v.len) stop(); else mark(i); }, 1000);
     };
     $("#dl")?.addEventListener("click", () => toast("Download would start here (prototype)."));
-    $("#reuse").onclick = () => { Object.assign(S.draft, { prompt: v.prompt, model: v.model, len: v.len, quality: v.quality, format: v.format, failDemo: false }); normalizeDraft(S.draft); save(); go("create"); toast("Prompt and settings restored."); };
+    $("#reuse").onclick = () => { Object.assign(S.draft, { prompt: v.prompt, model: v.model, len: v.len, quality: v.quality, format: v.format, failDemo: false }); normalizeDraft(S.draft); save(); go("create"); toast(isModelAvailable(v.model) ? "Prompt and settings restored." : "Prompt restored. The original model is unavailable. Review the new model and settings."); };
     $("#del").onclick = () => { const i = S.videos.findIndex(x => x.id === v.id), copy = S.videos[i], published = S.posts.filter(p => p.videoId === v.id); S.posts = S.posts.filter(p => p.videoId !== v.id); S.videos.splice(i, 1); save(); go("history");
       toast(published.length ? "Video deleted and publication removed." : "Video deleted.", { label: "Undo", fn: () => { S.videos.splice(i, 0, copy); S.posts.push(...published); save(); if (currentRoute().name === "history") route(); } }); };
     return () => clearInterval(tick);
   };
 }
 
-/* ----- Plans ----- */
-let planTab = "packs", planPick = { packs: "p2", subs: "s2" };
+/* Credit purchases and proposed changes at the next subscription renewal. */
+const currentPlanOption = () => S.plan ? CONFIG.plans.find(p => p.id === S.plan.id) || CONFIG.plans.find(p => p.credits === S.plan.credits && p.usd === S.plan.usd) : null;
+let checkoutCleanup = null;
+function pendingPlanMarkup(p = S.plan) {
+  const next = p?.state === "active" && p.pendingChange;
+  return next ? `<section class="plan-pending" id="pending-plan-change" aria-labelledby="pending-plan-title"><h3 id="pending-plan-title">Plan change scheduled</h3><p><strong class="num">${fmt(next.credits)} credits / month</strong> for $${next.usd} / month, starting ${accountDate(next.effectiveAt)}.</p><p>Your current plan continues until then. No payment is taken today.</p><button class="linkbtn" id="cancel-plan-change" type="button">Keep current plan</button></section>` : "";
+}
+function initPendingPlanChange() {
+  $("#cancel-plan-change")?.addEventListener("click", () => {
+    if (!S.plan?.pendingChange) return;
+    delete S.plan.pendingChange; save(); route({ preserve: true });
+    $("#title")?.focus({ preventScroll: true }); toast("Scheduled change removed. Your current plan continues.");
+  });
+}
 function viewPlans(main) {
-  const list = planTab === "packs" ? CONFIG.packs : CONFIG.plans, pick = list.find(x => x.id === planPick[planTab]) || list[0];
-  main.innerHTML = `<div class="page"><header><h1 id="title" tabindex="-1">Plans</h1><p class="sub">You have <span class="num">${fmt(S.balance)}</span> credits. Buy a pack once, or get credits every month.</p></header>
-  <div class="plans"><div>
-    ${S.plan && S.plan.state !== "cancelled" ? `<div class="yourplan"><b>${fmt(S.plan.credits)} credits a month</b><p class="muted">$${S.plan.usd} a month. Next payment ${accountDate(S.plan.nextBillingAt)}.</p>
-      <div class="row"><a class="btn" href="#/account/billing">Manage subscription</a></div></div>` : S.plan ? `<div class="yourplan"><b>Subscription cancelled</b><p class="muted">No future payments. Your demo credits stay available.</p><a class="account-link" href="#/account/billing">View subscription</a></div>` : ""}
-    <div class="seg" role="group" aria-label="Type"><button type="button" data-ptab="packs" aria-pressed="${planTab === "packs"}">Credit packs</button><button type="button" data-ptab="subs" aria-pressed="${planTab === "subs"}">Monthly subscription</button></div>
-    <fieldset class="opts" id="opts"><legend class="sr">Choose an option</legend>
-      ${list.map(o => `<label class="opt"><input type="radio" name="opt" value="${o.id}" ${o.id === pick.id ? "checked" : ""}><span class="dot"></span><span><b class="num">${fmt(o.credits)} credits</b><span class="d" style="display:block">${planTab === "subs" ? "Each month. Cancel any time." : o.note}</span></span><span class="p num">$${o.usd}${planTab === "subs" ? "<small>per month</small>" : `<small>${(o.usd / o.credits * 100).toFixed(1)}¢ a credit</small>`}</span></label>`).join("")}
-    </fieldset></div>
-  <div class="rates-wrap">
-    <h2 class="sec-h">What one second costs</h2>
-    <table class="rates"><caption class="sr">Credits per second of video</caption><thead><tr><th scope="col">Credits per second</th>${CONFIG.qualities.map(q => `<th scope="col" class="r">${q}</th>`).join("")}</tr></thead>
-    <tbody>${CONFIG.models.map(m => `<tr><th scope="row">${m.name}</th>${CONFIG.qualities.map(q => `<td class="r num">${m.rates[q] ?? "Unavailable"}</td>`).join("")}</tr>`).join("")}</tbody></table>
-    <p class="fine muted" style="margin-top:10px">An 8 second video costs eight times the number in the table.</p></div>
-  <aside class="sum" aria-live="polite"><h2>What you get</h2><p class="muted">Videos of 8 seconds at 720p</p><p class="big num" id="s-big">${fmt(pick.credits)} credits</p>
-    <div class="bars" id="bars"></div><button class="btn primary" style="width:100%" type="button" id="buy"></button><p class="fine" id="fine"></p></aside></div></div>`;
+  const params = new URLSearchParams(location.hash.split("?")[1] || "");
+  const tab = params.get("tab") === "subs" ? "subs" : "packs", sub = tab === "subs";
+  const active = S.plan?.state === "active", current = currentPlanOption();
+  const list = (sub ? CONFIG.plans : CONFIG.packs).map(o => sub && active && current?.id === o.id ? { ...o, credits: S.plan.credits, usd: S.plan.usd } : o);
+  const initialId = params.get("option") || (sub ? current?.id || "s2" : "p2");
+  let picked = list.find(o => o.id === initialId) || list[0];
+  const models = availableModels();
+  let estimate = models.find(m => m.id === params.get("model")) || models.find(m => m.id === S.draft.model) || models[0];
+  let quality = estimate?.qualities.includes(params.get("quality")) ? params.get("quality") : estimate?.qualities.includes(S.draft.quality) ? S.draft.quality : estimate?.qualities[0];
+  let length = estimate?.lengths.includes(Number(params.get("length"))) ? Number(params.get("length")) : estimate?.lengths.includes(Number(S.draft.len)) ? Number(S.draft.len) : estimate?.lengths[0];
+  main.innerHTML = `<div class="page plans-page"><header><h1 id="title" tabindex="-1">Credits & plans</h1><p class="sub">You have <span class="num">${fmt(S.balance)}</span> credits. Add more when you need them, or choose a monthly plan.</p></header>
+    ${S.plan ? `<section class="plan-current" aria-labelledby="current-plan-heading"><div><span class="plan-state">${active ? "Active subscription" : "Subscription cancelled"}</span><h2 id="current-plan-heading"><span class="num">${fmt(S.plan.credits)}</span> credits a month</h2><p>${active ? `$${S.plan.usd} per month. Next payment: $${S.plan.pendingChange?.usd ?? S.plan.usd} on ${accountDate(S.plan.nextBillingAt)}.` : "No future payments are scheduled. Your available credits are unchanged."}</p></div><a class="btn" id="manage-current-plan" href="#/account/billing">${active ? "Manage subscription" : "View subscription"}</a></section>${pendingPlanMarkup()}` : ""}
+    <div class="plan-layout"><div class="plan-options"><nav class="seg plan-tabs" aria-label="Purchase type">${[["packs", "Credit packs"], ["subs", "Monthly subscription"]].map(([id, label]) => `<button type="button" data-ptab="${id}" aria-pressed="${tab === id}">${label}</button>`).join("")}</nav>
+      <p class="plan-section-note">${sub ? active ? "Compare monthly credit amounts. Review a change before scheduling it for your next payment date." : "Credits are added after your first payment, then each month." : active ? "One payment for extra credits. Your subscription stays the same." : "One payment. No subscription required."}</p>
+      <fieldset class="opts" id="opts"><legend class="sr">${sub ? "Choose a monthly plan" : "Choose a credit pack"}</legend>${list.map(o => `<label class="opt"><input type="radio" name="opt" value="${o.id}" ${o.id === picked.id ? "checked" : ""}><span class="dot"></span><span><b class="num">${fmt(o.credits)} credits</b><span class="d">${sub ? active && current?.id === o.id ? "Current plan" : active && S.plan.pendingChange?.id === o.id ? "Scheduled for next payment" : "Each month" : esc(o.note)}</span></span><span class="p num">$${o.usd}<small>${sub ? "per month" : "one payment"}</small></span></label>`).join("")}</fieldset></div>
+      <aside class="plan-summary" aria-labelledby="summary-heading"><h2 id="summary-heading">${sub ? active ? "Your selection" : "Monthly credits" : "Extra credits"}</h2><p class="plan-summary-credits num" id="s-big"></p><p class="plan-summary-price num" id="s-price"></p><div id="plan-action"></div><p class="fine muted" id="fine"></p><div id="plan-change-review" hidden></div></aside>
+      <section class="plan-estimate" aria-labelledby="estimate-heading"><h2 id="estimate-heading">What your credits can create</h2><p>Estimate a video with the settings you choose. The final cost is shown before generation.</p>${models.length ? `<div class="plan-estimate-fields"><div><label for="estimate-model">Model</label><select id="estimate-model">${models.map(m => `<option value="${esc(m.id)}" ${m.id === estimate.id ? "selected" : ""}>${esc(m.name)}</option>`).join("")}</select></div><div><label for="estimate-quality">Quality</label><select id="estimate-quality"></select></div><div><label for="estimate-length">Length</label><select id="estimate-length"></select></div></div><p class="plan-estimate-result" id="estimate-result" role="status"></p>` : '<p class="plan-estimate-result">No models are available for an estimate right now. Your existing credits remain available.</p>'}</section></div></div>`;
   return () => {
-    const draw = () => { const o = (planTab === "packs" ? CONFIG.packs : CONFIG.plans).find(x => x.id === planPick[planTab]);
-      const rows = CONFIG.models.map(m => [m.name, Math.floor(o.credits / (m.rates["720p"] * 8))]), max = Math.max(1, ...rows.map(r => r[1]));
-      $("#s-big").textContent = `${fmt(o.credits)} credits`;
-      $("#bars").innerHTML = rows.map(([n, c]) => `<div class="bar-row"><span>${n}</span><span class="track" aria-hidden="true"><i style="width:${(c / max * 100).toFixed(1)}%"></i></span><span class="v num">${fmt(c)} videos</span></div>`).join("");
-      $("#buy").textContent = planTab === "packs" ? `Buy ${fmt(o.credits)} credits for $${o.usd}` : `Subscribe for $${o.usd} a month`;
-      $("#buy").disabled = planTab === "subs" && S.plan?.state === "active";
-      if ($("#buy").disabled) $("#buy").textContent = "You already have a subscription";
-      $("#fine").textContent = planTab === "packs" ? "One payment. Credits do not need a subscription." : "Renews every month. Cancel any time."; };
-    draw();
-    $$("[data-ptab]").forEach(b => b.onclick = () => { planTab = b.dataset.ptab; route(); });
-    $("#opts").onchange = e => { planPick[planTab] = e.target.value; draw(); };
-    $("#buy").onclick = () => checkout((planTab === "packs" ? CONFIG.packs : CONFIG.plans).find(x => x.id === planPick[planTab]), planTab);
+    const remember = () => {
+      const p = new URLSearchParams(location.hash.split("?")[1] || "");
+      p.set("tab", tab); p.set("option", picked.id);
+      if (estimate) { p.set("model", estimate.id); p.set("quality", quality); p.set("length", String(length)); }
+      history.replaceState(null, "", "#/plans?" + p.toString());
+    };
+    const drawEstimate = () => {
+      if (!estimate) return;
+      $("#estimate-quality").innerHTML = estimate.qualities.map(q => `<option value="${esc(q)}" ${q === quality ? "selected" : ""}>${esc(q)}</option>`).join("");
+      $("#estimate-length").innerHTML = estimate.lengths.map(n => `<option value="${n}" ${n === length ? "selected" : ""}>${n} seconds</option>`).join("");
+      const credits = cost({ model: estimate.id, quality, len: length, format: estimate.formats[0] });
+      $("#estimate-result").innerHTML = credits ? `<strong class="num">${fmt(credits)} credits per video.</strong> This ${sub ? "plan" : "pack"} covers about <strong class="num">${fmt(Math.floor(picked.credits / credits))}</strong> videos with these settings.` : "This combination is unavailable. Choose another setting.";
+    };
+    const draw = () => {
+      $("#s-big").textContent = `${fmt(picked.credits)} credits${sub ? " / month" : ""}`;
+      $("#s-price").textContent = `$${picked.usd}${sub ? " per month" : " once"}`;
+      const same = active && current?.id === picked.id, scheduled = active && S.plan.pendingChange?.id === picked.id;
+      $("#plan-action").innerHTML = sub && active ? same || scheduled ? `<a class="btn primary" id="manage-selected-plan" href="#/account/billing">${scheduled ? "View scheduled change" : "Manage subscription"}</a>` : '<button class="btn primary" id="review-plan-change" type="button">Review plan change</button>' : `<button class="btn primary" id="buy" type="button">${sub ? `Subscribe for $${picked.usd} a month` : `Buy ${fmt(picked.credits)} credits for $${picked.usd}`}</button>`;
+      $("#fine").textContent = sub ? active ? same ? "Your current plan. No new subscription is needed." : scheduled ? `This change starts ${accountDate(S.plan.pendingChange.effectiveAt)}. No payment today.` : `A change can start ${accountDate(S.plan.nextBillingAt)}. Your current credits stay available.` : "Renews every month. Cancel future payments in Billing." : "Credits are added after payment. Your subscription is unchanged.";
+      $("#plan-change-review").hidden = true;
+      $("#buy")?.addEventListener("click", () => checkout(picked, tab));
+      $("#review-plan-change")?.addEventListener("click", () => {
+        const reviewed = picked, panel = $("#plan-change-review");
+        panel.innerHTML = `<h3 tabindex="-1" id="plan-change-heading">Review your plan change</h3><dl><div><dt>Current plan</dt><dd class="num">${fmt(S.plan.credits)} credits / month · $${S.plan.usd}</dd></div><div><dt>New plan</dt><dd class="num">${fmt(reviewed.credits)} credits / month · $${reviewed.usd}</dd></div><div><dt>Starts</dt><dd>${accountDate(S.plan.nextBillingAt)}</dd></div><div><dt>Payment today</dt><dd>$0</dd></div></dl><p>${S.plan.pendingChange ? "This replaces your previously scheduled change. " : ""}Your current plan and credits stay unchanged until the change date.</p><div class="plan-review-actions"><button class="btn primary" id="confirm-plan-change" type="button">Schedule change</button><button class="btn" id="dismiss-plan-change" type="button">Keep selection</button></div>`;
+        panel.hidden = false; $("#plan-change-heading").focus({ preventScroll: true }); panel.scrollIntoView({ block: "nearest", behavior: "auto" });
+        $("#dismiss-plan-change").onclick = () => { panel.hidden = true; $("#review-plan-change").focus(); };
+        panel.onkeydown = e => { if (e.key === "Escape") { e.preventDefault(); $("#dismiss-plan-change").click(); } };
+        $("#confirm-plan-change").onclick = () => {
+          if (S.plan?.state !== "active" || !CONFIG.plans.some(p => p.id === reviewed.id)) return;
+          S.plan.pendingChange = { id: reviewed.id, credits: reviewed.credits, usd: reviewed.usd, effectiveAt: S.plan.nextBillingAt };
+          save(); route({ preserve: true }); $("#cancel-plan-change")?.focus({ preventScroll: true }); toast("Plan change scheduled. No payment was taken today.");
+        };
+      });
+      drawEstimate();
+    };
+    $$("[data-ptab]").forEach(b => b.onclick = () => go("plans?tab=" + b.dataset.ptab));
+    $("#opts").onchange = e => { picked = list.find(o => o.id === e.target.value) || picked; remember(); draw(); };
+    $("#estimate-model")?.addEventListener("change", e => { estimate = models.find(m => m.id === e.target.value); quality = estimate.qualities.includes(quality) ? quality : estimate.qualities[0]; length = estimate.lengths.includes(length) ? length : estimate.lengths[0]; remember(); drawEstimate(); });
+    $("#estimate-quality")?.addEventListener("change", e => { quality = e.target.value; remember(); drawEstimate(); });
+    $("#estimate-length")?.addEventListener("change", e => { length = Number(e.target.value); remember(); drawEstimate(); });
+    initPendingPlanChange(); draw();
+    return () => { if (checkoutCleanup) checkoutCleanup(); };
   };
 }
 function checkout(o, kind) {
-  const dlg = $("#dlg"), sub = kind === "subs";
+  const sub = kind === "subs", dlg = $("#dlg");
+  if (!o || dlg.open) return;
   if (sub && S.plan?.state === "active") { go("account/billing"); return; }
   const opener = document.activeElement;
-  dlg.innerHTML = `<h2 id="dlg-title">${sub ? "Start subscription" : "Buy credits"}</h2><p class="muted">${sub ? "Credits arrive now and every month." : "Credits are added right away."}</p>
-    <div class="lines"><div><span>${fmt(o.credits)} credits${sub ? " a month" : ""}</span><span class="num">$${o.usd}.00</span></div><div class="tot"><span>Total today</span><span class="num">$${o.usd}.00</span></div></div>
-    <div class="pay">${icon("plans", 20)}<span>Card ending 4242</span></div>
-    <p class="fine muted">Demo checkout. No card details are collected and no money is charged.</p>
-    <details class="prototype-options"><summary>Prototype scenario</summary><label class="demo-option"><input id="fail-payment" type="checkbox">Show a declined payment</label></details>
-    <p class="payment-error" id="payment-error" role="alert" hidden>Payment declined. Your balance has not changed. Clear the declined-payment scenario to try again.</p>
-    <div class="btns"><button class="btn" type="button" id="c-no">Cancel</button><button class="btn primary" type="button" id="c-yes">Pay $${o.usd}.00</button></div>`;
-  dlg.showModal();
-  dlg.addEventListener("close", () => { if (opener?.isConnected) opener.focus(); }, { once: true });
+  let pending = false, timer = null;
+  const cleanup = () => { clearTimeout(timer); timer = null; pending = false; dlg.removeEventListener("close", onClose); dlg.oncancel = null; if (dlg.open) dlg.close(); if (checkoutCleanup === cleanup) checkoutCleanup = null; };
+  const onClose = () => { cleanup(); if (opener?.isConnected) opener.focus(); };
+  checkoutCleanup = cleanup;
+  dlg.innerHTML = `<h2 id="dlg-title">${sub ? "Start subscription" : "Buy credits"}</h2><p class="muted">${sub ? "Credits arrive after payment, then each month." : "Credits are added after payment."}</p>
+    <div class="lines"><div><span>${fmt(o.credits)} credits${sub ? " a month" : ""}</span><span class="num">$${Number(o.usd).toFixed(2)}</span></div><div class="tot"><span>Total today</span><span class="num">$${Number(o.usd).toFixed(2)}</span></div></div><div class="pay">${icon("plans", 20)}<span>Card ending 4242</span></div><p class="fine muted">Demo checkout. No card details are collected and no money is charged.</p>
+    <details class="prototype-options"><summary>Prototype scenario</summary><label class="demo-option"><input id="fail-payment" type="checkbox">Show a declined payment</label></details><p class="payment-error" id="payment-error" role="alert" hidden>Payment declined. Your balance has not changed. Clear the declined-payment scenario to try again.</p><div class="btns"><button class="btn" id="c-no" type="button">Cancel</button><button class="btn primary" id="c-yes" type="button">Pay $${Number(o.usd).toFixed(2)}</button></div>`;
+  dlg.addEventListener("close", onClose, { once: true }); dlg.showModal();
   $("#c-no").onclick = () => dlg.close();
-  let pending = false;
   dlg.oncancel = e => { if (pending) e.preventDefault(); };
   $("#c-yes").onclick = e => {
     if (pending) return;
-    pending = true; const b = e.currentTarget, fail = $("#fail-payment").checked;
-    b.disabled = true; $("#c-no").disabled = true; b.textContent = "Paying…"; $("#payment-error").hidden = true;
-    setTimeout(() => {
+    pending = true; const button = e.currentTarget, fail = $("#fail-payment").checked;
+    button.disabled = true; $("#c-no").disabled = true; button.textContent = "Paying…"; $("#payment-error").hidden = true;
+    timer = setTimeout(() => {
+      timer = null;
+      if (sub && S.plan?.state === "active") { cleanup(); go("account/billing"); return; }
       if (fail) {
         addTransaction({ kind: sub ? "subscription" : "purchase", label: `Payment declined · ${fmt(o.credits)} credits`, delta: 0, status: "failed", usd: o.usd, note: "No credits added and no money charged in this demo." });
-        $("#payment-error").hidden = false; b.disabled = false; $("#c-no").disabled = false; b.textContent = `Try payment again`; pending = false; return;
+        $("#payment-error").hidden = false; button.disabled = false; $("#c-no").disabled = false; button.textContent = "Try payment again"; pending = false; return;
       }
       addTransaction({ kind: sub ? "subscription" : "purchase", label: `${fmt(o.credits)} credits${sub ? " · monthly subscription" : " · credit pack"}`, delta: o.credits, usd: o.usd, note: "Demo payment · card ending 4242" });
-      if (sub) { const now = new Date().toISOString(), end = nextMonth(now); S.plan = { credits: o.credits, usd: o.usd, state: "active", periodStart: now, periodEnd: end, nextBillingAt: end }; }
-      save(); pending = false; dlg.close(); go("account/billing"); if (currentRoute().name === "account") route(); toast(`${fmt(o.credits)} credits added. You have ${fmt(S.balance)}.`);
+      if (sub) { const now = new Date().toISOString(), end = nextMonth(now); S.plan = { id: o.id, credits: o.credits, usd: o.usd, state: "active", periodStart: now, periodEnd: end, nextBillingAt: end }; }
+      save(); pending = false; cleanup(); go("account/billing"); if (currentRoute().name === "account") route(); toast(`${fmt(o.credits)} credits added. You have ${fmt(S.balance)}.`);
     }, REDUCED ? 100 : 900);
   };
 }
+
 
 /* ----- Referrals ----- */
 function viewReferrals(main) {
@@ -1412,9 +1579,9 @@ function viewAccount(main, arg) {
 function accountOverview(body) {
   const recent = S.videos.slice(0, 3), plan = S.plan;
   body.innerHTML = `<div class="account-columns"><div class="account-main"><section class="account-balance" aria-label="Credit balance"><span class="account-caption">Available to create</span><p><strong class="account-amount num" id="account-balance">${fmt(S.balance)}</strong><span class="account-unit">credits</span></p><div class="account-balance-foot"><p>See the cost before you launch each video.</p><a class="btn" href="#/plans">Buy credits</a></div></section>
-    <section aria-labelledby="account-videos"><div class="account-section-head"><h2 id="account-videos">Your latest scenes</h2><a class="linkbtn" href="#/history">All videos</a></div>${recent.length ? `<div class="account-recent">${recent.map(v => `<article>${thumb(v)}<h3><a href="#/video/${v.id}">${esc(titleOf(v.prompt))}</a></h3><p>${esc(model(v.model).name)} · ${v.len} s</p>${getPublishedPost(v.id) ? `<a class="account-link" href="#/community/${getPublishedPost(v.id).id}" style="font-size:12px">Published</a>` : ""}</article>`).join("")}</div>` : `<div class="account-empty"><h3>Your first scene starts here</h3><p>Describe a scene and choose a model. You can review the price before you start.</p><a class="btn primary" href="#/create">Create your first video</a></div>`}</section>
+    <section aria-labelledby="account-videos"><div class="account-section-head"><h2 id="account-videos">Your latest scenes</h2><a class="linkbtn" href="#/history">All videos</a></div>${recent.length ? `<div class="account-recent">${recent.map(v => `<article>${thumb(v)}<h3><a href="#/video/${v.id}">${esc(titleOf(v.prompt))}</a></h3><p>${esc(recordModel(v).name)} · ${v.len} s</p>${getPublishedPost(v.id) ? `<a class="account-link" href="#/community/${getPublishedPost(v.id).id}" style="font-size:12px">Published</a>` : ""}</article>`).join("")}</div>` : `<div class="account-empty"><h3>Your first scene starts here</h3><p>Describe a scene and choose a model. You can review the price before you start.</p><a class="btn primary" href="#/create">Create your first video</a></div>`}</section>
     <section><div class="account-section-head"><h2>Recent credit activity</h2><a class="linkbtn" href="#/account/credits">Full activity</a></div>${accountLedger([...S.transactions].reverse().slice(0, 4), true)}</section></div>
-    <aside class="account-side"><section><h2>${plan?.state === "active" ? "Your monthly plan" : plan ? "Subscription cancelled" : "Create at your pace"}</h2>${plan?.state === "active" ? `<p class="account-plan-price num">${fmt(plan.credits)} <span>credits / month</span></p><p>Next payment: $${plan.usd} on ${accountDate(plan.nextBillingAt)}.</p><a class="linkbtn" href="#/account/billing">Manage subscription</a>` : `<p>${plan ? "No future payments are scheduled. Your current demo credits stay available." : "You do not have a subscription. Buy credits when you need them, or choose a monthly plan."}</p><a class="linkbtn" href="#/plans">Explore plans</a>`}</section>
+    <aside class="account-side"><section><h2>${plan?.state === "active" ? "Your monthly plan" : plan ? "Subscription cancelled" : "Create at your pace"}</h2>${plan?.state === "active" ? `<p class="account-plan-price num">${fmt(plan.credits)} <span>credits / month</span></p><p>Next payment: $${plan.pendingChange?.usd ?? plan.usd} on ${accountDate(plan.nextBillingAt)}.</p>${plan.pendingChange ? `<p>${fmt(plan.pendingChange.credits)} credits per month are scheduled from that date.</p>` : ""}<a class="linkbtn" href="#/account/billing">Manage subscription</a>` : `<p>${plan ? "No future payments are scheduled. Your current credits stay available." : "You do not have a subscription. Buy credits when you need them, or choose a monthly plan."}</p><a class="linkbtn" href="#/plans?tab=subs">Explore plans</a>`}</section>
     <section><h2>Your publications</h2><p>${S.posts.length ? `${S.posts.length} scene${S.posts.length === 1 ? "" : "s"} shared with the community.` : "Choose which finished videos appear in the community."}</p><a class="linkbtn" href="#/community/mine">Manage publications</a></section><section><h2>Invite someone</h2><p>Find your referral link and follow the people who join.</p><a class="linkbtn" href="#/referrals">Open referrals</a></section><section><h2>Your preferences</h2><p>${esc(accountUser().name)}<br>${esc(accountUser().email)}</p><a class="linkbtn" href="#/account/profile">Edit profile</a></section></aside></div>`;
   return null;
 }
@@ -1440,12 +1607,13 @@ function accountCredits(body) {
 function accountBilling(body) {
   const p = S.plan;
   body.innerHTML = `${p ? `<section class="account-plan"><div class="account-plan-head"><div><h2>${fmt(p.credits)} credits a month</h2><p class="muted">$${p.usd} per month</p></div><span class="account-status ${p.state === "active" ? "good" : "muted"}">${p.state === "active" ? "Active subscription" : "Subscription cancelled"}</span></div>
-    <dl class="account-facts"><div><dt>Current period</dt><dd>${accountDate(p.periodStart)}</dd></div><div><dt>Period ends</dt><dd>${accountDate(p.periodEnd)}</dd></div><div><dt>Next payment</dt><dd>${p.state === "active" ? `$${p.usd} · ${accountDate(p.nextBillingAt)}` : "None scheduled"}</dd></div></dl>
-    <p class="account-hint">${p.state === "active" ? `${fmt(p.credits)} credits were added when you subscribed. In this demo, cancelling stops future payments and leaves current credits available.` : "No future payments. Current credits stay available in this demo. You can choose another plan at any time."}</p>
-    <div class="row" style="margin-top:20px">${p.state === "active" ? '<button class="btn danger" id="cancel-subscription" type="button">Cancel subscription</button>' : '<a class="btn" href="#/plans">Choose a plan</a>'}<a class="linkbtn" href="#/account/credits">View credits</a></div>
-    <div id="cancel-confirm" class="account-cancel-confirm" hidden><p>Cancel future monthly payments? Your current ${fmt(S.balance)} demo credits stay available.</p><div class="row"><button class="btn" id="keep-subscription" type="button">Keep subscription</button><button class="btn danger" id="confirm-cancel" type="button">Confirm cancellation</button></div></div></section>` : `<section class="account-empty"><h2>No monthly subscription</h2><p>Buy credits once or choose a monthly plan. You can create videos with either option.</p><a class="btn primary" href="#/plans">Choose credits or a plan</a></section>`}
+    <dl class="account-facts"><div><dt>Current period</dt><dd>${accountDate(p.periodStart)}</dd></div><div><dt>Period ends</dt><dd>${accountDate(p.periodEnd)}</dd></div><div><dt>Next payment</dt><dd>${p.state === "active" ? `$${p.pendingChange?.usd ?? p.usd} · ${accountDate(p.nextBillingAt)}` : "None scheduled"}</dd></div></dl>
+    <p class="account-hint">${p.state === "active" ? "Cancelling stops future monthly payments. Your current credits stay available." : "No future payments. Current credits stay available. You can choose another plan at any time."}</p>
+    <div class="row" style="margin-top:20px">${p.state === "active" ? '<a class="btn" href="#/plans?tab=subs">Compare plans</a><button class="btn danger" id="cancel-subscription" type="button">Cancel subscription</button>' : '<a class="btn" href="#/plans?tab=subs">Choose a plan</a>'}<a class="linkbtn" href="#/account/credits">View credits</a></div>
+    <div id="cancel-confirm" class="account-cancel-confirm" hidden><p>Cancel future monthly payments? ${p.pendingChange ? "Your scheduled plan change will also be removed. " : ""}Your current ${fmt(S.balance)} credits stay available.</p><div class="row"><button class="btn" id="keep-subscription" type="button">Keep subscription</button><button class="btn danger" id="confirm-cancel" type="button">Confirm cancellation</button></div></div></section>${pendingPlanMarkup(p)}` : `<section class="account-empty"><h2>No monthly subscription</h2><p>Buy credits once or choose a monthly plan. You can create videos with either option.</p><a class="btn primary" href="#/plans?tab=subs">Choose credits or a plan</a></section>`}
     <div class="account-section-head"><h2>Purchase history</h2><a class="linkbtn" href="#/plans">Buy credits</a></div>${accountLedger([...S.transactions].reverse().filter(t => ["purchase", "subscription"].includes(t.kind)))}<p class="account-hint">These are sample purchases. Real receipts, renewal payments, tax and cancellation terms will be connected before launch.</p>`;
   return () => {
+    initPendingPlanChange();
     $("#cancel-subscription")?.addEventListener("click", () => { $("#cancel-confirm").hidden = false; $("#cancel-subscription").hidden = true; $("#keep-subscription").focus(); });
     $("#keep-subscription")?.addEventListener("click", () => { $("#cancel-confirm").hidden = true; $("#cancel-subscription").hidden = false; $("#cancel-subscription").focus(); });
     $("#confirm-cancel")?.addEventListener("click", () => { cancelSubscription(); route(); toast("Subscription cancelled. No future payments are scheduled."); });
@@ -1467,7 +1635,7 @@ function viewHome(main) {
   main.innerHTML = `<div class="landing"><section class="landing-hero" aria-labelledby="title"><div><h1 id="title" tabindex="-1">Your next scene starts here.</h1><p class="landing-intro">Short videos for social posts, product stories and B-roll. Describe your scene, choose the frame and review the cost.</p><div class="landing-actions"><a class="btn primary" href="${S.signedIn ? "#/create" : "#/signin"}">${S.signedIn ? "Create a video" : "Start creating"}</a><a class="btn" href="#/community">Explore community</a></div><div class="landing-caption"><button class="linkbtn" id="explore-demo" type="button">Explore workspace</button> before your first video.</div></div>
     <div class="landing-film"><div class="landing-frame"><img src="${IMG.studio}" alt="Rolling green hills with patches of snow beneath a pale sky"></div><div class="landing-frame-note"><span>One scene. A different point of view.</span><span class="num">00:08</span></div><div class="landing-filmstrip">${[["studio", "00:00"], ["night", "00:02"], ["coast", "00:04"], ["city", "00:06"]].map(([img, time]) => `<figure><img src="${IMG[img]}" alt=""><figcaption>${time}</figcaption></figure>`).join("")}</div><p class="landing-caption">Sample frames</p></div></section>
     <section class="landing-section"><h2>From a thought to a scene</h2><p class="landing-section-intro">Keep the idea in one place, from your first description to the finished video.</p><div class="landing-workflow"><div class="landing-prompt"><span class="landing-prompt-label">The scene</span><blockquote>“Green hills under a pale sky. A slow push forward, soft wind, quiet and still.”</blockquote><div class="landing-prompt-controls"><span>Landscape · 16:9</span><span>8 seconds</span><span>Review credits before launch</span></div></div><ol class="landing-steps"><li><div><h3>Describe what you see</h3><p>Start with a description. Add an image if you want a visual starting point.</p></div></li><li><div><h3>Choose the model and frame</h3><p>Each model offers its own settings. The price follows your choices.</p></div></li><li><div><h3>Keep your scene, or share it</h3><p>Your videos stay in History. Publish a finished scene to the community and choose whether to include your prompt.</p></div></li></ol></div></section>
-    <section class="landing-section"><h2>A choice of models, one workspace</h2><p class="landing-section-intro">Choose a model for your scene. Available settings follow your choice.</p><div class="landing-models">${CONFIG.models.map(m => `<article class="landing-model-row"><img src="${IMG[m.img]}" alt=""><div><h3>${esc(m.name)}</h3><p>${esc(m.provider)} · ${esc(m.tag)}</p></div><div class="landing-model-settings">${m.qualities.join(" / ")}<br><span class="muted">${m.formats.join(" · ")}</span></div><span class="landing-model-role">${m.id === "runway" ? "Text or image to video" : m.id === "seedance" ? "Drafts" : "Resolution options"}</span></article>`).join("")}</div><p class="landing-caption">Resolution and frame options depend on the model you choose.</p></section>
+    <section class="landing-section"><h2>A choice of models, one workspace</h2><p class="landing-section-intro">Choose a model for your scene. Available settings follow your choice.</p><div class="landing-models">${availableModels().filter(m => m.featured !== false).slice(0, 3).map(m => `<article class="landing-model-row"><img src="${IMG[m.img] || IMG.studio}" alt=""><div><h3>${esc(m.name)}</h3><p>${esc(m.provider)} · ${esc(m.tag)}</p></div><div class="landing-model-settings">${m.qualities.join(" / ")}<br><span class="muted">${m.formats.join(" · ")}</span></div><span class="landing-model-role">${(m.inputs || ["text"]).includes("image") ? "Text or image to video" : "Text to video"}</span></article>`).join("")}</div><p class="landing-caption">Resolution and frame options depend on the model you choose.</p></section>
     <section class="landing-account"><div><h2>Your credits have a story.</h2><p>See what you bought, what each video cost and what remains. Keep your plan, purchases and scenes together.</p><a class="btn" href="${S.signedIn ? "#/account/overview" : "#/signin"}">Open your account</a></div><div class="landing-account-visual"><h3>What you can follow</h3><div class="landing-flow-row"><span>Credit purchase</span><span>Credits added</span></div><div class="landing-flow-row"><span>Video launched</span><span>Cost recorded</span></div><div class="landing-flow-row"><span>Credit activity</span><span>Balance explained</span></div><div class="landing-flow-row"><span>Your subscription</span><span>Next payment visible</span></div></div></section>
     <section class="landing-section landing-faq"><h2>Before your first video</h2><div><details><summary>Do I need a subscription?</summary><p>No. The proposed service offers one-off credit packs and a monthly subscription. Either option gives you credits for videos.</p></details><details><summary>Why do models have different settings?</summary><p>Each model supports different resolutions, frame shapes and video lengths. You only see options for the selected model.</p></details><details><summary>Where can I find my videos?</summary><p>Your videos stay in History, with their prompts, settings and credit costs. Open your account to review recent scenes and purchases.</p></details></div></section></div>`;
   return () => { $("#explore-demo").onclick = () => { if (S.signedIn) go("account/overview"); else enterDemoAccount(); }; };
@@ -1550,7 +1718,7 @@ const publicInitials = name => name.split(/\s+/).slice(0, 2).map(w => [...w][0] 
 function communityCards(limit = 6, mine = false) {
   const posts = communityPosts(mine).slice(0, limit);
   if (!posts.length) return `<section class="publication-empty"><h2>${mine ? "Your scenes can find an audience" : "No published scenes yet"}</h2><p>${mine ? "Publish a finished video from its result page. You choose whether to share the prompt." : "Published videos will appear here."}</p><a class="btn" href="${S.signedIn ? "#/history" : "#/signin"}">${S.signedIn ? "Choose a video" : "Sign in"}</a></section>`;
-  return `<div class="community-grid">${posts.map(p => `<article class="community-card"><a class="thumb" href="#/community/${p.id}" aria-label="View ${esc(p.caption)}"><img src="${IMG[p.img]}" alt="" loading="lazy"><span class="badge num">${tc(p.len)}</span></a><div class="community-author"><span class="community-initials" aria-hidden="true">${esc(publicInitials(p.author))}</span><span>${esc(p.author)}</span></div><h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(model(p.model).name)}</span><span class="num">${p.len} s · ${esc(p.quality)} · ${esc(p.format)}</span></p>${p.includePrompt && p.prompt ? `<a class="btn community-use" href="#/create?scene=${encodeURIComponent(p.id)}" aria-label="Use the setup for ${esc(p.caption)}">Use this setup</a>` : '<p class="community-privacy">Prompt kept private</p>'}</article>`).join("")}</div>`;
+  return `<div class="community-grid">${posts.map(p => `<article class="community-card"><a class="thumb" href="#/community/${p.id}" aria-label="View ${esc(p.caption)}"><img src="${IMG[p.img]}" alt="" loading="lazy"><span class="badge num">${tc(p.len)}</span></a><div class="community-author"><span class="community-initials" aria-hidden="true">${esc(publicInitials(p.author))}</span><span>${esc(p.author)}</span></div><h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span><span class="num">${p.len} s · ${esc(p.quality)} · ${esc(p.format)}</span></p>${p.includePrompt && p.prompt ? `<a class="btn community-use" href="#/create?scene=${encodeURIComponent(p.id)}" aria-label="Use the setup for ${esc(p.caption)}">Use this setup</a>` : '<p class="community-privacy">Prompt kept private</p>'}</article>`).join("")}</div>`;
 }
 function unpublishPost(id) {
   const post = S.posts.find(p => p.id === id);
@@ -1572,7 +1740,7 @@ function initPublication(v) {
     if (!caption || caption.length > 120) { $("#publish-error").hidden = false; $("#publish-title").setAttribute("aria-invalid", "true"); $("#publish-title").focus(); return; }
     if (!S.signedIn || v.status !== "ready" || getPublishedPost(v.id)) return;
     const includePrompt = $("#publish-share-prompt").checked;
-    const post = { id: `post-${Date.now().toString(36)}-${v.id}`, videoId: v.id, author: accountUser().name, caption, includePrompt, model: v.model, len: v.len, quality: v.quality, format: v.format, img: v.img, createdAt: new Date().toISOString() };
+    const post = { id: `post-${Date.now().toString(36)}-${v.id}`, videoId: v.id, author: accountUser().name, caption, includePrompt, model: v.model, modelName: recordModel(v).name, providerName: recordModel(v).provider, len: v.len, quality: v.quality, format: v.format, img: v.img, createdAt: new Date().toISOString() };
     if (includePrompt) post.prompt = v.prompt;
     S.posts.push(post); save(); route({ preserve: true }); $("#view-publication")?.focus({ preventScroll: true }); toast("Your scene is published.", { label: "View", fn: () => go("community/" + post.id) });
   });
@@ -1587,7 +1755,7 @@ function viewCommunity(main, arg) {
   const p = communityPosts(false).find(x => x.id === arg);
   if (!p) { main.innerHTML = '<div class="page"><h1 id="title" tabindex="-1">Publication unavailable</h1><div class="publication-empty"><p>The creator may have removed this scene.</p><a class="btn" href="#/community">Back to community</a></div></div>'; return null; }
   const own = S.signedIn && S.posts.some(x => x.id === p.id);
-  main.innerHTML = `<div class="page"><a class="linkbtn" href="#/community">Back to community</a><div class="community-detail"><div><div class="player"><img src="${IMG[p.img]}" alt="Scene preview: ${esc(p.caption)}"><button class="play" type="button" id="community-play" aria-label="Play preview">${icon("play", 24)}</button></div><div class="community-preview-strip">${[0, 1, 2, 3].map(i => `<figure><img src="${IMG[p.img]}" alt=""><figcaption class="num">${tc(Math.floor(p.len * i / 4))}</figcaption></figure>`).join("")}</div></div><aside><h1 id="title" tabindex="-1">${esc(p.caption)}</h1><div class="community-author"><span class="community-initials" aria-hidden="true">${esc(publicInitials(p.author))}</span>${esc(p.author)}</div><dl class="facts"><div><dt>Model</dt><dd>${esc(model(p.model).name)}</dd></div><div><dt>Length</dt><dd class="num">${p.len} s</dd></div><div><dt>Frame</dt><dd>${esc(p.quality)} · ${esc(p.format)}</dd></div></dl><section class="community-prompt"><h2>${p.includePrompt ? "Creator’s prompt" : "A private prompt"}</h2><p>${p.includePrompt ? esc(p.prompt) : "The creator has chosen not to share the prompt."}</p>${p.includePrompt ? `<button class="btn primary" id="use-community-prompt" type="button">${S.signedIn ? "Use this setup" : "Sign in to use this setup"}</button>` : '<a class="btn" href="#/create">Create your own scene</a>'}</section>${own ? `<div class="row"><a class="linkbtn" href="#/video/${p.videoId}">Your original video</a><button class="linkbtn" id="unpublish-video" type="button">Unpublish</button></div>` : ""}</aside></div></div>`;
+  main.innerHTML = `<div class="page"><a class="linkbtn" href="#/community">Back to community</a><div class="community-detail"><div><div class="player"><img src="${IMG[p.img]}" alt="Scene preview: ${esc(p.caption)}"><button class="play" type="button" id="community-play" aria-label="Play preview">${icon("play", 24)}</button></div><div class="community-preview-strip">${[0, 1, 2, 3].map(i => `<figure><img src="${IMG[p.img]}" alt=""><figcaption class="num">${tc(Math.floor(p.len * i / 4))}</figcaption></figure>`).join("")}</div></div><aside><h1 id="title" tabindex="-1">${esc(p.caption)}</h1><div class="community-author"><span class="community-initials" aria-hidden="true">${esc(publicInitials(p.author))}</span>${esc(p.author)}</div><dl class="facts"><div><dt>Model</dt><dd>${esc(recordModel(p).name)}</dd></div><div><dt>Length</dt><dd class="num">${p.len} s</dd></div><div><dt>Frame</dt><dd>${esc(p.quality)} · ${esc(p.format)}</dd></div></dl><section class="community-prompt"><h2>${p.includePrompt ? "Creator’s prompt" : "A private prompt"}</h2><p>${p.includePrompt ? esc(p.prompt) : "The creator has chosen not to share the prompt."}</p>${p.includePrompt ? `<button class="btn primary" id="use-community-prompt" type="button">${S.signedIn ? "Use this setup" : "Sign in to use this setup"}</button>` : '<a class="btn" href="#/create">Create your own scene</a>'}</section>${own ? `<div class="row"><a class="linkbtn" href="#/video/${p.videoId}">Your original video</a><button class="linkbtn" id="unpublish-video" type="button">Unpublish</button></div>` : ""}</aside></div></div>`;
   return () => {
     let timer = null, frame = 0;
     const stop = () => { clearInterval(timer); timer = null; $("#community-play").innerHTML = icon("play", 24); $("#community-play").setAttribute("aria-label", "Play preview"); $$(".community-preview-strip figure").forEach(e => e.classList.remove("now")); };
@@ -1596,6 +1764,37 @@ function viewCommunity(main, arg) {
     $("#use-community-prompt")?.addEventListener("click", () => { go("create?scene=" + encodeURIComponent(p.id)); });
     return () => clearInterval(timer);
   };
+}
+
+function renderModelPicker(d) {
+  const m = model(d.model), providers = [...new Set(availableModels().map(x => x.provider))].sort();
+  return `<section class="model-picker" aria-label="Selected model"><div><span class="catalog-label">Model</span><strong>${esc(m.name)}</strong><p>${esc(m.provider)} · ${fmt(m.rates[d.quality])} credits / second</p></div><button class="btn" id="browse-models" type="button" aria-haspopup="dialog">Change model</button></section>
+    <dialog class="catalog-dialog" id="model-dialog" aria-labelledby="model-dialog-title"><header><div><h2 id="model-dialog-title">Choose a model</h2><p>Available settings follow your selection.</p></div><button class="catalog-close" id="close-model-dialog" type="button" aria-label="Close model catalog">${icon("x", 20)}</button></header><div class="catalog-toolbar"><label class="sr" for="model-search">Search models and providers</label><input id="model-search" type="search" placeholder="Search models or providers" autocomplete="off"><div class="catalog-filters"><div><label for="model-provider">Provider</label><select id="model-provider"><option value="all">All providers</option>${providers.map(p => `<option value="${esc(p)}">${esc(p)}</option>`).join("")}</select></div><div><label for="model-input">Starting point</label><select id="model-input"><option value="all">Text or image</option><option value="text">Text</option><option value="image">Image</option></select></div></div><p class="catalog-count" id="model-count" role="status"></p></div><div class="catalog-results" id="model-results"></div></dialog>`;
+}
+function initModelPicker() {
+  const dialog = $("#model-dialog"), opener = $("#browse-models");
+  if (!dialog || !opener) return () => {};
+  const search = $("#model-search"), provider = $("#model-provider"), input = $("#model-input");
+  const draw = () => {
+    const q = search.value.trim().toLowerCase();
+    const results = availableModels().filter(m => (!q || `${m.name} ${m.provider} ${m.tag || ""}`.toLowerCase().includes(q)) && (provider.value === "all" || m.provider === provider.value) && (input.value === "all" || (m.inputs || ["text", "image"]).includes(input.value)));
+    $("#model-count").textContent = `${results.length} model${results.length === 1 ? "" : "s"}`;
+    $("#model-results").innerHTML = results.length ? results.map(m => `<button type="button" class="catalog-option" data-pick-model="${esc(m.id)}" aria-pressed="${S.draft.model === m.id}"><span class="catalog-option-main"><strong>${esc(m.name)}</strong><span>${esc(m.provider)} · ${esc(m.tag || "Video generation")}</span><small>${m.qualities.map(esc).join(" / ")} · ${Math.min(...m.lengths)}–${Math.max(...m.lengths)} s</small></span><span class="catalog-option-side"><span class="num">From ${fmt(Math.min(...m.qualities.map(q => m.rates[q])))} credits / s</span>${S.draft.model === m.id ? `<b>${icon("check", 14)}Selected</b>` : ""}</span></button>`).join("") : '<div class="catalog-empty"><h3>No matching models</h3><p>Try a different name or clear the filters.</p><button class="btn" id="clear-model-filters" type="button">Clear filters</button></div>';
+    $("#clear-model-filters")?.addEventListener("click", () => { search.value = ""; provider.value = "all"; input.value = "all"; draw(); search.focus(); });
+  };
+  opener.onclick = () => { search.value = ""; provider.value = "all"; input.value = "all"; draw(); dialog.showModal(); search.focus(); };
+  $("#close-model-dialog").onclick = () => dialog.close();
+  dialog.addEventListener("close", () => { if (opener.isConnected) opener.focus({ preventScroll: true }); });
+  search.addEventListener("input", draw); provider.addEventListener("change", draw); input.addEventListener("change", draw);
+  dialog.addEventListener("keydown", e => { if (e.key === "Enter" && e.target === search) { e.preventDefault(); $("[data-pick-model]", dialog)?.focus(); } });
+  $("#model-results").onclick = e => {
+    const button = e.target.closest("[data-pick-model]");
+    if (!button) return;
+    if (!isModelAvailable(button.dataset.pickModel)) { draw(); toast("This model is no longer available. Choose another model."); return; }
+    S.draft.model = button.dataset.pickModel; normalizeDraft(S.draft); save(); dialog.close(); route({ preserve: true });
+    $("#browse-models")?.focus({ preventScroll: true }); toast(`${model(S.draft.model).name} selected. Review the settings and cost.`);
+  };
+  return () => { if (dialog.open) dialog.close(); };
 }
 
 
