@@ -715,9 +715,12 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .community-card-meta { color: var(--text-muted); font-size: 13px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; }
 .community-card-meta span { min-width: 0; overflow-wrap: anywhere; }
 .community-card-meta span:last-child { text-align: right; }
-.community-metrics { display: flex; flex-wrap: wrap; gap: 8px 20px; color: var(--text-muted); font-size: 13px; line-height: 1.6; margin-top: 12px; }
-.community-metrics > span { white-space: nowrap; }
-.community-metrics b { color: var(--text); font-weight: 500; }
+.community-metrics { display: flex; flex-wrap: wrap; gap: 8px 12px; color: var(--text-muted); font-size: 13px; line-height: 1.6; margin-top: 8px; }
+.community-metric { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 40px; min-height: 32px; padding: 4px; border: 0; border-radius: var(--r-sm); background: transparent; color: var(--text-muted); font-size: inherit; }
+.community-metric:hover { background: var(--surface-2); color: var(--text); }
+.community-metric .num { color: var(--text); font-weight: 500; }
+.community-metric-tooltip { position: fixed; z-index: 80; max-width: calc(100vw - 16px); padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface); color: var(--text); box-shadow: 0 4px 16px var(--shadow); font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
+@media (pointer: coarse), (max-width: 760px) { .community-metric { min-width: 44px; min-height: 44px; } }
 .community-detail .community-metrics { margin: -12px 0 24px; }
 .community-use { margin-top: 16px; min-height: 44px; }
 .community-privacy { margin-top: 16px; min-height: 44px; display: flex; align-items: center; color: var(--text-muted); font-size: 13px; }
@@ -1007,6 +1010,8 @@ const ICONS = {
   warn: '<circle cx="8" cy="8" r="5.5"/><path d="M8 5v3.5M8 11v.01"/>',
   play: '<path d="M5 3.5v9l7.5-4.5z"/>',
   pause: '<path d="M5.5 3.5v9M10.5 3.5v9"/>',
+  eye: '<path d="M1.5 8s2.3-4 6.5-4 6.5 4 6.5 4-2.3 4-6.5 4S1.5 8 1.5 8Z"/><circle cx="8" cy="8" r="2"/>',
+  reuse: '<path d="M12.5 6A4.8 4.8 0 0 0 4 4.5L2 6.5M2 3v3.5h3.5M3.5 10a4.8 4.8 0 0 0 8.5 1.5l2-2M14 13V9.5h-3.5"/>',
   create: '<rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M6.5 6v4L10 8z"/>',
   community: '<rect x="1.5" y="2" width="5.5" height="8" rx="1"/><rect x="9" y="6" width="5.5" height="8" rx="1"/><path d="M1.5 13h5.5M9 3h5.5"/>',
   history: '<circle cx="8" cy="8" r="5.5"/><path d="M8 5v3.2l2 1.3"/>',
@@ -1145,7 +1150,7 @@ function renderChrome() {
   const signed = S.signedIn;
   $("#top").innerHTML = `<div class="top-in"><a class="logo" href="${signed ? "#/create" : "#/home"}" aria-label="Aurora, home">Aurora</a>${signed ? `
     <nav class="nav" aria-label="Main">${NAV.map(([k, l]) => `<a href="#/${k}" ${r === k || (k === "history" && r === "video") ? 'aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
-    <a class="bal" href="#/plans" aria-label="Balance ${fmt(S.balance)} credits.${S.plan?.state === "active" ? ` Monthly plan: ${fmt(S.plan.credits)} credits per month.` : S.plan ? " Subscription cancelled." : ""} Open credits and plans."><span class="balance-amount"><b class="num" id="bal-n">${fmt(S.balance)}</b><span>credits</span></span>${S.plan ? `<span class="header-plan" id="header-plan"><span>${S.plan.state === "active" ? "Monthly" : "Subscription"}</span><b class="num">${S.plan.state === "active" ? `${fmt(S.plan.credits)}/month` : "Cancelled"}</b></span>` : ""}</a>
+    <a class="bal" href="${S.plan?.state === "active" ? "#/account/billing" : "#/plans"}" aria-label="Balance ${fmt(S.balance)} credits.${S.plan?.state === "active" ? ` Monthly plan: ${fmt(S.plan.credits)} credits per month. Manage subscription.` : (S.plan ? " Subscription cancelled." : "") + " Open credits and plans."}"><span class="balance-amount"><b class="num" id="bal-n">${fmt(S.balance)}</b><span>credits</span></span>${S.plan ? `<span class="header-plan" id="header-plan"><span>${S.plan.state === "active" ? "Monthly" : "Subscription"}</span><b class="num">${S.plan.state === "active" ? `${fmt(S.plan.credits)}/month` : "Cancelled"}</b></span>` : ""}</a>
     <div class="acct"><button class="avatar" id="acct-btn" type="button" aria-expanded="${menuOpen}" aria-controls="menu" aria-label="Account menu">${esc(accountUser().initials)}</button>
       <div class="menu" id="menu" ${menuOpen ? "" : "hidden"}>
         <div class="who"><b>${esc(accountUser().name)}</b><span>${esc(accountUser().email)}</span></div>
@@ -1178,6 +1183,7 @@ const TITLES = { home: "Your next scene", community: "Community", account: "Your
 let afterSignIn = "create";
 let disposeView = null;
 function route(options = {}) {
+  hideCommunityMetricTooltip();
   const previousFocus = options.preserve ? document.activeElement?.id : null;
   const previousHref = options.preserve ? document.activeElement?.getAttribute("href") : null;
   cancelViewLoad();
@@ -1274,7 +1280,7 @@ function viewCreate(main) {
   main.innerHTML = `
   <section class="hero" aria-labelledby="title">
     <h1 class="display" id="title" tabindex="-1">Describe your scene</h1>
-    <p class="lead">Choose your model and see the price before you start.</p>
+    <p class="lead">Your ideas, in motion.</p>
     <div class="creator-starts" role="group" aria-label="Example starting points"><span>Try a starting point</span>${Object.entries(CREATOR_STARTERS).map(([id, p]) => `<button type="button" data-starter="${id}" aria-label="Use ${p.label.toLowerCase()} example, ${p.format}">${p.label} <span class="num">${p.format}</span></button>`).join("")}</div>
     <form class="composer" id="composer" novalidate>
       <label class="sr" for="prompt">Describe your video</label>
@@ -1919,7 +1925,7 @@ function communityCounts(id) {
 }
 function communityMetricItems(p) {
   const counts = communityCounts(p.id);
-  const metric = (key, label) => `<span><b class="num" data-community-count="${key}">${fmt(counts[key])}</b> <span data-community-label="${key}">${label}</span></span>`;
+  const metric = (key, label) => `<button class="community-metric" data-community-metric="${key}" type="button" aria-label="${fmt(counts[key])} ${label}">${icon(key === "views" ? "eye" : "reuse", 16)}<span class="num" data-community-count="${key}" aria-hidden="true">${fmt(counts[key])}</span></button>`;
   return `${metric("views", counts.views === 1 ? "view" : "views")}${p.includePrompt && p.prompt ? metric("promptUses", counts.promptUses === 1 ? "prompt use" : "prompt uses") : ""}`;
 }
 function communityMetrics(p, live = false) {
@@ -1929,6 +1935,59 @@ function refreshCommunityMetrics(id) {
   const p = communityPosts(false).find(post => post.id === id);
   if (p) $$(".community-metrics").filter(el => el.dataset.communityPost === id).forEach(el => { el.innerHTML = communityMetricItems(p); });
 }
+const communityMetricTooltip = document.createElement("div");
+communityMetricTooltip.id = "community-metric-tooltip";
+communityMetricTooltip.className = "community-metric-tooltip";
+communityMetricTooltip.setAttribute("role", "tooltip");
+/* The button name already includes the value and meaning; do not read them twice. */
+communityMetricTooltip.setAttribute("aria-hidden", "true");
+communityMetricTooltip.hidden = true;
+document.body.appendChild(communityMetricTooltip);
+let communityMetricAnchor = null, communityMetricPinned = false, communityMetricDismiss = null;
+function hideCommunityMetricTooltip() {
+  clearTimeout(communityMetricDismiss); communityMetricDismiss = null;
+  communityMetricTooltip.hidden = true; communityMetricAnchor = null; communityMetricPinned = false;
+}
+function positionCommunityMetricTooltip() {
+  if (!communityMetricAnchor) return;
+  if (!communityMetricAnchor.isConnected) { hideCommunityMetricTooltip(); return; }
+  const anchor = communityMetricAnchor.getBoundingClientRect(), tip = communityMetricTooltip.getBoundingClientRect(), margin = 8;
+  const left = Math.max(margin, Math.min(innerWidth - tip.width - margin, anchor.left + (anchor.width - tip.width) / 2));
+  const above = anchor.top - tip.height - margin;
+  const top = above >= margin ? above : Math.max(margin, Math.min(innerHeight - tip.height - margin, anchor.bottom + margin));
+  communityMetricTooltip.style.left = `${left}px`; communityMetricTooltip.style.top = `${top}px`;
+}
+function showCommunityMetricTooltip(button, pinned = false) {
+  clearTimeout(communityMetricDismiss); communityMetricDismiss = null;
+  communityMetricPinned = pinned || (communityMetricAnchor === button && communityMetricPinned);
+  communityMetricAnchor = button;
+  communityMetricTooltip.textContent = button.dataset.communityMetric === "views" ? "Views" : "Prompt uses";
+  communityMetricTooltip.hidden = false; positionCommunityMetricTooltip();
+}
+function dismissCommunityMetricTooltipSoon() {
+  if (communityMetricPinned || document.activeElement === communityMetricAnchor) return;
+  clearTimeout(communityMetricDismiss);
+  communityMetricDismiss = setTimeout(hideCommunityMetricTooltip, 120);
+}
+document.addEventListener("mouseover", e => {
+  const button = e.target.closest(".community-metric");
+  if (button) showCommunityMetricTooltip(button);
+  else if (communityMetricTooltip.contains(e.target)) { clearTimeout(communityMetricDismiss); communityMetricDismiss = null; }
+});
+document.addEventListener("mouseout", e => {
+  const button = e.target.closest(".community-metric");
+  if ((button && !button.contains(e.relatedTarget)) || (communityMetricTooltip.contains(e.target) && !communityMetricTooltip.contains(e.relatedTarget))) dismissCommunityMetricTooltipSoon();
+});
+document.addEventListener("focusin", e => { const button = e.target.closest(".community-metric"); if (button) showCommunityMetricTooltip(button); });
+document.addEventListener("focusout", e => { if (e.target === communityMetricAnchor) hideCommunityMetricTooltip(); });
+document.addEventListener("click", e => {
+  const button = e.target.closest(".community-metric");
+  if (button) { if (communityMetricAnchor === button && communityMetricPinned) hideCommunityMetricTooltip(); else showCommunityMetricTooltip(button, true); }
+  else if (!communityMetricTooltip.contains(e.target)) hideCommunityMetricTooltip();
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape") hideCommunityMetricTooltip(); });
+window.addEventListener("resize", positionCommunityMetricTooltip);
+window.addEventListener("scroll", positionCommunityMetricTooltip, true);
 function recordCommunityView(id) {
   if (!communityPosts(false).some(p => p.id === id)) return;
   const activity = communityActivity();
@@ -1983,6 +2042,7 @@ document.addEventListener("click", e => {
   beginCommunitySetup(new URLSearchParams(link.hash.split("?")[1] || "").get("scene"));
 });
 window.addEventListener("hashchange", () => {
+  hideCommunityMetricTooltip();
   if (!["create", "signin"].includes(currentRoute().name)) clearCommunitySetupIntent();
 });
 if (!["create", "signin"].includes(currentRoute().name)) clearCommunitySetupIntent();
