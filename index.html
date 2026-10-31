@@ -96,12 +96,13 @@ main:focus, [tabindex="-1"]:focus { outline: none; }
 .nav { display: flex; gap: 4px; margin-left: auto; }
 .nav a { padding: 8px 14px; border-radius: var(--r-pill); color: var(--text-muted); font-weight: 500; }
 .nav a:hover { color: var(--text); }
+.nav a[href="#/community"] { color: var(--text); font-weight: 600; }
 .nav a[aria-current="page"] { background: var(--surface-2); color: var(--text); }
 .bal { display: inline-flex; gap: 6px; align-items: baseline; padding: 7px 14px; border: 1px solid var(--field-line); border-radius: var(--r-pill); font-weight: 600; }
 .bal span:last-child { font-weight: 400; color: var(--text-muted); }
 .bal:hover { background: var(--surface-2); }
 .acct { position: relative; }
-.avatar { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--field-line); background: var(--surface); font-weight: 600; font-size: 13px; }
+.avatar { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--field-line); background: var(--surface); font-weight: 600; font-size: 13px; }
 .avatar:hover, .avatar[aria-expanded="true"] { background: var(--surface-2); }
 .menu { position: absolute; right: 0; top: 48px; width: 272px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: 0 16px 48px var(--shadow); padding: 8px; z-index: 30; }
 .menu[hidden] { display: none; }
@@ -133,6 +134,11 @@ main { display: block; }
 .hero { max-width: 920px; margin: 0 auto; padding: 48px 32px 0; }
 h1.display { font-size: var(--fs-h1); line-height: 1.1; letter-spacing: -0.02em; }
 .lead { color: var(--text-muted); font-size: var(--fs-lead); margin: 8px 0 28px; }
+.creator-starts { display: flex; align-items: center; gap: 8px 16px; flex-wrap: wrap; margin: -12px 0 20px; font-size: 13px; }
+.creator-starts > span { color: var(--text-muted); }
+.creator-starts button { min-height: 44px; padding: 8px 0; border: 0; background: none; text-decoration: underline; text-underline-offset: 4px; font-weight: 500; }
+.creator-starts button:hover { color: var(--accent); }
+.creator-starts button span { color: var(--text-muted); margin-left: 4px; }
 .page { max-width: 1200px; margin: 0 auto; padding: 40px 32px 72px; }
 .page > header { margin-bottom: 28px; }
 .page h1 { font-size: 36px; line-height: 1.15; letter-spacing: -0.015em; }
@@ -405,6 +411,10 @@ dialog .btns { display: flex; gap: 10px; justify-content: flex-end; }
   .notice-in { padding: 8px 16px; }
   .hero { padding: 24px 16px 0; }
   .lead { font-size: 16px; margin-bottom: 20px; }
+  .creator-starts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0 0 20px; }
+  .creator-starts > span { grid-column: 1 / -1; }
+  .creator-starts button { display: flex; flex-direction: column; justify-content: center; gap: 2px; border: 1px solid var(--field-line); border-radius: var(--r-sm); min-height: 52px; text-decoration: none; }
+  .creator-starts button span { margin-left: 0; font-size: 12px; }
   .composer textarea { font-size: 17px; padding: 16px 16px 6px; }
   .tools { padding: 6px 10px 12px 16px; }
   .settings { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 16px 10px 12px; }
@@ -437,7 +447,7 @@ dialog .btns { display: flex; gap: 10px; justify-content: flex-end; }
   .opt b { font-size: 21px; }
   .bar-row { grid-template-columns: 70px minmax(0, 1fr) 68px; }
   .idea { grid-template-columns: 84px minmax(0, 1fr); }
-  .menu { position: fixed; right: 12px; top: 60px; }
+  .menu { position: fixed; right: 12px; top: 68px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -564,6 +574,7 @@ dialog .btns { display: flex; gap: 10px; justify-content: flex-end; }
 .landing-hero .landing-intro { font-size: 18px; color: var(--text-muted); line-height: 1.65; max-width: 36ch; margin: 24px 0; }
 .landing-actions { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
 .landing-caption { font-size: 13px; color: var(--text-muted); margin-top: 20px; line-height: 1.6; }
+.landing-caption #explore-demo { min-height: 44px; }
 .landing-film { min-width: 0; }
 .landing-frame { aspect-ratio: 4 / 3; overflow: hidden; position: relative; background: var(--surface-2); border-radius: var(--r-sm); }
 .landing-frame img { width: 100%; height: 100%; object-fit: cover; }
@@ -692,6 +703,9 @@ dialog .btns { display: flex; gap: 10px; justify-content: flex-end; }
 .community-card h3 { font-family: var(--sans); font-size: 16px; font-weight: 600; margin: 12px 0 6px; overflow-wrap: anywhere; }
 .community-card h3 a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .community-card-meta { color: var(--text-muted); font-size: 13px; display: flex; justify-content: space-between; gap: 12px; }
+.community-card-meta span:last-child { text-align: right; }
+.community-use { margin-top: 16px; min-height: 44px; }
+.community-privacy { margin-top: 16px; min-height: 44px; display: flex; align-items: center; color: var(--text-muted); font-size: 13px; }
 .community-author { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 13px; }
 .community-initials { width: 28px; height: 28px; border-radius: var(--r-sm); background: var(--surface-2); display: grid; place-items: center; font-size: 11px; font-weight: 600; flex: none; }
 .community-tabs { display: flex; gap: 28px; border-bottom: 1px solid var(--line); margin: 24px 0 32px; }
@@ -728,7 +742,16 @@ dialog .btns { display: flex; gap: 10px; justify-content: flex-end; }
 .publication-empty h2 { font-size: 28px; }
 .publication-empty p { color: var(--text-muted); max-width: 48ch; margin: 12px 0 24px; }
 @media (max-width: 900px) { .community-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .community-detail { grid-template-columns: 1fr; } }
-@media (max-width: 600px) { .community-grid { grid-template-columns: 1fr; gap: 32px; } .community-card .thumb { aspect-ratio: 16 / 10; } .community-detail { gap: 28px; } .publish-panel { padding: 16px; } }
+@media (max-width: 600px) {
+  .community-grid { grid-template-columns: 1fr; gap: 32px; }
+  .community-card .thumb { aspect-ratio: 16 / 10; }
+  .community-detail { gap: 28px; }
+  .publish-panel { padding: 16px; }
+  body[data-view="community"] .account-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+  body[data-view="community"] .account-heading > div { display: contents; }
+  body[data-view="community"] .account-heading .sub { grid-column: 1 / -1; grid-row: 2; margin-top: 0; }
+  body[data-view="community"] .account-heading > .btn { grid-column: 2; grid-row: 1; }
+}
 @media (max-width: 760px) {
   .vside { display: flex; flex-direction: column; }
   .vside > h1 { order: 0; }
@@ -830,6 +853,7 @@ const ICONS = {
   play: '<path d="M5 3.5v9l7.5-4.5z"/>',
   pause: '<path d="M5.5 3.5v9M10.5 3.5v9"/>',
   create: '<rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M6.5 6v4L10 8z"/>',
+  community: '<rect x="1.5" y="2" width="5.5" height="8" rx="1"/><rect x="9" y="6" width="5.5" height="8" rx="1"/><path d="M1.5 13h5.5M9 3h5.5"/>',
   history: '<circle cx="8" cy="8" r="5.5"/><path d="M8 5v3.2l2 1.3"/>',
   plans: '<rect x="2" y="4" width="12" height="8.5" rx="1.5"/><path d="M2 7h12"/>',
   referrals: '<circle cx="6" cy="6" r="2.2"/><path d="M2.5 13c.4-2.2 1.8-3.4 3.5-3.4s3.1 1.2 3.5 3.4M11 5.2a2 2 0 0 1 0 3.6M11.5 9.8c1.3.3 2.2 1.4 2.5 3.2"/>',
@@ -937,7 +961,7 @@ function toast(msg, action, ttl = 5000) {
 /* ==========================================================================
    CHROME: header, notice, tab bar
    ========================================================================== */
-const NAV = [["create", "Create"], ["history", "History"], ["plans", "Plans"], ["referrals", "Referrals"], ["account", "Account"]];
+const NAV = [["create", "Create"], ["community", "Community"], ["history", "History"], ["plans", "Plans"], ["referrals", "Referrals"]];
 let menuOpen = false;
 function renderChrome() {
   const r = currentRoute().name;
@@ -949,13 +973,11 @@ function renderChrome() {
       <div class="menu" id="menu" ${menuOpen ? "" : "hidden"}>
         <div class="who"><b>${esc(accountUser().name)}</b><span>${esc(accountUser().email)}</span></div>
         <a class="item" href="#/account/overview">Your account</a>
-        <a class="item" href="#/account/credits">Credit activity</a>
-        <a class="item" href="#/account/billing">Subscription & purchases</a>
         <div class="lab" id="theme-lab">Theme</div>
         <div class="seg" role="group" aria-labelledby="theme-lab">${["auto", "light", "dark"].map(t => `<button type="button" data-theme-set="${t}" aria-pressed="${themePref() === t}">${t[0].toUpperCase() + t.slice(1)}</button>`).join("")}</div>
         ${REVIEW ? '<button class="item" type="button" id="reset">Reset prototype</button>' : ""}
         <button class="item" type="button" id="signout">Sign out</button>
-      </div></div>` : `<nav class="public-nav" aria-label="Main"><a href="#/home">How it works</a><a class="btn primary" href="#/signin">Start creating</a></nav>`}</div>`;
+      </div></div>` : `<nav class="public-nav" aria-label="Main"><a href="#/community" ${r === "community" ? 'aria-current="page"' : ""}>Community</a><a class="btn primary" href="#/signin">Start creating</a></nav>`}</div>`;
   $("#tabbar").innerHTML = signed ? NAV.map(([k, l]) => `<a href="#/${k}" ${r === k || (k === "history" && r === "video") ? 'aria-current="page"' : ""}>${icon(k === "create" ? "create" : k, 22)}<span>${l}</span></a>`).join("") : "";
   $("#tabbar").style.display = signed ? "" : "none";
 }
@@ -965,6 +987,7 @@ document.addEventListener("click", e => {
   if (t && t.dataset.themeSet) { setTheme(t.dataset.themeSet); menuOpen = true; renderChrome(); $(`[data-theme-set="${t.dataset.themeSet}"]`)?.focus(); return; }
   if (t && t.id === "reset") { S = seed(); save(); menuOpen = false; renderChrome(); toast("Prototype reset."); go("home"); return; }
   if (t && t.id === "signout") { S.signedIn = false; save(); menuOpen = false; go("home"); return; }
+  if (t && t.matches("#menu a")) { const same = t.getAttribute("href") === location.hash; menuOpen = false; renderChrome(); if (same) $("#title")?.focus({ preventScroll: true }); return; }
   if (menuOpen && !e.target.closest(".acct")) { menuOpen = false; renderChrome(); }
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && menuOpen) { menuOpen = false; renderChrome(); $("#acct-btn")?.focus(); } });
@@ -1050,12 +1073,24 @@ const thumb = (v, link = true) => {
 const videoCard = v => `<article class="vcard" data-vid="${v.id}">${thumb(v)}<h3>${esc(titleOf(v.prompt))}</h3><p class="meta"><span class="num">${model(v.model).name}, ${v.len} s</span>${v.status === "failed" ? `<button class="linkbtn" type="button" data-retry="${v.id}">Try again</button>` : v.status === "generating" ? "<span>Rendering</span>" : `<span>${esc(v.when)}</span>`}</p></article>`;
 
 /* ----- Create ----- */
+const CREATOR_STARTERS = {
+  social: { label: "Social clip", format: "9:16", prompt: "A vertical close-up of an iced coffee on a sunny cafe table. Condensation catches the light as the camera slowly moves closer. Leave clear space above the cup for a headline." },
+  product: { label: "Product shot", format: "1:1", prompt: "A matte ceramic skincare bottle on a pale stone surface. Soft side lighting, a slow camera arc, and a clean background. Keep the bottle label facing the camera." },
+  broll: { label: "B-roll", format: "16:9", prompt: "Morning light falls across a creator's desk. Hands open a notebook beside a camera and a cup of coffee. A slow overhead camera move with natural colours." },
+};
 function viewCreate(main) {
+  const sourceId = new URLSearchParams(location.hash.split("?")[1] || "").get("scene");
+  const source = sourceId ? communityPosts(false).find(p => p.id === sourceId && p.includePrompt && p.prompt) : null;
+  if (sourceId) {
+    if (source) { Object.assign(S.draft, { prompt: source.prompt, model: source.model, len: source.len, quality: source.quality, format: source.format, imageName: "", failDemo: false }); normalizeDraft(S.draft); save(); }
+    history.replaceState(null, "", "#/create");
+  }
   const d = normalizeDraft(S.draft), selectedModel = model(d.model);
   main.innerHTML = `
   <section class="hero" aria-labelledby="title">
     <h1 class="display" id="title" tabindex="-1">Describe your scene</h1>
     <p class="lead">Choose your model and see the price before you start.</p>
+    <div class="creator-starts" role="group" aria-label="Example starting points"><span>Try a starting point</span>${Object.entries(CREATOR_STARTERS).map(([id, p]) => `<button type="button" data-starter="${id}" aria-label="Use ${p.label.toLowerCase()} example, ${p.format}">${p.label} <span class="num">${p.format}</span></button>`).join("")}</div>
     <form class="composer" id="composer" novalidate>
       <label class="sr" for="prompt">Describe your video</label>
       <textarea id="prompt" rows="4" maxlength="1000" placeholder="A slow dolly shot through a quiet market at dawn, warm light, soft focus." aria-describedby="prompt-err">${esc(d.prompt)}</textarea>
@@ -1095,7 +1130,7 @@ function viewCreate(main) {
     <div class="gtabs"><button type="button" data-tab="videos" aria-pressed="${currentGalleryTab() === "videos"}">Your videos</button><button type="button" data-tab="community" aria-pressed="${currentGalleryTab() === "community"}">Community</button><a class="all linkbtn" href="#/history">All history</a></div>
     <div id="g-body"></div>
   </section>`;
-  return () => initCreate();
+  return () => { const cleanup = initCreate(); if (sourceId) toast(source ? "Prompt and settings added. Edit the scene and review the cost." : "This setup is unavailable. Your draft is unchanged."); return cleanup; };
 }
 function renderGallery(tab) {
   const body = $("#g-body"); if (!body) return;
@@ -1129,6 +1164,12 @@ function updatePrice() {
 function initCreate() {
   const f = $("#composer"), ta = $("#prompt"), err = $("#prompt-err");
   updatePrice(); renderGallery(currentGalleryTab());
+  $$("[data-starter]").forEach(b => b.addEventListener("click", () => {
+    const example = CREATOR_STARTERS[b.dataset.starter], previous = { ...S.draft };
+    Object.assign(S.draft, { prompt: example.prompt, model: "seedance", len: 5, quality: "720p", format: example.format, imageName: "", failDemo: false });
+    normalizeDraft(S.draft); save(); route({ preserve: true }); $("#prompt").focus();
+    toast(`${example.label} example added. Edit it before generating.`, { label: "Undo", fn: () => { S.draft = previous; save(); if (currentRoute().name === "create") { route({ preserve: true }); $("#prompt").focus(); } else go("create"); } });
+  }));
   if (S.draft.imageName) showAttached(S.draft.imageName, attachedUrl);
   ta.addEventListener("input", () => { S.draft.prompt = ta.value; $("#count").textContent = ta.value.length; err.hidden = true; ta.removeAttribute("aria-invalid"); save(); });
   f.addEventListener("change", e => { const t = e.target; if (t.name && t.type === "radio") { S.draft[t.name] = t.name === "len" ? Number(t.value) : t.value; normalizeDraft(S.draft); save(); if (t.name === "model") { route(); $(`input[name=model][value="${S.draft.model}"]`)?.focus(); } else updatePrice(); } });
@@ -1423,9 +1464,9 @@ function accountProfile(body) {
 }
 
 function viewHome(main) {
-  main.innerHTML = `<div class="landing"><section class="landing-hero" aria-labelledby="title"><div><h1 id="title" tabindex="-1">Your next scene starts here.</h1><p class="landing-intro">Turn a description or an image into a short video. Choose a model, set the frame and review the cost.</p><div class="landing-actions"><a class="btn primary" href="${S.signedIn ? "#/create" : "#/signin"}">${S.signedIn ? "Create a video" : "Start creating"}</a><button class="linkbtn" id="explore-demo" type="button">Explore workspace</button></div><p class="landing-caption">Explore the workspace before your first video.</p></div>
+  main.innerHTML = `<div class="landing"><section class="landing-hero" aria-labelledby="title"><div><h1 id="title" tabindex="-1">Your next scene starts here.</h1><p class="landing-intro">Short videos for social posts, product stories and B-roll. Describe your scene, choose the frame and review the cost.</p><div class="landing-actions"><a class="btn primary" href="${S.signedIn ? "#/create" : "#/signin"}">${S.signedIn ? "Create a video" : "Start creating"}</a><a class="btn" href="#/community">Explore community</a></div><div class="landing-caption"><button class="linkbtn" id="explore-demo" type="button">Explore workspace</button> before your first video.</div></div>
     <div class="landing-film"><div class="landing-frame"><img src="${IMG.studio}" alt="Rolling green hills with patches of snow beneath a pale sky"></div><div class="landing-frame-note"><span>One scene. A different point of view.</span><span class="num">00:08</span></div><div class="landing-filmstrip">${[["studio", "00:00"], ["night", "00:02"], ["coast", "00:04"], ["city", "00:06"]].map(([img, time]) => `<figure><img src="${IMG[img]}" alt=""><figcaption>${time}</figcaption></figure>`).join("")}</div><p class="landing-caption">Sample frames</p></div></section>
-    <section class="landing-section"><h2>From a thought to a scene</h2><p class="landing-section-intro">Keep the idea in one place, from your first description to the finished video.</p><div class="landing-workflow"><div class="landing-prompt"><span class="landing-prompt-label">The scene</span><blockquote>“Green hills under a pale sky. A slow push forward, soft wind, quiet and still.”</blockquote><div class="landing-prompt-controls"><span>Landscape · 16:9</span><span>8 seconds</span><span>Review credits before launch</span></div></div><ol class="landing-steps"><li><div><h3>Describe what you see</h3><p>Start with a description. Add an image if you want a visual starting point.</p></div></li><li><div><h3>Choose the model and frame</h3><p>Each model offers its own settings. The price follows your choices.</p></div></li><li><div><h3>Create, then keep the result</h3><p>Follow progress in your history. Return to the prompt or download the finished video in the live service.</p></div></li></ol></div></section>
+    <section class="landing-section"><h2>From a thought to a scene</h2><p class="landing-section-intro">Keep the idea in one place, from your first description to the finished video.</p><div class="landing-workflow"><div class="landing-prompt"><span class="landing-prompt-label">The scene</span><blockquote>“Green hills under a pale sky. A slow push forward, soft wind, quiet and still.”</blockquote><div class="landing-prompt-controls"><span>Landscape · 16:9</span><span>8 seconds</span><span>Review credits before launch</span></div></div><ol class="landing-steps"><li><div><h3>Describe what you see</h3><p>Start with a description. Add an image if you want a visual starting point.</p></div></li><li><div><h3>Choose the model and frame</h3><p>Each model offers its own settings. The price follows your choices.</p></div></li><li><div><h3>Keep your scene, or share it</h3><p>Your videos stay in History. Publish a finished scene to the community and choose whether to include your prompt.</p></div></li></ol></div></section>
     <section class="landing-section"><h2>A choice of models, one workspace</h2><p class="landing-section-intro">Choose a model for your scene. Available settings follow your choice.</p><div class="landing-models">${CONFIG.models.map(m => `<article class="landing-model-row"><img src="${IMG[m.img]}" alt=""><div><h3>${esc(m.name)}</h3><p>${esc(m.provider)} · ${esc(m.tag)}</p></div><div class="landing-model-settings">${m.qualities.join(" / ")}<br><span class="muted">${m.formats.join(" · ")}</span></div><span class="landing-model-role">${m.id === "runway" ? "Text or image to video" : m.id === "seedance" ? "Drafts" : "Resolution options"}</span></article>`).join("")}</div><p class="landing-caption">Resolution and frame options depend on the model you choose.</p></section>
     <section class="landing-account"><div><h2>Your credits have a story.</h2><p>See what you bought, what each video cost and what remains. Keep your plan, purchases and scenes together.</p><a class="btn" href="${S.signedIn ? "#/account/overview" : "#/signin"}">Open your account</a></div><div class="landing-account-visual"><h3>What you can follow</h3><div class="landing-flow-row"><span>Credit purchase</span><span>Credits added</span></div><div class="landing-flow-row"><span>Video launched</span><span>Cost recorded</span></div><div class="landing-flow-row"><span>Credit activity</span><span>Balance explained</span></div><div class="landing-flow-row"><span>Your subscription</span><span>Next payment visible</span></div></div></section>
     <section class="landing-section landing-faq"><h2>Before your first video</h2><div><details><summary>Do I need a subscription?</summary><p>No. The proposed service offers one-off credit packs and a monthly subscription. Either option gives you credits for videos.</p></details><details><summary>Why do models have different settings?</summary><p>Each model supports different resolutions, frame shapes and video lengths. You only see options for the selected model.</p></details><details><summary>Where can I find my videos?</summary><p>Your videos stay in History, with their prompts, settings and credit costs. Open your account to review recent scenes and purchases.</p></details></div></section></div>`;
@@ -1509,7 +1550,7 @@ const publicInitials = name => name.split(/\s+/).slice(0, 2).map(w => [...w][0] 
 function communityCards(limit = 6, mine = false) {
   const posts = communityPosts(mine).slice(0, limit);
   if (!posts.length) return `<section class="publication-empty"><h2>${mine ? "Your scenes can find an audience" : "No published scenes yet"}</h2><p>${mine ? "Publish a finished video from its result page. You choose whether to share the prompt." : "Published videos will appear here."}</p><a class="btn" href="${S.signedIn ? "#/history" : "#/signin"}">${S.signedIn ? "Choose a video" : "Sign in"}</a></section>`;
-  return `<div class="community-grid">${posts.map(p => `<article class="community-card"><a class="thumb" href="#/community/${p.id}" aria-label="View ${esc(p.caption)}"><img src="${IMG[p.img]}" alt="" loading="lazy"><span class="badge num">${tc(p.len)}</span></a><div class="community-author"><span class="community-initials" aria-hidden="true">${esc(publicInitials(p.author))}</span><span>${esc(p.author)}</span></div><h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(model(p.model).name)}</span><span class="num">${p.len} s · ${esc(p.quality)}</span></p></article>`).join("")}</div>`;
+  return `<div class="community-grid">${posts.map(p => `<article class="community-card"><a class="thumb" href="#/community/${p.id}" aria-label="View ${esc(p.caption)}"><img src="${IMG[p.img]}" alt="" loading="lazy"><span class="badge num">${tc(p.len)}</span></a><div class="community-author"><span class="community-initials" aria-hidden="true">${esc(publicInitials(p.author))}</span><span>${esc(p.author)}</span></div><h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(model(p.model).name)}</span><span class="num">${p.len} s · ${esc(p.quality)} · ${esc(p.format)}</span></p>${p.includePrompt && p.prompt ? `<a class="btn community-use" href="#/create?scene=${encodeURIComponent(p.id)}" aria-label="Use the setup for ${esc(p.caption)}">Use this setup</a>` : '<p class="community-privacy">Prompt kept private</p>'}</article>`).join("")}</div>`;
 }
 function unpublishPost(id) {
   const post = S.posts.find(p => p.id === id);
@@ -1540,19 +1581,19 @@ function initPublication(v) {
 function viewCommunity(main, arg) {
   if (!arg || arg === "mine") {
     const mine = arg === "mine";
-    main.innerHTML = `<div class="page"><header class="account-heading"><div><h1 id="title" tabindex="-1">${mine ? "Your publications" : "Community"}</h1><p class="sub">${mine ? "Your shared scenes. You can unpublish a scene without deleting your video." : "Scenes from the people creating here. Explore a point of view, or share your own."}</p></div><a class="btn primary" href="#/create">Create a video</a></header><nav class="community-tabs" aria-label="Community"><a href="#/community" ${!mine ? 'aria-current="page"' : ""}>All creators</a><a href="#/community/mine" ${mine ? 'aria-current="page"' : ""}>My publications</a></nav>${communityCards(100, mine)}</div>`;
+    main.innerHTML = `<div class="page"><header class="account-heading"><div><h1 id="title" tabindex="-1">${mine ? "Your publications" : "Community"}</h1><p class="sub">${mine ? "Your shared scenes. You can unpublish a scene without deleting your video." : "Find a scene for your next post. Use an open prompt and its settings, then make it yours."}</p></div><a class="btn primary" href="#/create">Create a video</a></header><nav class="community-tabs" aria-label="Community"><a href="#/community" ${!mine ? 'aria-current="page"' : ""}>All creators</a><a href="#/community/mine" ${mine ? 'aria-current="page"' : ""}>My publications</a></nav>${communityCards(100, mine)}</div>`;
     return null;
   }
   const p = communityPosts(false).find(x => x.id === arg);
   if (!p) { main.innerHTML = '<div class="page"><h1 id="title" tabindex="-1">Publication unavailable</h1><div class="publication-empty"><p>The creator may have removed this scene.</p><a class="btn" href="#/community">Back to community</a></div></div>'; return null; }
   const own = S.signedIn && S.posts.some(x => x.id === p.id);
-  main.innerHTML = `<div class="page"><a class="linkbtn" href="#/community">Back to community</a><div class="community-detail"><div><div class="player"><img src="${IMG[p.img]}" alt="Scene preview: ${esc(p.caption)}"><button class="play" type="button" id="community-play" aria-label="Play preview">${icon("play", 24)}</button></div><div class="community-preview-strip">${[0, 1, 2, 3].map(i => `<figure><img src="${IMG[p.img]}" alt=""><figcaption class="num">${tc(Math.floor(p.len * i / 4))}</figcaption></figure>`).join("")}</div></div><aside><h1 id="title" tabindex="-1">${esc(p.caption)}</h1><div class="community-author"><span class="community-initials" aria-hidden="true">${esc(publicInitials(p.author))}</span>${esc(p.author)}</div><dl class="facts"><div><dt>Model</dt><dd>${esc(model(p.model).name)}</dd></div><div><dt>Length</dt><dd class="num">${p.len} s</dd></div><div><dt>Frame</dt><dd>${esc(p.quality)} · ${esc(p.format)}</dd></div></dl><section class="community-prompt"><h2>${p.includePrompt ? "Creator’s prompt" : "A private prompt"}</h2><p>${p.includePrompt ? esc(p.prompt) : "The creator has chosen not to share the prompt."}</p>${p.includePrompt ? `<button class="btn primary" id="use-community-prompt" type="button">${S.signedIn ? "Use this prompt" : "Sign in to use this prompt"}</button>` : '<a class="btn" href="#/create">Create your own scene</a>'}</section>${own ? `<div class="row"><a class="linkbtn" href="#/video/${p.videoId}">Your original video</a><button class="linkbtn" id="unpublish-video" type="button">Unpublish</button></div>` : ""}</aside></div></div>`;
+  main.innerHTML = `<div class="page"><a class="linkbtn" href="#/community">Back to community</a><div class="community-detail"><div><div class="player"><img src="${IMG[p.img]}" alt="Scene preview: ${esc(p.caption)}"><button class="play" type="button" id="community-play" aria-label="Play preview">${icon("play", 24)}</button></div><div class="community-preview-strip">${[0, 1, 2, 3].map(i => `<figure><img src="${IMG[p.img]}" alt=""><figcaption class="num">${tc(Math.floor(p.len * i / 4))}</figcaption></figure>`).join("")}</div></div><aside><h1 id="title" tabindex="-1">${esc(p.caption)}</h1><div class="community-author"><span class="community-initials" aria-hidden="true">${esc(publicInitials(p.author))}</span>${esc(p.author)}</div><dl class="facts"><div><dt>Model</dt><dd>${esc(model(p.model).name)}</dd></div><div><dt>Length</dt><dd class="num">${p.len} s</dd></div><div><dt>Frame</dt><dd>${esc(p.quality)} · ${esc(p.format)}</dd></div></dl><section class="community-prompt"><h2>${p.includePrompt ? "Creator’s prompt" : "A private prompt"}</h2><p>${p.includePrompt ? esc(p.prompt) : "The creator has chosen not to share the prompt."}</p>${p.includePrompt ? `<button class="btn primary" id="use-community-prompt" type="button">${S.signedIn ? "Use this setup" : "Sign in to use this setup"}</button>` : '<a class="btn" href="#/create">Create your own scene</a>'}</section>${own ? `<div class="row"><a class="linkbtn" href="#/video/${p.videoId}">Your original video</a><button class="linkbtn" id="unpublish-video" type="button">Unpublish</button></div>` : ""}</aside></div></div>`;
   return () => {
     let timer = null, frame = 0;
     const stop = () => { clearInterval(timer); timer = null; $("#community-play").innerHTML = icon("play", 24); $("#community-play").setAttribute("aria-label", "Play preview"); $$(".community-preview-strip figure").forEach(e => e.classList.remove("now")); };
     $("#community-play").onclick = () => { if (timer) { stop(); return; } frame = 0; $("#community-play").innerHTML = icon("pause", 24); $("#community-play").setAttribute("aria-label", "Pause preview"); $$(".community-preview-strip figure")[0].classList.add("now"); timer = setInterval(() => { frame++; if (frame >= 4) { stop(); return; } $$(".community-preview-strip figure").forEach((e, i) => e.classList.toggle("now", i === frame)); }, REDUCED ? 500 : 1000); };
     $("#unpublish-video")?.addEventListener("click", () => unpublishPost(p.id));
-    $("#use-community-prompt")?.addEventListener("click", () => { if (!S.signedIn) { afterSignIn = "community/" + p.id; go("signin"); return; } Object.assign(S.draft, { prompt: p.prompt, model: p.model, len: p.len, quality: p.quality, format: p.format, imageName: "", failDemo: false }); normalizeDraft(S.draft); save(); go("create"); toast("Prompt and settings added. Make this scene your own."); });
+    $("#use-community-prompt")?.addEventListener("click", () => { go("create?scene=" + encodeURIComponent(p.id)); });
     return () => clearInterval(timer);
   };
 }
