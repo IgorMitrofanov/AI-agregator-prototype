@@ -565,16 +565,20 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .landing-actions { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
 .landing-caption { font-size: 13px; color: var(--text-muted); margin-top: 20px; line-height: 1.6; }
 .landing-caption #explore-demo { min-height: 44px; }
-.landing-caption #landing-example-link { display: inline-flex; align-items: center; min-height: 44px; }
+.landing-example-action { display: flex; justify-content: flex-end; margin-top: 8px; }
+.landing-example-watch { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; color: var(--text-muted); border-radius: var(--r-sm); }
+.landing-example-watch:hover { color: var(--text); background: var(--surface-2); }
 .landing-film { min-width: 0; }
 .landing-frame { aspect-ratio: 4 / 3; overflow: hidden; position: relative; background: var(--surface-2); border-radius: var(--r-sm); cursor: pointer; }
 .landing-frame img { width: 100%; height: 100%; object-fit: cover; transition: opacity 420ms ease-out; }
 .landing-frame-note { display: flex; justify-content: space-between; gap: 12px; margin-top: 12px; color: var(--text-muted); font-size: 13px; }
 .landing-filmstrip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 16px; }
-.landing-filmstrip figure { margin: 0; }
+.landing-scene-choice { display: block; min-width: 44px; min-height: 44px; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; }
 .landing-filmstrip img { width: 100%; height: 56px; object-fit: cover; display: block; }
 .landing-filmstrip .is-current img { outline: 2px solid var(--text); outline-offset: -2px; }
-.landing-filmstrip figcaption { margin-top: 4px; font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.landing-scene-caption { display: block; margin-top: 4px; font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.landing-scene-choice:hover .landing-scene-caption { color: var(--text); }
+.landing-scene-choice[aria-pressed="true"] .landing-scene-caption { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
 .landing-section { padding: 40px 0; border-top: 1px solid var(--line); }
 .landing-section h2 { font-size: 32px; line-height: 1.2; }
 .landing-section-intro { color: var(--text-muted); margin-top: 12px; max-width: 62ch; line-height: 1.6; }
@@ -621,8 +625,9 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .landing-section { padding: 32px 0; }
   .landing-section h2 { font-size: 29px; }
   .landing-model-row { grid-template-columns: 48px minmax(0, 1fr); }
+  .landing-model-row:has(.landing-model-role a) { position: relative; padding-right: 56px; }
   .landing-model-row .landing-model-settings { grid-column: 2; margin-top: -10px; }
-  .landing-model-role:has(a) { display: block; grid-column: 2; text-align: left; }
+  .landing-model-role:has(a) { display: block; position: absolute; grid-column: auto; top: 20px; right: 0; }
   .landing-model-row.without-preview { grid-template-columns: minmax(0, 1fr); }
   .landing-model-row.without-preview .landing-model-settings { grid-column: 1; margin-top: 0; }
   .landing-faq > div { margin-top: 24px; }
@@ -692,7 +697,16 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .community-metric-tooltip { position: fixed; z-index: 80; max-width: calc(100vw - 16px); padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface); color: var(--text); box-shadow: 0 4px 16px var(--shadow); font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
 @media (pointer: coarse), (max-width: 760px) { .community-metric { min-width: 44px; min-height: 44px; } }
 .community-detail .community-metrics { margin: -12px 0 24px; }
-.community-use { margin-top: 16px; min-height: 44px; }
+.community-use { display: grid; place-items: center; flex: none; width: 44px; height: 44px; margin-top: 16px; padding: 0; }
+.community-prompt-action { display: grid; place-items: center; width: 48px; height: 48px; padding: 0; }
+.community-card-foot { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+.community-card-foot > .community-use, .community-card-foot > .community-privacy { margin-top: 0; }
+.publication-actions { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.publication-action { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; border: 1px solid var(--line); border-radius: var(--r-sm); color: var(--text-muted); background: transparent; }
+.publication-action:hover { background: var(--surface-2); color: var(--text); }
+.publication-action:active { background: var(--surface); color: var(--text); }
+.publication-action .ic { flex: none; }
+.community-detail .publication-actions { justify-content: flex-start; margin: 24px 0 0; gap: 8px; }
 .community-privacy { margin-top: 16px; min-height: 44px; display: flex; align-items: center; color: var(--text-muted); font-size: 13px; }
 .community-author { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 13px; }
 .community-initials { width: 28px; height: 28px; border-radius: var(--r-sm); background: var(--surface-2); display: grid; place-items: center; font-size: 11px; font-weight: 600; flex: none; }
@@ -1039,6 +1053,9 @@ const ICONS = {
   play: '<path d="M5 3.5v9l7.5-4.5z"/>',
   pause: '<path d="M5.5 3.5v9M10.5 3.5v9"/>',
   eye: '<path d="M1.5 8s2.3-4 6.5-4 6.5 4 6.5 4-2.3 4-6.5 4S1.5 8 1.5 8Z"/><circle cx="8" cy="8" r="2"/>',
+  eyeOff: '<path d="M1.5 8s2.3-4 6.5-4 6.5 4 6.5 4-2.3 4-6.5 4S1.5 8 1.5 8Z"/><circle cx="8" cy="8" r="2"/><path d="m2 2 12 12"/>',
+  sliders: '<path d="M2 4h3m3 0h6M2 8h7m3 0h2M2 12h2m3 0h7M6.5 2.5v3M10.5 6.5v3M5.5 10.5v3"/>',
+  setup: '<path d="M7 3h6a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H7M1.5 8H9m0 0L6 5m3 3-3 3"/>',
   reuse: '<path d="M12.5 6A4.8 4.8 0 0 0 4 4.5L2 6.5M2 3v3.5h3.5M3.5 10a4.8 4.8 0 0 0 8.5 1.5l2-2M14 13V9.5h-3.5"/>',
   duration: '<circle cx="8" cy="8" r="5.5"/><path d="M8 4.5V8l2.5 1.5"/>',
   resolution: '<path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/><path d="M5.5 6.5v3M10.5 6.5v3M5.5 8h5"/>',
@@ -2119,14 +2136,14 @@ function viewHome(main) {
     .map(id => OFFICIAL_EXAMPLES.find(example => example.id === id))
     .map(example => ({ ...example, src: IMG[example.img], modelLabel: recordModel(example).name }));
   main.innerHTML = `<div class="landing"><section class="landing-hero" aria-labelledby="title"><div><h1 id="title" tabindex="-1">Your next scene starts here.</h1><p class="landing-intro">Short videos for social posts, product stories and B-roll.</p><div class="landing-actions"><a class="btn primary" href="${S.signedIn ? "#/create" : "#/signin"}">${S.signedIn ? "Create a video" : "Start creating"}</a><a class="btn" href="#/community">Explore community</a></div>${REVIEW ? '<div class="landing-caption"><button class="linkbtn" id="explore-demo" type="button">Explore workspace</button></div>' : ""}</div>
-    <div class="landing-film"><div class="landing-frame" id="landing-frame" role="button" tabindex="0" aria-label="Show next scene frame. Current scene: ${sceneFrames[0].alt}" aria-describedby="landing-frame-help"><img id="landing-scene" src="${sceneFrames[0].src}" alt="${sceneFrames[0].alt}"></div><p class="sr" id="landing-frame-help">Select the frame to see another scene. Browsing stops automatic changes.</p><div class="landing-frame-note"><span id="landing-scene-category">${sceneFrames[0].category}</span><span id="landing-scene-model">${sceneFrames[0].modelLabel}</span></div><div class="landing-filmstrip">${sceneFrames.map((scene, i) => `<figure ${i === 0 ? 'class="is-current"' : ""}><img src="${scene.src}" alt=""><figcaption>${scene.category}</figcaption></figure>`).join("")}</div><p class="landing-caption"><a class="linkbtn" id="landing-example-link" href="#/community/${sceneFrames[0].id}">Watch model example</a></p></div></section>
-    <section class="landing-section"><h2>From a thought to a scene</h2><p class="landing-section-intro">Keep the idea in one place, from your first description to the finished video.</p><div class="landing-workflow"><div class="landing-prompt"><span class="landing-prompt-label">The scene</span><blockquote>“Green hills under a pale sky. A slow push forward, soft wind, quiet and still.”</blockquote><div class="landing-prompt-controls"><span>Landscape · 16:9</span><span>8 seconds</span><span>Review the cost before creating</span></div></div><ol class="landing-steps"><li><div><h3>Describe what you see</h3><p>Start with a description. Add an image if you want a visual starting point.</p></div></li><li><div><h3>Choose the model and frame</h3><p>Each model offers its own settings. The price follows your choices.</p></div></li><li><div><h3>Keep your scene, or share it</h3><p>Your videos stay in History. Publish a finished scene to the community and choose whether to include your prompt.</p></div></li></ol></div></section>
-    <section class="landing-section"><h2>A choice of models, one workspace</h2><p class="landing-section-intro">Choose a model for your scene. Available settings follow your choice.</p><div class="landing-models">${availableModels().filter(m => m.featured !== false).slice(0, 3).map(m => `<article class="landing-model-row ${officialExample(m.id) ? "" : "without-preview"}">${officialExample(m.id) ? `<img src="${officialPoster(officialExample(m.id))}" alt="">` : ""}<div><h3>${esc(m.name)}</h3><p>${esc(m.provider)} · ${esc(m.tag)}</p></div><div class="landing-model-settings">${m.qualities.join(" / ")}<br><span class="muted">${m.formats.join(" · ")}</span></div><span class="landing-model-role">${officialExample(m.id) ? `<a class="linkbtn" href="#/community/${officialExample(m.id).id}">Watch example</a>` : (m.inputs || ["text"]).includes("image") ? "Text or image to video" : "Text to video"}</span></article>`).join("")}</div><p class="landing-caption">Resolution and frame options depend on the model you choose.</p></section>
-    <section class="landing-section landing-faq"><h2>Before your first video</h2><div><details><summary>Do I need a subscription?</summary><p>No. Aurora offers one-off credit packs and a monthly subscription. Either option gives you credits for videos.</p></details><details><summary>Why do models have different settings?</summary><p>Each model supports different resolutions, frame shapes and video lengths. You only see options for the selected model.</p></details><details><summary>Where can I find my videos?</summary><p>Your videos stay in History, with their prompts, settings and credit costs. Open your account to review recent scenes and purchases.</p></details></div></section></div>`;
+    <div class="landing-film"><div class="landing-frame" id="landing-frame" role="button" tabindex="0" aria-label="Show next scene frame. Current scene: ${sceneFrames[0].alt}" aria-describedby="landing-frame-help"><img id="landing-scene" src="${sceneFrames[0].src}" alt="${sceneFrames[0].alt}"></div><p class="sr" id="landing-frame-help">Choose a preview, or select the large frame for the next scene. Browsing stops automatic changes.</p><div class="landing-frame-note"><span id="landing-scene-category">${sceneFrames[0].category}</span><span id="landing-scene-model">${sceneFrames[0].modelLabel}</span></div><div class="landing-filmstrip">${sceneFrames.map((scene, i) => `<button class="landing-scene-choice${i === 0 ? " is-current" : ""}" type="button" data-scene-index="${i}" aria-label="Show ${esc(scene.caption)}" aria-controls="landing-frame" aria-pressed="${i === 0}"><img src="${scene.src}" alt=""><span class="landing-scene-caption">${scene.category}</span></button>`).join("")}</div><p class="landing-example-action"><a class="landing-example-watch" id="landing-example-link" href="#/community/${sceneFrames[0].id}" aria-label="Watch ${esc(sceneFrames[0].modelLabel)} model example" title="Watch ${esc(sceneFrames[0].modelLabel)} model example">${icon("play", 20)}</a></p></div></section>
+    <section class="landing-section"><h2>From prompt to video.</h2><div class="landing-workflow"><div class="landing-prompt"><span class="landing-prompt-label">Your prompt</span><blockquote>“Green hills beneath a pale sky. A slow camera push. Soft light. Quiet wind.”</blockquote><div class="landing-prompt-controls">${videoFactsMarkup({ len: 8, format: "16:9" })}</div></div><ol class="landing-steps"><li><div><h3>Describe the shot</h3><p>Write a prompt or add a reference image.</p></div></li><li><div><h3>Choose your settings</h3><p>Pick a model, length and frame. Check the price.</p></div></li><li><div><h3>Keep or publish</h3><p>Your video is saved in History. Share it in Community, with or without its prompt.</p></div></li></ol></div></section>
+    <section class="landing-section"><h2>Choose your model</h2><div class="landing-models">${availableModels().filter(m => m.featured !== false).slice(0, 3).map(m => `<article class="landing-model-row ${officialExample(m.id) ? "" : "without-preview"}">${officialExample(m.id) ? `<img src="${officialPoster(officialExample(m.id))}" alt="">` : ""}<div><h3>${esc(m.name)}</h3><p>${esc(m.provider)}</p></div><div class="landing-model-settings">${m.qualities.join(" / ")}<br><span class="muted">${m.formats.join(" · ")}</span></div><span class="landing-model-role">${officialExample(m.id) ? `<a class="landing-example-watch" href="#/community/${officialExample(m.id).id}" aria-label="Watch ${esc(m.name)} model example" title="Watch ${esc(m.name)} model example">${icon("play", 20)}</a>` : (m.inputs || ["text"]).includes("image") ? "Text or image to video" : "Text to video"}</span></article>`).join("")}</div></section>
+    <section class="landing-section landing-faq"><h2>Before you start</h2><div><details><summary>Can I buy credits without a subscription?</summary><p>Yes. Choose a credit pack or a monthly plan.</p></details><details><summary>Which settings are available?</summary><p>Length, resolution and frame shape depend on the model.</p></details><details><summary>Where are my videos?</summary><p>In History. You choose what to publish in Community.</p></details></div></section></div>`;
   return () => {
     $("#explore-demo")?.addEventListener("click", () => { if (S.signedIn) go("account/overview"); else enterDemoAccount(); });
-    const target = $("#landing-frame"), image = $("#landing-scene"), motion = matchMedia("(prefers-reduced-motion: reduce)");
-    let frame = 0, inView = false, hovering = false, stopped = false, disposed = false;
+    const showcase = $(".landing-film"), target = $("#landing-frame"), image = $("#landing-scene"), choices = $$(".landing-scene-choice", showcase), motion = matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0, requestedFrame = 0, inView = false, hovering = false, stopped = false, disposed = false;
     let rotationTimer = null, transitionTimer = null, transitionFrame = null, pendingUpdate = null;
     const armRotation = () => {
       clearTimeout(rotationTimer); rotationTimer = null;
@@ -2139,21 +2156,27 @@ function viewHome(main) {
       if (pendingUpdate && !disposed) pendingUpdate();
       pendingUpdate = null;
       image.style.opacity = ""; image.style.transition = "";
-      armRotation();
+      if (!disposed && requestedFrame !== frame) showFrame(requestedFrame);
+      else armRotation();
     };
-    const showNextFrame = (automatic = false) => {
-      if (disposed || transitionTimer) return;
+    const showFrame = (nextFrame, automatic = false) => {
+      if (disposed) return;
       clearTimeout(rotationTimer); rotationTimer = null;
       if (!automatic) stopped = true;
+      requestedFrame = nextFrame;
+      if (transitionTimer) return;
+      if (requestedFrame === frame) { armRotation(); return; }
       const update = () => {
-        frame = (frame + 1) % sceneFrames.length;
+        frame = requestedFrame;
         const scene = sceneFrames[frame];
         image.src = scene.src; image.alt = scene.alt;
         $("#landing-scene-category").textContent = scene.category;
         $("#landing-scene-model").textContent = scene.modelLabel;
         $("#landing-example-link").href = "#/community/" + scene.id;
+        $("#landing-example-link").setAttribute("aria-label", `Watch ${scene.modelLabel} model example`);
+        $("#landing-example-link").title = `Watch ${scene.modelLabel} model example`;
         target.setAttribute("aria-label", `Show next scene frame. Current scene: ${scene.alt}`);
-        $$(".landing-filmstrip figure").forEach((el, i) => el.classList.toggle("is-current", i === frame));
+        choices.forEach((el, i) => { el.classList.toggle("is-current", i === frame); el.setAttribute("aria-pressed", String(i === frame)); });
         pendingUpdate = null;
       };
       if (motion.matches) { update(); armRotation(); return; }
@@ -2167,13 +2190,15 @@ function viewHome(main) {
         transitionTimer = setTimeout(finishTransition, 450);
       }, 190);
     };
+    const showNextFrame = (automatic = false) => showFrame((frame + 1) % sceneFrames.length, automatic);
     target.addEventListener("click", () => showNextFrame());
     target.addEventListener("keydown", e => {
       if (!e.altKey && !e.ctrlKey && !e.metaKey && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); showNextFrame(); }
     });
-    target.addEventListener("mouseenter", () => { hovering = true; armRotation(); });
-    target.addEventListener("mouseleave", () => { hovering = false; armRotation(); });
-    target.addEventListener("focusin", () => { stopped = true; armRotation(); });
+    choices.forEach((choice, i) => choice.addEventListener("click", () => showFrame(i)));
+    showcase.addEventListener("mouseenter", () => { hovering = true; armRotation(); });
+    showcase.addEventListener("mouseleave", () => { hovering = false; armRotation(); });
+    showcase.addEventListener("focusin", () => { stopped = true; armRotation(); });
     const onVisibility = () => armRotation();
     const onMotion = () => { if (motion.matches) finishTransition(); armRotation(); };
     document.addEventListener("visibilitychange", onVisibility);
@@ -2249,6 +2274,11 @@ function communityPublisherMarkup(p) {
   return p.official ? `<div class="community-author"><span>By ${esc(p.author)}</span></div>`
     : `<div class="community-author"><span class="community-initials" aria-hidden="true">${esc(publicInitials(p.author))}</span><span>${esc(p.author)}</span></div>`;
 }
+const ownsPublication = post => Boolean(post && !post.official && S.signedIn && S.posts.some(own => own.id === post.id));
+function publicationActionsMarkup(post, { detail = false } = {}) {
+  if (!ownsPublication(post)) return "";
+  return `<div class="publication-actions" role="group" aria-label="Publication actions" data-publication-post="${esc(post.id)}"><a class="publication-action" data-publication-action="original" href="#/video/${post.videoId}" aria-label="Your original video">${icon("create", 18)}</a><button class="publication-action" ${detail ? 'id="publication-settings"' : ""} data-publication-action="settings" type="button" aria-label="Publication settings">${icon("sliders", 18)}</button><button class="publication-action" ${detail ? 'id="unpublish-video"' : ""} data-publication-action="unpublish" type="button" aria-label="Unpublish from Community">${icon("eyeOff", 18)}</button></div>`;
+}
 const COMMUNITY_ACTIVITY_STORE = "aurora-community-activity-v1";
 const COMMUNITY_SETUP_INTENT = "aurora-community-setup-intent-v1";
 let communityActivityFallback = { viewedPosts: [], setupEvents: [] }, communitySetupFallback = null;
@@ -2297,14 +2327,14 @@ function positionCommunityMetricTooltip() {
   const anchor = communityMetricAnchor.getBoundingClientRect(), tip = communityMetricTooltip.getBoundingClientRect(), margin = 8;
   const left = Math.max(margin, Math.min(innerWidth - tip.width - margin, anchor.left + (anchor.width - tip.width) / 2));
   const above = anchor.top - tip.height - margin;
-  const top = above >= margin ? above : Math.max(margin, Math.min(innerHeight - tip.height - margin, anchor.bottom + margin));
+  const top = Math.max(margin, Math.min(innerHeight - tip.height - margin, above >= margin ? above : anchor.bottom + margin));
   communityMetricTooltip.style.left = `${left}px`; communityMetricTooltip.style.top = `${top}px`;
 }
 function showCommunityMetricTooltip(button, pinned = false) {
   clearTimeout(communityMetricDismiss); communityMetricDismiss = null;
   communityMetricPinned = pinned || (communityMetricAnchor === button && communityMetricPinned);
   communityMetricAnchor = button;
-  communityMetricTooltip.textContent = { views: "Views", promptUses: "Prompt uses", private: "Private prompt" }[button.dataset.communityMetric] || "";
+  communityMetricTooltip.textContent = button.classList.contains("community-metric") ? { views: "Views", promptUses: "Prompt uses", private: "Private prompt" }[button.dataset.communityMetric] || "" : button.dataset.communityTooltip || button.getAttribute("aria-label");
   communityMetricTooltip.hidden = false; positionCommunityMetricTooltip();
 }
 function dismissCommunityMetricTooltipSoon() {
@@ -2313,15 +2343,15 @@ function dismissCommunityMetricTooltipSoon() {
   communityMetricDismiss = setTimeout(hideCommunityMetricTooltip, 120);
 }
 document.addEventListener("mouseover", e => {
-  const button = e.target.closest(".community-metric");
+  const button = e.target.closest(".community-metric, .publication-action, .community-use, #use-community-prompt");
   if (button) showCommunityMetricTooltip(button);
   else if (communityMetricTooltip.contains(e.target)) { clearTimeout(communityMetricDismiss); communityMetricDismiss = null; }
 });
 document.addEventListener("mouseout", e => {
-  const button = e.target.closest(".community-metric");
+  const button = e.target.closest(".community-metric, .publication-action, .community-use, #use-community-prompt");
   if ((button && !button.contains(e.relatedTarget)) || (communityMetricTooltip.contains(e.target) && !communityMetricTooltip.contains(e.relatedTarget))) dismissCommunityMetricTooltipSoon();
 });
-document.addEventListener("focusin", e => { const button = e.target.closest(".community-metric"); if (button) showCommunityMetricTooltip(button); });
+document.addEventListener("focusin", e => { const button = e.target.closest(".community-metric, .publication-action, .community-use, #use-community-prompt"); if (button) showCommunityMetricTooltip(button); });
 document.addEventListener("focusout", e => { if (e.target === communityMetricAnchor) hideCommunityMetricTooltip(); });
 document.addEventListener("click", e => {
   const button = e.target.closest(".community-metric");
@@ -2331,6 +2361,15 @@ document.addEventListener("click", e => {
 document.addEventListener("keydown", e => { if (e.key === "Escape") hideCommunityMetricTooltip(); });
 window.addEventListener("resize", positionCommunityMetricTooltip);
 window.addEventListener("scroll", positionCommunityMetricTooltip, true);
+document.addEventListener("click", e => {
+  const action = e.target.closest(".publication-action");
+  if (!action) return;
+  const post = S.posts.find(p => p.id === action.closest(".publication-actions")?.dataset.publicationPost);
+  hideCommunityMetricTooltip();
+  if (!ownsPublication(post)) { e.preventDefault(); return; }
+  if (action.dataset.publicationAction === "settings") { e.preventDefault(); go(`video/${post.videoId}?publish=1`); }
+  else if (action.dataset.publicationAction === "unpublish") { e.preventDefault(); unpublishPost(post.id); }
+});
 function recordCommunityView(id) {
   if (!communityPosts(false).some(p => p.id === id)) return;
   const activity = communityActivity();
@@ -2394,14 +2433,22 @@ function communityCards(limit = 6, mine = false) {
   if (!posts.length) return `<section class="publication-empty"><h2>${mine ? "Your scenes can find an audience" : "No published scenes yet"}</h2><p>${mine ? "Publish a finished video from its result page. You choose whether to share the prompt." : "Published videos will appear here."}</p><a class="btn" href="${S.signedIn ? "#/history" : "#/signin"}">${S.signedIn ? "Choose a video" : "Sign in"}</a></section>`;
   return `<div class="community-grid">${posts.map(p => {
     const preview = recordOfficialExample(p), poster = officialPoster(preview), setupAvailable = isModelAvailable(p.model);
-    return `<article class="community-card" ${p.official ? 'data-official-example="true"' : ""}><a class="thumb ${poster ? "" : "community-no-preview"}" href="#/community/${p.id}" aria-label="View ${esc(p.caption)}">${poster ? `<img src="${esc(poster)}" alt="${esc(preview.alt)}" loading="lazy">${Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}` : '<span>Preview unavailable</span>'}</a>${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${preview ? videoFactsMarkup(preview) : ""}</p>${communityMetrics(p)}${p.includePrompt && p.prompt ? `<a class="btn community-use" href="#/create?scene=${encodeURIComponent(p.id)}" aria-label="Use the ${setupAvailable ? "setup" : "prompt"} for ${esc(p.caption)}">${setupAvailable ? "Use this setup" : "Use prompt"}</a>` : `<p class="community-privacy"><button class="community-metric" type="button" data-community-metric="private" aria-label="Private prompt">${icon("lock", 16)}</button></p>`}</article>`;
+    const promptAction = p.includePrompt && p.prompt ? `<a class="btn community-use" href="#/create?scene=${encodeURIComponent(p.id)}" aria-label="Use the ${setupAvailable ? "setup" : "prompt"} for ${esc(p.caption)}" data-community-tooltip="${setupAvailable ? "Use this setup" : "Use prompt"}">${icon("setup", 18)}</a>` : `<p class="community-privacy"><button class="community-metric" type="button" data-community-metric="private" aria-label="Private prompt">${icon("lock", 16)}</button></p>`;
+    return `<article class="community-card" ${p.official ? 'data-official-example="true"' : ""}><a class="thumb ${poster ? "" : "community-no-preview"}" href="#/community/${p.id}" aria-label="View ${esc(p.caption)}">${poster ? `<img src="${esc(poster)}" alt="${esc(preview.alt)}" loading="lazy">${Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}` : '<span>Preview unavailable</span>'}</a>${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${preview ? videoFactsMarkup(preview) : ""}</p>${communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div></article>`;
   }).join("")}</div>`;
 }
 function unpublishPost(id) {
   const post = S.posts.find(p => p.id === id);
-  if (!post || !S.signedIn) return;
+  if (!ownsPublication(post)) return;
+  const index = S.posts.indexOf(post);
   S.posts = S.posts.filter(p => p.id !== id); save(); route({ preserve: true }); ($("#publish-video") || $("#title"))?.focus({ preventScroll: true });
-  toast("Publication removed. Your video is still private in History.", { label: "Undo", fn: () => { if (!S.posts.some(p => p.id === post.id) && S.videos.some(v => v.id === post.videoId && v.status === "ready")) { S.posts.push(post); save(); route({ preserve: true }); } } });
+  toast("Publication removed. Your video is still private in History.", { label: "Undo", fn: () => {
+    if (S.signedIn && !S.posts.some(p => p.id === post.id) && S.videos.some(v => v.id === post.videoId && v.status === "ready")) {
+      S.posts.splice(Math.min(index, S.posts.length), 0, post); save(); route({ preserve: true });
+      const actions = $$(".publication-actions").find(group => group.dataset.publicationPost === post.id);
+      ((actions && $("[data-publication-action='unpublish']", actions)) || $("#unpublish-video") || $("#title"))?.focus({ preventScroll: true });
+    }
+  } });
 }
 function publicationMarkup(v) {
   const post = getPublishedPost(v.id);
@@ -2459,17 +2506,16 @@ function viewCommunity(main, arg) {
   }
   const p = communityPosts(false).find(x => x.id === arg);
   if (!p) { main.innerHTML = '<div class="page"><h1 id="title" tabindex="-1">Publication unavailable</h1><div class="publication-empty"><p>The creator may have removed this scene.</p><a class="btn" href="#/community">Back to community</a></div></div>'; return null; }
-  const own = !p.official && S.signedIn && S.posts.some(x => x.id === p.id);
   const preview = recordOfficialExample(p);
   const setupAvailable = isModelAvailable(p.model);
+  const promptActionLabel = S.signedIn ? setupAvailable ? "Use this setup" : "Use prompt" : setupAvailable ? "Sign in to use this setup" : "Sign in to use prompt";
   const player = preview ? officialMediaMarkup(preview, { id: "community-example-media", playerId: "community-player", playId: "community-play", errorId: "community-media-error", mediaIdPrefix: "community-example", playerClass: "community-official-player", showMetadata: !p.official }) : previewUnavailableMarkup(p, { id: "community-example-media" });
   main.innerHTML = `<div class="page"><a class="linkbtn" href="#/community">Back to community</a><div class="community-detail"><div>${player}</div><aside>
     <h1 id="title" tabindex="-1">${esc(p.caption)}</h1>${communityPublisherMarkup(p)}${communityMetrics(p, true)}
     <dl class="facts"><div><dt>Model</dt><dd>${esc(recordModel(p).name)}</dd></div>${preview && Number.isFinite(preview.len) && preview.len > 0 ? `<div><dt>${p.official ? "Length" : "Preview length"}</dt><dd class="num">${preview.len} s</dd></div>` : ""}${preview && (preview.quality || preview.format) ? `<div><dt>Frame</dt><dd>${[preview.quality, preview.format].filter(Boolean).map(esc).join(" · ")}</dd></div>` : ""}</dl>
-    <section class="community-prompt"><h2>${p.includePrompt ? p.promptKind === "suggested" ? "Suggested prompt" : "Creator’s prompt" : "A private prompt"}</h2><p>${p.includePrompt ? esc(p.prompt) : "The creator has chosen not to share the prompt."}</p>${p.includePrompt && !setupAvailable ? '<p>Choose an available model in Create.</p>' : ""}${p.includePrompt ? `<button class="btn primary" id="use-community-prompt" type="button">${S.signedIn ? setupAvailable ? "Use this setup" : "Use prompt" : setupAvailable ? "Sign in to use this setup" : "Sign in to use prompt"}</button>` : '<a class="btn" href="#/create">Create your own scene</a>'}</section>
-    ${own ? `<div class="row"><a class="linkbtn" href="#/video/${p.videoId}">Your original video</a><a class="linkbtn" id="publication-settings" href="#/video/${p.videoId}?publish=1">Publication settings</a><button class="linkbtn" id="unpublish-video" type="button">Unpublish</button></div>` : ""}</aside></div></div>`;
+    <section class="community-prompt"><h2>${p.includePrompt ? p.promptKind === "suggested" ? "Suggested prompt" : "Creator’s prompt" : "A private prompt"}</h2><p>${p.includePrompt ? esc(p.prompt) : "The creator has chosen not to share the prompt."}</p>${p.includePrompt && !setupAvailable ? '<p>Choose an available model in Create.</p>' : ""}${p.includePrompt ? `<button class="btn primary community-prompt-action" id="use-community-prompt" type="button" aria-label="${promptActionLabel}">${icon("setup", 20)}</button>` : '<a class="btn" href="#/create">Create your own scene</a>'}</section>
+    ${publicationActionsMarkup(p, { detail: true })}</aside></div></div>`;
   return () => {
-    $("#unpublish-video")?.addEventListener("click", () => unpublishPost(p.id));
     $("#use-community-prompt")?.addEventListener("click", () => beginCommunitySetup(p.id));
     return preview ? initOfficialMedia(preview, { id: "community-example-media", onPlay: () => recordCommunityView(p.id) }) : null;
   };
