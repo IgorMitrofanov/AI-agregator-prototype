@@ -1461,126 +1461,176 @@ body.community-reels .site-foot { display: none; }
   .reel-like-feedback.is-visible { animation: none; opacity: 1; transform: translate(-50%, -50%); }
 }
 
-/* Direction D: a referral statement with quiet, aligned amounts. */
+/* Direction D: a referral statement with an even, neutral rate scale.
+   Referral depth is not an earned loyalty or unlock state. */
 .referral-page { max-width: 1080px; }
 .referral-page .referral-heading { margin-bottom: 32px; }
 .referral-link-panel { padding: 28px 32px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); }
 .referral-link-top { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 24px; }
 .referral-link-top h2, .referral-levels h2 { font-size: 25px; line-height: 1.2; }
-.referral-direct-rate { display: flex; align-items: baseline; gap: 10px; flex: none; }
-.referral-direct-rate strong { font-size: 24px; font-weight: 500; line-height: 1.2; }
-.referral-direct-rate > span { color: var(--text-muted); font-size: 13px; }
+.referral-link-top > .ic { color: var(--text-muted); }
 .referral-link-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; gap: 12px; }
 .referral-link-controls input { width: 100%; min-width: 0; min-height: 48px; font-size: 16px; text-overflow: ellipsis; }
 .referral-link-controls .btn { min-height: 48px; white-space: nowrap; gap: 8px; }
 .referral-copy-status { color: var(--text-muted); font-size: 13px; line-height: 1.5; min-height: 20px; margin-top: 12px; }
-.referral-summary { margin: 36px 0 44px; }
+.referral-summary { margin: 36px 0 40px; }
 .referral-summary dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
-.referral-summary dl > div { padding: 0 24px; min-width: 0; }
+.referral-summary dl > div { padding: 0 28px; min-width: 0; }
 .referral-summary dl > div:first-child { padding-left: 0; }
 .referral-summary dl > div:last-child { padding-right: 0; }
-.referral-summary dl > div + div { border-left: 1px solid var(--line); } /* design-tells: ignore (neutral divider between data columns) */
-.referral-summary dt { color: var(--text-muted); margin-bottom: 12px; font-size: 14px; }
+.referral-summary dl > div + div { border-left: 1px solid var(--line); } /* design-tells: ignore (neutral divider between actual data columns) */
+.referral-summary dt { display: flex; align-items: center; gap: 9px; color: var(--text-muted); margin-bottom: 12px; font-size: 14px; }
 .referral-summary dd { margin: 0; font-size: clamp(28px, 3.1vw, 42px); line-height: 1.15; font-weight: 500; overflow-wrap: anywhere; }
 .referral-levels { border-top: 1px solid var(--line); padding-top: 28px; }
-.referral-levels ol { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; padding: 0; margin: 24px 0 0; }
-.referral-levels li { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; min-width: 0; }
+.referral-scale { position: relative; margin-top: 28px; }
+.referral-scale-track { position: absolute; width: 100%; height: 16px; bottom: 0; left: 0; color: var(--field-line); pointer-events: none; }
+.referral-levels ol { position: relative; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 0; margin: 0; }
+.referral-levels li { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 0; }
 .referral-levels li > span { color: var(--text-muted); font-size: 14px; }
-.referral-levels strong { font-family: var(--serif); font-size: 40px; line-height: 1.1; font-weight: 400; }
-.referral-levels strong span { font-size: 25px; margin-left: 2px; }
-.referral-footer { border-top: 1px solid var(--line); padding-top: 28px; margin-top: 32px; }
+.referral-rate { display: inline-flex; align-items: center; justify-content: center; color: var(--text); font-family: var(--serif); font-size: 44px; line-height: 1.1; font-weight: 400; }
+.referral-scale-marker { position: relative; flex: none; margin-top: 12px; color: var(--text); }
+.referral-scale-marker circle { fill: var(--bg); }
+.referral-rate-text { color: var(--text); }
+/* design-tells: ignore (requested soft neutral lettering; track and markers remain static) */
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  @media (prefers-reduced-motion: no-preference) {
+    .referral-rate-text { background-image: linear-gradient(100deg, var(--text-muted) 34%, var(--text) 50%, var(--text-muted) 66%); background-size: 250% 100%; background-repeat: no-repeat; background-position: 100% 0; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: referral-rate-glint 12s linear infinite; }
+    @keyframes referral-rate-glint { 0%, 15% { background-position: 100% 0; } 85%, 100% { background-position: 0% 0; } }
+  }
+}
+.referral-footer { border-top: 1px solid var(--line); padding-top: 28px; margin-top: 28px; }
 .referral-footer .btn { min-height: 44px; }
 .referral-loading { max-width: 1016px; }
 .referral-loading-link { padding: 28px 32px 44px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); }
 .referral-loading-link > div:first-child { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
-.referral-loading-link > div:first-child .skeleton-heading { margin: 0; width: min(220px, 55%); height: 30px; }
-.referral-loading-link > div:first-child .skeleton-line { width: 90px; height: 28px; margin: 0; }
+.referral-loading-link > div:first-child .skeleton-heading { margin: 0; width: min(220px, 75%); height: 30px; }
+.referral-loading-icon { width: 24px; height: 24px; margin: 0; }
 .referral-loading .referral-link-controls > span { width: 100%; margin: 0; height: 48px; }
 .referral-loading .referral-link-controls > .skeleton-action { width: 132px; }
-.referral-loading-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 36px 0 44px; }
-.referral-loading-summary .skeleton-line { width: min(100%, 76px); height: 20px; margin: 0 0 12px; }
+.referral-loading-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 36px 0 40px; }
+.referral-loading-summary .skeleton-line { width: min(100%, 96px); height: 20px; margin: 0 0 12px; }
 .referral-loading-number { display: block; width: min(100%, 128px); height: 48px; }
-.referral-loading-levels { border-top: 1px solid var(--line); padding: 28px 0 32px; margin-bottom: 28px; border-bottom: 1px solid var(--line); }
-.referral-loading-levels .skeleton-heading { margin: 0 0 24px; height: 30px; width: 160px; }
-.referral-loading-levels > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
+.referral-loading-levels { border-top: 1px solid var(--line); padding: 28px 0 26px; margin-bottom: 28px; border-bottom: 1px solid var(--line); }
+.referral-loading-levels .skeleton-heading { margin: 0 0 28px; height: 30px; width: 160px; }
+.referral-loading-levels > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); justify-items: center; min-height: 112px; }
+.referral-loading-rate { display: block; width: 80px; max-width: 80%; height: 72px; }
 
+@media (forced-colors: active) {
+  .referral-rate-text { color: CanvasText; -webkit-text-fill-color: currentColor; background: none; animation: none; }
+  .referral-scale-track, .referral-scale-marker { color: CanvasText; }
+  .referral-scale-marker circle { fill: Canvas; }
+}
 @media (max-width: 600px) {
   .referral-page .referral-heading { margin-bottom: 24px; }
   .referral-link-panel { padding: 20px 20px 12px; }
-  .referral-link-top { align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+  .referral-link-top { gap: 12px; margin-bottom: 20px; }
   .referral-link-top h2, .referral-levels h2 { font-size: 24px; }
-  .referral-direct-rate { display: grid; gap: 4px; justify-items: end; }
-  .referral-direct-rate strong { font-size: 24px; }
   .referral-link-controls { grid-template-columns: minmax(0, 1fr); }
   .referral-link-controls .btn { justify-content: center; }
   .referral-summary { margin: 28px 0 32px; }
   .referral-summary dl > div { padding: 0 12px; }
-  .referral-summary dt { font-size: 13px; margin-bottom: 10px; }
+  .referral-summary dt { flex-wrap: wrap; gap: 6px; font-size: 13px; margin-bottom: 10px; }
+  .referral-summary dt > span { flex-basis: 100%; }
   .referral-summary dd { font-size: clamp(23px, 6.2vw, 32px); }
   .referral-levels { padding-top: 24px; }
-  .referral-levels ol { gap: 16px; margin-top: 20px; }
-  .referral-levels li { display: grid; gap: 12px; }
-  .referral-levels strong { font-size: 36px; }
-  .referral-levels strong span { font-size: 23px; }
-  .referral-footer { padding-top: 24px; margin-top: 28px; }
+  .referral-scale { margin-top: 24px; }
+  .referral-rate { font-size: 38px; }
+  .referral-levels li > span { font-size: 13px; }
+  .referral-footer { padding-top: 24px; margin-top: 24px; }
   .referral-loading-link { padding: 20px 20px 44px; }
   .referral-loading-link > div:first-child { margin-bottom: 20px; }
   .referral-loading .referral-link-controls > .skeleton-action { width: 100%; }
   .referral-loading-summary { gap: 12px; margin: 28px 0 32px; }
-  .referral-loading-summary .skeleton-line { margin-bottom: 10px; }
+  .referral-loading-summary .skeleton-line { height: 44px; margin-bottom: 10px; }
   .referral-loading-number { height: 36px; }
   .referral-loading-levels { padding-top: 24px; margin-bottom: 24px; }
-  .referral-loading-levels > div { gap: 16px; }
+  .referral-loading-levels .skeleton-heading { margin-bottom: 24px; }
+  .referral-loading-rate { width: 72px; }
 }
 
-/* Calm app chrome; the media carries the colour. */
-:root { --sidebar-width: 216px; }
+/* The same left navigation at every size; fixed portrait frames contain uploaded photos. */
+:root { --sidebar-width: 224px; }
 .workspace-sidebar { display: none; }
 .workspace-location { color: var(--text-muted); font-size: 14px; }
 .workspace-current-mark { display: inline-flex; flex: none; margin-left: auto; color: var(--text); }
 .workspace-shell .seg label:has(input:checked) > span,
 .workspace-shell .chip[aria-pressed="true"],
-.workspace-shell .seg > button[aria-pressed="true"] {
-  background: var(--fill); color: var(--on-fill); font-weight: 600;
+.workspace-shell .seg > button[aria-pressed="true"] { background: var(--fill); color: var(--on-fill); font-weight: 600; }
+.workspace-shell .top-in { display: flex; align-items: center; gap: 16px; }
+.workspace-shell .top .workspace-profile { display: flex; flex: none; }
+.workspace-profile-link { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; flex: none; }
+.workspace-profile-link:hover { background: var(--surface-2); }
+.workspace-avatar-frame { position: relative; isolation: isolate; display: grid; place-items: center; flex: none; width: 36px; height: 36px; max-width: 36px; max-height: 36px; border: 1px solid var(--field-line); border-radius: 50%; overflow: hidden; background: var(--surface); font-size: 12px; font-weight: 600; }
+.workspace-avatar-frame .user-avatar-photo { position: absolute; inset: 0; display: block; width: 100%; height: 100%; min-width: 0; max-width: 100%; max-height: 100%; border-radius: inherit; object-fit: cover; }
+.workspace-account-heading { margin: 22px 12px 8px; color: var(--text-muted); font-size: 12px; }
+.workspace-account-links, .workspace-sidebar .nav { display: grid; gap: 4px; margin: 0; }
+.workspace-account-link, .workspace-sidebar .nav a { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 10px 12px; border-radius: var(--r-sm); color: var(--text-muted); font-size: 14px; font-weight: 500; }
+.workspace-account-link:hover { background: var(--surface-2); color: var(--text); }
+.workspace-account-link[aria-current="page"], .workspace-sidebar .nav a[aria-current="page"] { background: var(--surface-2); color: var(--text); font-weight: 600; box-shadow: inset 0 0 0 1px var(--line); }
+.workspace-sidebar .nav a[href="#/create"] { color: var(--text); font-weight: 600; }
+.workspace-navigation-footer { flex: none; padding-top: 16px; margin-top: 16px; border-top: 1px solid var(--line); }
+.workspace-theme > span { display: block; color: var(--text-muted); font-size: 12px; margin-bottom: 8px; }
+.workspace-theme .seg { display: flex; width: 100%; }
+.workspace-theme .seg > button { flex: 1; min-height: 44px; gap: 5px; padding: 8px 4px; font-size: 12px; }
+.workspace-theme-glyph { display: inline-flex; flex: none; transform-origin: center; }
+.workspace-theme-glyph.is-changing { animation: workspace-theme-change 180ms ease-out; }
+.workspace-signout { display: flex; align-items: center; gap: 12px; min-height: 44px; width: 100%; padding: 8px 12px; margin-top: 8px; border: 0; border-radius: var(--r-sm); color: var(--text-muted); background: none; text-align: left; font-size: 14px; }
+.workspace-signout:hover { background: var(--surface-2); color: var(--text); }
+.workspace-signin { width: 100%; margin-top: 12px; }
+.workspace-reset { display: flex; align-items: center; min-height: 44px; font-size: 12px; }
+@keyframes workspace-theme-change {
+  from { opacity: .45; transform: rotate(-14deg) scale(.9); }
+  to { opacity: 1; transform: rotate(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .workspace-theme-glyph.is-changing { animation: none; }
 }
 @media (min-width: 1001px) {
   .workspace-shell { padding-left: var(--sidebar-width); }
-  .workspace-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 25; display: flex; flex-direction: column; width: var(--sidebar-width); padding: 28px 16px 20px; background: var(--bg); border-right: 1px solid var(--line); }
-  .sidebar-brand { margin: 0 12px 36px; align-self: flex-start; }
-  .workspace-sidebar .nav { display: grid; gap: 6px; margin: 0; overflow-y: auto; }
-  .workspace-sidebar .nav a { display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 10px 12px; border-radius: var(--r-sm); font-size: 14px; }
-  .workspace-sidebar .nav a[href="#/history"] { margin-top: 24px; }
-  .workspace-sidebar .nav a[aria-current="page"] { background: var(--surface-2); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
-  .workspace-sidebar .nav a[href="#/create"] { color: var(--text); font-weight: 600; }
-  .workspace-sidebar .nav .ic { flex: none; }
+  .workspace-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 25; display: flex; flex-direction: column; width: var(--sidebar-width); padding: 24px 16px 16px; background: var(--bg); border-right: 1px solid var(--line); }
+  .sidebar-brand { margin: 0 12px 24px; align-self: flex-start; }
+  .workspace-navigation { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px; margin: -4px; }
+  .workspace-sidebar .nav a { margin: 0; }
   .workspace-shell .top-in { max-width: 1320px; min-height: 80px; padding: 14px 40px; }
   .workspace-shell .top-in > .logo { display: none; }
-  .workspace-shell .bal { margin-left: auto; }
+  .workspace-shell .bal, .workspace-header-signin { margin-left: auto; }
   .workspace-shell .page, .workspace-shell .landing { max-width: 1320px; padding-left: 40px; padding-right: 40px; }
   .workspace-shell .site-foot { max-width: 1320px; padding-left: 40px; padding-right: 40px; }
-  .workspace-sidebar .sidebar-account { position: relative; margin-top: auto; padding-top: 24px; }
-  .sidebar-account #acct-btn { display: flex; align-items: center; gap: 10px; width: 100%; height: auto; min-height: 56px; padding: 8px; background: none; border: 0; border-radius: var(--r-sm); text-align: left; }
-  .sidebar-account #acct-btn:hover, .sidebar-account #acct-btn[aria-expanded="true"] { background: var(--surface-2); }
-  .sidebar-avatar { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border: 1px solid var(--line); border-radius: var(--r-pill); overflow: hidden; font-size: 12px; }
-  .sidebar-avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .sidebar-account-name { min-width: 0; flex: 1; }
-  .sidebar-account-name strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 600; }
-  .sidebar-account-name small { display: block; color: var(--text-muted); font-size: 12px; margin-top: 2px; }
-  .sidebar-account .menu { top: auto; bottom: 72px; left: 0; right: auto; width: 272px; max-height: calc(100dvh - 140px); }
-  .sidebar-signin { margin-top: auto; }
 }
 @media (max-width: 1000px) {
-  .workspace-shell #btn-image, .workspace-shell #btn-speak { min-width: 44px; min-height: 44px; }
-  .workspace-shell .community-metric { min-width: 44px; min-height: 44px; }
+  .workspace-shell #btn-image, .workspace-shell #btn-speak, .workspace-shell .community-metric { min-width: 44px; min-height: 44px; }
+  .workspace-shell .top-in { display: grid; grid-template-columns: 44px minmax(0, 1fr) 144px 44px; gap: 8px; padding: 10px 12px; }
+  .workspace-shell .top-in.is-guest { grid-template-columns: 44px minmax(0, 1fr) auto; }
+  .workspace-shell .top-in > .logo { min-width: 0; font-size: clamp(20px, 5.8vw, 28px); line-height: 1.2; }
   .workspace-location { display: none; }
-  .workspace-shell .mobile-navigation { position: fixed; top: var(--workspace-header-height, 69px); bottom: 0; left: 0; right: auto; width: min(360px, 100vw); max-height: none; padding: 16px 16px max(24px, env(safe-area-inset-bottom)); border-right: 1px solid var(--line); border-bottom: 0; box-shadow: 16px 0 40px var(--shadow); }
+  .workspace-shell .mobile-nav-btn { display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--r-sm); }
+  .workspace-shell .bal { margin: 0; width: 144px; height: 48px; min-height: 48px; grid-template-columns: 52px minmax(0, 1fr); gap: 8px; padding: 6px 8px; }
+  .workspace-shell .balance-amount #bal-n { font-size: 14px; }
+  .workspace-shell .balance-amount { gap: 2px; }
+  .workspace-shell .balance-amount > .ic { width: 12px; height: 12px; }
+  .workspace-shell .header-plan { padding-left: 8px; }
+  .workspace-shell .header-plan > span, .workspace-shell .header-plan > b:only-child { padding-left: 5px; padding-right: 5px; font-size: 10.5px; }
+  .workspace-shell .header-plan > b { font-size: 10.5px; }
+  .workspace-shell .workspace-header-signin { min-height: 44px; padding: 10px 16px; }
+  .workspace-shell .mobile-navigation { position: fixed; top: var(--workspace-header-height, 69px); bottom: 0; left: 0; right: auto; width: min(360px, 100vw); max-height: none; overflow-y: auto; padding: 16px 16px max(24px, env(safe-area-inset-bottom)); background: var(--bg); border-right: 1px solid var(--line); border-bottom: 0; box-shadow: 16px 0 40px var(--shadow); }
   .workspace-shell .mobile-navigation[hidden] { display: none; }
+  .workspace-mobile-name { margin: 0 12px 16px; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
   .workspace-shell.workspace-nav-open { overflow: hidden; }
   .workspace-shell.workspace-nav-open #main, .workspace-shell.workspace-nav-open .site-foot { pointer-events: none; }
-  .workspace-shell .mobile-nav-links > a[href="#/history"] { margin-top: 12px; }
-  .workspace-shell .mobile-nav-links > a[aria-current="page"] { box-shadow: inset 0 0 0 1px var(--line); }
+  .workspace-shell .mobile-nav-links > a, .workspace-shell .mobile-account-link { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 10px 12px; font-size: 15px; }
+  .workspace-shell .mobile-nav-links > a[href="#/history"] { margin-top: 0; }
+  .workspace-shell .mobile-nav-links > a[aria-current="page"], .workspace-shell .mobile-account-link[aria-current="page"] { background: var(--surface-2); color: var(--text); font-weight: 600; box-shadow: inset 0 0 0 1px var(--line); }
 }
-/* Viewing a scene uses the complete app viewport. */
+@media (max-width: 359px) {
+  .workspace-shell .top-in { grid-template-columns: 44px minmax(0, 1fr) 124px 44px; gap: 6px; }
+  .workspace-shell .top-in.is-guest { grid-template-columns: 44px minmax(0, 1fr) auto; }
+  .workspace-shell .bal { width: 124px; grid-template-columns: 50px minmax(0, 1fr); gap: 6px; padding-left: 6px; padding-right: 6px; }
+  .workspace-shell .balance-amount #bal-n { font-size: 12px; }
+  .workspace-shell .balance-amount > .ic { width: 12px; height: 12px; }
+  .workspace-shell .header-plan { padding-left: 6px; }
+  .workspace-shell .header-plan > span, .workspace-shell .header-plan > b:only-child { padding-left: 3px; padding-right: 3px; font-size: 10px; }
+  .workspace-shell .header-plan > b { font-size: 10px; }
+}
 body.workspace-shell:has(.community-viewer), body.workspace-shell:has(.app-loading-viewer) { padding-left: 0; }
 body:has(.community-viewer) .workspace-sidebar, body:has(.app-loading-viewer) .workspace-sidebar { display: none; }
 
@@ -1598,12 +1648,7 @@ body:has(.community-viewer) .workspace-sidebar, body:has(.app-loading-viewer) .w
 .signin-options #sf .row { gap: 12px 20px; }
 .signin-options #sf .row > button { min-height: 44px; }
 
-.scene-preset-summary { padding: 20px 22px; border-bottom: 1px solid var(--line); }
-.scene-preset-summary h2 { font-family: var(--sans); font-size: 16px; line-height: 1.4; font-weight: 600; }
-.scene-preset-summary p { font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
-.scene-reference-facts { margin-top: 6px; color: var(--text-muted); }
-.scene-adapted-facts { margin-top: 4px; color: var(--text); }
-@media (max-width: 760px) { .scene-preset-summary { padding: 16px; } }
+/* Ready scenes use the existing composer controls without a separate reference panel. */
 
 .prototype-options { margin-top: 16px; color: var(--text-muted); font-size: var(--fs-caption); }
 .prototype-options summary { cursor: pointer; padding: 8px 0; }
@@ -2293,7 +2338,7 @@ function accountLinksMarkup(mobile = false) {
 let menuOpen = false, mobileNavOpen = false;
 const mobileChrome = matchMedia("(max-width: 1000px)");
 const walletCompact = new Intl.NumberFormat("en-US", { notation: "compact", maximumSignificantDigits: 2 });
-const walletAmount = value => Math.abs(value) >= 10000 ? walletCompact.format(value) : fmt(value);
+const walletAmount = value => Math.abs(value) >= 1e15 ? `${walletCompact.format(value / 1e15)}P` : Math.abs(value) >= 10000 ? walletCompact.format(value) : fmt(value);
 const walletLabel = () => `Balance ${fmt(S.balance)} credits.${S.plan?.state === "active" ? ` Monthly plan: ${fmt(S.plan.credits)} credits per month. Manage subscription.` : ` Free.${S.plan ? " Subscription cancelled." : ""} Open credits and plans.`}`;
 function renderChrome() {
   const activeRoute = currentRoute().name;
@@ -2333,7 +2378,7 @@ document.addEventListener("keydown", e => {
 mobileChrome.addEventListener("change", () => {
   const restore = menuOpen || mobileNavOpen || Boolean(document.activeElement?.closest("#mobile-navigation, #mobile-nav-btn, .acct"));
   mobileNavOpen = false; menuOpen = false; renderChrome();
-  if (restore) (mobileChrome.matches ? $("#mobile-nav-btn") : $(".nav a[aria-current]", $("#top")) || $("#acct-btn"))?.focus({ preventScroll: true });
+  if (restore) (mobileChrome.matches ? $("#mobile-nav-btn") : $("#workspace-sidebar a[aria-current]") || $("#profile-shortcut"))?.focus({ preventScroll: true });
 });
 
 /* ==========================================================================
@@ -2516,7 +2561,6 @@ function viewCreate(main) {
     <h1 class="display" id="title" tabindex="-1">Describe your scene</h1>
     <p class="lead">Your ideas, in motion.</p>
     <form class="composer" id="composer" novalidate>
-      ${scenePresetSummaryMarkup()}
       <label class="sr" for="prompt">Describe your video</label>
       <div class="prompt-wrap"><textarea id="prompt" rows="4" maxlength="1000" placeholder="A slow dolly shot through a quiet market at dawn, warm light, soft focus." aria-describedby="prompt-err">${esc(d.prompt)}</textarea></div>
       <p class="err" id="prompt-err" role="alert" hidden>${icon("warn", 14)}Describe the scene first. One or two sentences are enough.</p>
@@ -2576,7 +2620,6 @@ function setGalleryTab(tab) {
 }
 const emptyVideos = () => `<div class="empty"><h2>Your first scene starts here</h2><p>Describe a video above, or explore the feed for a starting point.</p><a class="linkbtn" href="#/community">Explore feed</a></div>`;
 function updatePrice() {
-  updateScenePresetSummary();
   const d = S.draft, c = cost(d), left = S.balance - c, m = model(d.model);
   $("#p-total").textContent = `${fmt(c)} credits`;
   const enough = left >= 0;
@@ -3414,22 +3457,29 @@ function viewReferrals(main) {
   main.innerHTML = `<div class="page referral-page">
     <header class="referral-heading"><h1 id="title" tabindex="-1">Referrals</h1></header>
     <section class="referral-link-panel" aria-labelledby="referral-link-heading">
-      <div class="referral-link-top"><h2 id="referral-link-heading">Your referral link</h2><p class="referral-direct-rate"><strong class="num">10%</strong><span>Level 1</span></p></div>
+      <div class="referral-link-top"><h2 id="referral-link-heading">Your referral link</h2>${icon("referrals", 24)}</div>
       <div class="referral-link-controls"><label class="sr" for="rlink">Your referral link</label><input id="rlink" type="text" readonly value="${esc(link)}" spellcheck="false" autocapitalize="off" autocomplete="off"><button class="btn primary" type="button" id="copy">${icon("copy", 18)}<span>Copy link</span></button></div>
       <p id="referral-copy-status" class="referral-copy-status" role="status" aria-live="polite"></p>
     </section>
     <section class="referral-summary" aria-label="Referral activity"><dl>
-      <div><dt>Invited</dt><dd class="num" id="referral-invited">${fmt(referral.invited)}</dd></div>
-      <div><dt>Subscribers</dt><dd class="num" id="referral-subscribers">${fmt(referral.subscribers)}</dd></div>
-      <div><dt>Earned</dt><dd class="num" id="referral-earned">${esc(earnings)}</dd></div>
+      <div><dt>${icon("referrals", 18)}<span>Invited</span></dt><dd class="num" id="referral-invited">${fmt(referral.invited)}</dd></div>
+      <div><dt>${icon("plans", 18)}<span>Subscribers</span></dt><dd class="num" id="referral-subscribers">${fmt(referral.subscribers)}</dd></div>
+      <div><dt>${icon("credits", 18)}<span>Earned</span></dt><dd class="num" id="referral-earned">${esc(earnings)}</dd></div>
     </dl></section>
-    <section class="referral-levels" aria-labelledby="referral-levels-heading"><h2 id="referral-levels-heading">Three levels</h2><ol>${levels.map(([level, rate]) => `<li><span>Level ${level}</span><strong class="num">${rate}<span>%</span></strong></li>`).join("")}</ol></section>
+    <section class="referral-levels" aria-labelledby="referral-levels-heading">
+      <h2 id="referral-levels-heading">Three levels</h2>
+      <div class="referral-scale">
+        <svg class="referral-scale-track" viewBox="0 0 900 16" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true" focusable="false"><path d="M150 8H750" vector-effect="non-scaling-stroke"/></svg>
+        <ol role="list" aria-label="Referral reward levels">${levels.map(([level, rate]) => `<li><span>Level ${level}</span><strong class="referral-rate num"><span class="referral-rate-text">${rate}%</span></strong><svg class="referral-scale-marker" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="4.5"/></svg></li>`).join("")}</ol>
+      </div>
+    </section>
     <div class="referral-footer"><a class="btn" id="referrals-account" href="#/account/overview">Your account</a></div>
   </div>`;
   return () => {
     const button = $("#copy", main), input = $("#rlink", main), status = $("#referral-copy-status", main);
     let disposed = false;
     button.onclick = async () => {
+      const restoreFocus = document.activeElement === button;
       button.disabled = true;
       try {
         if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
@@ -3446,7 +3496,10 @@ function viewReferrals(main) {
           status.textContent = "Link selected. Copy it from the text field.";
         }
       } finally {
-        if (!disposed) button.disabled = false;
+        if (!disposed) {
+          button.disabled = false;
+          if (restoreFocus && document.activeElement === document.body) button.focus({ preventScroll: true });
+        }
       }
     };
     return () => { disposed = true; };
@@ -3456,9 +3509,9 @@ function viewReferrals(main) {
 /* Match the referral loading surface to its completed layout. */
 function skeletonReferrals() {
   return `<div class="referral-loading">
-    <div class="referral-loading-link"><div><span class="skeleton skeleton-heading"></span><span class="skeleton skeleton-line short"></span></div><div class="referral-link-controls"><span class="skeleton skeleton-field"></span>${skeletonAction()}</div></div>
+    <div class="referral-loading-link"><div><span class="skeleton skeleton-heading"></span><span class="skeleton referral-loading-icon"></span></div><div class="referral-link-controls"><span class="skeleton skeleton-field"></span>${skeletonAction()}</div></div>
     <div class="referral-loading-summary">${Array.from({ length: 3 }, () => '<div><span class="skeleton skeleton-line short"></span><span class="skeleton referral-loading-number"></span></div>').join("")}</div>
-    <div class="referral-loading-levels"><span class="skeleton skeleton-heading"></span><div>${Array.from({ length: 3 }, () => '<span class="skeleton referral-loading-number"></span>').join("")}</div></div>
+    <div class="referral-loading-levels"><span class="skeleton skeleton-heading"></span><div>${Array.from({ length: 3 }, () => '<span class="skeleton referral-loading-rate"></span>').join("")}</div></div>
     ${skeletonAction()}
   </div>`;
 }
@@ -3985,22 +4038,6 @@ function applyScenePreset(source, draft) {
   draft.len = nearestSceneOption(target.lengths, Number(source.len)) ?? draft.len;
   draft.quality = nearestSceneOption(target.qualities, referenceQuality, sceneQualityNumber) ?? draft.quality;
   return normalizeDraft(draft);
-}
-function currentScenePreset() {
-  return S.draft.scenePresetId ? communityPosts(false).find(post => post.id === S.draft.scenePresetId && post.includePrompt && post.prompt) : null;
-}
-function scenePresetSummaryMarkup() {
-  const source = currentScenePreset();
-  if (!source) return "";
-  const facts = [recordModel(source).name, Number(source.len) > 0 ? `${source.len} s` : null, source.format].filter(Boolean);
-  return `<section class="scene-preset-summary" aria-label="Scene setup"><h2>${esc(source.caption)}</h2><p class="scene-reference-facts">Reference: ${facts.map(esc).join(" · ")}</p><p class="scene-adapted-facts" id="scene-adapted-facts" role="status" aria-live="polite"></p></section>`;
-}
-function updateScenePresetSummary() {
-  const output = document.getElementById("scene-adapted-facts"), source = currentScenePreset();
-  if (!output || !source) return;
-  const draft = S.draft;
-  const adapted = source.model !== draft.model || Number(source.len) !== draft.len || source.format !== draft.format || sceneQualityNumber(source.quality) !== sceneQualityNumber(draft.quality);
-  output.textContent = `${adapted ? "Adapted to" : "Your video:"} ${model(draft.model).name} · ${draft.len} s · ${draft.quality} · ${draft.format}`;
 }
 
 /* Result retention is separate from generation jobs and the credit ledger. */
@@ -5004,60 +5041,72 @@ function initCommunityReels(main) {
   return () => { cancelSingleTap(); clearLikeFeedback(); abort.abort(); observer.disconnect(); clearTimeout(settleTimer); cancelAnimationFrame(frame); cancelAnimationFrame(restoreFrame); cancelAnimationFrame(entryFrame); document.body.classList.remove('community-reels'); };
 }
 
-/* One workspace navigation. Phone disclosure retains the existing account tools. */
-const renderHeaderChrome = renderChrome;
-renderChrome = function renderWorkspaceChrome() {
-  renderHeaderChrome();
+/* One left navigation for workspace and account; the portrait is a profile shortcut. */
+Object.assign(ICONS, {
+  themeAuto: '<rect x="2" y="2.5" width="12" height="8.5" rx="1.5"/><path d="M5 14h6M8 11v3M8 5v3.5"/>',
+  themeLight: '<circle cx="8" cy="8" r="2.5"/><path d="M8 1v1M8 14v1M1 8h1M14 8h1M3 3l.8.8M12.2 12.2l.8.8M3 13l.8-.8M12.2 3.8l.8-.8"/>',
+  themeDark: '<path d="M13.8 9.2A6 6 0 0 1 6.8 2a6 6 0 1 0 7 7.2Z"/>',
+  signOut: '<path d="M6 2.5H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h3M6 8h8m0 0-3-3m3 3-3 3"/>',
+});
+let workspaceThemeTransition = null;
+function workspaceRoute() {
+  const route = currentRoute();
+  return route.name === "video" ? (privateVideoReturnContext()?.path === "#/create?gallery=videos" ? "create" : "history") : route.name;
+}
+function workspaceLinksMarkup(mobile = false) {
+  const route = currentRoute(), active = workspaceRoute();
+  const main = S.signedIn ? NAV : NAV.filter(([key]) => ["home", "community", "create"].includes(key));
+  const mark = '<span class="workspace-current-mark">' + icon("check", 14) + '</span>';
+  const links = main.map(([key, label]) => `<a href="#/${key}" ${active === key ? 'aria-current="page"' : ""}>${icon(key, 18)}<span>${esc(label)}</span>${active === key ? mark : ""}</a>`).join("");
+  const section = ACCOUNT_NAV.some(([id]) => id === route.arg) ? route.arg : "overview";
+  const accountIcons = { overview: "account", credits: "credits", analytics: "sliders", billing: "plans", profile: "account" };
+  const account = S.signedIn ? `<div class="workspace-account-heading">Account</div><div class="${mobile ? "mobile-account-links" : "workspace-account-links"}" role="group" aria-label="Account">${ACCOUNT_NAV.map(([key, label]) => {
+    const selected = route.name === "account" && key === section;
+    return `<a class="${mobile ? "mobile-account-link" : "workspace-account-link"}" ${mobile && key === "overview" ? 'id="mobile-account-link"' : ""} href="#/account/${key}" ${selected ? 'aria-current="page"' : ""}>${icon(accountIcons[key], 18)}<span>${label}</span>${selected ? mark : ""}</a>`;
+  }).join("")}</div>` : "";
+  return `<div class="${mobile ? "mobile-nav-links" : "nav"}" role="group" aria-label="Workspace">${links}</div>${account}`;
+}
+function workspaceFooterMarkup(mobile = false) {
+  const prefix = mobile ? "mobile" : "desktop";
+  return `<div class="workspace-navigation-footer"><div class="workspace-theme"><span id="${prefix}-theme-label">Appearance</span><div class="seg" role="group" aria-labelledby="${prefix}-theme-label">${["auto", "light", "dark"].map(theme => {
+    const label = theme[0].toUpperCase() + theme.slice(1);
+    const moving = workspaceThemeTransition?.theme === theme && workspaceThemeTransition.surface === prefix;
+    return `<button type="button" data-workspace-theme="${theme}" data-workspace-surface="${prefix}" aria-pressed="${themePref() === theme}" title="${theme === "auto" ? "Use system appearance" : `${label} appearance`}"><span class="workspace-theme-glyph${moving ? " is-changing" : ""}">${icon(`theme${label}`, 17)}</span><span>${label}</span></button>`;
+  }).join("")}</div></div>${S.signedIn ? `<button class="workspace-signout" type="button" id="${mobile ? "mobile-signout" : "signout"}">${icon("signOut", 18)}<span>Sign out</span></button>` : '<a class="btn primary workspace-signin" href="#/signin">Sign in</a>'}${REVIEW && S.signedIn && !mobile ? '<button class="linkbtn workspace-reset" id="reset" type="button">Reset workspace</button>' : ""}</div>`;
+}
+function renderWorkspaceChrome() {
+  const panelScroll = $("#mobile-navigation")?.scrollTop || 0;
+  const sidebarScroll = $("#workspace-sidebar .workspace-navigation")?.scrollTop || 0;
   document.body.classList.add("workspace-shell");
-  let side = document.getElementById("workspace-sidebar");
-  if (!side) {
-    side = document.createElement("aside");
-    side.id = "workspace-sidebar";
-    side.className = "workspace-sidebar";
-    side.setAttribute("aria-label", "Workspace");
-    $("#top").before(side);
+  let sidebar = document.getElementById("workspace-sidebar");
+  if (!sidebar) {
+    sidebar = document.createElement("aside"); sidebar.id = "workspace-sidebar"; sidebar.className = "workspace-sidebar"; sidebar.setAttribute("aria-label", "Workspace"); $("#top").before(sidebar);
   }
-  side.innerHTML = '<a class="logo sidebar-brand" href="#/home" aria-label="Aurora, home">Aurora</a>';
-  const nav = $("#top .nav");
-  if (nav) side.appendChild(nav);
-  else {
-    const publicNav = document.createElement("nav");
-    publicNav.className = "nav";
-    publicNav.setAttribute("aria-label", "Main");
-    publicNav.innerHTML = NAV.filter(([key]) => ["home", "community", "create"].includes(key)).map(([key, label]) => `<a href="#/${key}" ${currentRoute().name === key ? 'aria-current="page"' : ""}>${label}</a>`).join("");
-    side.appendChild(publicNav);
-  }
-  $$(".nav > a", side).forEach(link => {
-    const key = link.getAttribute("href").slice(2);
-    link.innerHTML = `${icon(key === "history" ? "history" : key === "community" ? "community" : key, 18)}<span>${esc(link.textContent)}</span>`;
-  });
-  const currentMarker = `<span class="workspace-current-mark">${icon("check", 14)}</span>`;
-  $(".nav > a[aria-current='page']", side)?.insertAdjacentHTML("beforeend", currentMarker);
-  $("#mobile-navigation .mobile-nav-links > a[aria-current='page']")?.insertAdjacentHTML("beforeend", currentMarker);
-  const account = $("#top .acct");
-  if (account && !mobileChrome.matches) {
-    account.classList.add("sidebar-account");
-    const user = accountUser();
-    $("#acct-btn", account).innerHTML = `<span class="sidebar-avatar">${accountAvatarMarkup(user)}</span><span class="sidebar-account-name"><strong>${esc(user.name)}</strong><small>Your account</small></span>${icon("sliders", 16)}`;
-    side.appendChild(account);
-  } else if (!S.signedIn) {
-    const entry = document.createElement("a");
-    entry.href = "#/signin"; entry.className = "btn primary sidebar-signin";
-    entry.textContent = "Sign in"; side.appendChild(entry);
-  }
-  const location = document.createElement("span");
-  location.className = "workspace-location";
-  location.textContent = "Workspace";
-  $("#top .top-in").prepend(location);
-  $("#mobile-navigation")?.classList.toggle("is-open", mobileNavOpen);
+  sidebar.innerHTML = `<a class="logo sidebar-brand" href="#/home" aria-label="Aurora, home">Aurora</a><nav class="workspace-navigation" aria-label="Main navigation">${workspaceLinksMarkup()}</nav>${workspaceFooterMarkup()}`;
+  $(".workspace-navigation", sidebar).scrollTop = sidebarScroll;
+  const allowance = S.plan?.state === "active" ? (mobileChrome.matches ? walletCompact.format(S.plan.credits) : walletAmount(S.plan.credits)) : "";
+  const period = mobileChrome.matches && allowance.length > 2 ? "mo" : "month";
+  const wallet = S.signedIn ? `<a class="bal" href="${S.plan?.state === "active" ? "#/account/billing" : "#/plans"}" aria-label="${walletLabel()}" title="${fmt(S.balance)} credits"><span class="balance-amount"><b class="num" id="bal-n">${walletAmount(S.balance)}</b>${icon("credits", 16)}</span><span class="header-plan" id="header-plan">${S.plan?.state === "active" ? `<span><span class="wallet-status-text">Monthly</span></span><b class="num">${allowance}/${period}</b>` : '<b><span class="wallet-status-text">Free</span></b>'}</span></a>` : '<a class="btn primary workspace-header-signin" href="#/signin">Sign in</a>';
+  const portrait = S.signedIn ? `<div class="acct workspace-profile"><a class="workspace-profile-link" id="profile-shortcut" href="#/account/profile" aria-label="Your profile" title="${esc(accountUser().name)}"><span class="workspace-avatar-frame">${accountAvatarMarkup(accountUser())}</span></a></div>` : "";
+  $("#top").innerHTML = `<div class="top-in${S.signedIn ? " is-signed-in" : " is-guest"}"><button class="mobile-nav-btn" id="mobile-nav-btn" type="button" aria-expanded="${mobileNavOpen}" aria-controls="mobile-navigation" aria-label="${mobileNavOpen ? "Close navigation" : "Open navigation"}">${icon(mobileNavOpen ? "x" : "navigation", 22)}</button><a class="logo" href="#/home" aria-label="Aurora, home">Aurora</a><span class="workspace-location">Workspace</span>${wallet}${portrait}</div><nav class="mobile-navigation" id="mobile-navigation" aria-label="Main navigation" ${mobileNavOpen ? "" : "hidden"}><div class="mobile-navigation-content">${S.signedIn ? `<p class="workspace-mobile-name">${esc(accountUser().name)}</p>` : ""}${workspaceLinksMarkup(true)}${workspaceFooterMarkup(true)}</div></nav>`;
   document.body.classList.toggle("workspace-nav-open", mobileNavOpen && mobileChrome.matches);
-};
+  if (mobileNavOpen && mobileChrome.matches) $("#mobile-navigation").scrollTop = panelScroll;
+}
+renderChrome = renderWorkspaceChrome;
 
 const workspaceHeaderObserver = new ResizeObserver(() => {
   document.documentElement.style.setProperty("--workspace-header-height", `${$("#top").getBoundingClientRect().height}px`);
 });
 workspaceHeaderObserver.observe($("#top"));
-
+document.addEventListener("click", event => {
+  const button = event.target.closest("[data-workspace-theme]");
+  if (!button) return;
+  const surface = button.dataset.workspaceSurface;
+  workspaceThemeTransition = { theme: button.dataset.workspaceTheme, surface };
+  setTheme(button.dataset.workspaceTheme);
+  workspaceThemeTransition = null;
+  document.querySelector(`[data-workspace-theme="${button.dataset.workspaceTheme}"][data-workspace-surface="${surface}"]`)?.focus({ preventScroll: true });
+});
 document.addEventListener("keydown", event => {
   if (event.key !== "Tab" || !mobileNavOpen || !mobileChrome.matches) return;
   const controls = $$("#mobile-navigation a, #mobile-navigation button").filter(node => !node.hidden && node.getClientRects().length);
