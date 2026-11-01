@@ -1598,6 +1598,13 @@ body:has(.community-viewer) .workspace-sidebar, body:has(.app-loading-viewer) .w
 .signin-options #sf .row { gap: 12px 20px; }
 .signin-options #sf .row > button { min-height: 44px; }
 
+.scene-preset-summary { padding: 20px 22px; border-bottom: 1px solid var(--line); }
+.scene-preset-summary h2 { font-family: var(--sans); font-size: 16px; line-height: 1.4; font-weight: 600; }
+.scene-preset-summary p { font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.scene-reference-facts { margin-top: 6px; color: var(--text-muted); }
+.scene-adapted-facts { margin-top: 4px; color: var(--text); }
+@media (max-width: 760px) { .scene-preset-summary { padding: 16px; } }
+
 .prototype-options { margin-top: 16px; color: var(--text-muted); font-size: var(--fs-caption); }
 .prototype-options summary { cursor: pointer; padding: 8px 0; }
 body:not(.review-mode) .prototype-options, body:not(.review-mode) .model-notice { display: none; }
@@ -2255,12 +2262,23 @@ function setTheme(p) { try { localStorage.setItem("aurora-theme", p); } catch (e
    ========================================================================== */
 function toast(msg, action, ttl = 5000) {
   const el = document.createElement("div"); el.className = "toast";
+  // Keep one current status; deletion Undo remains a separate, usable action.
+  el.dataset.toastKind = action?.label === "Undo" ? "undo" : "status";
+  if (el.dataset.toastKind === "status") clearStatusToasts();
   el.innerHTML = `<span>${esc(msg)}</span>${action ? `<button type="button">${esc(action.label)}</button>` : ""}`;
   $("#toasts").appendChild(el);
-  const kill = () => { const focused = el.contains(document.activeElement); el.remove(); if (focused) $("#title")?.focus({ preventScroll: true }); };
-  if (action) $("button", el).onclick = () => { action.fn(); kill(); };
-  setTimeout(kill, action ? Math.max(ttl, 7000) : ttl);
+  let timer;
+  const remove = () => { clearTimeout(timer); el.remove(); };
+  const kill = () => {
+    if (!el.contains(document.activeElement)) { remove(); return; }
+    // Do not remove a focused action or move focus just because a timer elapsed.
+    el.addEventListener("focusout", () => queueMicrotask(() => { if (!el.contains(document.activeElement)) remove(); }), { once: true });
+  };
+  el.dismissToast = kill;
+  if (action) $("button", el).onclick = () => { action.fn(); remove(); };
+  timer = setTimeout(kill, action ? Math.max(ttl, 7000) : ttl);
 }
+function clearStatusToasts() { $$('#toasts .toast[data-toast-kind="status"]').forEach(el => el.dismissToast?.()); }
 
 /* ==========================================================================
    CHROME: header and navigation
@@ -2484,7 +2502,11 @@ function viewCreate(main) {
   const source = sourceId ? communityPosts(false).find(p => p.id === sourceId && p.includePrompt && p.prompt) : null;
   const sourceAvailable = source && isModelAvailable(source.model);
   if (sourceId) {
-    if (source) { Object.assign(S.draft, sourceAvailable ? { prompt: source.prompt, model: source.model, len: source.len, quality: source.quality, format: source.format, imageName: "", failDemo: false } : { prompt: source.prompt, imageName: "", failDemo: false }); normalizeDraft(S.draft); save(); }
+    if (source) {
+      if (sourceParams.get("preset") === "scene") applyScenePreset(source, S.draft);
+      else { delete S.draft.scenePresetId; Object.assign(S.draft, sourceAvailable ? { prompt: source.prompt, model: source.model, len: source.len, quality: source.quality, format: source.format, imageName: "", failDemo: false } : { prompt: source.prompt, imageName: "", failDemo: false }); normalizeDraft(S.draft); }
+      save();
+    }
     completeCommunitySetup(sourceId, source, sourceParams.get("setup"), S.draft);
     history.replaceState(null, "", "#/create");
   } else clearCommunitySetupIntent();
@@ -2494,6 +2516,7 @@ function viewCreate(main) {
     <h1 class="display" id="title" tabindex="-1">Describe your scene</h1>
     <p class="lead">Your ideas, in motion.</p>
     <form class="composer" id="composer" novalidate>
+      ${scenePresetSummaryMarkup()}
       <label class="sr" for="prompt">Describe your video</label>
       <div class="prompt-wrap"><textarea id="prompt" rows="4" maxlength="1000" placeholder="A slow dolly shot through a quiet market at dawn, warm light, soft focus." aria-describedby="prompt-err">${esc(d.prompt)}</textarea></div>
       <p class="err" id="prompt-err" role="alert" hidden>${icon("warn", 14)}Describe the scene first. One or two sentences are enough.</p>
@@ -2528,7 +2551,7 @@ function viewCreate(main) {
     <div class="gtabs"><button type="button" data-tab="videos" aria-pressed="${currentGalleryTab() === "videos"}">My videos</button><button type="button" data-tab="community" aria-pressed="${currentGalleryTab() === "community"}">Explore</button><a class="all linkbtn video-icon-action" href="#/history" aria-label="All history" data-community-tooltip="All history">${icon("history", 18)}</a></div>
     <div id="g-body"></div>
   </section>`;
-  return () => { const cleanup = initCreate(); if (sourceId) toast(source ? (sourceAvailable ? "Prompt and settings added. Edit the scene and review the cost." : `Prompt added. ${selectedModel.name} is selected. Change it anytime.`) : "This setup is unavailable. Your draft is unchanged."); return cleanup; };
+  return () => { const cleanup = initCreate(); if (sourceId && (!source || sourceParams.get("preset") !== "scene")) toast(source ? (sourceAvailable ? "Prompt and settings added. Edit the scene and review the cost." : `Prompt added. ${selectedModel.name} is selected. Change it anytime.`) : "This setup is unavailable. Your draft is unchanged."); return cleanup; };
 }
 function renderGallery(tab) {
   const body = $("#g-body"); if (!body) return;
@@ -2553,6 +2576,7 @@ function setGalleryTab(tab) {
 }
 const emptyVideos = () => `<div class="empty"><h2>Your first scene starts here</h2><p>Describe a video above, or explore the feed for a starting point.</p><a class="linkbtn" href="#/community">Explore feed</a></div>`;
 function updatePrice() {
+  updateScenePresetSummary();
   const d = S.draft, c = cost(d), left = S.balance - c, m = model(d.model);
   $("#p-total").textContent = `${fmt(c)} credits`;
   const enough = left >= 0;
@@ -2592,7 +2616,7 @@ function initCreate() {
     const inputs = model(d.model).inputs || ["text", "image"];
     if (c === null || (d.imageName && !inputs.includes("image")) || (!d.imageName && inputs.includes("image") && !inputs.includes("text"))) { toast("Review your model, image and settings before generating."); route(); return; }
     if (!d.prompt.trim()) { err.hidden = false; ta.setAttribute("aria-invalid", "true"); ta.focus(); return; }
-    if (c > S.balance) { go("plans"); toast(`You need ${fmt(c - S.balance)} more credits for this video.`); return; }
+    if (c > S.balance) { buyCreditsForDraft(); return; }
     const id = S.nextId++;
     addTransaction({ kind: "generation", label: `${model(d.model).name} · ${d.len} s · ${d.quality}`, delta: -c, videoId: id, modelId: d.model, modelName: model(d.model).name, note: "Credits used at launch." });
     S.videos.unshift({ id, prompt: d.prompt.trim(), model: d.model, modelName: model(d.model).name, providerName: model(d.model).provider, len: d.len, quality: d.quality, format: d.format, credits: c, status: "generating", filled: 0, img: officialExample(d.model)?.img || "", exampleId: officialExample(d.model)?.id || null, when: "Just now", createdAt: new Date().toISOString(), failDemo: d.failDemo });
@@ -2605,7 +2629,7 @@ function initCreate() {
   $(".gtabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) setGalleryTab(b.dataset.tab); });
   $("#g-body").addEventListener("click", e => {
     const retry = e.target.closest("[data-retry]");
-    if (retry) { const v = S.videos.find(x => x.id === Number(retry.dataset.retry)); Object.assign(S.draft, { prompt: v.prompt, model: v.model, len: v.len, quality: v.quality, format: v.format, failDemo: false }); normalizeDraft(S.draft); save(); route(); toast("Settings restored. Press Generate video to try again."); }
+    if (retry) { const v = S.videos.find(x => x.id === Number(retry.dataset.retry)); delete S.draft.scenePresetId; Object.assign(S.draft, { prompt: v.prompt, model: v.model, len: v.len, quality: v.quality, format: v.format, failDemo: false }); normalizeDraft(S.draft); save(); route(); toast("Settings restored. Press Generate video to try again."); }
   });
   return () => { if (rec) clearTimeout(rec); disposePicker?.(); };
 }
@@ -2685,6 +2709,61 @@ function viewVideo(main, arg) {
 }
 
 /* Credit purchases and proposed changes at the next subscription renewal. */
+const CREATE_PURCHASE_RETURN = "aurora-create-purchase-return-v1";
+let createPurchaseReturn = (() => { try { return JSON.parse(sessionStorage.getItem(CREATE_PURCHASE_RETURN)); } catch (e) { return null; } })();
+const purchaseOwner = () => String(S.user?.email || "").trim().toLowerCase();
+const purchaseDraft = () => JSON.stringify(S.draft);
+function clearCreatePurchaseReturn() {
+  createPurchaseReturn = null;
+  try { sessionStorage.removeItem(CREATE_PURCHASE_RETURN); } catch (e) {}
+}
+function currentCreatePurchaseReturn() {
+  const context = createPurchaseReturn, params = new URLSearchParams(location.hash.split("?")[1] || "");
+  if (!context || !S.signedIn || currentRoute().name !== "plans" || currentRoute().arg || context.token !== params.get("resume")
+      || !/^[a-zA-Z0-9-]{8,80}$/.test(context.token || "") || context.owner !== purchaseOwner() || context.draft !== purchaseDraft()
+      || !/^#\/create(?:\?gallery=(?:videos|community))?$/.test(context.path || "")
+      || !Number.isFinite(context.createdAt) || Date.now() - context.createdAt > 60 * 60 * 1000 || context.createdAt > Date.now()
+      || !Number.isFinite(context.scrollX) || !Number.isFinite(context.scrollY) || context.scrollX < 0 || context.scrollY < 0) return null;
+  return context;
+}
+function buyCreditsForDraft() {
+  if (!S.signedIn || currentRoute().name !== "create") return;
+  const gallery = new URLSearchParams(location.hash.split("?")[1] || "").get("gallery");
+  createPurchaseReturn = {
+    token: typeof crypto.randomUUID === "function" ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+    owner: purchaseOwner(), draft: purchaseDraft(), createdAt: Date.now(),
+    path: "#/create" + (["videos", "community"].includes(gallery) ? `?gallery=${gallery}` : ""),
+    scrollX: Math.max(0, scrollX), scrollY: Math.max(0, scrollY),
+  };
+  try { sessionStorage.setItem(CREATE_PURCHASE_RETURN, JSON.stringify(createPurchaseReturn)); } catch (e) {}
+  clearStatusToasts();
+  go(`plans?resume=${encodeURIComponent(createPurchaseReturn.token)}`);
+}
+function finishCreatePurchaseReturn(message) {
+  const context = currentCreatePurchaseReturn();
+  clearCreatePurchaseReturn();
+  if (!context) return false;
+  go(context.path.slice(2));
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    if (location.hash !== context.path || !S.signedIn || purchaseOwner() !== context.owner || purchaseDraft() !== context.draft) return;
+    const status = document.createElement("p");
+    status.id = "purchase-return-status"; status.className = "account-hint"; status.setAttribute("role", "status");
+    status.textContent = message + " Review the cost before generating.";
+    $("#composer")?.after(status);
+    window.scrollTo(context.scrollX, context.scrollY);
+    const button = $("#go");
+    if (!button) return;
+    button.focus({ preventScroll: true });
+    const rect = button.getBoundingClientRect(), header = $("#top").getBoundingClientRect().bottom;
+    if (rect.top < header || rect.bottom > innerHeight) button.scrollIntoView({ block: "center", behavior: "instant" });
+  }));
+  return true;
+}
+// A return belongs only to this tab's uninterrupted purchase for this draft/account.
+const validateCreatePurchaseReturn = () => { if (createPurchaseReturn && !currentCreatePurchaseReturn()) clearCreatePurchaseReturn(); };
+window.addEventListener("hashchange", validateCreatePurchaseReturn);
+validateCreatePurchaseReturn();
+
 const currentPlanOption = () => S.plan ? CONFIG.plans.find(p => p.id === S.plan.id) || CONFIG.plans.find(p => p.credits === S.plan.credits && p.usd === S.plan.usd) : null;
 let checkoutCleanup = null;
 function pendingPlanMarkup(p = S.plan) {
@@ -2700,6 +2779,7 @@ function initPendingPlanChange() {
 }
 function viewPlans(main) {
   const params = new URLSearchParams(location.hash.split("?")[1] || "");
+  const purchaseReturn = currentCreatePurchaseReturn();
   const tab = params.get("tab") === "subs" ? "subs" : "packs", sub = tab === "subs";
   const active = S.plan?.state === "active", current = currentPlanOption();
   const list = (sub ? CONFIG.plans : CONFIG.packs).map(o => sub && active && current?.id === o.id ? { ...o, credits: S.plan.credits, usd: S.plan.usd } : o);
@@ -2709,7 +2789,7 @@ function viewPlans(main) {
   let estimate = models.find(m => m.id === params.get("model")) || models.find(m => m.id === S.draft.model) || models[0];
   let quality = estimate?.qualities.includes(params.get("quality")) ? params.get("quality") : estimate?.qualities.includes(S.draft.quality) ? S.draft.quality : estimate?.qualities[0];
   let length = estimate?.lengths.includes(Number(params.get("length"))) ? Number(params.get("length")) : estimate?.lengths.includes(Number(S.draft.len)) ? Number(S.draft.len) : estimate?.lengths[0];
-  main.innerHTML = `<div class="page plans-page"><header><h1 id="title" tabindex="-1">Credits & plans</h1><p class="sub"><span class="num">${fmt(S.balance)}</span> credits available</p></header>
+  main.innerHTML = `<div class="page plans-page"><header><h1 id="title" tabindex="-1">Credits & plans</h1><p class="sub"><span class="num">${fmt(S.balance)}</span> credits available</p>${purchaseReturn ? `<p class="account-hint" id="purchase-create-note" role="status">You need ${fmt(Math.max(0, cost(S.draft) - S.balance))} more credits. After payment, you’ll return to your scene.</p>` : ""}</header>
     ${S.plan ? `<section class="plan-current" aria-labelledby="current-plan-heading"><div><span class="plan-state">${active ? "Active subscription" : "Subscription cancelled"}</span><h2 id="current-plan-heading"><span class="num">${fmt(S.plan.credits)}</span> credits a month</h2><p>${active ? `$${S.plan.usd} per month. Next payment: $${S.plan.pendingChange?.usd ?? S.plan.usd} on ${accountDate(S.plan.nextBillingAt)}.` : "No future payments are scheduled. Your available credits are unchanged."}</p></div><a class="btn" id="manage-current-plan" href="#/account/billing">${active ? "Manage subscription" : "View subscription"}</a></section>${pendingPlanMarkup()}` : ""}
     <div class="plan-layout"><div class="plan-options"><nav class="seg plan-tabs" aria-label="Purchase type">${[["packs", "Credit packs"], ["subs", "Monthly subscription"]].map(([id, label]) => `<button type="button" data-ptab="${id}" aria-pressed="${tab === id}">${label}</button>`).join("")}</nav>
       <fieldset class="opts" id="opts"><legend class="sr">${sub ? "Choose a monthly plan" : "Choose a credit pack"}</legend>${list.map(o => `<label class="opt"><input type="radio" name="opt" value="${o.id}" ${o.id === picked.id ? "checked" : ""}><span class="dot"></span><span><b class="num">${fmt(o.credits)} credits</b><span class="d">${sub ? active && current?.id === o.id ? "Current plan" : active && S.plan.pendingChange?.id === o.id ? "Scheduled for next payment" : "Each month" : esc(o.note)}</span></span><span class="p num">$${o.usd}<small>${sub ? "per month" : "one payment"}</small></span></label>`).join("")}</fieldset></div>
@@ -2810,7 +2890,11 @@ function checkout(o, kind) {
       }
       addTransaction({ kind: sub ? "subscription" : "purchase", label: `${fmt(o.credits)} credits${sub ? " · monthly subscription" : " · credit pack"}`, delta: o.credits, usd: o.usd, note: "Payment · card ending 4242" });
       if (sub) { const now = new Date().toISOString(), end = nextMonth(now); S.plan = { id: o.id, credits: o.credits, usd: o.usd, state: "active", periodStart: now, periodEnd: end, nextBillingAt: end }; }
-      save(); pending = false; cleanup(); go("account/billing"); if (currentRoute().name === "account") route(); toast(`${fmt(o.credits)} credits added. You have ${fmt(S.balance)}.`);
+      save(); pending = false; cleanup();
+      const message = `${fmt(o.credits)} credits added. You have ${fmt(S.balance)}.`;
+      const resumed = finishCreatePurchaseReturn(message);
+      if (!resumed) { go("account/billing"); if (currentRoute().name === "account") route(); }
+      if (!resumed) toast(message);
     }, REDUCED ? 100 : 900);
   };
 }
@@ -3174,7 +3258,7 @@ function viewHome(main) {
         <span class="home-scene-play" aria-hidden="true">${icon("play", 18)}</span>
       </a>
       <div class="home-scene-heading"><h2>${esc(scene.caption)}</h2><div class="home-scene-meta"><span>${esc(model.name)}</span><span class="num">${esc(scene.format)}</span></div></div>
-      <a class="btn community-use home-scene-use" href="#/create?scene=${encodeURIComponent(scene.id)}" aria-label="Use prompt for ${esc(scene.caption)}" data-community-tooltip="Use prompt">${icon("setup", 18)}<span>Use prompt</span></a>
+      <a class="btn community-use home-scene-use" href="#/create?scene=${encodeURIComponent(scene.id)}&preset=scene" aria-label="Use scene ${esc(scene.caption)}" data-community-tooltip="Use scene">${icon("setup", 18)}<span>Use scene</span></a>
     </article>`;
   };
   const portraits = scenes.slice(0, 4).map(sceneCard).join("");
@@ -3469,6 +3553,7 @@ function publicationActionsMarkup(post, { detail = false, history = false } = {}
 }
 function reuseVideoSettings(video, { readyOnly = false } = {}) {
   if (!S.signedIn || !video || !S.videos.some(v => v.id === video.id) || (readyOnly && video.status !== "ready")) return;
+  delete S.draft.scenePresetId;
   Object.assign(S.draft, { prompt: video.prompt, model: video.model, len: video.len, quality: video.quality, format: video.format, imageName: "", failDemo: false });
   normalizeDraft(S.draft); save(); go("create");
   toast(isModelAvailable(video.model) ? "Prompt and settings restored." : "Prompt restored. The original model is unavailable. Review the new model and settings.");
@@ -3650,16 +3735,17 @@ function clearCommunitySetupIntent() {
 function countableCommunitySetup(p) {
   return Boolean(p?.includePrompt && typeof p.prompt === "string" && p.prompt.trim() && p.prompt.length <= 1000);
 }
-function beginCommunitySetup(id) {
+function beginCommunitySetup(id, preset = null) {
   clearCommunitySetupIntent();
   const post = communityPosts(false).find(p => p.id === id);
   let destination = "create?scene=" + encodeURIComponent(id);
   if (countableCommunitySetup(post)) {
     const token = globalThis.crypto?.randomUUID?.() || `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
-    const intent = { token, postId: id };
+    const intent = { token, postId: id, preset: preset === "scene" ? "scene" : null };
     communitySetupFallback = intent;
     try { sessionStorage.setItem(COMMUNITY_SETUP_INTENT, JSON.stringify(intent)); } catch (e) {}
     destination += "&setup=" + encodeURIComponent(token);
+    if (intent.preset) destination += "&preset=" + intent.preset;
   }
   go(destination);
 }
@@ -3679,13 +3765,14 @@ function communitySetupContinuation(fallback) {
   const params = new URLSearchParams(fallback.split("?")[1] || "");
   const matching = fallback === "create" || (fallback.split("?")[0] === "create" && params.get("scene") === intent.postId && params.get("setup") === intent.token);
   if (!matching || !countableCommunitySetup(p)) { clearCommunitySetupIntent(); return fallback; }
-  return `create?scene=${encodeURIComponent(intent.postId)}&setup=${encodeURIComponent(intent.token)}`;
+  return `create?scene=${encodeURIComponent(intent.postId)}&setup=${encodeURIComponent(intent.token)}${intent.preset === "scene" ? "&preset=scene" : ""}`;
 }
 document.addEventListener("click", e => {
   const link = e.target.closest("a.community-use");
   if (!link || e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
   e.preventDefault();
-  beginCommunitySetup(new URLSearchParams(link.hash.split("?")[1] || "").get("scene"));
+  const params = new URLSearchParams(link.hash.split("?")[1] || "");
+  beginCommunitySetup(params.get("scene"), params.get("preset"));
 });
 window.addEventListener("hashchange", () => {
   hideCommunityMetricTooltip();
@@ -3703,7 +3790,9 @@ function communityCards(limit = 6, mine = false, immersive = false) {
   if (!posts.length) return `<section class="publication-empty"><h2>${mine ? "Your scenes can find an audience" : "No published scenes yet"}</h2><p>${mine ? "Publish a finished video from its result page. You choose whether to share the prompt." : "Published videos will appear here."}</p><a class="btn" href="${S.signedIn ? "#/history" : "#/signin"}">${S.signedIn ? "Choose a video" : "Sign in"}</a></section>`;
   return `<div class="community-grid${immersive ? ' community-feed' : ''}">${posts.map(p => {
     const preview = recordOfficialExample(p), poster = officialPoster(preview), setupAvailable = isModelAvailable(p.model), qualityBadge = videoQualityBadgeMarkup(preview);
-    const promptAction = p.includePrompt && p.prompt ? `<a class="btn community-use" href="#/create?scene=${encodeURIComponent(p.id)}" aria-label="Use the ${setupAvailable ? "setup" : "prompt"} for ${esc(p.caption)}" data-community-tooltip="${setupAvailable ? "Use this setup" : "Use prompt"}">${icon("setup", 18)}${immersive ? '<span class="community-use-label">Use prompt</span>' : ''}</a>` : `<p class="community-privacy"><button class="community-metric" type="button" data-community-metric="private" aria-label="Private prompt">${icon("lock", 16)}</button></p>`;
+    const readyScene = immersive && currentRoute().arg === "watch" && communityViewerReturn?.path?.split("?")[0] === "#/home" && p.official;
+    const actionLabel = readyScene ? "Use scene" : setupAvailable ? "Use this setup" : "Use prompt";
+    const promptAction = p.includePrompt && p.prompt ? `<a class="btn community-use" href="#/create?scene=${encodeURIComponent(p.id)}${readyScene ? "&preset=scene" : ""}" aria-label="${actionLabel} for ${esc(p.caption)}" data-community-tooltip="${actionLabel}">${icon("setup", 18)}${immersive ? `<span class="community-use-label">${readyScene ? "Use scene" : "Use prompt"}</span>` : ''}</a>` : `<p class="community-privacy"><button class="community-metric" type="button" data-community-metric="private" aria-label="Private prompt">${icon("lock", 16)}</button></p>`;
     return `<article class="community-card" data-reel-post="${esc(p.id)}" ${p.official ? 'data-official-example="true"' : ""}><a class="thumb community-watch ${poster ? "" : "community-no-preview"}" href="${communityWatchHref(p.id, mine, currentRoute().name === 'create')}" aria-label="Watch ${esc(p.caption)}">${poster ? `<img src="${esc(poster)}" data-hover-example="${esc(preview.id)}" alt="${esc(preview.alt)}" loading="lazy">${Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}` : '<span>Preview unavailable</span>'}${qualityBadge}</a>${immersive ? '<div class="community-reel-copy">' : ''}${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview, { withAvatar: false }) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${preview ? videoFactsMarkup(preview) : ""}</p>${communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div>${immersive ? '</div>' : ''}</article>`;
   }).join("")}</div>`;
 }
@@ -3865,6 +3954,53 @@ function viewCommunity(main, arg) {
     $("#use-community-prompt")?.addEventListener("click", () => beginCommunitySetup(p.id));
     return preview ? initOfficialMedia(preview, { id: "community-example-media", autoplay: true, onPlay: () => recordCommunityView(p.id) }) : null;
   };
+}
+
+/* Ready scenes adapt to the selected catalog without inventing capabilities. */
+const sceneFrameNumber = value => {
+  const match = String(value || "").match(/^(\d+(?:\.\d+)?):(\d+(?:\.\d+)?)$/);
+  return match && Number(match[2]) > 0 ? Number(match[1]) / Number(match[2]) : null;
+};
+const sceneQualityNumber = value => {
+  const text = String(value || "").trim();
+  if (/^4k(?:\s|$)/i.test(text)) return 2160;
+  const lines = text.match(/^(\d+)p(?:\s|$)/i);
+  if (lines) return Number(lines[1]);
+  const dimensions = text.match(/^(\d+)\s*[x\u00d7]\s*(\d+)$/i);
+  return dimensions ? Math.min(Number(dimensions[1]), Number(dimensions[2])) : null;
+};
+function nearestSceneOption(values, desired, numberOf = Number) {
+  if (!Number.isFinite(desired) || desired <= 0) return null;
+  return values.map((value, index) => ({ value, index, number: numberOf(value) }))
+    .filter(item => Number.isFinite(item.number) && item.number > 0)
+    .sort((a, b) => Math.abs(a.number - desired) - Math.abs(b.number - desired) || a.number - b.number || a.index - b.index)[0]?.value ?? null;
+}
+function applyScenePreset(source, draft) {
+  normalizeDraft(draft);
+  const target = isModelAvailable(source.model) ? model(source.model) : model(draft.model);
+  const referenceQuality = sceneQualityNumber(source.quality) ??
+    ([source.sourceWidth, source.sourceHeight].every(value => Number(value) > 0) ? Math.min(source.sourceWidth, source.sourceHeight) : null);
+  Object.assign(draft, { prompt: source.prompt, model: target.id, imageName: "", failDemo: false, scenePresetId: source.id });
+  draft.format = target.formats.includes(source.format) ? source.format : nearestSceneOption(target.formats, sceneFrameNumber(source.format), sceneFrameNumber) ?? draft.format;
+  draft.len = nearestSceneOption(target.lengths, Number(source.len)) ?? draft.len;
+  draft.quality = nearestSceneOption(target.qualities, referenceQuality, sceneQualityNumber) ?? draft.quality;
+  return normalizeDraft(draft);
+}
+function currentScenePreset() {
+  return S.draft.scenePresetId ? communityPosts(false).find(post => post.id === S.draft.scenePresetId && post.includePrompt && post.prompt) : null;
+}
+function scenePresetSummaryMarkup() {
+  const source = currentScenePreset();
+  if (!source) return "";
+  const facts = [recordModel(source).name, Number(source.len) > 0 ? `${source.len} s` : null, source.format].filter(Boolean);
+  return `<section class="scene-preset-summary" aria-label="Scene setup"><h2>${esc(source.caption)}</h2><p class="scene-reference-facts">Reference: ${facts.map(esc).join(" · ")}</p><p class="scene-adapted-facts" id="scene-adapted-facts" role="status" aria-live="polite"></p></section>`;
+}
+function updateScenePresetSummary() {
+  const output = document.getElementById("scene-adapted-facts"), source = currentScenePreset();
+  if (!output || !source) return;
+  const draft = S.draft;
+  const adapted = source.model !== draft.model || Number(source.len) !== draft.len || source.format !== draft.format || sceneQualityNumber(source.quality) !== sceneQualityNumber(draft.quality);
+  output.textContent = `${adapted ? "Adapted to" : "Your video:"} ${model(draft.model).name} · ${draft.len} s · ${draft.quality} · ${draft.format}`;
 }
 
 /* Result retention is separate from generation jobs and the credit ledger. */
