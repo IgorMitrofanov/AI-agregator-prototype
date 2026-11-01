@@ -1749,7 +1749,7 @@ function toast(msg, action, ttl = 5000) {
 /* ==========================================================================
    CHROME: header and navigation
    ========================================================================== */
-const NAV = [["create", "Create"], ["community", "Feed"], ["history", "History"], ["plans", "Plans"], ["referrals", "Referrals"]];
+const NAV = [["community", "Feed"], ["create", "Create"], ["history", "History"], ["plans", "Plans"], ["referrals", "Referrals"]];
 const ACCOUNT_NAV = [["overview", "Overview"], ["credits", "Credit activity"], ["analytics", "Analytics"], ["billing", "Billing"], ["profile", "Profile"]];
 function accountLinksMarkup(mobile = false) {
   const route = currentRoute();
@@ -3054,12 +3054,12 @@ function viewCommunity(main, arg) {
     return () => initCommunityReels(main);
   }
   const p = communityPosts(false).find(x => x.id === arg);
-  if (!p) { main.innerHTML = '<div class="page"><h1 id="title" tabindex="-1">Publication unavailable</h1><div class="publication-empty"><p>The creator may have removed this scene.</p><a class="btn" href="#/community">Back to feed</a></div></div>'; return null; }
+  if (!p) { main.innerHTML = '<div class="page"><h1 id="title" tabindex="-1">Publication unavailable</h1><div class="publication-empty"><p>The creator may have removed this scene.</p><a class="btn" href="#/community">Back</a></div></div>'; return null; }
   const preview = recordOfficialExample(p);
   const setupAvailable = isModelAvailable(p.model);
   const promptActionLabel = S.signedIn ? setupAvailable ? "Use this setup" : "Use prompt" : setupAvailable ? "Sign in to use this setup" : "Sign in to use prompt";
   const player = preview ? officialMediaMarkup(preview, { id: "community-example-media", playerId: "community-player", playId: "community-play", errorId: "community-media-error", mediaIdPrefix: "community-example", playerClass: "community-official-player", showMetadata: !p.official }) : previewUnavailableMarkup(p, { id: "community-example-media" });
-  main.innerHTML = `<div class="page"><a class="btn" href="#/community">Back to feed</a><div class="community-detail"><div>${player}</div><aside>
+  main.innerHTML = `<div class="page"><a class="btn" href="#/community">Back</a><div class="community-detail"><div>${player}</div><aside>
     <h1 id="title" tabindex="-1">${esc(p.caption)}</h1>${communityPublisherMarkup(p)}${communityMetrics(p, true)}
     <dl class="facts"><div><dt>Model</dt><dd>${esc(recordModel(p).name)}</dd></div>${preview && Number.isFinite(preview.len) && preview.len > 0 ? `<div><dt>${p.official ? "Length" : "Preview length"}</dt><dd class="num">${preview.len} s</dd></div>` : ""}${preview && (preview.quality || preview.format) ? `<div><dt>Frame</dt><dd>${[preview.quality, preview.format].filter(Boolean).map(esc).join(" · ")}</dd></div>` : ""}</dl>
     <section class="community-prompt"><h2>${p.includePrompt ? p.promptKind === "suggested" ? "Suggested prompt" : "Creator’s prompt" : "A private prompt"}</h2><p>${p.includePrompt ? esc(p.prompt) : "The creator has chosen not to share the prompt."}</p>${p.includePrompt && !setupAvailable ? '<p>Choose an available model in Create.</p>' : ""}${p.includePrompt ? `<button class="btn primary community-prompt-action" id="use-community-prompt" type="button" aria-label="${promptActionLabel}">${icon("setup", 20)}</button>` : '<a class="btn" href="#/create">Create your own scene</a>'}</section>
@@ -3673,11 +3673,11 @@ function viewCommunityViewer(main) {
   const returnPath = matchingReturn && ['#/community', '#/community/mine', '#/create'].includes(communityViewerReturn.path.split('?')[0])
     ? communityViewerReturn.path : fromCreate ? '#/create?gallery=community' : mine ? '#/community/mine' : '#/community';
   if (!selected || !posts.some(post => post.id === selected)) {
-    main.innerHTML = `<div class="page"><h1 id="title" tabindex="-1">${posts.length ? 'Publication unavailable' : mine ? 'No publications yet' : 'No published scenes yet'}</h1><div class="publication-empty"><a class="btn" href="${esc(returnPath)}">Back to feed</a></div></div>`;
+    main.innerHTML = `<div class="page"><h1 id="title" tabindex="-1">${posts.length ? 'Publication unavailable' : mine ? 'No publications yet' : 'No published scenes yet'}</h1><div class="publication-empty"><a class="btn" href="${esc(returnPath)}">Back</a></div></div>`;
     return null;
   }
   if (!matchingReturn) communityViewerReturn = { path: returnPath, scope: mine ? 'mine' : 'all', fromCreate, postId: selected, scrollX: 0, scrollY: null };
-  main.innerHTML = `<div class="page community-page community-viewer" data-community-viewer="true" data-viewer-scene="${esc(selected)}"><div class="community-feed-toolbar community-viewer-toolbar"><a class="btn community-viewer-back" id="viewer-back" href="${esc(returnPath)}">Back to feed</a><h1 class="sr" id="title" tabindex="-1">Feed viewer</h1><span class="sr" id="viewer-position" role="status" aria-live="polite"></span><div class="community-viewer-steps" role="group" aria-label="Browse videos"><button class="btn video-icon-action" id="viewer-previous" type="button" aria-label="Previous video">${communityStepIcon(false)}</button><button class="btn video-icon-action" id="viewer-next" type="button" aria-label="Next video">${communityStepIcon(true)}</button></div><a class="btn" id="viewer-details" href="#/community/${esc(selected)}">Details</a></div><div class="community-viewer-stage">${communityCards(100, mine, true)}</div></div>`;
+  main.innerHTML = `<div class="page community-page community-viewer" data-community-viewer="true" data-viewer-scene="${esc(selected)}"><div class="community-feed-toolbar community-viewer-toolbar"><a class="btn community-viewer-back" id="viewer-back" href="${esc(returnPath)}">Back</a><h1 class="sr" id="title" tabindex="-1">Feed viewer</h1><span class="sr" id="viewer-position" role="status" aria-live="polite"></span><div class="community-viewer-steps" role="group" aria-label="Browse videos"><button class="btn video-icon-action" id="viewer-previous" type="button" aria-label="Previous video">${communityStepIcon(false)}</button><button class="btn video-icon-action" id="viewer-next" type="button" aria-label="Next video">${communityStepIcon(true)}</button></div><a class="btn" id="viewer-details" href="#/community/${esc(selected)}">Details</a></div><div class="community-viewer-stage">${communityCards(100, mine, true)}</div></div>`;
   return () => initCommunityReels(main);
 }
 window.addEventListener('hashchange', () => {
