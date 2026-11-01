@@ -552,6 +552,8 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .account-ledger.compact .account-date { display: none; }
   .account-plan { padding: 20px; }
   .account-plan-head { flex-wrap: wrap; }
+  .billing-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .billing-actions > a, .billing-actions > button { justify-content: center; width: 100%; }
   .account-facts { grid-template-columns: 1fr; gap: 16px; }
   .account-facts > div { display: flex; justify-content: space-between; gap: 16px; }
   .account-facts dt { margin: 0; }
@@ -2306,7 +2308,7 @@ function accountBilling(body) {
   body.innerHTML = `${p ? `<section class="account-plan"><div class="account-plan-head"><div><h2>${fmt(p.credits)} credits a month</h2><p class="muted">$${p.usd} per month</p></div><span class="account-status ${p.state === "active" ? "good" : "muted"}">${p.state === "active" ? "Active subscription" : "Subscription cancelled"}</span></div>
     <dl class="account-facts"><div><dt>Current period</dt><dd>${accountDate(p.periodStart)}</dd></div><div><dt>Period ends</dt><dd>${accountDate(p.periodEnd)}</dd></div><div><dt>Next payment</dt><dd>${p.state === "active" ? `$${p.pendingChange?.usd ?? p.usd} · ${accountDate(p.nextBillingAt)}` : "None scheduled"}</dd></div></dl>
     <p class="account-hint">${p.state === "active" ? "Cancelling stops future monthly payments. Your current credits stay available." : "No future payments. Current credits stay available. You can choose another plan at any time."}</p>
-    <div class="billing-actions">${p.state === "active" ? '<a class="btn" href="#/plans?tab=subs">Compare plans</a><button class="btn danger" id="cancel-subscription" type="button">Cancel subscription</button>' : '<a class="btn" href="#/plans?tab=subs">Choose a plan</a>'}<a class="btn video-icon-action" id="billing-view-credits" href="#/account/credits" aria-label="View credit activity">${icon("credits", 18)}</a></div>
+    <div class="billing-actions">${p.state === "active" ? '<a class="btn" href="#/plans?tab=subs">Compare plans</a><button class="btn danger" id="cancel-subscription" type="button">Cancel subscription</button>' : '<a class="btn" href="#/plans?tab=subs">Choose a plan</a>'}<a class="btn" id="billing-view-credits" href="#/account/credits">View credits</a></div>
     <div id="cancel-confirm" class="account-cancel-confirm" hidden><p>Cancel future monthly payments? ${p.pendingChange ? "Your scheduled plan change will also be removed. " : ""}Your current ${fmt(S.balance)} credits stay available.</p><div class="row"><button class="btn" id="keep-subscription" type="button">Keep subscription</button><button class="btn danger" id="confirm-cancel" type="button">Confirm cancellation</button></div></div></section>${pendingPlanMarkup(p)}` : `<section class="account-empty"><h2>No monthly subscription</h2><p>Buy credits once or choose a monthly plan. You can create videos with either option.</p><a class="btn primary" href="#/plans?tab=subs">Choose credits or a plan</a></section>`}
     <div class="account-section-head"><h2>Purchase history</h2><a class="linkbtn" href="#/plans">Buy credits</a></div>${accountLedger([...S.transactions].reverse().filter(t => ["purchase", "subscription"].includes(t.kind)))}`;
   return () => {
