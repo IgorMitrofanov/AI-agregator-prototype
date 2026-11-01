@@ -103,8 +103,7 @@ main:focus, [tabindex="-1"]:focus { outline: none; }
 .nav { display: flex; gap: 4px; margin-left: auto; }
 .nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px; border-radius: var(--r-pill); color: var(--text-muted); font-weight: 500; }
 .nav a:hover { color: var(--text); }
-.nav a[href="#/community"] { color: var(--text); font-weight: 600; }
-.nav a[aria-current="page"] { background: var(--surface-2); color: var(--text); }
+.nav a[aria-current="page"] { background: var(--surface-2); color: var(--text); font-weight: 600; }
 .bal { display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 12px; align-items: center; flex: none; width: 224px; height: 52px; min-height: 52px; padding: 8px 12px; border: 1px solid var(--field-line); border-radius: var(--r-pill); font-weight: 600; }
 .balance-amount { display: inline-flex; gap: 6px; align-items: center; justify-content: center; min-width: 0; white-space: nowrap; }
 .balance-amount #bal-n { font-size: 15px; }
@@ -157,11 +156,6 @@ main { display: block; }
 .hero { max-width: 920px; margin: 0 auto; padding: 48px 32px 0; }
 h1.display { font-size: var(--fs-h1); line-height: 1.1; letter-spacing: -0.02em; }
 .lead { color: var(--text-muted); font-size: var(--fs-lead); margin: 8px 0 28px; }
-.creator-starts { display: flex; align-items: center; gap: 8px 16px; flex-wrap: wrap; margin: -12px 0 20px; font-size: 13px; }
-.creator-starts > span { color: var(--text-muted); }
-.creator-starts button { min-height: 44px; padding: 8px 0; border: 0; background: none; text-decoration: underline; text-underline-offset: 4px; font-weight: 500; }
-.creator-starts button:hover { color: var(--accent); }
-.creator-starts button span { color: var(--text-muted); margin-left: 4px; }
 .page { max-width: 1200px; margin: 0 auto; padding: 40px 32px 72px; }
 .page > header { margin-bottom: 28px; }
 .page h1 { font-size: 36px; line-height: 1.15; letter-spacing: -0.015em; }
@@ -206,7 +200,8 @@ legend { padding: 0; font-size: var(--fs-caption); color: var(--text-muted); mar
    COMPOSER
    ========================================================================== */
 .composer { background: var(--surface); border: 1px solid var(--field-line); border-radius: var(--r-md); }
-.composer textarea { border: 0; background: transparent; resize: none; padding: 20px 22px 6px; font-size: 18px; line-height: 1.5; min-height: 120px; border-radius: var(--r-md) var(--r-md) 0 0; }
+.prompt-wrap { min-width: 0; padding: 20px 22px 6px; }
+.composer textarea { display: block; border: 0; background: transparent; resize: none; padding: 0; font-size: 18px; line-height: 1.5; min-height: 6em; border-radius: 0; overflow-y: auto; }
 .composer textarea:focus-visible { outline: none; }
 .composer:has(textarea:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
 .composer .err { padding: 0 22px; margin-top: 0; }
@@ -256,6 +251,13 @@ legend { padding: 0; font-size: var(--fs-caption); color: var(--text-muted); mar
 .gen b { font-family: var(--serif); font-weight: 500; font-size: 20px; color: var(--text); display: block; }
 .fail { border: 1px dashed var(--field-line); border-radius: var(--r-sm); }
 .fail b { font-weight: 600; color: var(--bad); display: flex; gap: 6px; align-items: center; }
+.thumb-state { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 12px; }
+.thumb-state-line { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 14px; line-height: 1.25; }
+.thumb-state b { font-size: 14px; line-height: 1.25; font-weight: 600; }
+.thumb-state .gen-progress { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.thumb-state .strip { height: 8px; flex-shrink: 0; }
+.thumb-state-failed { border: 1px dashed var(--field-line); border-radius: var(--r-sm); }
+.thumb-state-failed b { display: flex; gap: 6px; align-items: center; color: var(--bad); }
 .ideas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; }
 .idea { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 16px; align-items: center; padding: 16px 0; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; width: 100%; }
 .idea:hover .idea-t { text-decoration: underline; text-underline-offset: 3px; }
@@ -411,11 +413,8 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .hero { padding: 24px 16px 0; }
   .lead { font-size: 16px; margin-bottom: 20px; }
   .history-model { width: 100%; font-size: 16px; }
-  .creator-starts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0 0 20px; }
-  .creator-starts > span { grid-column: 1 / -1; }
-  .creator-starts button { display: flex; flex-direction: column; justify-content: center; gap: 2px; border: 1px solid var(--field-line); border-radius: var(--r-sm); min-height: 52px; text-decoration: none; }
-  .creator-starts button span { margin-left: 0; font-size: 12px; }
-  .composer textarea { font-size: 17px; padding: 16px 16px 6px; }
+  .prompt-wrap { padding: 16px 16px 6px; }
+  .composer textarea { font-size: 17px; }
   .tools { padding: 6px 10px 12px 16px; }
   .settings { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 16px 10px 12px; }
   .settings .seg { display: flex; }
@@ -791,8 +790,9 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .history-publication-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 12px; }
 .history-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
 .history-actions .publication-actions { margin-left: 0; }
+body[data-view="video"] .crumb .btn { color: var(--text); text-decoration: none; }
 .vside .video-actions { display: flex; flex-direction: row; align-items: center; flex-wrap: wrap; gap: 8px; }
-.vside .video-actions > [data-video-delete] { margin-left: auto; }
+.vside .video-actions > [data-video-delete] { margin-left: 8px; }
 .publication-icon-actions { display: flex; align-items: center; gap: 8px; flex: none; }
 @media (max-width: 760px) { .hist .history-publication { display: block; } }
 .community-privacy { margin-top: 16px; min-height: 44px; display: flex; align-items: center; color: var(--text-muted); font-size: 13px; }
@@ -823,8 +823,8 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .community-prompt { margin: 24px 0; border-top: 1px solid var(--line); padding-top: 24px; }
 .community-prompt h2 { font-size: 23px; margin-bottom: 12px; }
 .community-prompt p { color: var(--text-muted); line-height: 1.65; overflow-wrap: anywhere; margin-bottom: 20px; }
-.publication { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid var(--line); margin-top: 16px; padding-top: 16px; scroll-margin-top: 110px; }
-.publication-state { flex: 1; min-width: 0; font-size: 13px; line-height: 1.5; color: var(--text-muted); font-weight: 500; }
+.publication { display: flex; align-items: center; justify-content: flex-start; gap: 12px; margin-top: 16px; scroll-margin-top: 110px; }
+.publication-state { flex: 0 1 auto; min-width: 0; max-width: 112px; font-size: 13px; line-height: 1.5; color: var(--text-muted); font-weight: 500; }
 .community-detail .row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
 .community-detail .row > * { max-width: 100%; white-space: normal; }
 .community-detail .row .linkbtn, body[data-view="community"] .page > .linkbtn { display: inline-flex; align-items: center; min-height: 44px; }
@@ -1096,7 +1096,7 @@ body.community-reels .site-foot { display: none; }
   scroll-snap-align: start; scroll-snap-stop: always; overflow: hidden;
   background: var(--cinema-bg); color: var(--cinema-text);
 }
-.community-page.is-reels .community-card > .thumb {
+.community-page.is-reels .community-card .thumb {
   position: relative; grid-row: 1; min-height: 0; width: 100%; height: 100%; aspect-ratio: auto;
   border-radius: 0; background: var(--cinema-bg); color: var(--cinema-muted);
 }
@@ -1151,7 +1151,7 @@ body.community-reels .site-foot { display: none; }
   .community-page.is-reels .community-tabs { flex: none; }
   .community-page.is-reels .community-create { display: none; }
   .community-page.is-reels .community-card { display: block; }
-  .community-page.is-reels .community-card > .thumb { position: absolute; inset: 0; width: 60%; }
+  .community-page.is-reels .community-card .thumb { position: absolute; inset: 0; width: 60%; }
   .community-page.is-reels .community-reel-copy { position: absolute; inset: 0 0 0 auto; width: 40%; padding: 8px 64px 8px 12px; display: flex; flex-direction: column; justify-content: center; background: var(--cinema-bg); }
   .community-page.is-reels .community-reel-copy::before { display: none; }
   .community-page.is-reels .community-card-meta > .video-facts { display: none; }
@@ -1174,24 +1174,28 @@ body.community-reels .site-foot { display: none; }
 /* Explicit viewer route: the same cards/controller, with native return/details
    links and quiet previous/next tools. Phones retain the portrait composition. */
 .community-page.is-reels .community-viewer-toolbar { display: flex; align-items: center; gap: 12px; padding: 8px 16px; }
-.community-viewer-back { display: inline-flex; align-items: center; min-height: 44px; margin-right: auto; font-size: 14px; white-space: nowrap; }
-.community-viewer-back:hover { text-decoration: underline; text-underline-offset: 3px; }
+.community-viewer-scene { display: contents; }
+.community-viewer-back { display: inline-flex; align-items: center; min-height: 44px; margin-right: auto; padding: 8px 12px; font-size: 14px; white-space: nowrap; }
 .community-viewer-steps { display: flex; gap: 4px; }
 .community-viewer-steps button:disabled { color: var(--text-muted); opacity: .45; cursor: default; }
 .community-viewer-steps .reel-step-down { transform: rotate(180deg); }
 .community-viewer-toolbar #viewer-details { min-height: 44px; padding: 8px 12px; font-size: 14px; }
 @media (min-width: 761px) and (min-height: 561px), (min-width: 1001px) {
-  .community-viewer.is-reels .community-viewer-toolbar { padding: 10px 32px; }
-  .community-viewer-stage { max-width: 1440px; margin: 0 auto; padding: 16px 32px 24px; }
-  .community-viewer.is-reels .community-feed { height: calc(100dvh - var(--community-feed-top, 160px) - 24px); border-radius: var(--r-md); }
-  .community-viewer.is-reels .community-card { display: grid; grid-template-columns: minmax(0, 1fr) 320px; grid-template-rows: minmax(0, 1fr); }
-  .community-viewer.is-reels .community-card > .thumb { position: relative; inset: auto; grid-column: 1; grid-row: 1; width: 100%; height: 100%; }
-  .community-viewer.is-reels .community-reel-copy { position: relative; inset: auto; width: auto; grid-column: 2; grid-row: 1; display: flex; flex-direction: column; justify-content: center; padding: 32px 68px 32px 24px; background: var(--cinema-bg); }
+  .community-viewer.is-reels .community-viewer-toolbar { width: var(--viewer-unit-width, 1180px); max-width: calc(100% - 112px); margin: 0 auto; padding: 10px 0; }
+  .community-viewer-stage { max-width: 1440px; margin: 0 auto; padding: 8px 32px 24px; }
+  .community-viewer-stage { cursor: pointer; }
+  .community-viewer.is-reels .community-feed { height: calc(100dvh - var(--community-feed-top, 160px) - 24px); border-radius: 0; background: var(--bg); }
+  .community-viewer.is-reels .community-card { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); place-items: start center; padding: 12px 24px; background: var(--bg); }
+  .community-viewer.is-reels .community-viewer-scene { display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: center; width: min(100%, var(--scene-unit-width, 1180px)); max-height: 100%; overflow: hidden; border-radius: var(--r-md); background: var(--cinema-bg); color: var(--cinema-text); cursor: default; }
+  .community-viewer.is-reels .community-card .thumb { position: relative; inset: auto; grid-column: 1; grid-row: 1; width: 100%; height: auto; aspect-ratio: var(--scene-ratio, 16 / 9); align-self: center; }
+  .community-viewer.is-reels .community-reel-copy { position: relative; inset: auto; width: auto; grid-column: 2; grid-row: 1; display: flex; flex-direction: column; justify-content: center; padding: 24px; background: var(--cinema-bg); }
   .community-viewer.is-reels .community-reel-copy::before { display: none; }
   .community-viewer.is-reels .community-author { flex-wrap: nowrap; }
   .community-viewer.is-reels .community-card-meta { flex-direction: column; gap: 8px; }
-  .community-viewer.is-reels .community-metrics { top: 24px; bottom: auto; right: 12px; }
-  .community-viewer.is-reels .community-privacy { top: 88px; bottom: auto; right: 12px; }
+  .community-viewer.is-reels .community-metrics { position: static; flex-direction: row; gap: 12px; margin-top: 16px; }
+  .community-viewer.is-reels .community-metric { flex-direction: row; gap: 6px; background: transparent; }
+  .community-viewer.is-reels .community-metric:hover { background: var(--cinema-control); }
+  .community-viewer.is-reels .community-privacy { position: static; margin: 0; }
   .community-viewer.is-reels .publication-actions { position: static; width: 100%; gap: 8px; }
   .community-viewer.is-reels .community-card:has(.publication-actions) .publication-actions { position: static; width: 100%; }
 }
@@ -1389,10 +1393,6 @@ const cost = d => {
   return Math.ceil(m.rates[d.quality] * Number(d.len));
 };
 const frameRatio = format => /^\d+(?:\.\d+)?:\d+(?:\.\d+)?$/.test(format || "") ? format.replace(":", "/") : "16/9";
-function starterModel(format) {
-  return availableModels().filter(m => m.formats.includes(format) && (m.inputs || ["text"]).includes("text"))
-    .sort((a, b) => Math.min(...a.qualities.map(q => a.rates[q])) - Math.min(...b.qualities.map(q => b.rates[q])))[0];
-}
 
 /* Published provider examples. Suggested prompts are Aurora's own starting points. */
 const OFFICIAL_EXAMPLES = [
@@ -1764,7 +1764,7 @@ const walletLabel = () => `Balance ${fmt(S.balance)} credits.${S.plan?.state ===
 function renderChrome() {
   const r = currentRoute().name;
   const signed = S.signedIn;
-  $("#top").innerHTML = `<div class="top-in"><a class="logo" href="${signed ? "#/create" : "#/home"}" aria-label="Aurora, home">Aurora</a>${signed ? `
+  $("#top").innerHTML = `<div class="top-in"><a class="logo" href="#/community" aria-label="Aurora, feed">Aurora</a>${signed ? `
     <nav class="nav" aria-label="Main">${NAV.map(([k, l]) => `<a href="#/${k}" ${r === k || (k === "history" && r === "video") ? 'aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
     <a class="bal" href="${S.plan?.state === "active" ? "#/account/billing" : "#/plans"}" aria-label="${walletLabel()}" title="${fmt(S.balance)} credits"><span class="balance-amount"><b class="num" id="bal-n">${walletAmount(S.balance)}</b>${icon("credits", 16)}</span><span class="header-plan" id="header-plan">${S.plan?.state === "active" ? `<span><span class="wallet-status-text">Monthly</span></span><b class="num">${walletAmount(S.plan.credits)}/month</b>` : '<b><span class="wallet-status-text">Free</span></b>'}</span></a>
     <div class="acct"><button class="avatar" id="acct-btn" type="button" aria-expanded="${menuOpen}" aria-controls="menu" aria-label="Account menu">${esc(accountUser().initials)}</button>
@@ -1876,7 +1876,9 @@ function updateCard(v) {
   $$(`[data-vid="${v.id}"]`).forEach(el => {
     if (v.status === "generating") {
       $$(".strip i", el).forEach((c, i) => c.classList.toggle("on", i < v.filled));
-      const t = $(".gen-t", el); if (t) t.textContent = "Generating your scene";
+      const progress = renderingProgress(v);
+      $$(".gen-progress", el).forEach(label => { label.textContent = `${progress}%`; });
+      $$(".thumb-progress", el).forEach(bar => { bar.setAttribute("aria-valuenow", progress); });
     } else if (el.matches(".vcard, tr")) { el.outerHTML = el.matches("tr") ? histRow(v) : videoCard(v); }
   });
   if (v.status !== "generating" && currentRoute().name === "video" && String(currentRoute().arg) === String(v.id)) route({ preserve: true });
@@ -1889,24 +1891,20 @@ function renderBalance() {
 /* ==========================================================================
    VIEWS
    ========================================================================== */
+const renderingProgress = v => Math.round(Math.min(1, Math.max(0, (v.filled || 0) / Math.max(1, v.len || 1))) * 100);
 const thumb = (v, link = true) => {
   const inner = v.status === "ready" ? confirmedThumbnailMarkup(v, { badge: true })
-    : v.status === "generating" ? `<div class="gen"><b class="gen-t">Generating your scene</b><div class="strip" style="grid-template-columns:repeat(${v.len},1fr)" aria-hidden="true">${cells(v.len, v.filled || 0)}</div><p>You can keep browsing.</p></div>`
-    : `<div class="fail"><b>${icon("warn")}Failed</b><p>Generation did not finish.</p></div>`;
+    : v.status === "generating" ? `<div class="thumb-state thumb-progress" role="progressbar" aria-label="Video rendering" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${renderingProgress(v)}"><div class="thumb-state-line"><b>Rendering</b><span class="gen-progress">${renderingProgress(v)}%</span></div><div class="strip" style="grid-template-columns:repeat(${v.len},1fr)" aria-hidden="true">${cells(v.len, v.filled || 0)}</div></div>`
+    : `<div class="thumb-state thumb-state-failed"><b>${icon("warn")}Failed</b></div>`;
   return link ? `<a class="thumb" href="#/video/${v.id}" aria-label="Open ${esc(titleOf(v.prompt))}">${inner}</a>` : `<div class="thumb">${inner}</div>`;
 };
 const videoCard = v => `<article class="vcard" data-vid="${v.id}">${thumb(v)}<h3>${esc(titleOf(v.prompt))}</h3><p class="meta"><span class="video-card-model">${esc(recordModel(v).name)}</span>${v.status === "failed" ? `<button class="linkbtn" type="button" data-retry="${v.id}">Try again</button>` : v.status === "generating" ? "<span>Rendering</span>" : `<span>${esc(videoCreatedLabel(v))}</span>`}${videoFactsMarkup(v, { credits: true })}</p><div class="video-card-actions">${videoDeleteAction(v)}</div></article>`;
 
 /* ----- Create ----- */
-const CREATOR_STARTERS = {
-  social: { label: "Social clip", format: "9:16", prompt: "A vertical close-up of an iced coffee on a sunny cafe table. Condensation catches the light as the camera slowly moves closer. Leave clear space above the cup for a headline." },
-  product: { label: "Product shot", format: "1:1", prompt: "A matte ceramic skincare bottle on a pale stone surface. Soft side lighting, a slow camera arc, and a clean background. Keep the bottle label facing the camera." },
-  broll: { label: "B-roll", format: "16:9", prompt: "Morning light falls across a creator's desk. Hands open a notebook beside a camera and a cup of coffee. A slow overhead camera move with natural colours." },
-};
 function viewCreate(main) {
   if (!availableModels().length) {
     clearCommunitySetupIntent();
-    main.innerHTML = `<section class="hero"><h1 id="title" tabindex="-1">Describe your scene</h1><p class="lead">Your draft stays here while models are unavailable.</p><div class="composer"><label class="sr" for="prompt">Describe your video</label><textarea id="prompt" rows="4" maxlength="1000">${esc(S.draft.prompt)}</textarea><div class="empty" role="status"><h2>No models available right now</h2><p>You can keep writing. Try again to check the catalog.</p><button class="btn" id="retry-models" type="button">Try again</button></div></div></section>`;
+    main.innerHTML = `<section class="hero"><h1 id="title" tabindex="-1">Describe your scene</h1><p class="lead">Your draft stays here while models are unavailable.</p><div class="composer"><label class="sr" for="prompt">Describe your video</label><div class="prompt-wrap"><textarea id="prompt" rows="4" maxlength="1000">${esc(S.draft.prompt)}</textarea></div><div class="empty" role="status"><h2>No models available right now</h2><p>You can keep writing. Try again to check the catalog.</p><button class="btn" id="retry-models" type="button">Try again</button></div></div></section>`;
     return () => { $("#prompt").oninput = e => { S.draft.prompt = e.target.value; save(); }; $("#retry-models").onclick = () => route(); };
   }
   const sourceParams = new URLSearchParams(location.hash.split("?")[1] || "");
@@ -1923,10 +1921,9 @@ function viewCreate(main) {
   <section class="hero" aria-labelledby="title">
     <h1 class="display" id="title" tabindex="-1">Describe your scene</h1>
     <p class="lead">Your ideas, in motion.</p>
-    <div class="creator-starts" role="group" aria-label="Example starting points"><span>Try a starting point</span>${Object.entries(CREATOR_STARTERS).map(([id, p]) => `<button type="button" data-starter="${id}" aria-label="Use ${p.label.toLowerCase()} example, ${p.format}">${p.label} <span class="num">${p.format}</span></button>`).join("")}</div>
     <form class="composer" id="composer" novalidate>
       <label class="sr" for="prompt">Describe your video</label>
-      <textarea id="prompt" rows="4" maxlength="1000" placeholder="A slow dolly shot through a quiet market at dawn, warm light, soft focus." aria-describedby="prompt-err">${esc(d.prompt)}</textarea>
+      <div class="prompt-wrap"><textarea id="prompt" rows="4" maxlength="1000" placeholder="A slow dolly shot through a quiet market at dawn, warm light, soft focus." aria-describedby="prompt-err">${esc(d.prompt)}</textarea></div>
       <p class="err" id="prompt-err" role="alert" hidden>${icon("warn", 14)}Describe the scene first. One or two sentences are enough.</p>
       <div class="tools">
         <span class="count num"><span id="count">${d.prompt.length}</span> / 1,000</span>
@@ -1955,8 +1952,8 @@ function viewCreate(main) {
     </form>
   </section>
   <section class="gallery" aria-labelledby="g-title">
-    <h2 class="sr" id="g-title">My videos and the feed</h2>
-    <div class="gtabs"><button type="button" data-tab="videos" aria-pressed="${currentGalleryTab() === "videos"}">My videos</button><button type="button" data-tab="community" aria-pressed="${currentGalleryTab() === "community"}">Feed</button><a class="all linkbtn video-icon-action" href="#/history" aria-label="All history" data-community-tooltip="All history">${icon("history", 18)}</a></div>
+    <h2 class="sr" id="g-title">My videos and inspiration</h2>
+    <div class="gtabs"><button type="button" data-tab="videos" aria-pressed="${currentGalleryTab() === "videos"}">My videos</button><button type="button" data-tab="community" aria-pressed="${currentGalleryTab() === "community"}">Explore</button><a class="all linkbtn video-icon-action" href="#/history" aria-label="All history" data-community-tooltip="All history">${icon("history", 18)}</a></div>
     <div id="g-body"></div>
   </section>`;
   return () => { const cleanup = initCreate(); if (sourceId) toast(source ? (sourceAvailable ? "Prompt and settings added. Edit the scene and review the cost." : `Prompt added. ${selectedModel.name} is selected. Change it anytime.`) : "This setup is unavailable. Your draft is unchanged."); return cleanup; };
@@ -2002,14 +1999,6 @@ function initCreate() {
   const f = $("#composer"), ta = $("#prompt"), err = $("#prompt-err");
   updatePrice(); renderGallery(currentGalleryTab());
   const disposePicker = initModelPicker();
-  $$("[data-starter]").forEach(b => b.addEventListener("click", () => {
-    const example = CREATOR_STARTERS[b.dataset.starter], previous = { ...S.draft };
-    const candidate = starterModel(example.format);
-    if (!candidate) { toast("No available model supports this example's format. Choose another starting point."); return; }
-    Object.assign(S.draft, { prompt: example.prompt, model: candidate.id, len: 5, quality: "720p", format: example.format, imageName: "", failDemo: false });
-    normalizeDraft(S.draft); save(); route({ preserve: true }); $("#prompt").focus();
-    toast(`${example.label} example added. Edit it before generating.`, { label: "Undo", fn: () => { S.draft = previous; save(); if (currentRoute().name === "create") { route({ preserve: true }); $("#prompt").focus(); } else go("create"); } });
-  }));
   if (S.draft.imageName) showAttached(S.draft.imageName, attachedUrl);
   ta.addEventListener("input", () => { S.draft.prompt = ta.value; $("#count").textContent = ta.value.length; err.hidden = true; ta.removeAttribute("aria-invalid"); save(); });
   f.addEventListener("change", e => { const t = e.target; if (t.name && t.type === "radio") { S.draft[t.name] = t.name === "len" ? Number(t.value) : t.value; normalizeDraft(S.draft); save(); if (t.name === "model") { route(); $(`input[name=model][value="${S.draft.model}"]`)?.focus(); } else updatePrice(); } });
@@ -2106,12 +2095,12 @@ function viewVideo(main, arg) {
   const mediaMarkup = shown ? example ? officialMediaMarkup(example, { id: "video-example-media", playerId: "player", playId: "play", errorId: "video-media-error", mediaIdPrefix: "video-example" }) : previewUnavailableMarkup(v, { showDetails: false })
     : `<div class="player" id="player" style="aspect-ratio:${ratio};${v.format === "9:16" ? "max-width:380px;" : ""}">${v.status === "generating" ? `<div class="gen" data-vid="${v.id}"><b class="gen-t">Generating your scene</b><div class="strip" style="grid-template-columns:repeat(${v.len},1fr)" aria-hidden="true">${cells(v.len, v.filled || 0)}</div><p>You can keep browsing.</p></div>` : `<div class="fail" style="position:absolute;inset:0"><b>${icon("warn")}Failed</b><p>${v.refunded ? "This video did not finish. Your credits were returned." : "This video did not finish."}</p></div>`}</div>`;
   const mediaAction = example ? { url: example.mediaType === "video" ? example.mediaUrl : example.sourceUrl, label: example.mediaType === "video" ? "Open MP4" : "Open source" } : detailsUrl ? { url: detailsUrl, label: "Model details" } : null;
-  main.innerHTML = `<div class="page"><nav class="crumb" aria-label="Back"><a href="#/history">← History</a></nav>
+  main.innerHTML = `<div class="page"><nav class="crumb" aria-label="Back"><a class="btn" href="#/history">← History</a></nav>
   <div class="vgrid"><div>${mediaMarkup}</div>
   <aside class="vside"><h1 id="title" tabindex="-1">${esc(titleOf(v.prompt))}</h1><p class="prompt">${esc(v.prompt)}</p>
     <dl class="facts"><div><dt>Model</dt><dd>${esc(recordModel(v).name)}</dd></div><div><dt>Length</dt><dd class="num">${v.len} s</dd></div><div><dt>Quality and format</dt><dd class="num">${v.quality}, ${v.format}</dd></div><div><dt>Credits used</dt><dd class="num">${v.refunded ? "0 · credits returned" : fmt(v.credits)}</dd></div><div><dt>Created</dt><dd>${esc(videoCreatedLabel(v))}</dd></div></dl>
-    <div class="acts video-actions" role="group" aria-label="Video actions">${shown && mediaAction ? `<a class="btn primary video-icon-action" id="dl" href="${esc(mediaAction.url)}" target="_blank" rel="noopener noreferrer" aria-label="${mediaAction.label}">${icon(example?.mediaType === "video" ? "download" : "external", 18)}</a>` : ""}
-      <button class="btn video-icon-action" type="button" id="reuse" aria-label="Use this setup">${icon("setup", 18)}</button><a class="btn video-icon-action" id="video-credit-activity" href="#/account/credits" aria-label="View credit activity">${icon("credits", 18)}</a>${videoDeleteAction(v, { id: "del", compactLabel: true })}</div>
+    <div class="acts video-actions" role="group" aria-label="Video actions"><button class="btn primary video-icon-action" type="button" id="reuse" aria-label="Use this setup">${icon("setup", 18)}</button>${shown && mediaAction ? `<a class="btn video-icon-action" id="dl" href="${esc(mediaAction.url)}" target="_blank" rel="noopener noreferrer" aria-label="${mediaAction.label}">${icon(example?.mediaType === "video" ? "download" : "external", 18)}</a>` : ""}
+      <a class="btn video-icon-action" id="video-credit-activity" href="#/account/credits" aria-label="View credit activity">${icon("credits", 18)}</a>${videoDeleteAction(v, { id: "del", compactLabel: true })}</div>
     ${shown ? publicationMarkup(v) : ""}
   </aside></div></div>`;
   return () => {
@@ -3070,7 +3059,7 @@ function viewCommunity(main, arg) {
   const setupAvailable = isModelAvailable(p.model);
   const promptActionLabel = S.signedIn ? setupAvailable ? "Use this setup" : "Use prompt" : setupAvailable ? "Sign in to use this setup" : "Sign in to use prompt";
   const player = preview ? officialMediaMarkup(preview, { id: "community-example-media", playerId: "community-player", playId: "community-play", errorId: "community-media-error", mediaIdPrefix: "community-example", playerClass: "community-official-player", showMetadata: !p.official }) : previewUnavailableMarkup(p, { id: "community-example-media" });
-  main.innerHTML = `<div class="page"><a class="linkbtn" href="#/community">Back to feed</a><div class="community-detail"><div>${player}</div><aside>
+  main.innerHTML = `<div class="page"><a class="btn" href="#/community">Back to feed</a><div class="community-detail"><div>${player}</div><aside>
     <h1 id="title" tabindex="-1">${esc(p.caption)}</h1>${communityPublisherMarkup(p)}${communityMetrics(p, true)}
     <dl class="facts"><div><dt>Model</dt><dd>${esc(recordModel(p).name)}</dd></div>${preview && Number.isFinite(preview.len) && preview.len > 0 ? `<div><dt>${p.official ? "Length" : "Preview length"}</dt><dd class="num">${preview.len} s</dd></div>` : ""}${preview && (preview.quality || preview.format) ? `<div><dt>Frame</dt><dd>${[preview.quality, preview.format].filter(Boolean).map(esc).join(" · ")}</dd></div>` : ""}</dl>
     <section class="community-prompt"><h2>${p.includePrompt ? p.promptKind === "suggested" ? "Suggested prompt" : "Creator’s prompt" : "A private prompt"}</h2><p>${p.includePrompt ? esc(p.prompt) : "The creator has chosen not to share the prompt."}</p>${p.includePrompt && !setupAvailable ? '<p>Choose an available model in Create.</p>' : ""}${p.includePrompt ? `<button class="btn primary community-prompt-action" id="use-community-prompt" type="button" aria-label="${promptActionLabel}">${icon("setup", 20)}</button>` : '<a class="btn" href="#/create">Create your own scene</a>'}</section>
@@ -3688,7 +3677,7 @@ function viewCommunityViewer(main) {
     return null;
   }
   if (!matchingReturn) communityViewerReturn = { path: returnPath, scope: mine ? 'mine' : 'all', fromCreate, postId: selected, scrollX: 0, scrollY: null };
-  main.innerHTML = `<div class="page community-page community-viewer" data-community-viewer="true" data-viewer-scene="${esc(selected)}"><div class="community-feed-toolbar community-viewer-toolbar"><a class="community-viewer-back" id="viewer-back" href="${esc(returnPath)}">Back to feed</a><h1 class="sr" id="title" tabindex="-1">Feed viewer</h1><span class="sr" id="viewer-position" role="status" aria-live="polite"></span><div class="community-viewer-steps" role="group" aria-label="Browse videos"><button class="btn video-icon-action" id="viewer-previous" type="button" aria-label="Previous video">${communityStepIcon(false)}</button><button class="btn video-icon-action" id="viewer-next" type="button" aria-label="Next video">${communityStepIcon(true)}</button></div><a class="btn" id="viewer-details" href="#/community/${esc(selected)}">Details</a></div><div class="community-viewer-stage">${communityCards(100, mine, true)}</div></div>`;
+  main.innerHTML = `<div class="page community-page community-viewer" data-community-viewer="true" data-viewer-scene="${esc(selected)}"><div class="community-feed-toolbar community-viewer-toolbar"><a class="btn community-viewer-back" id="viewer-back" href="${esc(returnPath)}">Back to feed</a><h1 class="sr" id="title" tabindex="-1">Feed viewer</h1><span class="sr" id="viewer-position" role="status" aria-live="polite"></span><div class="community-viewer-steps" role="group" aria-label="Browse videos"><button class="btn video-icon-action" id="viewer-previous" type="button" aria-label="Previous video">${communityStepIcon(false)}</button><button class="btn video-icon-action" id="viewer-next" type="button" aria-label="Next video">${communityStepIcon(true)}</button></div><a class="btn" id="viewer-details" href="#/community/${esc(selected)}">Details</a></div><div class="community-viewer-stage">${communityCards(100, mine, true)}</div></div>`;
   return () => initCommunityReels(main);
 }
 window.addEventListener('hashchange', () => {
@@ -3708,6 +3697,16 @@ function initCommunityReels(main) {
   const viewer = page.dataset.communityViewer === 'true';
   const params = new URLSearchParams(location.hash.split('?')[1] || ''), mine = params.get('scope') === 'mine', fromCreate = params.get('from') === 'create';
   const key = location.hash.split('?')[0] + (viewer ? ':' + (mine ? 'mine' : 'all') : ''), cards = [...feed.children];
+  if (viewer) cards.forEach(card => {
+    const scene = document.createElement('div'); scene.className = 'community-viewer-scene';
+    const post = communityPosts(mine).find(post => post.id === card.dataset.reelPost), preview = recordOfficialExample(post);
+    const format = String(preview?.format || post?.format || '16:9').split(':').map(Number);
+    const ratio = preview?.sourceWidth > 0 && preview?.sourceHeight > 0 ? preview.sourceWidth / preview.sourceHeight
+      : format.length === 2 && format.every(value => value > 0) ? format[0] / format[1] : 16 / 9;
+    scene.dataset.mediaRatio = String(ratio); scene.style.setProperty('--scene-ratio', String(ratio));
+    while (card.firstChild) scene.appendChild(card.firstChild);
+    card.appendChild(scene);
+  });
   const abort = new AbortController(), signal = abort.signal;
   let enabled = false, frame = 0, restoreFrame = 0, settleTimer = null, lastHeight = 0;
   const initial = Math.max(0, cards.findIndex(card => card.dataset.reelPost === page.dataset.viewerScene));
@@ -3715,6 +3714,8 @@ function initCommunityReels(main) {
   const syncViewer = () => {
     if (!viewer || !feed.clientHeight) return;
     const index = nearest(), card = cards[index], id = card.dataset.reelPost;
+    const sceneWidth = card.querySelector('.community-viewer-scene').getBoundingClientRect().width;
+    if (sceneWidth > 0) page.style.setProperty('--viewer-unit-width', `${sceneWidth}px`);
     $('#viewer-previous').disabled = index === 0; $('#viewer-next').disabled = index === cards.length - 1;
     $('#viewer-details').href = '#/community/' + id;
     $('#viewer-position').textContent = `${index + 1} of ${cards.length}. ${card.querySelector('h3').textContent}`;
@@ -3728,6 +3729,10 @@ function initCommunityReels(main) {
     const top = Math.max(0, feed.getBoundingClientRect().top);
     page.style.setProperty('--community-feed-top', `${top}px`);
     lastHeight = feed.clientHeight;
+    if (viewer) cards.forEach(card => {
+      const scene = card.querySelector('.community-viewer-scene');
+      scene.style.setProperty('--scene-unit-width', `${Math.max(0, Math.min(1180, feed.clientWidth - 48, (lastHeight - 24) * Number(scene.dataset.mediaRatio) + 300))}px`);
+    });
     feed.scrollTop = Math.min(cards.length - 1, index) * lastHeight;
     syncViewer();
   };
@@ -3740,7 +3745,7 @@ function initCommunityReels(main) {
     if (enabled) { feed.setAttribute('tabindex', '0'); feed.setAttribute('role', 'region'); }
     else { feed.removeAttribute('tabindex'); feed.removeAttribute('role'); }
     cards.forEach(card => {
-      const old = card.querySelector(':scope > .thumb');
+      const old = card.querySelector('.thumb');
       if (enabled && old.tagName === 'A') {
         const button = document.createElement('button');
         button.type = 'button'; button.className = old.className + ' community-reel-toggle';
@@ -3795,6 +3800,33 @@ function initCommunityReels(main) {
   if (viewer) {
     $('#viewer-previous').addEventListener('click', () => move(-1), { signal });
     $('#viewer-next').addEventListener('click', () => move(1), { signal });
+    const panelOpen = () => ['#publish-panel', '#destructive-panel', '#mobile-navigation', '#menu', 'dialog[open]'].some(selector => {
+      const panel = document.querySelector(selector); return panel && !panel.hidden && panel.getClientRects().length;
+    });
+    const outside = target => target instanceof Element && page.contains(target) && !target.closest('.community-viewer-scene,.community-viewer-toolbar,a,button,input,textarea,select,[contenteditable="true"]');
+    let pointer = null, candidate = null;
+    window.addEventListener('pointerdown', event => {
+      candidate = null;
+      if (event.button !== 0 || !event.isPrimary || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || panelOpen() || String(getSelection()).trim() || !outside(event.target)) { pointer = null; return; }
+      pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, scroll: feed.scrollTop, moved: false };
+    }, { signal, capture: true });
+    page.addEventListener('pointermove', event => {
+      if (pointer && event.pointerId === pointer.id && Math.hypot(event.clientX - pointer.x, event.clientY - pointer.y) > 8) pointer.moved = true;
+    }, { signal, passive: true });
+    page.addEventListener('pointercancel', () => { pointer = candidate = null; }, { signal });
+    page.addEventListener('pointerup', event => {
+      candidate = pointer && event.pointerId === pointer.id && !pointer.moved && Math.abs(feed.scrollTop - pointer.scroll) < 2 && outside(event.target) ? pointer : null;
+      pointer = null;
+    }, { signal });
+    page.addEventListener('click', event => {
+      const clicked = candidate; candidate = null;
+      if (!clicked || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || panelOpen() || !outside(event.target) || String(getSelection()).trim() || Math.abs(feed.scrollTop - clicked.scroll) >= 2) return;
+      $('#viewer-back').click();
+    }, { signal });
+    window.addEventListener('keydown', event => {
+      if (event.key !== 'Escape' || event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || panelOpen()) return;
+      event.preventDefault(); event.stopPropagation(); $('#viewer-back').click();
+    }, { signal, capture: true });
   }
   communityReelsQuery.addEventListener('change', update, { signal });
   window.addEventListener('resize', scheduleResize, { signal });
