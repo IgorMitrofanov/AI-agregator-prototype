@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Aurora</title>
-<meta name="theme-color" content="#ecebe8">
+<meta name="theme-color" content="#d7d6d1">
 <script>
   /* Set the theme before first paint: stored choice, else the system setting. */
   (function () {
@@ -12,6 +12,8 @@
     try { pref = localStorage.getItem("aurora-theme") || "auto"; } catch (e) {}
     var dark = pref === "dark" || (pref === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
     document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+    var chrome = document.querySelector('meta[name="theme-color"]');
+    if (chrome) chrome.content = dark ? "#101113" : "#d7d6d1";
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,9 +28,11 @@
   --brand: #272727;
   color-scheme: light;
   /* Fallbacks for browsers without relative colour: the default brand only. */
-  --bg: #ecebe8; --surface: #f5f4f1; --surface-2: #e3e2df; --text: #1b1b1e; --text-muted: #606068;
-  --line: #cecdc9; --field-line: #787878; --accent: #333336; --fill: #272727; --on-fill: #ffffff;
-  --fill-hover: #424245; --soft: #e3e2df; --good: #2f6b45; --warn: #85580f; --bad: #a3322a;
+  --bg: #d7d6d1; --surface: #e0ded8; --surface-2: #c9c7c1; --text: #1b1b1e; --text-muted: #515158;
+  --line: #b7b5af; --field-line: #686762; --accent: #333336; --fill: #272727; --on-fill: #ffffff;
+  --fill-hover: #1f1f22; --soft: #c9c7c1; --good: #285839; --warn: #6e4b10; --bad: #8b2f29;
+  --wallet-badge-bg: #202124; --wallet-badge-fg: #f0f0f3; --wallet-badge-line: #45464b;
+  --wallet-glint-base: #a6a7af; --wallet-glint-mid: #c6c7cf; --wallet-glint-peak: #f8f8fa;
   --scrim: rgb(18 18 20 / 0.45); --shadow: rgb(18 18 20 / 0.16);
   --serif: "Newsreader", Georgia, "Times New Roman", serif;
   --sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -41,15 +45,17 @@
   --line: #323338; --field-line: #767680; --accent: #d6d6dc; --fill: #e4e4e8; --on-fill: #18181b;
   --fill-hover: #fafafa; --soft: #2b2c31; --good: #8cc7a0; --warn: #e0b565; --bad: #f08c82;
   --scrim: rgb(0 0 0 / 0.6); --shadow: rgb(0 0 0 / 0.5);
+  --wallet-badge-bg: #0b0c0e; --wallet-badge-fg: #f3f3f5; --wallet-badge-line: #414249;
+  --wallet-glint-base: #a7a7b0; --wallet-glint-mid: #c6c7cf; --wallet-glint-peak: #f3f3f5;
 }
 @supports (color: oklch(from red l c h)) {
   :root {
-    --accent: oklch(from var(--brand) clamp(0.34, l, 0.50) clamp(0, c, 0.15) h);
-    --fill: oklch(from var(--brand) clamp(0.30, l, 0.80) clamp(0, c, 0.17) h);
+    --accent: oklch(from var(--brand) clamp(0.34, l, 0.43) clamp(0, c, 0.15) h);
+    --fill: oklch(from var(--brand) clamp(0.30, l, 0.52) clamp(0, c, 0.17) h);
     --on-fill: oklch(from var(--fill) clamp(0.14, calc((0.56 - l) * 100), 0.98) 0 h);
     --fill-hover: oklch(from var(--fill) calc(l - 0.05) c h);
-    --soft: oklch(from var(--brand) 0.91 clamp(0, calc(c * 0.15), 0.015) h);
-    --good: oklch(0.42 0.10 155); --warn: oklch(0.47 0.10 70); --bad: oklch(0.45 0.16 28);
+    --soft: oklch(from var(--brand) 0.83 clamp(0, calc(c * 0.1), 0.012) h);
+    --good: oklch(0.39 0.095 155); --warn: oklch(0.41 0.09 70); --bad: oklch(0.42 0.14 28);
     --scrim: oklch(0.2 0 0 / 0.45); --shadow: oklch(0.2 0 0 / 0.16);
   }
   :root[data-theme="dark"] {
@@ -109,16 +115,20 @@ main:focus, [tabindex="-1"]:focus { outline: none; }
 .balance-amount #bal-n { font-size: 15px; }
 .balance-amount > .ic { color: var(--text-muted); }
 .header-plan { display: flex; flex-direction: column; justify-content: center; gap: 2px; align-self: stretch; min-width: 0; border-left: 1px solid var(--line); padding-left: 12px; font-size: 12px; line-height: 1.25; white-space: nowrap; }
-.header-plan > span, .header-plan > b:only-child { display: inline-flex; align-items: center; justify-content: center; align-self: center; height: 18px; padding: 0 6px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface-2); color: var(--text); font-size: 11px; line-height: 1; font-weight: 600; }
+.header-plan > span, .header-plan > b:only-child { display: inline-flex; align-items: center; justify-content: center; align-self: center; height: 18px; padding: 0 6px; border: 1px solid var(--wallet-badge-line); border-radius: var(--r-sm); background: var(--wallet-badge-bg); color: var(--wallet-badge-fg); font-size: 11px; line-height: 1; font-weight: 600; }
 .header-plan > b { align-self: center; color: var(--text-muted); font-weight: 500; line-height: 1.15; }
 .header-plan > b:only-child { min-width: 42px; height: 24px; padding: 0 10px; font-size: 12px; }
-.wallet-status-text { color: var(--text); }
+.wallet-status-text { color: var(--wallet-badge-fg); }
 /* Igor requested a slow neutral glint on the status letters, with a static accessible fallback. */
 @supports ((background-clip: text) or (-webkit-background-clip: text)) {
-  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
-    .wallet-status-text { background-image: linear-gradient(100deg, var(--text-muted) 42%, var(--text) 50%, var(--text-muted) 58%); background-size: 250% 100%; background-repeat: no-repeat; background-position: 100% 0; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: wallet-status-glint 8s linear infinite; }
+  @media (prefers-reduced-motion: no-preference) {
+    .wallet-status-text { background-image: linear-gradient(100deg, var(--wallet-glint-base) 34%, var(--wallet-glint-mid) 44%, var(--wallet-glint-peak) 50%, var(--wallet-glint-mid) 56%, var(--wallet-glint-base) 66%); background-size: 250% 100%; background-repeat: no-repeat; background-position: 100% 0; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: wallet-status-glint 8s linear infinite; }
     @keyframes wallet-status-glint { 0%, 15% { background-position: 100% 0; } 85%, 100% { background-position: 0% 0; } }
   }
+}
+@media (forced-colors: active) {
+  .header-plan > span, .header-plan > b:only-child { background: Canvas; color: CanvasText; border-color: CanvasText; }
+  .wallet-status-text { color: CanvasText; -webkit-text-fill-color: currentColor; background: none; animation: none; }
 }
 .bal:hover { background: var(--surface-2); }
 .acct { position: relative; }
@@ -527,6 +537,22 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .account-profile-note { border-top: 1px solid var(--line); padding-top: 20px; }
 .account-profile-note h2 { font-size: 23px; }
 .account-profile-note p { color: var(--text-muted); margin: 12px 0 20px; line-height: 1.6; }
+.avatar, .mobile-account-initials { position: relative; overflow: hidden; }
+.user-avatar-initials { position: relative; z-index: 0; }
+.user-avatar-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.profile-photo-row { display: flex; align-items: center; gap: 24px; }
+.profile-photo-preview { position: relative; display: grid; place-items: center; flex: none; width: 80px; height: 80px; border-radius: 50%; overflow: hidden; background: var(--surface-2); color: var(--text); border: 1px solid var(--field-line); font-size: 24px; font-weight: 600; }
+.profile-photo-controls { min-width: 0; }
+.profile-photo-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.profile-photo-actions .btn { min-height: 44px; }
+.profile-photo-controls .account-hint { margin-top: 10px; }
+#profile-photo-status { min-height: 20px; margin-top: 12px; }
+.profile-photo-error { margin-top: 12px; color: var(--bad); font-size: 13px; }
+@media (max-width: 420px) {
+  .profile-photo-row { align-items: flex-start; gap: 16px; }
+  .profile-photo-actions { flex-direction: column; gap: 8px; }
+  .profile-photo-actions .btn { width: 100%; padding-right: 12px; padding-left: 12px; }
+}
 @media (max-width: 900px) {
   .account-columns { gap: 28px; grid-template-columns: minmax(0, 1.5fr) minmax(210px, 1fr); }
   .account-side { padding-left: 24px; }
@@ -733,6 +759,72 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .skeleton-ledger-row span { height: 16px; }
 .skeleton-form { max-width: 640px; min-height: 720px; margin-top: 32px; }
 .skeleton-field { margin: 24px 0 32px; height: 48px; }
+.app-loading, .loading-body, .loading-body > * { min-width: 0; }
+.skeleton-action { width: 120px; max-width: 100%; height: 44px; flex: none; }
+.skeleton-heading { width: min(220px, 80%); height: 24px; margin-bottom: 24px; }
+.skeleton-avatar { width: 32px; height: 32px; border-radius: 50%; }
+.skeleton-action-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.app-loading-feed > .loading-feed-toolbar { margin-bottom: 0; }
+.loading-feed-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.loading-feed-heading > h1 { min-width: 0; }
+.loading-feed-heading > span { flex: none; }
+.loading-feed-toolbar .skeleton-tabs { height: 50px; align-items: center; margin: 28px 0 32px; padding: 0; }
+.skeleton-feed-grid .skeleton-scenes { margin: 0 0 32px; gap: 32px 24px; }
+.skeleton-feed-grid .skeleton-photo { aspect-ratio: 16 / 11; }
+.skeleton-reel { display: none; position: relative; min-height: 180px; overflow: hidden; background: var(--cinema-bg); }
+.skeleton-reel .skeleton, .skeleton-viewer-unit .skeleton { background: var(--cinema-control); }
+.skeleton-reel-stage { position: relative; min-height: 0; overflow: hidden; }
+.skeleton-reel-picture { position: absolute; top: 50%; left: 0; width: 100%; aspect-ratio: 16 / 9; transform: translateY(-50%); border-radius: 0; }
+.skeleton-reel-copy { position: relative; min-width: 0; padding: 16px 84px 24px 16px; display: grid; gap: 12px; }
+.skeleton-reel-copy .skeleton-text { margin: 0; }
+.skeleton-reel-metrics { position: absolute; right: 12px; bottom: 88px; display: grid; gap: 12px; }
+.skeleton-reel-metrics .skeleton-action { width: 44px; }
+.app-loading-viewer { max-width: none; min-height: calc(100dvh - var(--loading-chrome-height)); padding: 0 0 24px; }
+.app-loading-viewer > .loading-scene-toolbar { width: min(1180px, calc(100% - 112px)); margin: 0 auto; padding: 10px 0; }
+.skeleton-scene-tools { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.skeleton-scene-tools > div { display: flex; gap: 4px; }
+.skeleton-back { width: 64px; }
+.skeleton-step { width: 44px; }
+.skeleton-details { width: 72px; margin-left: 8px; }
+.skeleton-viewer { width: min(1180px, calc(100% - 112px)); margin: 8px auto 0; }
+.skeleton-viewer-unit { display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: center; overflow: hidden; border-radius: var(--r-md); background: var(--cinema-bg); }
+.skeleton-viewer-picture { width: 100%; aspect-ratio: 16 / 9; border-radius: 0; }
+.skeleton-viewer-copy { min-width: 0; padding: 24px; }
+.skeleton-viewer-copy > .skeleton-action { margin-top: 24px; }
+.skeleton-viewer-copy .skeleton-action-row .skeleton-action { width: 44px; }
+.app-loading-detail > .loading-scene-toolbar { margin-bottom: 24px; }
+.skeleton-detail { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(260px, 1fr); gap: 40px; }
+.skeleton-detail > * { min-width: 0; }
+.skeleton-detail-picture { width: 100%; aspect-ratio: 16 / 10; }
+.skeleton-detail-facts { display: grid; gap: 24px; margin: 32px 0; padding: 24px 0; border-block: 1px solid var(--line); }
+.skeleton-list-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin: 32px 0 16px; }
+.skeleton-filter { width: 200px; }
+.skeleton-search { width: 260px; }
+.skeleton-history-row { display: grid; grid-template-columns: minmax(0, 2.4fr) minmax(80px, .7fr) 96px; align-items: center; gap: 24px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.skeleton-history-scene { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.skeleton-history-picture { width: 96px; height: 60px; flex: none; }
+.skeleton-history-scene .skeleton-text { flex: 1; min-width: 0; margin: 0; }
+.skeleton-history-actions { display: flex; gap: 8px; }
+.skeleton-history-actions .skeleton-action { width: 44px; }
+.skeleton-analytics-controls { margin-bottom: 28px; }
+.skeleton-analytics-controls .skeleton-filter { width: 170px; }
+.skeleton-analytics-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding-bottom: 32px; margin-bottom: 32px; border-bottom: 1px solid var(--line); }
+.skeleton-total { width: 90px; max-width: 100%; height: 42px; margin-top: 12px; }
+.skeleton-analytics-layout { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(260px, 1fr); gap: 56px; }
+.skeleton-chart { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 12px; height: 220px; padding-top: 36px; border-bottom: 1px solid var(--line); }
+.skeleton-chart > span { max-width: 24px; width: 100%; justify-self: center; border-radius: var(--r-sm) var(--r-sm) 0 0; }
+.skeleton-model-row { margin: 28px 0; }
+.skeleton-model-track { height: 8px; margin-top: 12px; }
+.skeleton-referrals { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; }
+.skeleton-link-row { display: flex; gap: 16px; margin: 24px 0 40px; }
+.skeleton-link-row .skeleton-field { min-width: 0; flex: 1; height: 44px; margin: 0; }
+.skeleton-funnel { display: grid; gap: 24px; margin: 24px 0 32px; }
+.skeleton-funnel > div { display: grid; grid-template-columns: 100px minmax(0, 1fr) 28px; gap: 12px; }
+.skeleton-referrals .skeleton-ledger { margin-top: 24px; }
+.skeleton-profile { display: grid; grid-template-columns: minmax(0, 640px) minmax(240px, 1fr); gap: 56px; }
+.skeleton-profile .skeleton-form { margin: 0; }
+.skeleton-billing { padding: 28px; border: 1px solid var(--line); border-radius: var(--r-md); }
+.skeleton-billing-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
 .app-load-error { max-width: 640px; margin: 40px 0 200px; padding-top: 32px; border-top: 1px solid var(--line); }
 .app-load-error h2 { font-size: 28px; }
 .app-load-error p { margin: 12px 0 24px; color: var(--text-muted); max-width: 48ch; line-height: 1.6; }
@@ -741,6 +833,9 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .skeleton-account { grid-template-columns: minmax(0, 1.5fr) minmax(210px, 1fr); gap: 28px; }
   .skeleton-scenes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .skeleton-scenes > :nth-child(3) { display: none; }
+  .skeleton-detail, .skeleton-referrals { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .skeleton-analytics-layout { grid-template-columns: minmax(0, 1.5fr) minmax(230px, 1fr); gap: 32px; }
+  .skeleton-profile { grid-template-columns: minmax(0, 1fr); gap: 36px; }
 }
 @media (max-width: 760px) {
   input[type="text"], input[type="email"], input[type="search"] { font-size: 16px; }
@@ -757,6 +852,49 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .skeleton-tabs { gap: 20px; }
   .skeleton-tabs span { width: 64px; }
   .skeleton-ledger-row { gap: 20px; }
+  .skeleton-history-row { grid-template-columns: minmax(0, 1fr) 96px; gap: 16px; }
+  .skeleton-history-meta { display: none; }
+  .skeleton-history-picture { width: 64px; height: 48px; }
+  .skeleton-analytics-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .skeleton-analytics-summary { gap: 16px; }
+  .skeleton-chart { height: 180px; gap: 8px; }
+  .skeleton-profile .skeleton-form { min-height: 0; }
+  .skeleton-billing { padding: 20px; }
+  .skeleton-billing-facts { grid-template-columns: minmax(0, 1fr); gap: 0; }
+}
+@media (max-width: 760px), (pointer: coarse) and (max-width: 1000px) {
+  .app-loading-feed, .app-loading-viewer { display: flex; flex-direction: column; height: calc(100dvh - var(--loading-chrome-height)); min-height: 0; max-width: none; padding: 0; }
+  .app-loading-feed > .loading-feed-toolbar { padding: 8px 16px 0; }
+  .loading-feed-heading h1 { font-size: 26px; line-height: 1.2; }
+  .loading-feed-heading .skeleton-action { width: 114px; }
+  .loading-feed-toolbar .skeleton-tabs { margin: 0; height: 44px; gap: 24px; border-bottom: 0; }
+  .app-loading-feed > .loading-body, .app-loading-viewer > .loading-body { display: flex; min-height: 0; flex: 1; }
+  .skeleton-feed, .skeleton-viewer { display: flex; width: 100%; min-height: 0; flex: 1; margin: 0; }
+  .skeleton-feed-grid, .skeleton-viewer-unit { display: none; }
+  .skeleton-reel { display: grid; grid-template-rows: minmax(0, 1fr) auto; flex: 1; }
+  .app-loading-viewer > .loading-scene-toolbar { flex: none; width: 100%; margin: 0; padding: 8px 16px; }
+}
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1000px) {
+  .app-loading-feed > .loading-feed-toolbar { display: flex; align-items: center; gap: 20px; padding-top: 0; }
+  .loading-feed-heading { flex: 1; min-width: 0; }
+  .loading-feed-heading h1 { font-size: 23px; }
+  .loading-feed-toolbar > [aria-hidden] { flex: none; }
+  .skeleton-reel { display: block; }
+  .skeleton-reel-stage { position: absolute; inset: 0 auto 0 0; width: 60%; }
+  .skeleton-reel-copy { position: absolute; inset: 0 64px 0 auto; width: calc(40% - 76px); padding: 0; align-content: center; gap: 8px; }
+  .skeleton-reel-copy .skeleton-text { gap: 8px; }
+  .skeleton-reel-copy .skeleton-action { width: 100%; }
+  .skeleton-reel-metrics { top: 12px; bottom: auto; gap: 8px; }
+}
+.skeleton-profile-photo { padding-bottom: 28px; margin-bottom: 32px; border-bottom: 1px solid var(--line); }
+.skeleton-profile-photo-row { display: flex; align-items: center; gap: 24px; }
+.skeleton-profile-avatar { width: 80px; height: 80px; flex: none; border-radius: 50%; }
+.skeleton-profile-photo-controls { min-width: 0; flex: 1; }
+.skeleton-profile-photo-controls > .skeleton-line { margin-top: 10px; }
+.skeleton-profile-photo > .skeleton-line { height: 20px; margin-top: 12px; }
+@media (max-width: 420px) {
+  .skeleton-profile-photo-row { align-items: flex-start; gap: 16px; }
+  .skeleton-profile-photo-controls .skeleton-action-row { flex-direction: column; align-items: flex-start; gap: 8px; }
 }
 @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; opacity: 0.75; } }
 
@@ -773,6 +911,12 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .community-metric { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 40px; min-height: 32px; padding: 4px; border: 0; border-radius: var(--r-sm); background: transparent; color: var(--text-muted); font-size: inherit; }
 .community-metric:hover { background: var(--surface-2); color: var(--text); }
 .community-metric .num { color: var(--text); font-weight: 500; }
+.community-like { min-width: 44px; min-height: 44px; }
+.community-like[aria-pressed="true"] { color: var(--text); }
+.community-like .ic { transition: transform 160ms ease-out; }
+.community-like[aria-pressed="true"] .ic { fill: currentColor; }
+.community-like:active .ic { transform: scale(.92); }
+@media (prefers-reduced-motion: reduce) { .community-like .ic { transition: none; } }
 .community-metric-tooltip { position: fixed; z-index: 80; max-width: calc(100vw - 16px); padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface); color: var(--text); box-shadow: 0 4px 16px var(--shadow); font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
 @media (pointer: coarse), (max-width: 760px) { .community-metric { min-width: 44px; min-height: 44px; } }
 .community-detail .community-metrics { margin: -12px 0 24px; }
@@ -804,6 +948,11 @@ body[data-view="video"] .crumb .btn { color: var(--text); text-decoration: none;
 .community-author-identity { flex: 1; min-width: 0; display: grid; gap: 2px; }
 .community-author-name { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); font-weight: 500; }
 .community-author-kind { display: block; color: var(--text-muted); font-size: 11px; line-height: 1.4; }
+.community-publication-date { display: block; color: var(--text-muted); font-size: 11px; line-height: 1.4; white-space: nowrap; }
+.community-date-line { margin: 2px 0 4px; }
+.community-page.is-reels .community-publication-date { color: var(--cinema-muted); }
+.community-page.is-reels .community-date-line { margin: 0 0 2px; }
+.community-detail-media { position: relative; }
 .community-example-credit { flex-wrap: nowrap; gap: 8px; color: var(--text-muted); }
 .community-source-compact { flex-wrap: wrap; gap: 4px 12px; }
 .community-source-compact > .community-author-name { color: var(--text-muted); font-weight: 400; }
@@ -830,12 +979,12 @@ body[data-view="video"] .crumb .btn { color: var(--text); text-decoration: none;
 .community-detail .row .linkbtn, body[data-view="community"] .page > .linkbtn { display: inline-flex; align-items: center; min-height: 44px; }
 .publication-popover { position: fixed; inset: auto; z-index: 90; width: min(380px, calc(100vw - 32px)); margin: 0; padding: 24px; overflow-y: auto; background: var(--surface); color: var(--text); border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: 0 16px 48px var(--shadow); }
 .publication-popover[hidden] { display: none; }
-.publication-popover-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.publication-popover-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
 .publication-popover-head h2 { min-width: 0; margin: 0; font-size: 26px; line-height: 1.2; }
 .publication-popover-close { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; background: transparent; color: var(--text-muted); border: 0; border-radius: var(--r-sm); }
 .publication-popover-close:hover { background: var(--surface-2); color: var(--text); }
 .publication-as { margin: 0 0 24px; color: var(--text-muted); font-size: var(--fs-caption); overflow-wrap: anywhere; }
-.publication-as strong { color: var(--text); font-weight: 500; }
+.publication-as strong { margin-inline-start: 4px; color: var(--text); font-weight: 500; }
 .publication-title-label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 500; }
 .publication-popover input[type="text"] { width: 100%; min-height: 44px; font-size: 16px; }
 .publication-popover .publication-share { display: flex; align-items: center; gap: 10px; margin: 16px 0 4px; min-height: 44px; font-size: 14px; cursor: pointer; }
@@ -1036,6 +1185,8 @@ body[data-view="video"] .crumb .btn { color: var(--text); text-decoration: none;
 .vcard .meta > .video-facts { flex-basis: 100%; }
 .vcard .video-card-model { min-width: 0; overflow-wrap: anywhere; }
 .hist-mobile-meta > .video-facts { display: flex; margin-top: 4px; }
+.video-quality-badge { position: absolute; top: 12px; right: 12px; z-index: 4; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 26px; padding: 4px 5px; border: 1px solid var(--cinema-line); border-radius: var(--r-sm); background: var(--cinema-control); color: var(--cinema-text); line-height: 1; cursor: inherit; }
+.video-quality-badge > svg { display: block; flex: none; pointer-events: none; }
 
 .official-media-player { aspect-ratio: 16 / 9; }
 .official-media-player > .official-media-poster, .official-media-player > video, .official-media-player > iframe { display: block; width: 100%; height: 100%; object-fit: contain; border: 0; }
@@ -1068,19 +1219,17 @@ body[data-view="video"] .crumb .btn { color: var(--text); text-decoration: none;
   --cinema-scrim: rgb(16 17 19 / .96);
 }
 .community-feed-toolbar > .account-heading { margin-bottom: 28px; }
-.community-create > .ic, .community-use-label { display: none; }
+.community-use-label { display: none; }
 .community-reel-toggle { border: 0; padding: 0; color: inherit; text-align: inherit; width: 100%; }
 .reel-play-indicator { display: none; }
 .community-page.is-reels { padding: 0; max-width: none; }
 body.community-reels .site-foot { display: none; }
 .community-page.is-reels .community-feed-toolbar { padding: 8px 16px 0; background: var(--bg); }
-.community-page.is-reels .account-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0; }
+.community-page.is-reels .account-heading { display: flex; flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 12px; margin: 0; }
 .community-page.is-reels .account-heading > div { display: block; min-width: 0; }
 .community-page.is-reels .account-heading h1 { font-size: 26px; line-height: 1.2; }
 .community-page.is-reels .account-heading .sub { display: none; }
-.community-page.is-reels .community-create { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; }
-.community-page.is-reels .community-create > .ic { display: block; }
-.community-page.is-reels .community-create > span { display: none; }
+.community-page.is-reels .community-create { display: inline-flex; flex: none; min-height: 44px; padding: 10px 14px; font-size: 14px; white-space: nowrap; }
 .community-page.is-reels .community-tabs { margin: 0; gap: 24px; border-bottom: 0; }
 .community-page.is-reels .community-tabs a { min-height: 44px; padding: 10px 0; font-size: 14px; }
 .community-page.is-reels .community-feed {
@@ -1105,7 +1254,9 @@ body.community-reels .site-foot { display: none; }
 .community-page.is-reels .thumb > .badge { top: 16px; bottom: auto; left: 16px; background: var(--cinema-control); color: var(--cinema-text); }
 .community-page.is-reels .reel-play-indicator { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: grid; place-items: center; width: 52px; height: 52px; border: 1px solid var(--cinema-line); border-radius: 50%; background: var(--cinema-control); color: var(--cinema-text); z-index: 2; }
 .community-page.is-reels .thumb:has(img[data-preview-state="playing"]) .reel-play-indicator,
-.community-page.is-reels .thumb:has(img[data-preview-state="loading"]) .reel-play-indicator { opacity: 0; }
+.community-page.is-reels .thumb:has(img[data-preview-state="loading"]) .reel-play-indicator,
+.community-page.is-reels .thumb:has(img[data-preview-state="suspended"]) .reel-play-indicator,
+.community-page.is-reels .thumb:has(img[data-preview-state="warm"]) .reel-play-indicator { opacity: 0; }
 .community-page.is-reels .community-reel-copy {
   position: relative; grid-row: 2; min-width: 0; z-index: 2; padding: 16px 80px max(20px, env(safe-area-inset-bottom));
   padding-left: 16px; background: var(--cinema-scrim);
@@ -1149,7 +1300,6 @@ body.community-reels .site-foot { display: none; }
   .community-page.is-reels .account-heading { flex: 1; }
   .community-page.is-reels .account-heading h1 { font-size: 23px; }
   .community-page.is-reels .community-tabs { flex: none; }
-  .community-page.is-reels .community-create { display: none; }
   .community-page.is-reels .community-card { display: block; }
   .community-page.is-reels .community-card .thumb { position: absolute; inset: 0; width: 60%; }
   .community-page.is-reels .community-reel-copy { position: absolute; inset: 0 0 0 auto; width: 40%; padding: 8px 64px 8px 12px; display: flex; flex-direction: column; justify-content: center; background: var(--cinema-bg); }
@@ -1361,6 +1511,7 @@ const ICONS = {
   play: '<path d="M5 3.5v9l7.5-4.5z"/>',
   pause: '<path d="M5.5 3.5v9M10.5 3.5v9"/>',
   eye: '<path d="M1.5 8s2.3-4 6.5-4 6.5 4 6.5 4-2.3 4-6.5 4S1.5 8 1.5 8Z"/><circle cx="8" cy="8" r="2"/>',
+  heart: '<path d="M8 13.5 2.5 8A3.4 3.4 0 0 1 7.3 3.2L8 4l.7-.8A3.4 3.4 0 0 1 13.5 8Z"/>',
   eyeOff: '<path d="M1.5 8s2.3-4 6.5-4 6.5 4 6.5 4-2.3 4-6.5 4S1.5 8 1.5 8Z"/><circle cx="8" cy="8" r="2"/><path d="m2 2 12 12"/>',
   sliders: '<path d="M2 4h3m3 0h6M2 8h7m3 0h2M2 12h2m3 0h7M6.5 2.5v3M10.5 6.5v3M5.5 10.5v3"/>',
   setup: '<path d="M7 3h6a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H7M1.5 8H9m0 0L6 5m3 3-3 3"/>',
@@ -1549,11 +1700,43 @@ const OFFICIAL_EXAMPLES = [
     includePrompt: true, promptKind: "suggested", official: true,
     prompt: "Two explorers pause beside ancient markings. Warm torchlight catches their faces as a quiet exchange and cave ambience complete the scene."
   }
-];
+].map(example => ({ ...example, curatedAt: "2026-11-01T01:55:49+03:00" })); // Added to Aurora in 6d37da5; not the provider's publication date.
 const officialExample = modelId => OFFICIAL_EXAMPLES.find(example => example.model === modelId) || null;
 const officialPoster = record => IMG[record?.img] || record?.posterUrl || "";
 
 /* Read-only scene metadata. The visible units stay useful without interpreting an icon. */
+function videoPreviewQuality(record) {
+  if (!record) return null;
+  let width = Number(record.sourceWidth), height = Number(record.sourceHeight);
+  const dimensionFields = record.sourceWidth !== undefined || record.sourceHeight !== undefined;
+  if (!dimensionFields) {
+    if (!["video", "embed"].includes(record.mediaType)) return null;
+    const quality = String(record.quality || "").trim(), dimensions = quality.match(/^(\d+)\s*[×x]\s*(\d+)$/i), lines = quality.match(/^(\d{3,4})p(?:\s+preview)?$/i);
+    if (dimensions) { width = Number(dimensions[1]); height = Number(dimensions[2]); }
+    else if (lines || /^4k(?:\s+preview)?$/i.test(quality)) {
+      const resolution = lines ? Number(lines[1]) : 2160;
+      const label = resolution >= 2160 ? "4K" : resolution >= 1080 ? "FHD" : resolution >= 720 ? "HD" : "SD";
+      return { label, width: null, height: lines ? resolution : null, description: `Source quality: ${label} · ${quality}` };
+    }
+    else return null;
+  }
+  if (![width, height].every(value => Number.isInteger(value) && value > 0)) return null;
+  const short = Math.min(width, height), long = Math.max(width, height);
+  const label = short >= 2160 && long >= 3840 ? "4K" : short >= 1080 && long >= 1920 ? "FHD" : short >= 720 && long >= 1280 ? "HD" : "SD";
+  return { label, width, height, description: `Source quality: ${label} · ${width} × ${height} pixels` };
+}
+function videoQualityBadgeMarkup(record) {
+  const quality = videoPreviewQuality(record);
+  if (!quality) return "";
+  const glyphs = {
+    HD: ['0 0 26 16', 'M3 3v10M10 3v10M3 8h7M15 3v10h3a5 5 0 0 0 0-10Z'],
+    FHD: ['0 0 34 16', 'M2 13V3h7M2 8h6M12 3v10M19 3v10M12 8h7M23 3v10h3a5 5 0 0 0 0-10Z'],
+    '4K': ['0 0 28 16', 'M9 13V3L2 9h10M17 3v10M25 3l-8 5 8 5'],
+    SD: ['0 0 26 16', 'M10 4Q9 2.5 6.5 2.5Q3 2.5 3 5.3Q3 8 6.5 8Q10 8 10 10.7Q10 13.5 6.5 13.5Q4 13.5 2.5 12M15 3v10h3a5 5 0 0 0 0-10Z']
+  };
+  const [viewBox, path] = glyphs[quality.label];
+  return `<span class="video-quality-badge" role="img" data-preview-quality="${quality.label}" aria-label="${esc(quality.description)}" title="${esc(quality.description)}"><svg width="${quality.label === "FHD" ? 30 : 26}" height="16" viewBox="${viewBox}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${path}"/></svg></span>`;
+}
 function videoFactsMarkup(record, { credits = false } = {}) {
   const facts = [];
   const fact = (key, value, description) => `<span class="video-fact" data-video-fact="${key}" title="${esc(description)}">${icon(key, 14)}<span class="video-fact-value num" aria-hidden="true">${esc(value)}</span><span class="sr">${esc(description)}</span></span>`;
@@ -1707,7 +1890,14 @@ function migrateState(j) {
 function nextMonth(iso) { const date = new Date(iso); const day = date.getUTCDate(); date.setUTCDate(1); date.setUTCMonth(date.getUTCMonth() + 1); const last = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0)).getUTCDate(); date.setUTCDate(Math.min(day, last)); return date.toISOString(); }
 let S = (() => { try { return migrateState(JSON.parse(localStorage.getItem(STORE))); } catch (e) { return seed(); } })();
 const save = () => { try { localStorage.setItem(STORE, JSON.stringify(S)); } catch (e) {} };
-const accountUser = () => S.user;
+const userAvatarSource = value => typeof value === "string" && value.length <= 256 * 1024 && /^data:image\/jpeg;base64,[A-Za-z0-9+/]+={0,2}$/.test(value) ? value : "";
+const accountUser = () => {
+  const user = S.user;
+  if (user.avatar && user.avatarOwner !== String(user.email || "").trim().toLowerCase()) { user.avatar = ""; delete user.avatarOwner; }
+  return user;
+};
+const accountAvatarMarkup = user => `<span class="user-avatar-initials" aria-hidden="true">${esc(user.initials || "")}</span>${userAvatarSource(user.avatar) ? `<img class="user-avatar-photo" data-user-avatar src="${esc(userAvatarSource(user.avatar))}" alt="" width="44" height="44">` : ""}`;
+document.addEventListener("error", event => { if (event.target instanceof HTMLImageElement && event.target.hasAttribute("data-user-avatar")) event.target.hidden = true; }, true);
 function addTransaction({ delta, kind, label, status = "completed", ...extra }) {
   if (!Number.isInteger(delta) || S.balance + delta < 0) throw new Error("Invalid credit operation");
   S.balance += delta;
@@ -1729,7 +1919,7 @@ const themePref = () => { try { return localStorage.getItem("aurora-theme") || "
 function applyTheme() {
   const p = themePref(), dark = p === "dark" || (p === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
   document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
-  const m = $('meta[name="theme-color"]'); if (m) m.content = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() || (dark ? "#101113" : "#ecebe8");
+  const m = $('meta[name="theme-color"]'); if (m) m.content = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() || (dark ? "#101113" : "#d7d6d1");
 }
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
 function setTheme(p) { try { localStorage.setItem("aurora-theme", p); } catch (e) {} applyTheme(); renderChrome(); }
@@ -1765,10 +1955,10 @@ function renderChrome() {
   const activeRoute = currentRoute().name;
   const r = activeRoute === "video" ? (privateVideoReturnContext()?.path === "#/create?gallery=videos" ? "create" : "history") : activeRoute;
   const signed = S.signedIn;
-  $("#top").innerHTML = `<div class="top-in"><a class="logo" href="#/community" aria-label="Aurora, feed">Aurora</a>${signed ? `
+  $("#top").innerHTML = `<div class="top-in"><a class="logo" href="#/home" aria-label="Aurora, home">Aurora</a>${signed ? `
     <nav class="nav" aria-label="Main">${NAV.map(([k, l]) => `<a href="#/${k}" ${r === k || (k === "history" && r === "video") ? 'aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
     <a class="bal" href="${S.plan?.state === "active" ? "#/account/billing" : "#/plans"}" aria-label="${walletLabel()}" title="${fmt(S.balance)} credits"><span class="balance-amount"><b class="num" id="bal-n">${walletAmount(S.balance)}</b>${icon("credits", 16)}</span><span class="header-plan" id="header-plan">${S.plan?.state === "active" ? `<span><span class="wallet-status-text">Monthly</span></span><b class="num">${walletAmount(S.plan.credits)}/month</b>` : '<b><span class="wallet-status-text">Free</span></b>'}</span></a>
-    <div class="acct"><button class="avatar" id="acct-btn" type="button" aria-expanded="${menuOpen}" aria-controls="menu" aria-label="Account menu">${esc(accountUser().initials)}</button>
+    <div class="acct"><button class="avatar" id="acct-btn" type="button" aria-expanded="${menuOpen}" aria-controls="menu" aria-label="Account menu">${accountAvatarMarkup(accountUser())}</button>
       <div class="menu" id="menu" ${menuOpen ? "" : "hidden"}>
         <div class="who"><b>${esc(accountUser().name)}</b><span>${esc(accountUser().email)}</span></div>
         <nav class="account-menu-links" aria-label="Account">${accountLinksMarkup()}</nav>
@@ -1776,7 +1966,7 @@ function renderChrome() {
         <div class="seg" role="group" aria-labelledby="theme-lab">${["auto", "light", "dark"].map(t => `<button type="button" data-theme-set="${t}" aria-pressed="${themePref() === t}">${t[0].toUpperCase() + t.slice(1)}</button>`).join("")}</div>
         ${REVIEW ? '<button class="item" type="button" id="reset">Reset workspace</button>' : ""}
         <button class="item" type="button" id="signout">Sign out</button>
-      </div></div><button class="mobile-nav-btn" id="mobile-nav-btn" type="button" aria-expanded="${mobileNavOpen}" aria-controls="mobile-navigation" aria-label="${mobileNavOpen ? "Close navigation" : "Open navigation"}">${icon(mobileNavOpen ? "x" : "navigation", 22)}</button>` : `<nav class="public-nav" aria-label="Main"><a href="#/community" ${r === "community" ? 'aria-current="page"' : ""}>Feed</a><a class="btn primary" href="#/signin">Start creating</a></nav>`}</div>${signed ? `<nav class="mobile-navigation" id="mobile-navigation" aria-label="Main navigation" ${mobileNavOpen ? "" : "hidden"}><div class="mobile-nav-links">${NAV.map(([k, l]) => `<a href="#/${k}" ${r === k || (k === "history" && r === "video") ? 'aria-current="page"' : ""}>${l}</a>`).join("")}</div><div class="mobile-nav-account"><div class="mobile-account-who"><span class="mobile-account-initials" aria-hidden="true">${esc(accountUser().initials)}</span><span><strong>${esc(accountUser().name)}</strong><small>Your account</small></span></div><div class="mobile-account-links" role="group" aria-label="Account">${accountLinksMarkup(true)}</div><div class="mobile-theme"><span id="mobile-theme-label">Appearance</span><div class="seg" role="group" aria-labelledby="mobile-theme-label">${["auto", "light", "dark"].map(t => `<button type="button" data-mobile-theme="${t}" aria-pressed="${themePref() === t}">${t[0].toUpperCase() + t.slice(1)}</button>`).join("")}</div></div><button class="mobile-signout" id="mobile-signout" type="button">Sign out</button></div></nav>` : ""}`;
+      </div></div><button class="mobile-nav-btn" id="mobile-nav-btn" type="button" aria-expanded="${mobileNavOpen}" aria-controls="mobile-navigation" aria-label="${mobileNavOpen ? "Close navigation" : "Open navigation"}">${icon(mobileNavOpen ? "x" : "navigation", 22)}</button>` : `<nav class="public-nav" aria-label="Main"><a href="#/community" ${r === "community" ? 'aria-current="page"' : ""}>Feed</a><a class="btn primary" href="#/signin">Start creating</a></nav>`}</div>${signed ? `<nav class="mobile-navigation" id="mobile-navigation" aria-label="Main navigation" ${mobileNavOpen ? "" : "hidden"}><div class="mobile-nav-links">${NAV.map(([k, l]) => `<a href="#/${k}" ${r === k || (k === "history" && r === "video") ? 'aria-current="page"' : ""}>${l}</a>`).join("")}</div><div class="mobile-nav-account"><div class="mobile-account-who"><span class="mobile-account-initials" aria-hidden="true">${accountAvatarMarkup(accountUser())}</span><span><strong>${esc(accountUser().name)}</strong><small>Your account</small></span></div><div class="mobile-account-links" role="group" aria-label="Account">${accountLinksMarkup(true)}</div><div class="mobile-theme"><span id="mobile-theme-label">Appearance</span><div class="seg" role="group" aria-labelledby="mobile-theme-label">${["auto", "light", "dark"].map(t => `<button type="button" data-mobile-theme="${t}" aria-pressed="${themePref() === t}">${t[0].toUpperCase() + t.slice(1)}</button>`).join("")}</div></div><button class="mobile-signout" id="mobile-signout" type="button">Sign out</button></div></nav>` : ""}`;
 }
 document.addEventListener("click", e => {
   const t = e.target.closest("button, a");
@@ -1811,7 +2001,7 @@ const TITLES = { home: "Your next scene", community: "Feed", account: "Your acco
 let afterSignIn = "create";
 function signInDestination(destination = "create") {
   const path = String(destination || "create").replace(/^#\/?/, ""), pathname = path.split("?")[0];
-  return ["create", "history", "history/trash"].includes(pathname) || /^video\/\d+$/.test(pathname) ? path : "create";
+  return ["create", "history", "history/trash"].includes(pathname) || /^video\/\d+$/.test(pathname) || /^community(?:\/[a-zA-Z0-9_-]+)?$/.test(pathname) ? path : "create";
 }
 let disposeView = null;
 function route(options = {}) {
@@ -1888,7 +2078,7 @@ function restorePrivateVideoReturn() {
     const card = $(`#g-body .vcard[data-vid="${context.videoId}"]`) || $(`#h-body tr[data-vid="${context.videoId}"]`);
     if (context.scrollY === null) card?.scrollIntoView({ block: "center", behavior: "instant" });
     else window.scrollTo(context.scrollX, context.scrollY);
-    (card?.querySelector(".hist-title-group > a, a.thumb") || $(".gtabs [data-tab=videos]") || $("#title"))?.focus({ preventScroll: true });
+    (card?.querySelector(".hist-title-group > a") || card?.querySelector("a.thumb") || $(".gtabs [data-tab=videos]") || $("#title"))?.focus({ preventScroll: true });
   }));
 }
 window.addEventListener("hashchange", route);
@@ -2429,7 +2619,7 @@ function viewSignin(main) {
     (step === 1 ? $("#em") : $("#cd")).focus();
     $("#sf").onsubmit = e => { e.preventDefault();
       if (step === 1) { const v = $("#em").value.trim(); if (!/^\S+@\S+\.\S+$/.test(v)) { $("#e").hidden = false; $("#em").setAttribute("aria-invalid", "true"); $("#em").focus(); return; } email = v; step = 2; draw(); }
-      else { if (!/^\d{6}$/.test($("#cd").value)) { $("#e").hidden = false; $("#cd").focus(); return; } if (S.user.email !== email) { S = seed(); S.balance = 0; S.transactions = []; S.videos = []; S.nextTransactionId = 1; S.draft.prompt = ""; S.user = { name: "New creator", initials: "NC", email, notifications: { completed: true, receipts: true } }; } S.signedIn = true; save(); go(communitySetupContinuation(signInDestination(afterSignIn))); afterSignIn = "create"; toast("Signed in."); } };
+      else { if (!/^\d{6}$/.test($("#cd").value)) { $("#e").hidden = false; $("#cd").focus(); return; } if (S.user.email !== email) { S = seed(); S.balance = 0; S.transactions = []; S.videos = []; S.nextTransactionId = 1; S.draft.prompt = ""; S.user = { name: "New creator", initials: "NC", email, notifications: { completed: true, receipts: true } }; } S.signedIn = true; save(); go(communityLikeContinuation(communitySetupContinuation(signInDestination(afterSignIn)))); afterSignIn = "create"; toast("Signed in."); } };
     if (step === 2) { $("#resend").onclick = () => toast("Check your inbox for your verification code."); $("#change").onclick = () => { step = 1; draw(); }; }
   };
   main.innerHTML = "";
@@ -2505,13 +2695,109 @@ function accountBilling(body) {
 }
 function accountProfile(body) {
   const u = accountUser();
-  body.innerHTML = `<div class="account-profile-layout"><form class="account-form" id="profile-form" novalidate><section><h2>Your details</h2><div class="account-field"><label for="profile-name">Display name</label><input id="profile-name" type="text" value="${esc(u.name)}" autocomplete="name" maxlength="60" aria-describedby="profile-name-error"><p class="err" role="alert" id="profile-name-error" hidden>Enter a name with 1 to 60 characters.</p></div><div class="account-field"><label for="profile-email">Email for sign-in</label><input id="profile-email" type="email" value="${esc(u.email)}" readonly><p>Contact support to change your sign-in email.</p></div></section>
-    <section><h2>Notifications</h2><label class="account-toggle"><input type="checkbox" id="notify-completed" ${u.notifications.completed ? "checked" : ""}><span>Video completed<small>Notify me when my video is ready.</small></span></label><label class="account-toggle"><input type="checkbox" id="notify-receipts" ${u.notifications.receipts ? "checked" : ""}><span>Purchase receipts<small>Send a record of my credit purchases.</small></span></label></section><button class="btn primary" type="submit">Save preferences</button><p id="profile-saved" role="status" class="account-hint"></p></form>
+  body.innerHTML = `<div class="account-profile-layout"><form class="account-form" id="profile-form" novalidate><section class="profile-photo-section" aria-labelledby="profile-photo-heading"><h2 id="profile-photo-heading">Profile photo</h2><div class="profile-photo-row"><span class="profile-photo-preview" id="profile-photo-preview" role="img" aria-label="Profile photo preview"></span><div class="profile-photo-controls"><div class="profile-photo-actions"><button class="btn" id="profile-photo-upload" type="button">Upload photo</button><button class="btn" id="profile-photo-remove" type="button">Remove photo</button></div><p class="account-hint" id="profile-photo-hint">JPG, PNG or WebP. Max 8 MB.</p></div></div><input id="profile-photo-file" type="file" accept="image/jpeg,image/png,image/webp" aria-label="Choose profile photo" hidden><p class="account-hint" id="profile-photo-status" role="status"></p><p class="err profile-photo-error" id="profile-photo-error" role="alert" hidden></p></section><section><h2>Your details</h2><div class="account-field"><label for="profile-name">Display name</label><input id="profile-name" type="text" value="${esc(u.name)}" autocomplete="name" maxlength="60" aria-describedby="profile-name-error"><p class="err" role="alert" id="profile-name-error" hidden>Enter a name with 1 to 60 characters.</p></div><div class="account-field"><label for="profile-email">Email for sign-in</label><input id="profile-email" type="email" value="${esc(u.email)}" readonly><p>Contact support to change your sign-in email.</p></div></section>
+    <section><h2>Notifications</h2><label class="account-toggle"><input type="checkbox" id="notify-completed" ${u.notifications.completed ? "checked" : ""}><span>Video completed<small>Notify me when my video is ready.</small></span></label><label class="account-toggle"><input type="checkbox" id="notify-receipts" ${u.notifications.receipts ? "checked" : ""}><span>Purchase receipts<small>Send a record of my credit purchases.</small></span></label></section><button class="btn primary" id="profile-save" type="submit">Save changes</button><p id="profile-saved" role="status" class="account-hint"></p></form>
     <aside class="account-profile-note"><h2>Appearance</h2><div class="seg" role="group" aria-label="Account appearance">${["auto", "light", "dark"].map(t => `<button type="button" data-account-theme="${t}" aria-pressed="${themePref() === t}">${t === "auto" ? "System" : t[0].toUpperCase() + t.slice(1)}</button>`).join("")}</div><h2 style="margin-top:32px">Sign-in</h2><p>Use your email and a six-digit code to sign in.</p><button class="btn" id="account-signout" type="button">Sign out</button></aside></div>`;
   return () => {
-    $("#profile-form").onsubmit = e => { e.preventDefault(); const name = $("#profile-name").value.trim(); if (!name || name.length > 60) { $("#profile-name-error").hidden = false; $("#profile-name").setAttribute("aria-invalid", "true"); $("#profile-name").focus(); return; } u.name = name; u.initials = name.split(/\s+/).slice(0, 2).map(n => [...n][0]).join("").toUpperCase(); u.notifications = { completed: $("#notify-completed").checked, receipts: $("#notify-receipts").checked }; save(); renderChrome(); $("#profile-name-error").hidden = true; $("#profile-name").removeAttribute("aria-invalid"); $("#profile-saved").textContent = "Preferences saved."; };
+    const form = $("#profile-form"), input = $("#profile-photo-file"), preview = $("#profile-photo-preview"), owner = String(u.email).trim().toLowerCase();
+    let draftAvatar = userAvatarSource(u.avatar), processing = false, disposed = false, revision = 0, pending = null;
+    const objectURLs = new Set();
+    const valid = () => !disposed && form.isConnected && S.signedIn && S.user === u && String(S.user.email).trim().toLowerCase() === owner;
+    const revoke = url => { if (objectURLs.delete(url)) URL.revokeObjectURL(url); };
+    const cancelPending = () => { if (pending) { const task = pending; pending = null; task.cancel(); } };
+    const initials = () => ($("#profile-name").value.trim() || u.name).split(/\s+/).slice(0, 2).map(n => [...n][0] || "").join("").toUpperCase();
+    const drawPhoto = () => {
+      preview.innerHTML = `<span class="user-avatar-initials" aria-hidden="true">${esc(initials())}</span>${draftAvatar ? `<img class="user-avatar-photo" data-user-avatar src="${esc(draftAvatar)}" alt="" width="80" height="80">` : ""}`;
+      $("#profile-photo-upload").textContent = draftAvatar ? "Change photo" : "Upload photo";
+      $("#profile-photo-remove").disabled = !draftAvatar && !processing;
+      $("#profile-save").disabled = processing;
+      form.setAttribute("aria-busy", String(processing));
+    };
+    const error = message => { const region = $("#profile-photo-error"); region.textContent = message; region.hidden = false; };
+    const clearError = () => { $("#profile-photo-error").hidden = true; $("#profile-photo-error").textContent = ""; };
+    const decode = (file, token) => new Promise((resolve, reject) => {
+      const image = new Image(), url = URL.createObjectURL(file); objectURLs.add(url);
+      let finished = false;
+      const finish = (failure = null) => {
+        if (finished) return; finished = true; clearTimeout(timeout);
+        image.onload = image.onerror = null;
+        if (pending?.token === token) pending = null;
+        if (failure) { image.src = ""; revoke(url); reject(failure); }
+        else resolve({ image, url });
+      };
+      const timeout = setTimeout(() => finish(new Error("We couldn’t read that image. Choose another photo.")), 10000);
+      pending = { token, cancel: () => finish(new DOMException("Photo selection cancelled", "AbortError")) };
+      image.onload = () => finish(); image.onerror = () => finish(new Error("We couldn’t read that image. Choose another photo."));
+      image.src = url;
+    });
+    const choosePhoto = async file => {
+      if (!file || !valid()) return;
+      const token = ++revision; cancelPending(); clearError(); processing = false;
+      $("#profile-photo-status").textContent = ""; $("#profile-saved").textContent = "";
+      if (file.size > 8 * 1024 * 1024) { error("Choose a photo smaller than 8 MB."); drawPhoto(); return; }
+      if (!file.size || !["image/jpeg", "image/png", "image/webp"].includes(file.type)) { error("Choose a JPG, PNG or WebP photo."); drawPhoto(); return; }
+      processing = true; drawPhoto(); $("#profile-photo-status").textContent = "Preparing photo…";
+      let decoded = null;
+      try {
+        const bytes = new Uint8Array(await file.slice(0, 12).arrayBuffer());
+        if (!valid() || token !== revision) return;
+        const jpeg = bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255;
+        const png = [137,80,78,71,13,10,26,10].every((value, i) => bytes[i] === value);
+        const webp = String.fromCharCode(...bytes.slice(0, 4)) === "RIFF" && String.fromCharCode(...bytes.slice(8, 12)) === "WEBP";
+        if (!(file.type === "image/jpeg" ? jpeg : file.type === "image/png" ? png : webp)) throw new Error("We couldn’t read that image. Choose another photo.");
+        decoded = await decode(file, token);
+        if (!valid() || token !== revision) return;
+        const { image } = decoded, width = image.naturalWidth, height = image.naturalHeight;
+        if (!width || !height || width * height > 64000000 || width > 16384 || height > 16384) throw new Error("That photo is too large. Choose a smaller image.");
+        const canvas = document.createElement("canvas"); canvas.width = canvas.height = 256;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) throw new Error("We couldn’t prepare that image. Choose another photo.");
+        ctx.fillStyle = getComputedStyle(preview).backgroundColor; ctx.fillRect(0, 0, 256, 256);
+        const edge = Math.min(width, height);
+        ctx.drawImage(image, (width - edge) / 2, (height - edge) / 2, edge, edge, 0, 0, 256, 256);
+        const result = userAvatarSource(canvas.toDataURL("image/jpeg", .86));
+        if (!result) throw new Error("We couldn’t prepare that image. Choose another photo.");
+        draftAvatar = result; $("#profile-photo-status").textContent = "Photo ready.";
+      } catch (failure) {
+        if (valid() && token === revision && failure.name !== "AbortError") { error(failure.message || "We couldn’t read that image. Choose another photo."); $("#profile-photo-status").textContent = ""; }
+      } finally {
+        if (decoded) { decoded.image.src = ""; revoke(decoded.url); }
+        if (valid() && token === revision) { processing = false; drawPhoto(); }
+      }
+    };
+    $("#profile-photo-upload").onclick = () => { if (valid()) input.click(); };
+    input.onchange = () => { const file = input.files?.[0]; input.value = ""; if (file) choosePhoto(file); };
+    $("#profile-photo-remove").onclick = () => {
+      if (!valid()) return;
+      revision++; cancelPending(); processing = false; draftAvatar = ""; clearError();
+      $("#profile-photo-status").textContent = "Photo removed."; $("#profile-saved").textContent = ""; drawPhoto();
+    };
+    $("#profile-name").addEventListener("input", () => { if (valid() && !draftAvatar) drawPhoto(); });
+    form.onsubmit = e => {
+      e.preventDefault(); if (!valid() || processing) return;
+      const name = $("#profile-name").value.trim();
+      if (!name || name.length > 60) { $("#profile-name-error").hidden = false; $("#profile-name").setAttribute("aria-invalid", "true"); $("#profile-name").focus(); return; }
+      const previous = { name: u.name, initials: u.initials, notifications: u.notifications, avatar: u.avatar, avatarOwner: u.avatarOwner,
+        hasAvatar: Object.hasOwn(u, "avatar"), hasAvatarOwner: Object.hasOwn(u, "avatarOwner"), posts: S.posts.map(post => ({ post, value: post.avatar, present: Object.hasOwn(post, "avatar") })) };
+      u.name = name; u.initials = initials(); u.notifications = { completed: $("#notify-completed").checked, receipts: $("#notify-receipts").checked };
+      u.avatar = userAvatarSource(draftAvatar); u.avatarOwner = owner;
+      S.posts.forEach(post => { post.avatar = u.avatar; });
+      try { localStorage.setItem(STORE, JSON.stringify(S)); }
+      catch (failure) {
+        u.name = previous.name; u.initials = previous.initials; u.notifications = previous.notifications;
+        if (previous.hasAvatar) u.avatar = previous.avatar; else delete u.avatar;
+        if (previous.hasAvatarOwner) u.avatarOwner = previous.avatarOwner; else delete u.avatarOwner;
+        previous.posts.forEach(({ post, value, present }) => { if (present) post.avatar = value; else delete post.avatar; });
+        $("#profile-saved").textContent = "";
+        error(failure.name === "QuotaExceededError" ? "Storage is full. Free some space and try again." : "Your changes couldn’t be saved. Check browser storage settings and try again.");
+        return;
+      }
+      clearError(); renderChrome(); $("#profile-photo-status").textContent = ""; $("#profile-name-error").hidden = true; $("#profile-name").removeAttribute("aria-invalid"); $("#profile-saved").textContent = "Changes saved.";
+    };
     $$("[data-account-theme]").forEach(b => b.onclick = () => { setTheme(b.dataset.accountTheme); $$("[data-account-theme]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); b.focus(); });
     $("#account-signout").onclick = () => { S.signedIn = false; save(); go("home"); };
+    drawPhoto();
+    return () => { disposed = true; revision++; cancelPending(); objectURLs.forEach(url => URL.revokeObjectURL(url)); objectURLs.clear(); };
   };
 }
 
@@ -2737,14 +3023,44 @@ function cancelViewLoad() { viewLoadId++; if (viewLoadTimer) clearTimeout(viewLo
 const skeletonLines = () => '<div class="skeleton-text"><span class="skeleton skeleton-line"></span><span class="skeleton skeleton-line medium"></span><span class="skeleton skeleton-line short"></span></div>';
 const skeletonScenes = () => `<div class="skeleton-scenes">${Array.from({ length: 3 }, () => `<div><span class="skeleton skeleton-photo"></span>${skeletonLines()}</div>`).join("")}</div>`;
 const skeletonLedger = () => `<div class="skeleton-ledger">${Array.from({ length: 6 }, () => '<div class="skeleton-ledger-row"><span class="skeleton"></span><span class="skeleton"></span><span class="skeleton"></span></div>').join("")}</div>`;
+const skeletonAction = (extra = "") => `<span class="skeleton skeleton-action ${extra}"></span>`;
+const skeletonTabs = widths => `<div class="skeleton-tabs">${widths.map(width => `<span class="skeleton" style="width:${width}px"></span>`).join("")}</div>`;
+const skeletonProfilePhoto = () => `<div class="skeleton-profile-photo"><span class="skeleton skeleton-heading"></span><div class="skeleton-profile-photo-row"><span class="skeleton skeleton-profile-avatar"></span><div class="skeleton-profile-photo-controls"><div class="skeleton-action-row">${skeletonAction()}${skeletonAction()}</div><span class="skeleton skeleton-line medium"></span></div></div><span class="skeleton skeleton-line short"></span></div>`;
+const skeletonReel = () => `<div class="skeleton-reel"><div class="skeleton-reel-stage"><span class="skeleton skeleton-reel-picture"></span></div><div class="skeleton-reel-copy"><span class="skeleton skeleton-avatar"></span>${skeletonLines()}${skeletonAction()}</div><div class="skeleton-reel-metrics">${skeletonAction()}${skeletonAction()}${skeletonAction()}</div></div>`;
+function skeletonCommunity(arg) {
+  if (!arg || arg === "mine") return `<div class="skeleton-feed"><div class="skeleton-feed-grid">${skeletonScenes()}${skeletonScenes()}</div>${skeletonReel()}</div>`;
+  if (arg === "watch") return `<div class="skeleton-viewer"><div class="skeleton-viewer-unit"><span class="skeleton skeleton-viewer-picture"></span><div class="skeleton-viewer-copy"><span class="skeleton skeleton-avatar"></span>${skeletonLines()}<div class="skeleton-action-row">${skeletonAction()}${skeletonAction()}</div>${skeletonAction()}</div></div>${skeletonReel()}</div>`;
+  return `<div class="skeleton-detail"><span class="skeleton skeleton-detail-picture"></span><div><span class="skeleton skeleton-heading"></span>${skeletonLines()}<div class="skeleton-detail-facts">${Array.from({ length: 3 }, () => '<span class="skeleton skeleton-line"></span>').join("")}</div>${skeletonLines()}${skeletonAction()}</div></div>`;
+}
+function skeletonHistory(trash) {
+  return `${skeletonTabs([72, 136])}${trash ? "" : `<div class="skeleton-list-controls">${skeletonAction("skeleton-filter")}${skeletonAction("skeleton-search")}</div>`}<div class="skeleton-history">${Array.from({ length: 5 }, () => `<div class="skeleton-history-row"><div class="skeleton-history-scene"><span class="skeleton skeleton-history-picture"></span>${skeletonLines()}</div><span class="skeleton skeleton-line skeleton-history-meta"></span><div class="skeleton-history-actions">${skeletonAction()}${skeletonAction()}</div></div>`).join("")}</div>`;
+}
+function skeletonAnalytics() {
+  return `<div class="skeleton-analytics"><div class="skeleton-analytics-controls">${skeletonAction("skeleton-filter")}</div><div class="skeleton-analytics-summary">${Array.from({ length: 3 }, () => '<div><span class="skeleton skeleton-line medium"></span><span class="skeleton skeleton-total"></span></div>').join("")}</div><div class="skeleton-analytics-layout"><div><span class="skeleton skeleton-heading"></span><div class="skeleton-chart">${Array.from({ length: 10 }, () => '<span class="skeleton"></span>').join("")}</div></div><div><span class="skeleton skeleton-heading"></span>${Array.from({ length: 3 }, () => `<div class="skeleton-model-row"><span class="skeleton skeleton-line medium"></span><span class="skeleton skeleton-model-track"></span></div>`).join("")}</div></div></div>`;
+}
+function skeletonReferrals() {
+  return `<div class="skeleton-referrals"><div><span class="skeleton skeleton-heading"></span><div class="skeleton-link-row"><span class="skeleton skeleton-field"></span>${skeletonAction()}</div><span class="skeleton skeleton-heading"></span><div class="skeleton-funnel">${Array.from({ length: 3 }, () => '<div><span class="skeleton skeleton-line"></span><span class="skeleton skeleton-line"></span><span class="skeleton skeleton-line"></span></div>').join("")}</div>${skeletonAction()}</div><div><span class="skeleton skeleton-heading"></span>${skeletonLedger()}</div></div>`;
+}
+function loadingSurface(name, arg) {
+  if (name === "community") return !arg || arg === "mine" ? "feed" : arg === "watch" ? "viewer" : "detail";
+  return name === "account" ? ["overview", "credits", "analytics", "billing", "profile"].includes(arg) ? arg : "overview" : name;
+}
+function loadingHeader(name, arg, label) {
+  const title = `<h1 id="title" tabindex="-1">${label}</h1>`;
+  if (name !== "community") return `<header>${title}</header>`;
+  if (!arg || arg === "mine") return `<header class="loading-feed-toolbar"><div class="loading-feed-heading">${title}<span aria-hidden="true">${skeletonAction()}</span></div><div aria-hidden="true">${skeletonTabs([56, 40, 48, 22])}</div></header>`;
+  return `<header class="loading-scene-toolbar"><h1 class="sr" id="title" tabindex="-1">${label}</h1><div aria-hidden="true" class="skeleton-scene-tools">${skeletonAction("skeleton-back")}${arg === "watch" ? `<div>${skeletonAction("skeleton-step")}${skeletonAction("skeleton-step")}${skeletonAction("skeleton-details")}</div>` : ""}</div></header>`;
+}
 function loadingMarkup(name, arg) {
   if (name === "account") {
-    if (arg === "credits") return skeletonLedger();
-    if (arg === "billing" || arg === "profile") return `<div class="skeleton-form">${skeletonLines()}<div class="skeleton skeleton-field"></div>${skeletonLines()}<div class="skeleton skeleton-field"></div>${skeletonLedger()}</div>`;
+    if (arg === "analytics") return skeletonAnalytics();
+    if (arg === "credits") return `<div class="skeleton-list-controls">${skeletonAction("skeleton-filter")}${skeletonAction()}</div>${skeletonLedger()}`;
+    if (arg === "billing") return `<div class="skeleton-billing"><span class="skeleton skeleton-heading"></span>${skeletonLines()}<div class="skeleton-billing-facts">${skeletonLines()}${skeletonLines()}${skeletonLines()}</div><div class="skeleton-action-row">${skeletonAction()}${skeletonAction()}${skeletonAction()}</div></div>${skeletonLedger()}`;
+    if (arg === "profile") return `<div class="skeleton-profile"><div class="skeleton-form">${skeletonProfilePhoto()}<span class="skeleton skeleton-heading"></span>${skeletonLines()}<div class="skeleton skeleton-field"></div>${skeletonLines()}<div class="skeleton skeleton-field"></div>${skeletonLines()}${skeletonAction()}</div><div class="skeleton-profile-note"><span class="skeleton skeleton-heading"></span><div class="skeleton skeleton-field"></div>${skeletonLines()}${skeletonAction()}</div></div>`;
     return `<div class="skeleton-account"><div><span class="skeleton skeleton-line short"></span><span class="skeleton skeleton-number"></span>${skeletonLines()}${skeletonScenes()}${skeletonLedger()}</div><div class="skeleton-aside">${skeletonLines()}${skeletonLines()}${skeletonLines()}</div></div>`;
   }
-  if (name === "community") return skeletonScenes() + skeletonScenes();
-  return name === "history" ? `${skeletonScenes()}${skeletonLedger()}` : `<div class="skeleton-account"><div>${skeletonLines()}<div class="skeleton skeleton-field"></div>${skeletonLines()}</div><div>${skeletonLedger()}</div></div>`;
+  if (name === "community") return skeletonCommunity(arg);
+  return name === "history" ? skeletonHistory(arg === "trash") : skeletonReferrals();
 }
 function loadView(main, name, arg, mount) {
   if (!["account", "history", "referrals", "community"].includes(name)) return false;
@@ -2753,9 +3069,10 @@ function loadView(main, name, arg, mount) {
   if (loadedViews.has(key) && !mode) return false;
   const id = viewLoadId;
   const accountTitles = { overview: "Your account", credits: "Credit activity", analytics: "Analytics", billing: "Subscription & purchases", profile: "Profile & preferences" };
-  const labels = { account: accountTitles[arg] || "Your account", history: "History", referrals: "Referrals", community: "Feed" };
+  const labels = { account: accountTitles[arg] || "Your account", history: arg === "trash" ? "Recently deleted" : "History", referrals: "Referrals", community: arg === "watch" ? "Feed viewer" : arg === "mine" ? "Your publications" : arg ? "Video details" : "Feed" };
   main.setAttribute("aria-busy", "true");
-  main.innerHTML = `<div class="page app-loading"><header><h1 id="title" tabindex="-1">${labels[name]}</h1><p class="sr" role="status">Loading ${labels[name].toLowerCase()}.</p></header><div aria-hidden="true">${loadingMarkup(name, arg)}</div></div>`;
+  const chromeHeight = Math.round($("#top").getBoundingClientRect().height);
+  main.innerHTML = `<div class="page app-loading app-loading-${loadingSurface(name, arg)}" style="--loading-chrome-height:${chromeHeight}px">${loadingHeader(name, arg, labels[name])}<p class="sr" role="status">Loading ${labels[name].toLowerCase()}.</p><div class="loading-body" aria-hidden="true">${loadingMarkup(name, arg)}</div></div>`;
   $("#title").focus({ preventScroll: true });
   viewLoadTimer = setTimeout(() => {
     if (id !== viewLoadId) return;
@@ -2777,14 +3094,71 @@ function loadView(main, name, arg, mount) {
 
 /* Published provider examples and the current account's publication snapshots. */
 const getPublishedPost = videoId => S.posts.find(p => p.videoId === videoId);
-const communityPosts = mine => mine ? (S.signedIn ? [...S.posts].reverse() : []) : [...S.posts].reverse().concat(OFFICIAL_EXAMPLES);
+const communityDateFormat = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "Europe/Moscow" });
+function communityPublicationTimestamp(post) {
+  const value = post?.official ? post.curatedAt : post?.createdAt;
+  if (typeof value !== "string") return null;
+  const parts = value.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/);
+  if (!parts) return null;
+  const [year, month, day, hour, minute, second] = parts.slice(1, 7).map(Number), leap = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+  const days = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1];
+  if (!days || day < 1 || day > days || hour > 23 || minute > 59 || second > 59) return null;
+  const timestamp = Date.parse(value);
+  return Number.isFinite(timestamp) ? timestamp : null;
+}
+function communityPublicationDateMarkup(post) {
+  const timestamp = communityPublicationTimestamp(post);
+  if (timestamp === null) return "";
+  const label = communityDateFormat.format(new Date(timestamp)), meaning = `${post.official ? "Added to Aurora" : "Published"} ${label}`;
+  return `<time class="community-publication-date" datetime="${esc(post.official ? post.curatedAt : post.createdAt)}" aria-label="${esc(meaning)}" title="${esc(meaning)}">${post.official ? "Added " : ""}${esc(label)}</time>`;
+}
+const COMMUNITY_SHUFFLE_STORE = "aurora-community-shuffle-seed-v1";
+let communityShuffleFallback = "";
+const communityNewShuffleSeed = () => globalThis.crypto?.randomUUID?.() || `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+function communityShuffleSeed() {
+  let seed = communityShuffleFallback;
+  try { seed = sessionStorage.getItem(COMMUNITY_SHUFFLE_STORE) || seed; } catch (e) {}
+  if (!/^[a-zA-Z0-9_-]{1,64}$/.test(seed)) seed = communityNewShuffleSeed();
+  communityShuffleFallback = seed;
+  try { sessionStorage.setItem(COMMUNITY_SHUFFLE_STORE, seed); } catch (e) {}
+  return seed;
+}
+function communityFeedSettings(options = {}) {
+  const params = new URLSearchParams(location.hash.split("?")[1] || ""), requested = options.sort ?? params.get("sort");
+  const sort = ["latest", "shuffle"].includes(requested) ? requested : "trending";
+  const value = options.seed ?? params.get("seed"), seed = typeof value === "string" && /^[a-zA-Z0-9_-]{1,64}$/.test(value) ? value : sort === "shuffle" ? communityShuffleSeed() : "";
+  return { sort, seed };
+}
+function communityFeedHref(sort = "trending", seed) {
+  const settings = communityFeedSettings({ sort, seed });
+  if (settings.sort === "trending") return "#/community";
+  const params = new URLSearchParams({ sort: settings.sort });
+  if (settings.sort === "shuffle") params.set("seed", settings.seed);
+  return "#/community?" + params.toString();
+}
+function communityShuffleRank(value) {
+  let hash = 2166136261;
+  for (let i = 0; i < value.length; i++) { hash ^= value.charCodeAt(i); hash = Math.imul(hash, 16777619); }
+  return hash >>> 0;
+}
+function communityPosts(mine = false, options = {}) {
+  const posts = mine ? (S.signedIn ? [...S.posts].reverse() : []) : [...S.posts].reverse().concat(OFFICIAL_EXAMPLES);
+  const { sort, seed } = communityFeedSettings(options), likes = communityActivity().likesByAccount;
+  const count = id => Object.values(likes).filter(ids => ids.includes(id)).length;
+  const published = post => communityPublicationTimestamp(post) ?? 0;
+  return posts.map((post, index) => ({ post, index })).sort((a, b) => {
+    if (!mine && sort === "shuffle") return communityShuffleRank(seed + ":" + a.post.id) - communityShuffleRank(seed + ":" + b.post.id) || a.index - b.index;
+    if (!mine && sort === "trending") { const difference = count(b.post.id) - count(a.post.id); if (difference) return difference; }
+    return published(b.post) - published(a.post) || a.index - b.index;
+  }).map(item => item.post);
+}
 const publicInitials = name => name.split(/\s+/).slice(0, 2).map(w => [...w][0] || "").join("").toUpperCase();
 const communityPublisherAvatars = Object.freeze({
   "Runway": "avatar_runway", "Kling AI": "avatar_kling", "BytePlus": "avatar_byteplus",
   "Google DeepMind": "avatar_deepmind", "Dave Clark via Kling AI": "avatar_dave"
 });
 function communityAvatarMarkup(p) {
-  const image = p.official ? IMG[communityPublisherAvatars[p.author]] : "";
+  const image = p.official ? IMG[communityPublisherAvatars[p.author]] : typeof userAvatarSource === "function" ? userAvatarSource(p.avatar) : "";
   return `<span class="community-avatar${image ? "" : " community-initials"}" aria-hidden="true"><span>${esc(publicInitials(p.author || "Creator"))}</span>${image ? `<img data-community-avatar src="${esc(image)}" alt="" width="32" height="32" loading="lazy" decoding="async">` : ""}</span>`;
 }
 document.addEventListener("error", event => {
@@ -2793,10 +3167,11 @@ document.addEventListener("error", event => {
 function communitySourceMarkup(example, { withAvatar = true } = {}) {
   if (!example) return "";
   const identity = withAvatar ? `${communityAvatarMarkup(example)}<span class="community-author-identity"><span class="community-author-name">${esc(example.author)}</span><span class="community-author-kind">Model example</span></span>` : `<span class="community-author-kind">Model example</span><span class="community-author-name">${esc(example.author)}</span>`;
-  return `<div class="community-author community-example-credit${withAvatar ? "" : " community-source-compact"}">${identity}<a class="community-source video-icon-action" href="${esc(example.sourceUrl)}" target="_blank" rel="noopener noreferrer" aria-label="View source" data-community-tooltip="View source">${icon("external", 18)}</a></div>`;
+  const date = withAvatar ? communityPublicationDateMarkup(example) : "";
+  return `<div class="community-author community-example-credit${withAvatar ? "" : " community-source-compact"}">${identity}<a class="community-source video-icon-action" href="${esc(example.sourceUrl)}" target="_blank" rel="noopener noreferrer" aria-label="View source" data-community-tooltip="View source">${icon("external", 18)}</a></div>${date ? `<div class="community-date-line">${date}</div>` : ""}`;
 }
 function communityPublisherMarkup(p) {
-  return `<div class="community-author">${communityAvatarMarkup(p)}<span class="community-author-name">${esc(p.author)}</span></div>`;
+  return `<div class="community-author">${communityAvatarMarkup(p)}<span class="community-author-identity"><span class="community-author-name">${esc(p.author)}</span>${communityPublicationDateMarkup(p)}</span></div>`;
 }
 const ownsPublication = post => Boolean(post && !post.official && S.signedIn && S.posts.some(own => own.id === post.id));
 function publicationActionsMarkup(post, { detail = false, history = false } = {}) {
@@ -2813,11 +3188,16 @@ function reuseVideoSettings(video, { readyOnly = false } = {}) {
 }
 const COMMUNITY_ACTIVITY_STORE = "aurora-community-activity-v1";
 const COMMUNITY_SETUP_INTENT = "aurora-community-setup-intent-v1";
-let communityActivityFallback = { viewedPosts: [], setupEvents: [] }, communitySetupFallback = null;
+const COMMUNITY_LIKE_INTENT = "aurora-community-like-intent-v1";
+let communityActivityFallback = { viewedPosts: [], setupEvents: [], likesByAccount: {} }, communitySetupFallback = null;
+let communityLikeFallback = null;
 function communityActivity() {
   let activity;
   try { activity = JSON.parse(localStorage.getItem(COMMUNITY_ACTIVITY_STORE)); } catch (e) {}
   if (!activity || !Array.isArray(activity.viewedPosts) || !Array.isArray(activity.setupEvents)) activity = communityActivityFallback;
+  const likes = activity.likesByAccount;
+  activity.likesByAccount = likes && typeof likes === "object" && !Array.isArray(likes)
+    ? Object.fromEntries(Object.entries(likes).filter(([, ids]) => Array.isArray(ids)).map(([owner, ids]) => [owner, [...new Set(ids.filter(id => typeof id === "string"))]])) : {};
   return activity;
 }
 function saveCommunityActivity(activity) {
@@ -2826,19 +3206,76 @@ function saveCommunityActivity(activity) {
 }
 function communityCounts(id) {
   const activity = communityActivity();
-  return { views: activity.viewedPosts.includes(id) ? 1 : 0, promptUses: activity.setupEvents.filter(e => e?.postId === id).length };
+  return { views: activity.viewedPosts.includes(id) ? 1 : 0, promptUses: activity.setupEvents.filter(e => e?.postId === id).length, likes: Object.values(activity.likesByAccount).filter(ids => ids.includes(id)).length };
+}
+const communityLikeIdentity = () => S.signedIn && typeof S.user.email === "string" ? S.user.email.trim().toLowerCase() : "";
+const communityLiked = id => Boolean(communityLikeIdentity() && communityActivity().likesByAccount[communityLikeIdentity()]?.includes(id));
+const communityLikeLabel = (id, count) => `${communityLiked(id) ? "Unlike" : "Like"} video. ${fmt(count)} ${count === 1 ? "like" : "likes"}`;
+function setCommunityLike(id, liked = true) {
+  const owner = communityLikeIdentity(), activity = communityActivity();
+  if (!S.posts.some(post => post.id === id) && !OFFICIAL_EXAMPLES.some(post => post.id === id)) return { liked: false, count: 0, changed: false };
+  if (!owner) {
+    if (liked) beginCommunityLike(id);
+    return { liked: false, count: communityCounts(id).likes, changed: false, requiresSignIn: Boolean(liked) };
+  }
+  const ids = activity.likesByAccount[owner] || [], previous = ids.includes(id), next = Boolean(liked);
+  if (previous !== next) {
+    activity.likesByAccount[owner] = next ? ids.concat(id) : ids.filter(value => value !== id);
+    saveCommunityActivity(activity); refreshCommunityMetrics(id);
+  }
+  return { liked: next, count: communityCounts(id).likes, changed: previous !== next };
+}
+function toggleCommunityLike(id) {
+  return setCommunityLike(id, !communityLiked(id));
+}
+function communityLikeIntent() {
+  try { return JSON.parse(sessionStorage.getItem(COMMUNITY_LIKE_INTENT)) || communityLikeFallback; } catch (e) { return communityLikeFallback; }
+}
+function clearCommunityLikeIntent(resetDestination = false) {
+  const intent = communityLikeIntent();
+  communityLikeFallback = null;
+  try { sessionStorage.removeItem(COMMUNITY_LIKE_INTENT); } catch (e) {}
+  if (resetDestination && !S.signedIn && afterSignIn === intent?.destination) afterSignIn = "create";
+}
+function beginCommunityLike(id) {
+  if (currentRoute().name === "signin") return;
+  clearCommunitySetupIntent(); clearCommunityLikeIntent();
+  const [base, query = ""] = location.hash.replace(/^#\/?/, "").split("?"), params = new URLSearchParams(query);
+  if (base === "community" || base === "community/mine") params.set("scene", id);
+  const destination = base + (params.size ? "?" + params.toString() : "");
+  communityLikeFallback = { postId: id, destination };
+  try { sessionStorage.setItem(COMMUNITY_LIKE_INTENT, JSON.stringify(communityLikeFallback)); } catch (e) {}
+  afterSignIn = destination; go("signin"); toast("Sign in to like videos.");
+}
+function communityLikeContinuation(destination) {
+  const intent = communityLikeIntent();
+  clearCommunityLikeIntent();
+  if (!intent) return destination;
+  const target = signInDestination(intent.destination);
+  if (!S.signedIn || currentRoute().name !== "signin" || target !== intent.destination || !["create", target].includes(destination)) return destination;
+  setCommunityLike(intent.postId, true);
+  return target;
 }
 function communityMetricItems(p) {
   const counts = communityCounts(p.id);
   const metric = (key, label) => `<button class="community-metric" data-community-metric="${key}" type="button" aria-label="${fmt(counts[key])} ${label}">${icon(key === "views" ? "eye" : "reuse", 16)}<span class="num" data-community-count="${key}" aria-hidden="true">${fmt(counts[key])}</span></button>`;
-  return `${metric("views", counts.views === 1 ? "view" : "views")}${p.includePrompt && p.prompt ? metric("promptUses", counts.promptUses === 1 ? "prompt use" : "prompt uses") : ""}`;
+  const like = `<button class="community-metric community-like" data-community-metric="likes" data-community-like="${esc(p.id)}" type="button" aria-pressed="${communityLiked(p.id)}" aria-label="${communityLikeLabel(p.id, counts.likes)}">${icon("heart", 18)}<span class="num" data-community-count="likes" aria-hidden="true">${fmt(counts.likes)}</span></button>`;
+  return `${like}${metric("views", counts.views === 1 ? "view" : "views")}${p.includePrompt && p.prompt ? metric("promptUses", counts.promptUses === 1 ? "prompt use" : "prompt uses") : ""}`;
 }
 function communityMetrics(p, live = false) {
   return `<p class="community-metrics" data-community-post="${esc(p.id)}" ${live ? 'aria-live="polite" aria-atomic="true"' : ""}>${communityMetricItems(p)}</p>`;
 }
 function refreshCommunityMetrics(id) {
   const p = communityPosts(false).find(post => post.id === id);
-  if (p) $$(".community-metrics").filter(el => el.dataset.communityPost === id).forEach(el => { el.innerHTML = communityMetricItems(p); });
+  if (!p) return;
+  const counts = communityCounts(id);
+  $$(".community-metrics").filter(el => el.dataset.communityPost === id).forEach(el => $$("[data-community-metric]", el).forEach(button => {
+    const key = button.dataset.communityMetric, value = counts[key];
+    if (!Number.isFinite(value)) return;
+    $("[data-community-count]", button).textContent = fmt(value);
+    button.setAttribute("aria-label", key === "likes" ? communityLikeLabel(id, value) : `${fmt(value)} ${key === "views" ? value === 1 ? "view" : "views" : value === 1 ? "prompt use" : "prompt uses"}`);
+    if (key === "likes") button.setAttribute("aria-pressed", String(communityLiked(id)));
+  }));
 }
 const communityMetricTooltip = document.createElement("div");
 communityMetricTooltip.id = "community-metric-tooltip";
@@ -2866,7 +3303,7 @@ function showCommunityMetricTooltip(button, pinned = false) {
   clearTimeout(communityMetricDismiss); communityMetricDismiss = null;
   communityMetricPinned = pinned || (communityMetricAnchor === button && communityMetricPinned);
   communityMetricAnchor = button;
-  communityMetricTooltip.textContent = button.classList.contains("community-metric") ? { views: "Views", promptUses: "Prompt uses", private: "Private prompt" }[button.dataset.communityMetric] || "" : button.dataset.communityTooltip || button.getAttribute("aria-label");
+  communityMetricTooltip.textContent = button.classList.contains("community-metric") ? { likes: button.getAttribute("aria-pressed") === "true" ? "Unlike" : "Like", views: "Views", promptUses: "Prompt uses", private: "Private prompt" }[button.dataset.communityMetric] || "" : button.dataset.communityTooltip || button.getAttribute("aria-label");
   communityMetricTooltip.hidden = false; positionCommunityMetricTooltip();
 }
 function dismissCommunityMetricTooltipSoon() {
@@ -2887,12 +3324,16 @@ document.addEventListener("focusin", e => { const button = e.target.closest(".co
 document.addEventListener("focusout", e => { if (e.target === communityMetricAnchor) hideCommunityMetricTooltip(); });
 document.addEventListener("click", e => {
   const button = e.target.closest(".community-metric");
+  if (button?.dataset.communityLike && !e.defaultPrevented) {
+    const result = toggleCommunityLike(button.dataset.communityLike);
+    if (result.requiresSignIn) return;
+  }
   if (button) { if (communityMetricAnchor === button && communityMetricPinned) hideCommunityMetricTooltip(); else showCommunityMetricTooltip(button, true); }
   else if (!communityMetricTooltip.contains(e.target)) hideCommunityMetricTooltip();
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape") hideCommunityMetricTooltip(); });
 window.addEventListener("resize", positionCommunityMetricTooltip);
-window.addEventListener("scroll", positionCommunityMetricTooltip, true);
+window.addEventListener("scroll", hideCommunityMetricTooltip, true);
 document.addEventListener("click", e => {
   const action = e.target.closest(".publication-action");
   if (!action) return;
@@ -2962,15 +3403,21 @@ document.addEventListener("click", e => {
 window.addEventListener("hashchange", () => {
   hideCommunityMetricTooltip();
   if (!["create", "signin"].includes(currentRoute().name)) clearCommunitySetupIntent();
+  if (currentRoute().name !== "signin") clearCommunityLikeIntent(true);
 });
 if (!["create", "signin"].includes(currentRoute().name)) clearCommunitySetupIntent();
+if (currentRoute().name !== "signin") clearCommunityLikeIntent(true);
+document.addEventListener("click", event => {
+  const link = event.target.closest("a[href]");
+  if (currentRoute().name === "signin" && link && !event.defaultPrevented && event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) clearCommunityLikeIntent(true);
+});
 function communityCards(limit = 6, mine = false, immersive = false) {
   const posts = communityPosts(mine).slice(0, limit);
   if (!posts.length) return `<section class="publication-empty"><h2>${mine ? "Your scenes can find an audience" : "No published scenes yet"}</h2><p>${mine ? "Publish a finished video from its result page. You choose whether to share the prompt." : "Published videos will appear here."}</p><a class="btn" href="${S.signedIn ? "#/history" : "#/signin"}">${S.signedIn ? "Choose a video" : "Sign in"}</a></section>`;
   return `<div class="community-grid${immersive ? ' community-feed' : ''}">${posts.map(p => {
-    const preview = recordOfficialExample(p), poster = officialPoster(preview), setupAvailable = isModelAvailable(p.model);
+    const preview = recordOfficialExample(p), poster = officialPoster(preview), setupAvailable = isModelAvailable(p.model), qualityBadge = videoQualityBadgeMarkup(preview);
     const promptAction = p.includePrompt && p.prompt ? `<a class="btn community-use" href="#/create?scene=${encodeURIComponent(p.id)}" aria-label="Use the ${setupAvailable ? "setup" : "prompt"} for ${esc(p.caption)}" data-community-tooltip="${setupAvailable ? "Use this setup" : "Use prompt"}">${icon("setup", 18)}${immersive ? '<span class="community-use-label">Use prompt</span>' : ''}</a>` : `<p class="community-privacy"><button class="community-metric" type="button" data-community-metric="private" aria-label="Private prompt">${icon("lock", 16)}</button></p>`;
-    return `<article class="community-card" data-reel-post="${esc(p.id)}" ${p.official ? 'data-official-example="true"' : ""}><a class="thumb community-watch ${poster ? "" : "community-no-preview"}" href="${communityWatchHref(p.id, mine, currentRoute().name === 'create')}" aria-label="Watch ${esc(p.caption)}">${poster ? `<img src="${esc(poster)}" data-hover-example="${esc(preview.id)}" alt="${esc(preview.alt)}" loading="lazy">${Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}` : '<span>Preview unavailable</span>'}</a>${immersive ? '<div class="community-reel-copy">' : ''}${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview, { withAvatar: false }) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${preview ? videoFactsMarkup(preview) : ""}</p>${communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div>${immersive ? '</div>' : ''}</article>`;
+    return `<article class="community-card" data-reel-post="${esc(p.id)}" ${p.official ? 'data-official-example="true"' : ""}><a class="thumb community-watch ${poster ? "" : "community-no-preview"}" href="${communityWatchHref(p.id, mine, currentRoute().name === 'create')}" aria-label="Watch ${esc(p.caption)}">${poster ? `<img src="${esc(poster)}" data-hover-example="${esc(preview.id)}" alt="${esc(preview.alt)}" loading="lazy">${Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}` : '<span>Preview unavailable</span>'}${qualityBadge}</a>${immersive ? '<div class="community-reel-copy">' : ''}${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview, { withAvatar: false }) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${preview ? videoFactsMarkup(preview) : ""}</p>${communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div>${immersive ? '</div>' : ''}</article>`;
   }).join("")}</div>`;
 }
 function unpublishPost(id) {
@@ -3071,7 +3518,7 @@ function openPublicationSettings(id, trigger = null) {
     const existing = getPublishedPost(current.id);
     if (existing) { existing.caption = caption; existing.includePrompt = includePrompt; if (includePrompt) existing.prompt = current.prompt; else delete existing.prompt; }
     else {
-      const published = { id: `post-${Date.now().toString(36)}-${current.id}`, videoId: current.id, author: accountUser().name, caption, includePrompt, model: current.model, modelName: recordModel(current).name, providerName: recordModel(current).provider, len: current.len, quality: current.quality, format: current.format, img: current.img, exampleId: recordOfficialExample(current)?.id || null, createdAt: new Date().toISOString() };
+      const published = { id: `post-${Date.now().toString(36)}-${current.id}`, videoId: current.id, author: accountUser().name, avatar: typeof userAvatarSource === "function" ? userAvatarSource(accountUser().avatar) : "", caption, includePrompt, model: current.model, modelName: recordModel(current).name, providerName: recordModel(current).provider, len: current.len, quality: current.quality, format: current.format, img: current.img, exampleId: recordOfficialExample(current)?.id || null, createdAt: new Date().toISOString() };
       if (includePrompt) published.prompt = current.prompt;
       S.posts.push(published);
     }
@@ -3106,8 +3553,14 @@ function initPublication(v) {
 function viewCommunity(main, arg) {
   if (arg === "watch") return viewCommunityViewer(main);
   if (!arg || arg === "mine") {
-    const mine = arg === "mine";
-    main.innerHTML = `<div class="page community-page"><div class="community-feed-toolbar"><header class="account-heading"><div><h1 id="title" tabindex="-1">${mine ? "Your publications" : "Feed"}</h1></div><a class="btn primary community-create" href="#/create" aria-label="Create a video">${icon("create", 18)}<span>Create a video</span></a></header><nav class="community-tabs" aria-label="Feed"><a href="#/community" ${!mine ? 'aria-current="page"' : ""}>All creators</a><a href="#/community/mine" ${mine ? 'aria-current="page"' : ""}>My publications</a></nav></div>${communityCards(100, mine, true)}</div>`;
+    const mine = arg === "mine", settings = communityFeedSettings();
+    if (!mine && settings.sort === "shuffle" && new URLSearchParams(location.hash.split("?")[1] || "").get("seed") !== settings.seed) {
+      const params = new URLSearchParams(location.hash.split("?")[1] || ""); params.set("seed", settings.seed);
+      history.replaceState(null, "", "#/community?" + params.toString());
+    }
+    const tabs = [["trending", "Trending"], ["latest", "Latest"], ["shuffle", "Shuffle"], ["mine", "My"]];
+    const shuffleHref = communityFeedHref("shuffle", communityNewShuffleSeed());
+    main.innerHTML = `<div class="page community-page"><div class="community-feed-toolbar"><header class="account-heading"><div><h1 id="title" tabindex="-1">${mine ? "Your publications" : "Feed"}</h1></div><a class="btn primary community-create" href="#/create">Create video</a></header><nav class="community-tabs" aria-label="Feed">${tabs.map(([sort, label]) => `<a href="${sort === "mine" ? "#/community/mine" : sort === "shuffle" ? shuffleHref : communityFeedHref(sort)}" ${(mine ? sort === "mine" : sort === settings.sort) ? 'aria-current="page"' : ""}>${label}</a>`).join("")}</nav></div>${communityCards(100, mine, true)}</div>`;
     return () => initCommunityReels(main);
   }
   const p = communityPosts(false).find(x => x.id === arg);
@@ -3116,7 +3569,7 @@ function viewCommunity(main, arg) {
   const setupAvailable = isModelAvailable(p.model);
   const promptActionLabel = S.signedIn ? setupAvailable ? "Use this setup" : "Use prompt" : setupAvailable ? "Sign in to use this setup" : "Sign in to use prompt";
   const player = preview ? officialMediaMarkup(preview, { id: "community-example-media", playerId: "community-player", playId: "community-play", errorId: "community-media-error", mediaIdPrefix: "community-example", playerClass: "community-official-player", showMetadata: !p.official }) : previewUnavailableMarkup(p, { id: "community-example-media" });
-  main.innerHTML = `<div class="page"><a class="btn" href="#/community">Back</a><div class="community-detail"><div>${player}</div><aside>
+  main.innerHTML = `<div class="page"><a class="btn" href="#/community">Back</a><div class="community-detail"><div class="community-detail-media">${player}${videoQualityBadgeMarkup(preview)}</div><aside>
     <h1 id="title" tabindex="-1">${esc(p.caption)}</h1>${communityPublisherMarkup(p)}${communityMetrics(p, true)}
     <dl class="facts"><div><dt>Model</dt><dd>${esc(recordModel(p).name)}</dd></div>${preview && Number.isFinite(preview.len) && preview.len > 0 ? `<div><dt>${p.official ? "Length" : "Preview length"}</dt><dd class="num">${preview.len} s</dd></div>` : ""}${preview && (preview.quality || preview.format) ? `<div><dt>Frame</dt><dd>${[preview.quality, preview.format].filter(Boolean).map(esc).join(" · ")}</dd></div>` : ""}</dl>
     <section class="community-prompt"><h2>${p.includePrompt ? p.promptKind === "suggested" ? "Suggested prompt" : "Creator’s prompt" : "A private prompt"}</h2><p>${p.includePrompt ? esc(p.prompt) : "The creator has chosen not to share the prompt."}</p>${p.includePrompt && !setupAvailable ? '<p>Choose an available model in Create.</p>' : ""}${p.includePrompt ? `<button class="btn primary community-prompt-action" id="use-community-prompt" type="button" aria-label="${promptActionLabel}">${icon("setup", 20)}</button>` : '<a class="btn" href="#/create">Create your own scene</a>'}</section>
@@ -3411,7 +3864,8 @@ function renderModelPicker(d) {
 function initModelPicker() {
   const dialog = $("#model-dialog"), opener = $("#browse-models");
   if (!dialog || !opener) return () => {};
-  const search = $("#model-search"), provider = $("#model-provider"), input = $("#model-input");
+  const search = $("#model-search"), provider = $("#model-provider"), input = $("#model-input"), close = $("#close-model-dialog");
+  const touchPicker = matchMedia("(max-width: 1000px), (pointer: coarse)");
   const draw = () => {
     const q = search.value.trim().toLowerCase();
     const results = availableModels().filter(m => (!q || `${m.name} ${m.provider} ${m.tag || ""}`.toLowerCase().includes(q)) && (provider.value === "all" || m.provider === provider.value) && (input.value === "all" || (m.inputs || ["text", "image"]).includes(input.value)));
@@ -3419,8 +3873,13 @@ function initModelPicker() {
     $("#model-results").innerHTML = results.length ? results.map(m => `<button type="button" class="catalog-option" data-pick-model="${esc(m.id)}" aria-pressed="${S.draft.model === m.id}"><span class="catalog-option-main"><strong>${esc(m.name)}</strong><span>${esc(m.provider)} · ${esc(m.tag || "Video generation")}</span><small>${m.qualities.map(esc).join(" / ")} · ${Math.min(...m.lengths)}–${Math.max(...m.lengths)} s</small></span><span class="catalog-option-side"><span class="num">From ${fmt(Math.min(...m.qualities.map(q => m.rates[q])))} credits / s</span>${S.draft.model === m.id ? `<b>${icon("check", 14)}Selected</b>` : ""}</span></button>`).join("") : '<div class="catalog-empty"><h3>No matching models</h3><p>Try a different name or clear the filters.</p><button class="btn" id="clear-model-filters" type="button">Clear filters</button></div>';
     $("#clear-model-filters")?.addEventListener("click", () => { search.value = ""; provider.value = "all"; input.value = "all"; draw(); search.focus(); });
   };
-  opener.onclick = () => { search.value = ""; provider.value = "all"; input.value = "all"; draw(); dialog.showModal(); search.focus(); };
-  $("#close-model-dialog").onclick = () => dialog.close();
+  opener.onclick = () => {
+    search.value = ""; provider.value = "all"; input.value = "all"; draw();
+    const initialFocus = touchPicker.matches ? close : search;
+    close.autofocus = initialFocus === close; search.autofocus = initialFocus === search;
+    dialog.showModal(); initialFocus.focus({ preventScroll: true });
+  };
+  close.onclick = () => dialog.close();
   dialog.addEventListener("close", () => { if (opener.isConnected) opener.focus({ preventScroll: true }); });
   search.addEventListener("input", draw); provider.addEventListener("change", draw); input.addEventListener("change", draw);
   dialog.addEventListener("keydown", e => { if (e.key === "Enter" && e.target === search) { e.preventDefault(); $("[data-pick-model]", dialog)?.focus(); } });
@@ -3438,13 +3897,13 @@ function initModelPicker() {
    hls.js stable pin verified 2026-11-01: github.com/video-dev/hls.js/releases/tag/v1.7.4.
    Mux URL format: mux.com/docs/guides/play-your-videos. YouTube mute API: developers.google.com/youtube/iframe_api_reference. */
 const hoverPreviewController = (() => {
-  const HOOK = "img[data-hover-example]", HOVER_DELAY = 180, SETTLE_DELAY = 700, VISIBLE_RATIO = 0.68;
+  const HOOK = "img[data-hover-example]", HOVER_DELAY = 180, SETTLE_DELAY = 700, REEL_SETTLE_DELAY = 80, VISIBLE_RATIO = 0.68;
   const HLS_URL = "https://cdn.jsdelivr.net/npm/hls.js@1.7.4/dist/hls.min.js";
   const HLS_INTEGRITY = "sha384-p9vgU/7IYJWd3I4STrtqxqR/2cAQlhIX7D/HrTnIMEjjcUox165b7se7sxmm3zDg";
   const fine = matchMedia("(hover: hover) and (pointer: fine)"), coarse = matchMedia("(pointer: coarse)");
   const motion = matchMedia("(prefers-reduced-motion: reduce)"), connection = navigator.connection;
-  const failures = new Map(), pausedReels = new WeakSet();
-  let active = null, hoverImage = null, hoverTimer = null, settleTimer = null, disposed = false;
+  const failures = new Map(), warmFailures = new Map(), pausedReels = new WeakSet();
+  let active = null, warm = null, hoverImage = null, hoverTimer = null, settleTimer = null, warmTimer = null, settleDue = 0, disposed = false, reelDirection = 1, lastReelIndex = -1;
   const blocked = (manual = false) => {
     if (document.hidden || (!manual && (motion.matches || connection?.saveData))) return true;
     if (document.activeElement?.matches("input,textarea,select,[contenteditable='true']")) return true;
@@ -3465,6 +3924,7 @@ const hoverPreviewController = (() => {
     button.setAttribute('aria-pressed', String(playing));
     button.setAttribute('aria-label', `${playing ? 'Pause' : 'Play'} preview: ${button.dataset.reelCaption}`);
   };
+  const reelBusy = (image, value) => image?.closest('[data-reel-toggle]')?.setAttribute('aria-busy', String(value));
   const rectVisibility = image => {
     const r = image.getBoundingClientRect(), top = Math.max(0, document.querySelector("#top")?.getBoundingClientRect().bottom || 0);
     const width = Math.max(0, Math.min(innerWidth, r.right) - Math.max(0, r.left));
@@ -3476,11 +3936,12 @@ const hoverPreviewController = (() => {
     const r = rectVisibility(image);
     return r.rect.width > 0 && r.rect.height > 0 && r.ratio > 0 && (failures.get(image.dataset.hoverExample) || 0) < Date.now();
   };
-  const live = session => active === session && !session.abort.signal.aborted && allowed(session.manual) && session.image.isConnected && session.image.dataset.hoverExample === session.example.id;
-  const clearTimers = () => { clearTimeout(hoverTimer); clearTimeout(settleTimer); hoverTimer = settleTimer = null; };
-  const release = () => {
-    const previous = active; active = null;
+  const live = session => (active === session || warm === session) && !session.abort.signal.aborted && allowed(session.manual) && session.image.isConnected && session.image.dataset.hoverExample === session.example.id;
+  const clearTimers = () => { clearTimeout(hoverTimer); clearTimeout(settleTimer); clearTimeout(warmTimer); hoverTimer = settleTimer = warmTimer = null; settleDue = 0; };
+  const disposeSession = previous => {
     if (!previous) return;
+    if (active === previous) active = null;
+    if (warm === previous) warm = null;
     previous.abort.abort(); clearTimeout(previous.timeout); clearInterval(previous.muteTimer);
     if (previous.video) {
       previous.video.onloadeddata = previous.video.onplaying = previous.video.onerror = null;
@@ -3495,19 +3956,26 @@ const hoverPreviewController = (() => {
     if (previous.positionAdded && previous.host.style.position === "relative") previous.host.style.position = previous.originalPosition;
     previous.image.removeAttribute("data-preview-state");
     reelState(previous.image, false);
+    reelBusy(previous.image, false);
   };
-  const stop = () => { clearTimers(); release(); };
+  const release = () => disposeSession(active);
+  const releaseWarm = () => disposeSession(warm);
+  const stop = () => { clearTimers(); release(); releaseWarm(); };
   const fail = session => {
-    if (active !== session) return;
-    failures.set(session.example.id, Date.now() + 30000);
-    release();
+    if (active !== session && warm !== session) return;
+    const wasActive = active === session;
+    (wasActive ? failures : warmFailures).set(session.example.id, Date.now() + 30000);
+    disposeSession(session);
+    if (wasActive) { clearTimeout(warmTimer); warmTimer = null; releaseWarm(); }
   };
   const reveal = session => {
-    if (!live(session)) return;
+    if (!live(session) || active !== session || session.paused || session.suspended) return;
     clearTimeout(session.timeout);
     session.image.dataset.previewState = "playing";
     reelState(session.image, true);
+    reelBusy(session.image, false);
     session.layer.classList.add("is-ready");
+    queueWarm(session);
   };
   const alignLayer = session => {
     const image = session.image.getBoundingClientRect(), host = session.host.getBoundingClientRect();
@@ -3539,12 +4007,18 @@ const hoverPreviewController = (() => {
   };
   const startVideo = async (session, source) => {
     const video = document.createElement("video"); session.video = video;
-    video.className = "thumbnail-live-video"; video.muted = true; video.defaultMuted = true; video.volume = 0;
-    video.playsInline = true; video.loop = true; video.preload = "none"; video.controls = false;
+    video.className = warm === session ? "thumbnail-warm-video" : "thumbnail-live-video"; video.muted = true; video.defaultMuted = true; video.volume = 0;
+    video.playsInline = true; video.loop = true; video.preload = warm === session ? "metadata" : "none"; video.controls = false; video.autoplay = false;
+    if (warm === session) Object.assign(video.style, { position: 'absolute', inset: '0', width: '100%', height: '100%', objectFit: 'contain' });
     video.setAttribute("muted", ""); video.setAttribute("playsinline", ""); video.setAttribute("aria-hidden", "true"); video.tabIndex = -1;
     video.addEventListener("volumechange", () => { if (!video.muted || video.volume !== 0) { video.muted = true; video.volume = 0; } }, { signal: session.abort.signal });
     const firstFrame = () => {
       if (!live(session) || video.readyState < 2 || !video.videoWidth) return;
+      if (warm === session) {
+        session.ready = true; clearTimeout(session.timeout); session.hls?.stopLoad();
+        return;
+      }
+      if (session.paused || session.suspended) return;
       if (session.frameRequest !== undefined || session.layer.classList.contains("is-ready")) return;
       if (video.requestVideoFrameCallback) session.frameRequest = video.requestVideoFrameCallback(() => { session.frameRequest = undefined; reveal(session); });
       else reveal(session);
@@ -3553,17 +4027,18 @@ const hoverPreviewController = (() => {
     video.onerror = () => fail(session);
     session.layer.appendChild(video);
     const play = () => {
-      if (!live(session)) return;
+      if (!live(session) || active !== session || session.paused || session.suspended) return;
       video.muted = true; video.defaultMuted = true; video.volume = 0;
-      video.play().then(firstFrame).catch(() => { if (live(session)) fail(session); });
+      video.play().then(() => { if (session.layer.classList.contains('is-ready')) reveal(session); else firstFrame(); }).catch(() => { if (live(session) && !session.paused && !session.suspended) fail(session); });
     };
-    if (source.type === "video") { video.src = source.url; play(); return; }
+    session.play = play;
+    if (source.type === "video") { video.src = source.url; if (warm === session) video.load(); else play(); return; }
     const native = video.canPlayType("application/vnd.apple.mpegurl") && (!window.MediaSource || "ManagedMediaSource" in window);
-    if (native) { video.src = source.url; play(); return; }
+    if (native) { video.src = source.url; if (warm === session) video.load(); else play(); return; }
     const Hls = await loadHls(session);
     if (!live(session)) return;
     if (!Hls.isSupported()) { fail(session); return; }
-    session.hls = new Hls({ autoStartLoad: false, startLevel: 0, capLevelToPlayerSize: true, maxBufferLength: 5, maxMaxBufferLength: 10, backBufferLength: 0 });
+    session.hls = new Hls({ autoStartLoad: false, startLevel: 0, capLevelToPlayerSize: true, maxBufferLength: warm === session ? 1 : 5, maxMaxBufferLength: warm === session ? 2 : 10, maxBufferSize: 2 * 1024 * 1024, backBufferLength: 0 });
     session.hls.on(Hls.Events.ERROR, (_, data) => { if (data.fatal) fail(session); });
     session.hls.on(Hls.Events.MANIFEST_PARSED, () => { if (live(session)) { session.hls.startLoad(0); play(); } });
     session.hls.on(Hls.Events.MEDIA_ATTACHED, () => { if (live(session)) session.hls.loadSource(source.url); });
@@ -3596,7 +4071,7 @@ const hoverPreviewController = (() => {
           player.mute(); player.setVolume(0);
           // Do not request playback until the API confirms both muted state and zero volume.
           session.muteTimer = setInterval(() => {
-            if (!live(session)) return;
+            if (!live(session) || active !== session || session.paused || session.suspended) return;
             if (player.isMuted() && player.getVolume() === 0) { clearInterval(session.muteTimer); session.muteTimer = null; player.playVideo(); }
           }, 40);
         },
@@ -3605,20 +4080,65 @@ const hoverPreviewController = (() => {
       }
     });
   };
-  const begin = (image, manual = false) => {
-    if (!allowed(manual) || !eligible(image) || (!manual && pausedReels.has(image))) return;
+  const makeSession = (image, manual = false, preloading = false) => {
     const example = exampleFor(image), source = mediaSource(example, image);
-    if (!source || (active?.image === image && active.example.id === example.id)) return;
-    release();
+    if (!source || (preloading && source.type === 'youtube')) return null;
     const host = hostFor(image), layer = document.createElement("div"), abort = new AbortController();
-    layer.className = "thumbnail-live-preview"; layer.setAttribute("aria-hidden", "true"); layer.dataset.example = example.id;
-    const session = { image, host, layer, example, abort, manual, paused: false, originalPosition: host.style.position, positionAdded: getComputedStyle(host).position === "static" };
-    active = session;
+    layer.className = preloading ? 'thumbnail-warm-preview' : 'thumbnail-live-preview'; layer.setAttribute("aria-hidden", "true"); layer.dataset.example = example.id;
+    if (preloading) Object.assign(layer.style, { position: 'absolute', opacity: '0', pointerEvents: 'none', overflow: 'hidden' });
+    const session = { image, host, layer, example, abort, manual, paused: false, suspended: false, source, originalPosition: host.style.position, positionAdded: getComputedStyle(host).position === "static" };
+    if (preloading) warm = session; else active = session;
     if (session.positionAdded) host.style.position = "relative";
     alignLayer(session); host.insertBefore(layer, image.nextSibling);
-    image.dataset.previewState = "loading";
+    if (reelImage(image)) layer.style.transition = motion.matches ? 'none' : 'opacity 100ms ease-out';
+    image.dataset.previewState = preloading ? 'warm' : 'loading';
+    if (!preloading) reelBusy(image, true);
     session.timeout = setTimeout(() => fail(session), 10000);
     Promise.resolve(source.type === "youtube" ? startYouTube(session, source) : startVideo(session, source)).catch(() => { if (live(session)) fail(session); });
+    return session;
+  };
+  const resume = session => {
+    if (!live(session) || active !== session) return;
+    session.suspended = false; alignLayer(session);
+    if (session.hls) session.hls.startLoad(-1);
+    if (session.play) session.play();
+    else if (session.youtube) {
+      session.youtube.mute(); session.youtube.setVolume(0);
+      if (session.youtube.isMuted() && session.youtube.getVolume() === 0) session.youtube.playVideo();
+    }
+  };
+  const begin = (image, manual = false) => {
+    if (!allowed(manual) || !eligible(image) || (!manual && pausedReels.has(image))) return;
+    const example = exampleFor(image);
+    if (active?.image === image && active.example.id === example.id) { if (active.suspended && !active.paused) resume(active); return; }
+    clearTimeout(warmTimer); warmTimer = null;
+    if (warm?.image === image && warm.example.id === example.id) {
+      const session = warm; warm = null; release(); active = session; session.manual = manual;
+      session.layer.className = 'thumbnail-live-preview'; Object.assign(session.layer.style, { opacity: '', pointerEvents: '', overflow: '' });
+      session.video.className = 'thumbnail-live-video'; session.video.removeAttribute('style'); session.video.preload = 'none';
+      if (session.hls) { session.hls.config.maxBufferLength = 5; session.hls.config.maxMaxBufferLength = 10; }
+      image.dataset.previewState = 'loading'; reelBusy(image, true); resume(session); return;
+    }
+    releaseWarm(); release(); makeSession(image, manual);
+  };
+  const warmAllowed = () => allowed() && !['slow-2g', '2g'].includes(connection?.effectiveType) && !active?.paused && !active?.suspended;
+  const queueWarm = session => {
+    if (!reelImage(session.image) || !warmAllowed() || active !== session) return;
+    clearTimeout(warmTimer);
+    warmTimer = setTimeout(() => {
+      warmTimer = null;
+      if (!warmAllowed() || active !== session || !live(session)) return;
+      const feed = session.image.closest('.community-feed'), cards = [...feed.querySelectorAll('.community-card')];
+      const index = cards.indexOf(session.image.closest('.community-card'));
+      if (lastReelIndex >= 0 && index !== lastReelIndex) reelDirection = index > lastReelIndex ? 1 : -1;
+      lastReelIndex = index;
+      const next = cards[index + reelDirection] || cards[index + 1] || cards[index - 1], image = next?.querySelector(HOOK);
+      if (!image || !image.isConnected || !exampleFor(image) || exampleFor(image).id === session.example.id || pausedReels.has(image) || (failures.get(image.dataset.hoverExample) || 0) > Date.now() || (warmFailures.get(image.dataset.hoverExample) || 0) > Date.now()) { releaseWarm(); return; }
+      const source = mediaSource(exampleFor(image), image);
+      if (!source || source.type === 'youtube') { releaseWarm(); return; }
+      if (warm?.image === image && warm.example.id === image.dataset.hoverExample) return;
+      releaseWarm(); makeSession(image, false, true);
+    }, 350);
   };
   const scheduleHover = image => {
     if (!fine.matches || reelImage(image) || !allowed() || !eligible(image)) return;
@@ -3633,14 +4153,34 @@ const hoverPreviewController = (() => {
     const candidates = [...document.querySelectorAll(HOOK)].filter(image => (reels ? reelImage(image) : mobileImage(image)) && eligible(image)).map(image => ({ image, ...rectVisibility(image) }))
       .filter(item => item.rect.width >= 130 && item.rect.height >= 80 && item.ratio >= VISIBLE_RATIO)
       .sort((a, b) => Math.abs(a.rect.top + a.rect.height / 2 - center) - Math.abs(b.rect.top + b.rect.height / 2 - center));
-    if (candidates[0]) begin(candidates[0].image);
+    if (candidates[0]) {
+      if (reels) { const feed = candidates[0].image.closest('.community-feed'); reelScrollPositions.set(feed, feed.scrollTop); }
+      begin(candidates[0].image);
+    }
   };
-  const armMobile = () => { clearTimeout(settleTimer); settleTimer = null; if ((reelsVisible() || (coarse.matches && !fine.matches)) && allowed()) settleTimer = setTimeout(() => { settleTimer = null; chooseMobile(); }, reelsVisible() ? 280 : SETTLE_DELAY); };
+  const armMobile = (delay = reelsVisible() ? REEL_SETTLE_DELAY : SETTLE_DELAY, reset = false) => {
+    if (!(reelsVisible() || (coarse.matches && !fine.matches)) || !allowed()) return;
+    const due = performance.now() + delay;
+    if (!reset && settleTimer && settleDue <= due) return;
+    clearTimeout(settleTimer); settleDue = due;
+    settleTimer = setTimeout(() => { settleTimer = null; settleDue = 0; chooseMobile(); }, delay);
+  };
+  const suspendReel = () => {
+    clearTimeout(hoverTimer); clearTimeout(warmTimer); hoverTimer = warmTimer = null; hoverImage = null;
+    if (!active || !reelImage(active.image) || active.paused || active.suspended) return;
+    active.suspended = true; active.video?.pause(); active.hls?.stopLoad();
+    if (active.frameRequest !== undefined && active.video?.cancelVideoFrameCallback) { active.video.cancelVideoFrameCallback(active.frameRequest); active.frameRequest = undefined; }
+    try { active.youtube?.pauseVideo(); } catch (_) {}
+    active.image.dataset.previewState = 'suspended'; reelState(active.image, false);
+  };
+  const reelScrollPositions = new WeakMap();
   const toggleReel = image => {
     if (!reelImage(image) || !allowed(true)) return;
     clearTimers(); hoverImage = null;
     if (active?.image === image && !active.paused) {
+      if (active.suspended) { pausedReels.delete(image); active.manual = true; resume(active); return; }
       pausedReels.add(image);
+      releaseWarm();
       if (!active.layer.classList.contains('is-ready')) { release(); return; }
       active.paused = true; active.video?.pause();
       try { active.youtube?.pauseVideo(); } catch (_) {}
@@ -3672,21 +4212,36 @@ const hoverPreviewController = (() => {
     const host = hostFor(hoverImage);
     if (host && !host.contains(event.relatedTarget)) { clearTimeout(hoverTimer); hoverTimer = null; hoverImage = null; release(); }
   }, { passive: true });
-  document.addEventListener("scroll", () => { stop(); hoverImage = null; armMobile(); }, { passive: true, capture: true });
-  document.addEventListener("pointerdown", event => { if (event.target.closest?.('.community-page.is-reels [data-reel-toggle]')) return; stop(); hoverImage = null; }, { passive: true, capture: true });
-  document.addEventListener("click", event => { if (event.target.closest?.('.community-page.is-reels [data-reel-toggle]')) return; stop(); hoverImage = null; armMobile(); }, { passive: true, capture: true });
-  document.addEventListener("focusin", event => { if (event.target.closest?.('.community-page.is-reels [data-reel-toggle]')) return; stop(); hoverImage = null; }, true);
+  document.addEventListener("scroll", () => {
+    const feed = document.querySelector('.community-page.is-reels .community-feed');
+    if (feed && !blocked(active?.manual)) {
+      const previous = reelScrollPositions.get(feed); reelScrollPositions.set(feed, feed.scrollTop);
+      if (previous === undefined || Math.abs(previous - feed.scrollTop) >= .5) suspendReel();
+      armMobile(undefined, true); return;
+    }
+    stop(); hoverImage = null; armMobile();
+  }, { passive: true, capture: true });
+  document.addEventListener('scrollend', event => {
+    if (event.target.matches?.('.community-page.is-reels .community-feed')) { clearTimeout(settleTimer); settleTimer = null; settleDue = 0; chooseMobile(); }
+  }, { passive: true, capture: true });
+  const reelNavigation = target => target.closest?.('.community-page.is-reels .community-viewer-steps,.community-page.is-reels .community-feed[tabindex="0"]') && !target.closest?.('a,button,input,textarea,select,.community-reel-copy');
+  const reelStep = target => target.closest?.('.community-page.is-reels .community-viewer-steps');
+  const reelInlineControl = target => target.closest?.('.community-page.is-reels .community-metric');
+  document.addEventListener("pointerdown", event => { if (event.target.closest?.('.community-page.is-reels [data-reel-toggle]') || reelInlineControl(event.target)) return; if (reelStep(event.target)) { suspendReel(); armMobile(); return; } stop(); hoverImage = null; }, { passive: true, capture: true });
+  document.addEventListener("click", event => { if (event.target.closest?.('.community-page.is-reels [data-reel-toggle]') || reelInlineControl(event.target)) return; if (reelStep(event.target)) { suspendReel(); armMobile(); return; } stop(); hoverImage = null; armMobile(); }, { passive: true, capture: true });
+  document.addEventListener("focusin", event => { if (event.target.closest?.('.community-page.is-reels [data-reel-toggle]') || reelNavigation(event.target) || reelInlineControl(event.target)) return; if (reelStep(event.target)) { suspendReel(); armMobile(); return; } stop(); hoverImage = null; }, true);
   document.addEventListener("focusout", () => queueMicrotask(armMobile), true);
   document.addEventListener("toggle", () => { stop(); armMobile(); }, true);
   document.addEventListener("visibilitychange", () => { stop(); hoverImage = null; armMobile(); });
-  window.addEventListener("hashchange", () => { stop(); hoverImage = null; armMobile(); });
+  window.addEventListener("hashchange", () => { stop(); hoverImage = null; lastReelIndex = -1; reelDirection = 1; armMobile(reelsVisible() ? 0 : SETTLE_DELAY); });
   window.addEventListener("resize", () => { stop(); hoverImage = null; armMobile(); });
   window.addEventListener("pagehide", () => { stop(); hoverImage = null; });
-  window.addEventListener("pageshow", armMobile);
+  window.addEventListener("pageshow", () => armMobile());
   for (const query of [fine, coarse, motion]) query.addEventListener("change", () => { stop(); hoverImage = null; armMobile(); });
   connection?.addEventListener?.("change", () => { stop(); armMobile(); });
   const observer = new MutationObserver(records => {
     if (active && (!active.image.isConnected || active.image.dataset.hoverExample !== active.example.id || blocked(active.manual))) release();
+    if (warm && (!warm.image.isConnected || warm.image.dataset.hoverExample !== warm.example.id || blocked())) releaseWarm();
     let changed = false;
     for (const record of records) {
       if (record.type === "attributes") {
@@ -3698,7 +4253,7 @@ const hoverPreviewController = (() => {
   });
   observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["data-hover-example", "src", "hidden", "open", "aria-expanded"] });
   armMobile();
-  return { stop, refresh: armMobile, toggleReel, destroy() { disposed = true; stop(); observer.disconnect(); } };
+  return { stop, refresh: () => armMobile(reelsVisible() ? 0 : SETTLE_DELAY), toggleReel, destroy() { disposed = true; stop(); observer.disconnect(); } };
 })();
 
 /* Native scroll snap keeps swipe, assistive technology and keyboard scrolling.
@@ -3706,8 +4261,10 @@ const hoverPreviewController = (() => {
 const communityReelsQuery = matchMedia('(max-width: 760px), (pointer: coarse) and (max-width: 1000px)');
 const communityReelPositions = new Map();
 let communityViewerReturn = null, communityViewerSnapshot = null;
-function communityWatchHref(id, mine = false, fromCreate = false) {
+function communityWatchHref(id, mine = false, fromCreate = false, options = {}) {
   const params = new URLSearchParams({ scene: id, scope: mine ? 'mine' : 'all' });
+  const settings = communityFeedSettings(options), ordering = new URLSearchParams(communityFeedHref(settings.sort, settings.seed).split('?')[1] || '');
+  for (const key of ['sort', 'seed']) if (ordering.has(key)) params.set(key, ordering.get(key));
   if (fromCreate) params.set('from', 'create');
   return '#/community/watch?' + params.toString();
 }
@@ -3715,25 +4272,28 @@ document.addEventListener('click', event => {
   const link = event.target.closest('a.community-watch');
   if (!link || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
   const target = new URLSearchParams(link.hash.split('?')[1] || '');
-  communityViewerReturn = { path: location.hash, scope: target.get('scope'), fromCreate: target.get('from') === 'create', postId: link.closest('[data-reel-post]')?.dataset.reelPost,
+  communityViewerReturn = { path: location.hash, scope: target.get('scope'), sort: target.get('sort') || 'trending', seed: target.get('seed') || '', fromCreate: target.get('from') === 'create', postId: link.closest('[data-reel-post]')?.dataset.reelPost,
     scrollX, scrollY, feedScroll: document.querySelector('.community-feed')?.scrollTop || 0 };
 });
 const communityStepIcon = down => `<svg class="ic${down ? ' reel-step-down' : ''}" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 10 4-4 4 4"/></svg>`;
 function viewCommunityViewer(main) {
   const params = new URLSearchParams(location.hash.split('?')[1] || ''), mine = params.get('scope') === 'mine';
-  const posts = communityPosts(mine), fromCreate = params.get('from') === 'create';
+  const requested = communityFeedSettings(), feedHref = communityFeedHref(requested.sort, requested.seed), ordering = new URLSearchParams(feedHref.split('?')[1] || '');
+  const settings = communityFeedSettings({ sort: requested.sort, seed: ordering.get('seed') || '' });
+  if (settings.sort === 'shuffle' && params.get('seed') !== settings.seed) { params.set('seed', settings.seed); history.replaceState(history.state, '', '#/community/watch?' + params.toString()); }
+  const posts = communityPosts(mine, settings), fromCreate = params.get('from') === 'create';
   let selected = params.get('scene') || posts[0]?.id;
   if (!posts.some(post => post.id === selected) && communityViewerSnapshot?.path === location.hash) {
     selected = posts[Math.min(communityViewerSnapshot.index, posts.length - 1)]?.id;
   }
-  const matchingReturn = communityViewerReturn?.scope === (mine ? 'mine' : 'all') && communityViewerReturn.fromCreate === fromCreate;
+  const matchingReturn = communityViewerReturn?.scope === (mine ? 'mine' : 'all') && communityViewerReturn.fromCreate === fromCreate && communityViewerReturn.sort === settings.sort && communityViewerReturn.seed === (settings.seed || '');
   const returnPath = matchingReturn && ['#/community', '#/community/mine', '#/create'].includes(communityViewerReturn.path.split('?')[0])
-    ? communityViewerReturn.path : fromCreate ? '#/create?gallery=community' : mine ? '#/community/mine' : '#/community';
+    ? communityViewerReturn.path : fromCreate ? '#/create?gallery=community' + (ordering.size ? '&' + ordering.toString() : '') : mine ? '#/community/mine' : feedHref;
   if (!selected || !posts.some(post => post.id === selected)) {
     main.innerHTML = `<div class="page"><h1 id="title" tabindex="-1">${posts.length ? 'Publication unavailable' : mine ? 'No publications yet' : 'No published scenes yet'}</h1><div class="publication-empty"><a class="btn" href="${esc(returnPath)}">Back</a></div></div>`;
     return null;
   }
-  if (!matchingReturn) communityViewerReturn = { path: returnPath, scope: mine ? 'mine' : 'all', fromCreate, postId: selected, scrollX: 0, scrollY: null };
+  if (!matchingReturn) communityViewerReturn = { path: returnPath, scope: mine ? 'mine' : 'all', sort: settings.sort, seed: settings.seed || '', fromCreate, postId: selected, scrollX: 0, scrollY: null };
   main.innerHTML = `<div class="page community-page community-viewer" data-community-viewer="true" data-viewer-scene="${esc(selected)}"><div class="community-feed-toolbar community-viewer-toolbar"><a class="btn community-viewer-back" id="viewer-back" href="${esc(returnPath)}">Back</a><h1 class="sr" id="title" tabindex="-1">Feed viewer</h1><span class="sr" id="viewer-position" role="status" aria-live="polite"></span><div class="community-viewer-steps" role="group" aria-label="Browse videos"><button class="btn video-icon-action" id="viewer-previous" type="button" aria-label="Previous video">${communityStepIcon(false)}</button><button class="btn video-icon-action" id="viewer-next" type="button" aria-label="Next video">${communityStepIcon(true)}</button></div><a class="btn" id="viewer-details" href="#/community/${esc(selected)}">Details</a></div><div class="community-viewer-stage">${communityCards(100, mine, true)}</div></div>`;
   return () => initCommunityReels(main);
 }
@@ -3753,10 +4313,11 @@ function initCommunityReels(main) {
   if (!page || !feed) return null;
   const viewer = page.dataset.communityViewer === 'true';
   const params = new URLSearchParams(location.hash.split('?')[1] || ''), mine = params.get('scope') === 'mine', fromCreate = params.get('from') === 'create';
-  const key = location.hash.split('?')[0] + (viewer ? ':' + (mine ? 'mine' : 'all') : ''), cards = [...feed.children];
+  const settings = communityFeedSettings();
+  const key = location.hash.split('?')[0] + (viewer ? ':' + (mine ? 'mine' : 'all') : '') + ':' + settings.sort + ':' + (settings.seed || ''), cards = [...feed.children];
   if (viewer) cards.forEach(card => {
     const scene = document.createElement('div'); scene.className = 'community-viewer-scene';
-    const post = communityPosts(mine).find(post => post.id === card.dataset.reelPost), preview = recordOfficialExample(post);
+      const post = communityPosts(mine, settings).find(post => post.id === card.dataset.reelPost), preview = recordOfficialExample(post);
     const format = String(preview?.format || post?.format || '16:9').split(':').map(Number);
     const ratio = preview?.sourceWidth > 0 && preview?.sourceHeight > 0 ? preview.sourceWidth / preview.sourceHeight
       : format.length === 2 && format.every(value => value > 0) ? format[0] / format[1] : 16 / 9;
@@ -3765,8 +4326,9 @@ function initCommunityReels(main) {
     card.appendChild(scene);
   });
   const abort = new AbortController(), signal = abort.signal;
-  let enabled = false, frame = 0, restoreFrame = 0, settleTimer = null, lastHeight = 0;
-  const initial = Math.max(0, cards.findIndex(card => card.dataset.reelPost === page.dataset.viewerScene));
+  let enabled = false, frame = 0, restoreFrame = 0, settleTimer = null, singleTap = null, lastLikeGesture = null, lastMediaPointerType = '', lastHeight = 0;
+  const requestedScene = viewer ? page.dataset.viewerScene : params.get('scene');
+  const requestedIndex = cards.findIndex(card => card.dataset.reelPost === requestedScene), initial = Math.max(0, requestedIndex);
   const nearest = () => Math.max(0, Math.min(cards.length - 1, Math.round(feed.scrollTop / Math.max(1, feed.clientHeight))));
   const syncViewer = () => {
     if (!viewer || !feed.clientHeight) return;
@@ -3776,13 +4338,13 @@ function initCommunityReels(main) {
     $('#viewer-previous').disabled = index === 0; $('#viewer-next').disabled = index === cards.length - 1;
     $('#viewer-details').href = '#/community/' + id;
     $('#viewer-position').textContent = `${index + 1} of ${cards.length}. ${card.querySelector('h3').textContent}`;
-    const href = communityWatchHref(id, mine, fromCreate);
+    const href = communityWatchHref(id, mine, fromCreate, settings);
     if (location.hash !== href) history.replaceState(history.state, '', href);
     communityViewerSnapshot = { path: href, index };
   };
   const resize = () => {
     if (!enabled || !feed.isConnected) return;
-    const index = lastHeight ? Math.round(feed.scrollTop / lastHeight) : viewer ? initial : communityReelPositions.get(key) || 0;
+    const index = lastHeight ? Math.round(feed.scrollTop / lastHeight) : viewer || requestedIndex >= 0 ? initial : communityReelPositions.get(key) || 0;
     const top = Math.max(0, feed.getBoundingClientRect().top);
     page.style.setProperty('--community-feed-top', `${top}px`);
     lastHeight = feed.clientHeight;
@@ -3810,6 +4372,7 @@ function initCommunityReels(main) {
         button.dataset.reelCaption = card.querySelector('h3')?.textContent || 'video';
         button.setAttribute('aria-label', `Play preview: ${button.dataset.reelCaption}`);
         button.setAttribute('aria-pressed', 'false');
+        button.style.touchAction = 'pan-y pinch-zoom';
         while (old.firstChild) button.appendChild(old.firstChild);
         const indicator = document.createElement('span'); indicator.className = 'reel-play-indicator'; indicator.setAttribute('aria-hidden', 'true'); indicator.innerHTML = icon('play', 22);
         button.appendChild(indicator);
@@ -3827,12 +4390,39 @@ function initCommunityReels(main) {
     if (enabled) { resize(); hoverPreviewController.refresh(); }
     else { page.style.removeProperty('--community-feed-top'); lastHeight = 0; feed.scrollTop = 0; hoverPreviewController.refresh(); }
   };
+  const cancelSingleTap = () => { if (singleTap) clearTimeout(singleTap.timer); singleTap = null; };
+  const likeScene = button => {
+    cancelSingleTap();
+    if (!button.isConnected || signal.aborted || (lastLikeGesture?.button === button && performance.now() - lastLikeGesture.at < 300)) return;
+    lastLikeGesture = { button, at: performance.now() };
+    const id = button.closest('[data-reel-post]')?.dataset.reelPost;
+    if (id) setCommunityLike(id, true);
+  };
+  feed.addEventListener('pointerdown', event => { if (event.target.closest('[data-reel-toggle]')) lastMediaPointerType = event.pointerType; }, { signal });
   feed.addEventListener('click', event => {
     const button = event.target.closest('[data-reel-toggle]');
-    if (!enabled || !button) return;
-    hoverPreviewController.toggleReel(button.querySelector('img[data-hover-example]'));
+    if (!enabled || !button || event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    if (event.detail === 0) { cancelSingleTap(); hoverPreviewController.toggleReel(button.querySelector('img[data-hover-example]')); return; }
+    if (singleTap?.button === button && performance.now() - singleTap.at <= 240) { likeScene(button); return; }
+    cancelSingleTap();
+    singleTap = { button, at: performance.now(), timer: setTimeout(() => {
+      singleTap = null;
+      if (button.isConnected && !signal.aborted) hoverPreviewController.toggleReel(button.querySelector('img[data-hover-example]'));
+    }, 240) };
   }, { signal });
+  feed.addEventListener('dblclick', event => {
+    const button = event.target.closest('[data-reel-toggle]');
+    if (!enabled || !button || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    // Touch browsers can emit dblclick after our intentional single-tap window.
+    // Its clicks have already been handled; only mouse uses native dblclick.
+    if (lastMediaPointerType === 'mouse') likeScene(button);
+  }, { signal });
+  feed.addEventListener('pointercancel', cancelSingleTap, { signal });
+  document.addEventListener('pointerdown', event => { if (!event.target.closest?.('[data-reel-toggle]')) cancelSingleTap(); }, { signal, capture: true });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) cancelSingleTap(); }, { signal });
   feed.addEventListener('scroll', () => {
+    cancelSingleTap();
     if (!enabled) return;
     communityReelPositions.set(key, nearest());
     if (viewer) { clearTimeout(settleTimer); settleTimer = setTimeout(syncViewer, 320); }
@@ -3900,7 +4490,7 @@ function initCommunityReels(main) {
       card?.querySelector(':scope > .thumb')?.focus({ preventScroll: true });
     }); });
   }
-  return () => { abort.abort(); observer.disconnect(); clearTimeout(settleTimer); cancelAnimationFrame(frame); cancelAnimationFrame(restoreFrame); document.body.classList.remove('community-reels'); };
+  return () => { cancelSingleTap(); abort.abort(); observer.disconnect(); clearTimeout(settleTimer); cancelAnimationFrame(frame); cancelAnimationFrame(restoreFrame); document.body.classList.remove('community-reels'); };
 }
 
 
