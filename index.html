@@ -1358,6 +1358,84 @@ body.community-reels .site-foot { display: none; }
   .community-page.is-reels .community-viewer-toolbar { gap: 8px; padding-right: 12px; padding-left: 12px; }
 }
 
+/* A selected scene owns the phone viewport; the browse feed keeps its chrome. */
+@media (max-width: 760px), (pointer: coarse) and (max-width: 1000px) {
+  body:has(.community-viewer), body:has(.app-loading-viewer) { overflow: hidden; }
+  body:has(.community-viewer) #top, body:has(.community-viewer) .site-foot,
+  body:has(.app-loading-viewer) #top, body:has(.app-loading-viewer) .site-foot { display: none; }
+  body:has(.community-viewer) #toasts { top: calc(max(12px, env(safe-area-inset-top)) + 60px); bottom: auto; }
+  .community-viewer.is-reels, .app-loading-viewer {
+    position: fixed; inset: 0; z-index: 35; width: 100%; max-width: none;
+    height: 100dvh; min-height: 0; margin: 0; padding: 0;
+    overflow: hidden; background: var(--cinema-bg); color: var(--cinema-text);
+  }
+  .community-viewer.is-reels .community-viewer-toolbar {
+    position: absolute; inset: 0 0 auto; z-index: 6; width: 100%; max-width: none; margin: 0;
+    padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left));
+    background: transparent; gap: 12px;
+  }
+  .community-viewer.is-reels .community-viewer-toolbar .btn {
+    min-height: 44px; color: var(--cinema-text); background: var(--cinema-control); border-color: var(--cinema-line);
+  }
+  .community-viewer.is-reels .community-viewer-toolbar .btn:hover { background: var(--cinema-bg); }
+  .community-viewer.is-reels .community-viewer-steps { display: none; }
+  .community-viewer.is-reels .community-viewer-stage { width: 100%; height: 100%; max-width: none; margin: 0; padding: 0; }
+  .community-viewer.is-reels .community-feed { height: 100dvh; min-height: 0; border-radius: 0; background: var(--cinema-bg); }
+  .community-viewer.is-reels .community-card { display: block; min-height: 0; padding: 0; background: var(--cinema-bg); }
+  .community-viewer.is-reels .community-viewer-scene { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; width: 100%; height: 100%; border-radius: 0; }
+  .community-viewer.is-reels .community-card .thumb { position: relative; inset: auto; grid-column: 1; grid-row: 1; width: 100%; height: 100%; min-height: 0; aspect-ratio: auto; }
+  .community-viewer.is-reels .thumb > img,
+  .community-viewer.is-reels .thumbnail-live-preview > video { object-fit: contain; }
+  .community-viewer.is-reels .thumb > .badge,
+  .community-viewer.is-reels .video-quality-badge { top: calc(max(12px, env(safe-area-inset-top)) + 60px); }
+  .community-viewer.is-reels .community-reel-copy {
+    position: relative; inset: auto; grid-column: 1; grid-row: 2; display: block; width: 100%;
+    padding: 16px 80px max(20px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    background: var(--cinema-scrim);
+  }
+  .community-viewer.is-reels .community-reel-copy::before { display: none; }
+  .community-viewer.is-reels .community-card-meta { flex-direction: row; gap: 4px 12px; }
+  .community-viewer.is-reels .community-metrics {
+    position: absolute; right: max(12px, env(safe-area-inset-right));
+    top: auto; bottom: max(88px, calc(env(safe-area-inset-bottom) + 68px));
+    flex-direction: column; gap: 12px; margin: 0;
+  }
+  .community-viewer.is-reels .community-metric { flex-direction: column; gap: 2px; background: var(--cinema-control); }
+  .community-viewer.is-reels .community-privacy {
+    position: absolute; right: max(12px, env(safe-area-inset-right)); bottom: max(24px, calc(env(safe-area-inset-bottom) + 4px)); margin: 0;
+  }
+  .community-viewer.is-reels .community-card:has(.publication-actions) .publication-actions { position: static; width: 100%; gap: 8px; }
+  .app-loading.app-loading-viewer > .loading-scene-toolbar {
+    position: absolute; inset: 0 0 auto; z-index: 2; width: 100%; margin: 0;
+    padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left));
+  }
+  .app-loading-viewer .skeleton-step { display: none; }
+  .app-loading-viewer > .loading-body { height: 100%; }
+  .app-loading-viewer .skeleton-viewer { height: 100%; margin: 0; }
+  .app-loading-viewer .skeleton-reel { display: grid; grid-template-rows: minmax(0, 1fr) auto; }
+  .app-loading-viewer .skeleton-reel-stage { position: relative; inset: auto; width: 100%; }
+  .app-loading-viewer .skeleton-reel-copy { position: relative; inset: auto; width: 100%; padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+}
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1000px) and (pointer: coarse),
+       (orientation: landscape) and (max-height: 560px) and (max-width: 760px) {
+  .community-viewer.is-reels .community-viewer-scene { display: contents; }
+  .community-viewer.is-reels .community-card .thumb { position: absolute; inset: 0; width: 60%; }
+  .community-viewer.is-reels .community-reel-copy {
+    position: absolute; inset: calc(max(12px, env(safe-area-inset-top)) + 60px) 0 0 auto; width: 40%;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8px max(64px, calc(env(safe-area-inset-right) + 52px)) max(12px, env(safe-area-inset-bottom)) 12px;
+    background: var(--cinema-bg);
+  }
+  .community-viewer.is-reels .community-reel-copy::before { display: none; }
+  .community-viewer.is-reels .community-metrics { top: 4px; bottom: auto; gap: 8px; }
+  .community-viewer.is-reels .community-privacy { bottom: max(12px, env(safe-area-inset-bottom)); }
+  .community-viewer.is-reels .community-card:has(.publication-actions) .publication-actions { position: absolute; left: calc(-150% + 12px); bottom: 12px; width: auto; gap: 4px; }
+  .app-loading-viewer .skeleton-reel { display: block; }
+  .app-loading-viewer .skeleton-reel-stage { position: absolute; inset: 0 auto 0 0; width: 60%; }
+  .app-loading-viewer .skeleton-reel-copy { position: absolute; inset: 72px 64px 0 auto; width: calc(40% - 76px); padding: 0; }
+  .app-loading-viewer .skeleton-reel-metrics { top: 76px; }
+}
+
 .prototype-options { margin-top: 16px; color: var(--text-muted); font-size: var(--fs-caption); }
 .prototype-options summary { cursor: pointer; padding: 8px 0; }
 body:not(.review-mode) .prototype-options, body:not(.review-mode) .model-notice { display: none; }
@@ -1779,11 +1857,12 @@ function officialMediaMarkup(example, { id = "official-media", playerId = "offic
   const poster = officialPoster(example);
   return `<section class="official-media" id="${esc(id)}" data-media-prefix="${esc(mediaIdPrefix)}" data-media-state="ready" aria-label="Model example"><div class="player official-media-player ${esc(playerClass)}" id="${esc(playerId)}" style="aspect-ratio:${frameRatio(example.format)}">${poster ? `<img class="official-media-poster" src="${esc(poster)}" alt="${esc(example.alt || example.caption)}">` : ""}<button class="play official-media-play" id="${esc(playId)}" type="button" aria-label="Play model example">${icon("play", 24)}</button></div><div class="official-media-credit"><span>Model example</span><span>${esc(example.modelName || recordModel(example).name)}</span><a class="linkbtn" href="${esc(example.sourceUrl)}" target="_blank" rel="noopener noreferrer">Source</a></div>${showMetadata && example.author ? `<p class="official-media-author">By ${esc(example.author)}</p>` : ""}${showMetadata ? videoFactsMarkup(example) : ""}<p class="official-media-error" id="${esc(errorId)}" role="alert" hidden>Video could not load. <a class="linkbtn" href="${esc(example.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open source</a></p></section>`;
 }
-function initOfficialMedia(example, { id = "official-media", onPlay } = {}) {
+function initOfficialMedia(example, { id = "official-media", onPlay, autoplay = false } = {}) {
   const root = document.getElementById(id);
   if (!root || !example) return () => {};
   const player = $(".official-media-player", root), trigger = $(".official-media-play", root), poster = $(".official-media-poster", root), error = $(".official-media-error", root);
-  let media = null, loadingTimer = null, disposed = false;
+  const motion = matchMedia("(prefers-reduced-motion: reduce)"), connection = navigator.connection;
+  let media = null, loadingTimer = null, disposed = false, automatic = false;
   const release = () => {
     clearTimeout(loadingTimer); loadingTimer = null;
     if (!media) return;
@@ -1794,22 +1873,31 @@ function initOfficialMedia(example, { id = "official-media", onPlay } = {}) {
   };
   const failed = () => {
     if (disposed) return;
-    const refocus = player.contains(document.activeElement) || document.activeElement === document.body;
+    const refocus = !automatic && (player.contains(document.activeElement) || document.activeElement === document.body);
     release(); if (poster) poster.hidden = false;
     trigger.hidden = false; error.hidden = false; root.dataset.mediaState = "error"; player.setAttribute("aria-busy", "false");
     trigger.setAttribute("aria-label", "Try model example again"); if (refocus) trigger.focus({ preventScroll: true });
   };
-  trigger.onclick = () => {
+  const ready = () => {
+    release(); if (poster) poster.hidden = false;
+    trigger.hidden = false; error.hidden = true; root.dataset.mediaState = "ready"; player.setAttribute("aria-busy", "false");
+    trigger.setAttribute("aria-label", "Play model example");
+  };
+  const start = (auto = false) => {
+    if (disposed || !root.isConnected || (auto && (motion.matches || connection?.saveData || document.hidden))) return;
+    automatic = auto;
     release(); error.hidden = true; if (poster) poster.hidden = true;
     trigger.hidden = true; root.dataset.mediaState = "loading"; player.setAttribute("aria-busy", "true");
     if (!/^https:\/\//.test(example.mediaUrl || "")) { failed(); return; }
     if (example.mediaType === "video") {
       media = document.createElement("video"); media.id = `${root.dataset.mediaPrefix}-video`;
       media.controls = true; media.playsInline = true; media.preload = "none"; media.poster = officialPoster(example);
+      if (auto) { media.muted = true; media.defaultMuted = true; media.volume = 0; media.setAttribute("muted", ""); }
+      media.setAttribute("playsinline", "");
       media.src = example.mediaUrl; media.setAttribute("aria-label", `${example.caption} by ${example.author || example.providerName}`);
-      media.onerror = failed; player.appendChild(media); onPlay?.();
+      media.onerror = failed; player.appendChild(media);
       const activeMedia = media;
-      media.play().then(() => { if (!disposed && media === activeMedia) { root.dataset.mediaState = "playing"; player.setAttribute("aria-busy", "false"); } }).catch(() => { if (!disposed && media === activeMedia) { root.dataset.mediaState = "ready"; player.setAttribute("aria-busy", "false"); } });
+      media.play().then(() => { if (!disposed && media === activeMedia) { root.dataset.mediaState = "playing"; player.setAttribute("aria-busy", "false"); onPlay?.(); } }).catch(() => { if (!disposed && media === activeMedia) ready(); });
     } else if (example.mediaType === "embed") {
       media = document.createElement("iframe"); media.id = `${root.dataset.mediaPrefix}-embed`;
       media.title = `${example.caption} by ${example.author || example.providerName}`; media.allow = "autoplay; fullscreen; picture-in-picture";
@@ -1817,11 +1905,22 @@ function initOfficialMedia(example, { id = "official-media", onPlay } = {}) {
       media.onerror = failed; media.onload = () => { clearTimeout(loadingTimer); loadingTimer = null; if (!disposed) { root.dataset.mediaState = "ready"; player.setAttribute("aria-busy", "false"); } };
       const source = new URL(example.mediaUrl);
       source.searchParams.set("autoplay", /(^|\.)youtube(?:-nocookie)?\.com$/.test(source.hostname) ? "1" : "true");
+      if (auto) {
+        const youtube = /(^|\.)youtube(?:-nocookie)?\.com$/.test(source.hostname);
+        source.searchParams.set(youtube ? "mute" : "muted", youtube ? "1" : "true");
+        source.searchParams.set("playsinline", "1");
+      }
       media.src = source.href;
-      loadingTimer = setTimeout(failed, 12000); player.appendChild(media); onPlay?.();
+      loadingTimer = setTimeout(failed, 12000); player.appendChild(media);
+      // Cross-origin load confirms the player document, not a decoded frame.
+      if (!auto) onPlay?.();
     } else failed();
   };
-  return () => { disposed = true; release(); trigger.onclick = null; };
+  trigger.onclick = () => start(false);
+  const stopAutomatic = () => { if (automatic && (document.hidden || motion.matches || connection?.saveData)) { automatic = false; ready(); } };
+  motion.addEventListener("change", stopAutomatic); connection?.addEventListener?.("change", stopAutomatic); document.addEventListener("visibilitychange", stopAutomatic);
+  if (autoplay) start(true);
+  return () => { disposed = true; release(); trigger.onclick = null; motion.removeEventListener("change", stopAutomatic); connection?.removeEventListener?.("change", stopAutomatic); document.removeEventListener("visibilitychange", stopAutomatic); };
 }
 
 const cells = (n, on) => Array.from({ length: n }, (_, i) => `<i class="${i < on ? "on" : ""}"></i>`).join("");
@@ -2357,7 +2456,7 @@ function viewVideo(main, arg) {
   </aside></div></div>`;
   return () => {
     initPublication(v);
-    const disposeMedia = example ? initOfficialMedia(example, { id: "video-example-media" }) : null;
+    const disposeMedia = example ? initOfficialMedia(example, { id: "video-example-media", autoplay: true }) : null;
     $("#reuse").onclick = () => reuseVideoSettings(v);
     return () => disposeMedia?.();
   };
@@ -2614,16 +2713,16 @@ function viewLegal(main) {
 /* ----- Sign in ----- */
 function viewSignin(main) {
   let step = 1, email = "";
-  const draw = () => {
+  const draw = (focusInput = false) => {
     main.innerHTML = `<div class="signin"><h1 id="title" tabindex="-1">${step === 1 ? "Sign in to Aurora" : "Check your email"}</h1>
       <p class="muted">${step === 1 ? "Enter your email to sign in or create an account." : `Enter the verification code for ${esc(email)}.`}</p>
       <form id="sf" novalidate>${step === 1 ? `<div><label for="em">Email</label><input id="em" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" value="${esc(email)}"><p class="err" id="e" role="alert" hidden>${icon("warn", 14)}Enter a valid email, like you@example.com.</p></div><button class="go" type="submit" style="justify-content:center">Send code</button>`
         : `<div><label for="cd">6-digit code</label><input class="code" id="cd" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000"><p class="err" id="e" role="alert" hidden>${icon("warn", 14)}Enter all 6 digits.</p></div><button class="go" type="submit" style="justify-content:center">Sign in</button>
         <div class="row"><button class="linkbtn" type="button" id="resend">Send a new code</button><button class="linkbtn" type="button" id="change">Use another email</button></div>`}</form>
       <p class="muted" style="margin-top:20px;font-size:var(--fs-caption)">By continuing you accept the <a class="linkbtn" href="#/terms">Terms of service</a> and the <a class="linkbtn" href="#/privacy">Privacy policy</a>.</p></div>`;
-    (step === 1 ? $("#em") : $("#cd")).focus();
+    (matchMedia("(max-width: 1000px), (pointer: coarse)").matches && !focusInput ? $("#title") : step === 1 ? $("#em") : $("#cd")).focus({ preventScroll: true });
     $("#sf").onsubmit = e => { e.preventDefault();
-      if (step === 1) { const v = $("#em").value.trim(); if (!/^\S+@\S+\.\S+$/.test(v)) { $("#e").hidden = false; $("#em").setAttribute("aria-invalid", "true"); $("#em").focus(); return; } email = v; step = 2; draw(); }
+      if (step === 1) { const v = $("#em").value.trim(); if (!/^\S+@\S+\.\S+$/.test(v)) { $("#e").hidden = false; $("#em").setAttribute("aria-invalid", "true"); $("#em").focus(); return; } email = v; step = 2; draw(true); }
       else { if (!/^\d{6}$/.test($("#cd").value)) { $("#e").hidden = false; $("#cd").focus(); return; } if (S.user.email !== email) { S = seed(); S.balance = 0; S.transactions = []; S.videos = []; S.nextTransactionId = 1; S.draft.prompt = ""; S.user = { name: "New creator", initials: "NC", email, notifications: { completed: true, receipts: true } }; } S.signedIn = true; save(); go(communityLikeContinuation(communitySetupContinuation(signInDestination(afterSignIn)))); afterSignIn = "create"; toast("Signed in."); } };
     if (step === 2) { $("#resend").onclick = () => toast("Check your inbox for your verification code."); $("#change").onclick = () => { step = 1; draw(); }; }
   };
@@ -3502,7 +3601,7 @@ function openPublicationSettings(id, trigger = null) {
   publicationPanel.hidden = false;
   if (nativePublicationPopover) publicationPanel.showPopover();
   positionPublicationPanel();
-  $("#publish-title").focus({ preventScroll: true });
+  (matchMedia("(max-width: 1000px), (pointer: coarse)").matches ? $("#close-publish") : $("#publish-title")).focus({ preventScroll: true });
   $("#publish-title").oninput = event => {
     const field = event.target;
     if (field.getAttribute("aria-invalid") === "true" && field.value.trim().length > 0 && field.value.trim().length <= 120) {
@@ -3578,7 +3677,7 @@ function viewCommunity(main, arg) {
     ${publicationActionsMarkup(p, { detail: true })}</aside></div></div>`;
   return () => {
     $("#use-community-prompt")?.addEventListener("click", () => beginCommunitySetup(p.id));
-    return preview ? initOfficialMedia(preview, { id: "community-example-media", onPlay: () => recordCommunityView(p.id) }) : null;
+    return preview ? initOfficialMedia(preview, { id: "community-example-media", autoplay: true, onPlay: () => recordCommunityView(p.id) }) : null;
   };
 }
 
@@ -3873,7 +3972,7 @@ function initModelPicker() {
     const results = availableModels().filter(m => (!q || `${m.name} ${m.provider} ${m.tag || ""}`.toLowerCase().includes(q)) && (provider.value === "all" || m.provider === provider.value) && (input.value === "all" || (m.inputs || ["text", "image"]).includes(input.value)));
     $("#model-count").textContent = `${results.length} model${results.length === 1 ? "" : "s"}`;
     $("#model-results").innerHTML = results.length ? results.map(m => `<button type="button" class="catalog-option" data-pick-model="${esc(m.id)}" aria-pressed="${S.draft.model === m.id}"><span class="catalog-option-main"><strong>${esc(m.name)}</strong><span>${esc(m.provider)} · ${esc(m.tag || "Video generation")}</span><small>${m.qualities.map(esc).join(" / ")} · ${Math.min(...m.lengths)}–${Math.max(...m.lengths)} s</small></span><span class="catalog-option-side"><span class="num">From ${fmt(Math.min(...m.qualities.map(q => m.rates[q])))} credits / s</span>${S.draft.model === m.id ? `<b>${icon("check", 14)}Selected</b>` : ""}</span></button>`).join("") : '<div class="catalog-empty"><h3>No matching models</h3><p>Try a different name or clear the filters.</p><button class="btn" id="clear-model-filters" type="button">Clear filters</button></div>';
-    $("#clear-model-filters")?.addEventListener("click", () => { search.value = ""; provider.value = "all"; input.value = "all"; draw(); search.focus(); });
+    $("#clear-model-filters")?.addEventListener("click", () => { search.value = ""; provider.value = "all"; input.value = "all"; draw(); (touchPicker.matches ? close : search).focus({ preventScroll: true }); });
   };
   opener.onclick = () => {
     search.value = ""; provider.value = "all"; input.value = "all"; draw();
@@ -3923,8 +4022,13 @@ const hoverPreviewController = (() => {
   const reelState = (image, playing) => {
     const button = image?.closest('[data-reel-toggle]');
     if (!button) return;
-    button.setAttribute('aria-pressed', String(playing));
-    button.setAttribute('aria-label', `${playing ? 'Pause' : 'Play'} preview: ${button.dataset.reelCaption}`);
+    if (button.hasAttribute('data-reel-open')) {
+      button.removeAttribute('aria-pressed');
+      button.setAttribute('aria-label', `Open video: ${button.dataset.reelCaption}`);
+    } else {
+      button.setAttribute('aria-pressed', String(playing));
+      button.setAttribute('aria-label', `${playing ? 'Pause' : 'Play'} preview: ${button.dataset.reelCaption}`);
+    }
   };
   const reelBusy = (image, value) => image?.closest('[data-reel-toggle]')?.setAttribute('aria-busy', String(value));
   const rectVisibility = image => {
@@ -4176,10 +4280,11 @@ const hoverPreviewController = (() => {
     active.image.dataset.previewState = 'suspended'; reelState(active.image, false);
   };
   const reelScrollPositions = new WeakMap();
-  const toggleReel = image => {
+  const toggleReel = (image, playOnly = false) => {
     if (!reelImage(image) || !allowed(true)) return;
     clearTimers(); hoverImage = null;
     if (active?.image === image && !active.paused) {
+      if (playOnly) { active.manual = true; pausedReels.delete(image); if (active.suspended) resume(active); return; }
       if (active.suspended) { pausedReels.delete(image); active.manual = true; resume(active); return; }
       pausedReels.add(image);
       releaseWarm();
@@ -4194,7 +4299,7 @@ const hoverPreviewController = (() => {
       const session = active; session.paused = false; session.manual = true;
       if (session.video) {
         session.video.muted = true; session.video.defaultMuted = true; session.video.volume = 0;
-        session.video.play().then(() => { if (live(session)) reveal(session); }).catch(() => fail(session));
+        session.video.play().then(() => { if (live(session)) reveal(session); }).catch(() => { if (live(session) && !session.paused && !session.suspended) fail(session); });
       } else if (session.youtube) {
         session.youtube.mute(); session.youtube.setVolume(0);
         if (session.youtube.isMuted() && session.youtube.getVolume() === 0) session.youtube.playVideo();
@@ -4270,12 +4375,16 @@ function communityWatchHref(id, mine = false, fromCreate = false, options = {}) 
   if (fromCreate) params.set('from', 'create');
   return '#/community/watch?' + params.toString();
 }
+function rememberCommunityViewerReturn(trigger, href) {
+  const target = new URLSearchParams(href.split('?')[1] || '');
+  communityViewerReturn = { path: location.hash, scope: target.get('scope'), sort: target.get('sort') || 'trending', seed: target.get('seed') || '', fromCreate: target.get('from') === 'create', postId: trigger.closest('[data-reel-post]')?.dataset.reelPost,
+    playRequested: true,
+    scrollX, scrollY, feedScroll: document.querySelector('.community-feed')?.scrollTop || 0 };
+}
 document.addEventListener('click', event => {
   const link = event.target.closest('a.community-watch');
   if (!link || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-  const target = new URLSearchParams(link.hash.split('?')[1] || '');
-  communityViewerReturn = { path: location.hash, scope: target.get('scope'), sort: target.get('sort') || 'trending', seed: target.get('seed') || '', fromCreate: target.get('from') === 'create', postId: link.closest('[data-reel-post]')?.dataset.reelPost,
-    scrollX, scrollY, feedScroll: document.querySelector('.community-feed')?.scrollTop || 0 };
+  rememberCommunityViewerReturn(link, link.hash);
 });
 const communityStepIcon = down => `<svg class="ic${down ? ' reel-step-down' : ''}" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 10 4-4 4 4"/></svg>`;
 function viewCommunityViewer(main) {
@@ -4328,7 +4437,7 @@ function initCommunityReels(main) {
     card.appendChild(scene);
   });
   const abort = new AbortController(), signal = abort.signal;
-  let enabled = false, frame = 0, restoreFrame = 0, settleTimer = null, singleTap = null, lastLikeGesture = null, lastMediaPointerType = '', lastHeight = 0;
+  let enabled = false, frame = 0, restoreFrame = 0, entryFrame = 0, settleTimer = null, singleTap = null, lastLikeGesture = null, lastMediaPointerType = '', lastHeight = 0;
   const requestedScene = viewer ? page.dataset.viewerScene : params.get('scene');
   const requestedIndex = cards.findIndex(card => card.dataset.reelPost === requestedScene), initial = Math.max(0, requestedIndex);
   const nearest = () => Math.max(0, Math.min(cards.length - 1, Math.round(feed.scrollTop / Math.max(1, feed.clientHeight))));
@@ -4346,7 +4455,8 @@ function initCommunityReels(main) {
   };
   const resize = () => {
     if (!enabled || !feed.isConnected) return;
-    const index = lastHeight ? Math.round(feed.scrollTop / lastHeight) : viewer || requestedIndex >= 0 ? initial : communityReelPositions.get(key) || 0;
+    const selectedIndex = viewer ? cards.findIndex(card => card.dataset.reelPost === new URLSearchParams(location.hash.split('?')[1] || '').get('scene')) : -1;
+    const index = selectedIndex >= 0 ? selectedIndex : lastHeight ? Math.round(feed.scrollTop / lastHeight) : viewer || requestedIndex >= 0 ? initial : communityReelPositions.get(key) || 0;
     const top = Math.max(0, feed.getBoundingClientRect().top);
     page.style.setProperty('--community-feed-top', `${top}px`);
     lastHeight = feed.clientHeight;
@@ -4372,8 +4482,9 @@ function initCommunityReels(main) {
         button.type = 'button'; button.className = old.className + ' community-reel-toggle';
         button.dataset.reelToggle = ''; button.dataset.reelHref = old.getAttribute('href');
         button.dataset.reelCaption = card.querySelector('h3')?.textContent || 'video';
-        button.setAttribute('aria-label', `Play preview: ${button.dataset.reelCaption}`);
-        button.setAttribute('aria-pressed', 'false');
+        button.setAttribute('aria-label', `${viewer ? 'Play preview' : 'Open video'}: ${button.dataset.reelCaption}`);
+        if (viewer) button.setAttribute('aria-pressed', 'false');
+        else button.dataset.reelOpen = '';
         button.style.touchAction = 'pan-y pinch-zoom';
         while (old.firstChild) button.appendChild(old.firstChild);
         const indicator = document.createElement('span'); indicator.className = 'reel-play-indicator'; indicator.setAttribute('aria-hidden', 'true'); indicator.innerHTML = icon('play', 22);
@@ -4393,6 +4504,14 @@ function initCommunityReels(main) {
     else { page.style.removeProperty('--community-feed-top'); lastHeight = 0; feed.scrollTop = 0; hoverPreviewController.refresh(); }
   };
   const cancelSingleTap = () => { if (singleTap) clearTimeout(singleTap.timer); singleTap = null; };
+  const activateScene = button => {
+    if (!button.isConnected || signal.aborted) return;
+    if (viewer) { hoverPreviewController.toggleReel(button.querySelector('img[data-hover-example]')); return; }
+    const href = button.dataset.reelHref;
+    if (!href?.startsWith('#/community/watch?')) return;
+    rememberCommunityViewerReturn(button, href);
+    go(href.slice(2));
+  };
   const likeScene = button => {
     cancelSingleTap();
     if (!button.isConnected || signal.aborted || (lastLikeGesture?.button === button && performance.now() - lastLikeGesture.at < 300)) return;
@@ -4404,12 +4523,12 @@ function initCommunityReels(main) {
   feed.addEventListener('click', event => {
     const button = event.target.closest('[data-reel-toggle]');
     if (!enabled || !button || event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-    if (event.detail === 0) { cancelSingleTap(); hoverPreviewController.toggleReel(button.querySelector('img[data-hover-example]')); return; }
+    if (event.detail === 0) { cancelSingleTap(); activateScene(button); return; }
     if (singleTap?.button === button && performance.now() - singleTap.at <= 240) { likeScene(button); return; }
     cancelSingleTap();
     singleTap = { button, at: performance.now(), timer: setTimeout(() => {
       singleTap = null;
-      if (button.isConnected && !signal.aborted) hoverPreviewController.toggleReel(button.querySelector('img[data-hover-example]'));
+      activateScene(button);
     }, 240) };
   }, { signal });
   feed.addEventListener('dblclick', event => {
@@ -4479,9 +4598,16 @@ function initCommunityReels(main) {
   }
   communityReelsQuery.addEventListener('change', update, { signal });
   window.addEventListener('resize', scheduleResize, { signal });
+  window.visualViewport?.addEventListener('resize', scheduleResize, { signal });
   const observer = new ResizeObserver(scheduleResize);
   observer.observe(document.querySelector('#top')); observer.observe(page.querySelector('.community-feed-toolbar'));
   update();
+  if (viewer && communityViewerReturn?.playRequested && communityViewerReturn.postId === requestedScene) {
+    communityViewerReturn.playRequested = false;
+    entryFrame = requestAnimationFrame(() => {
+      if (!signal.aborted) hoverPreviewController.toggleReel(cards[initial]?.querySelector('img[data-hover-example]'), true);
+    });
+  }
   if (!viewer && communityViewerReturn?.path === location.hash) {
     restoreFrame = requestAnimationFrame(() => { restoreFrame = requestAnimationFrame(() => {
       if (signal.aborted) return;
@@ -4492,7 +4618,7 @@ function initCommunityReels(main) {
       card?.querySelector(':scope > .thumb')?.focus({ preventScroll: true });
     }); });
   }
-  return () => { cancelSingleTap(); abort.abort(); observer.disconnect(); clearTimeout(settleTimer); cancelAnimationFrame(frame); cancelAnimationFrame(restoreFrame); document.body.classList.remove('community-reels'); };
+  return () => { cancelSingleTap(); abort.abort(); observer.disconnect(); clearTimeout(settleTimer); cancelAnimationFrame(frame); cancelAnimationFrame(restoreFrame); cancelAnimationFrame(entryFrame); document.body.classList.remove('community-reels'); };
 }
 
 
