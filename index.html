@@ -1194,6 +1194,7 @@ body[data-view="video"] .crumb .btn { color: var(--text); text-decoration: none;
 .video-quality-badge > svg { display: block; flex: none; pointer-events: none; }
 
 .official-media-player { aspect-ratio: 16 / 9; }
+.official-media-player > video, .official-media-player > iframe { position: absolute; inset: 0; }
 .official-media-player > .official-media-poster, .official-media-player > video, .official-media-player > iframe { display: block; width: 100%; height: 100%; object-fit: contain; border: 0; }
 .official-media-player > .official-media-play { position: absolute; left: 16px; bottom: 16px; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--field-line); border-radius: 50%; background: var(--surface); color: var(--text); }
 .official-media-credit { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-top: 12px; font-size: var(--fs-caption); color: var(--text-muted); }
@@ -1212,6 +1213,30 @@ body[data-view="video"] .crumb .btn { color: var(--text); text-decoration: none;
 .thumbnail-live-preview > video { object-fit: cover; }
 .thumb:has(.thumbnail-live-preview) > .badge { z-index: 1; }
 @media (prefers-reduced-motion: reduce) { .thumbnail-live-preview { transition: none; } }
+
+/* The controller adds this only while the requested video is loading/buffering. */
+.video-loading-indicator {
+  position: absolute; top: 50%; left: 50%; z-index: 5;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 52px; height: 52px; padding: 12px; transform: translate(-50%, -50%);
+  border: 1px solid var(--cinema-line); border-radius: 50%;
+  background: var(--cinema-control); color: var(--cinema-text);
+  pointer-events: none !important;
+}
+.video-loading-indicator[hidden] { display: none; }
+.thumb:has(.reel-like-feedback.is-visible) > .video-loading-indicator { opacity: 0; }
+.video-loading-ring {
+  display: block; flex: none; width: 24px; height: 24px;
+  border: 3px solid var(--cinema-line); border-top-color: var(--cinema-text); border-radius: 50%;
+  animation: video-loading-turn 900ms linear infinite;
+}
+.video-loading-label { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@keyframes video-loading-turn { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .video-loading-indicator { width: auto; min-width: 52px; padding: 12px; border-radius: var(--r-sm); }
+  .video-loading-ring { animation: none; }
+  .video-loading-label { position: static; width: auto; height: auto; margin: 0; overflow: visible; clip-path: none; font-size: 12px; line-height: 1.4; }
+}
 
 /* The full Community feed becomes a silent, one-scene viewport on phones.
    Cinema roles stay dark in both themes so source frames keep their contrast. */
@@ -1434,6 +1459,26 @@ body.community-reels .site-foot { display: none; }
   .app-loading-viewer .skeleton-reel-stage { position: absolute; inset: 0 auto 0 0; width: 60%; }
   .app-loading-viewer .skeleton-reel-copy { position: absolute; inset: 72px 64px 0 auto; width: calc(40% - 76px); padding: 0; }
   .app-loading-viewer .skeleton-reel-metrics { top: 76px; }
+}
+
+/* A confirmed double-tap is visible on the media without intercepting gestures. */
+.reel-like-feedback {
+  position: absolute; top: 50%; left: 50%; z-index: 7;
+  display: grid; place-items: center; width: 80px; height: 80px;
+  border: 1px solid var(--cinema-line); border-radius: 50%;
+  background: var(--cinema-control); color: var(--cinema-text);
+  opacity: 0; transform: translate(-50%, -50%) scale(.88); pointer-events: none !important;
+}
+.reel-like-feedback > svg { display: block; width: 64px; height: 64px; fill: currentColor; }
+.reel-like-feedback[hidden] { display: none; }
+.reel-like-feedback.is-visible { animation: reel-like-confirm 600ms ease-out both; }
+@keyframes reel-like-confirm {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.88); }
+  18%, 65% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reel-like-feedback.is-visible { animation: none; opacity: 1; transform: translate(-50%, -50%); }
 }
 
 .prototype-options { margin-top: 16px; color: var(--text-muted); font-size: var(--fs-caption); }
@@ -1852,21 +1897,28 @@ function confirmedThumbnailMarkup(record, { compact = false, badge = false } = {
   const seconds = Number(example.len), time = Number.isFinite(seconds) && seconds > 0 ? tc(Math.round(seconds)) : "";
   return `<img src="${esc(poster)}" data-hover-example="${esc(example.id)}" alt="" loading="lazy">${badge ? `<span class="badge">Model example${time ? ` <span class="num">${time}</span>` : ""}</span>` : ""}`;
 }
+function videoLoadingMarkup() {
+  return '<span class="video-loading-indicator" aria-hidden="true" hidden><span class="video-loading-ring"></span><span class="video-loading-label">Loading</span></span>';
+}
 function officialMediaMarkup(example, { id = "official-media", playerId = "official-player", playId = "official-play", errorId = "official-media-error", mediaIdPrefix = "official-example", playerClass = "", showMetadata = true } = {}) {
   if (!example) return previewUnavailableMarkup(null, { id: playerId });
   const poster = officialPoster(example);
-  return `<section class="official-media" id="${esc(id)}" data-media-prefix="${esc(mediaIdPrefix)}" data-media-state="ready" aria-label="Model example"><div class="player official-media-player ${esc(playerClass)}" id="${esc(playerId)}" style="aspect-ratio:${frameRatio(example.format)}">${poster ? `<img class="official-media-poster" src="${esc(poster)}" alt="${esc(example.alt || example.caption)}">` : ""}<button class="play official-media-play" id="${esc(playId)}" type="button" aria-label="Play model example">${icon("play", 24)}</button></div><div class="official-media-credit"><span>Model example</span><span>${esc(example.modelName || recordModel(example).name)}</span><a class="linkbtn" href="${esc(example.sourceUrl)}" target="_blank" rel="noopener noreferrer">Source</a></div>${showMetadata && example.author ? `<p class="official-media-author">By ${esc(example.author)}</p>` : ""}${showMetadata ? videoFactsMarkup(example) : ""}<p class="official-media-error" id="${esc(errorId)}" role="alert" hidden>Video could not load. <a class="linkbtn" href="${esc(example.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open source</a></p></section>`;
+  return `<section class="official-media" id="${esc(id)}" data-media-prefix="${esc(mediaIdPrefix)}" data-media-state="ready" aria-label="Model example"><div class="player official-media-player ${esc(playerClass)}" id="${esc(playerId)}" style="aspect-ratio:${frameRatio(example.format)}">${poster ? `<img class="official-media-poster" src="${esc(poster)}" alt="${esc(example.alt || example.caption)}">` : ""}<button class="play official-media-play" id="${esc(playId)}" type="button" aria-label="Play model example">${icon("play", 24)}</button>${videoLoadingMarkup()}</div><div class="official-media-credit"><span>Model example</span><span>${esc(example.modelName || recordModel(example).name)}</span><a class="linkbtn" href="${esc(example.sourceUrl)}" target="_blank" rel="noopener noreferrer">Source</a></div>${showMetadata && example.author ? `<p class="official-media-author">By ${esc(example.author)}</p>` : ""}${showMetadata ? videoFactsMarkup(example) : ""}<p class="official-media-error" id="${esc(errorId)}" role="alert" hidden>Video could not load. <a class="linkbtn" href="${esc(example.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open source</a></p></section>`;
 }
 function initOfficialMedia(example, { id = "official-media", onPlay, autoplay = false } = {}) {
   const root = document.getElementById(id);
   if (!root || !example) return () => {};
   const player = $(".official-media-player", root), trigger = $(".official-media-play", root), poster = $(".official-media-poster", root), error = $(".official-media-error", root);
   const motion = matchMedia("(prefers-reduced-motion: reduce)"), connection = navigator.connection;
-  let media = null, loadingTimer = null, disposed = false, automatic = false;
+  let media = null, loadingTimer = null, frameRequest = null, disposed = false, automatic = false;
+  const spinner = $('.video-loading-indicator', player);
+  const busy = value => { player.setAttribute('aria-busy', String(value)); if (spinner) spinner.hidden = !value; };
   const release = () => {
     clearTimeout(loadingTimer); loadingTimer = null;
     if (!media) return;
-    media.onerror = null; media.onload = null;
+    media.onerror = null; media.onload = null; media.onloadeddata = null; media.onplaying = null; media.onwaiting = null; media.onstalled = null; media.onpause = null;
+    if (frameRequest !== null && media.cancelVideoFrameCallback) media.cancelVideoFrameCallback(frameRequest);
+    frameRequest = null;
     if (media instanceof HTMLVideoElement) { media.pause(); media.removeAttribute("src"); media.load(); }
     else media.src = "about:blank";
     media.remove(); media = null;
@@ -1875,19 +1927,19 @@ function initOfficialMedia(example, { id = "official-media", onPlay, autoplay = 
     if (disposed) return;
     const refocus = !automatic && (player.contains(document.activeElement) || document.activeElement === document.body);
     release(); if (poster) poster.hidden = false;
-    trigger.hidden = false; error.hidden = false; root.dataset.mediaState = "error"; player.setAttribute("aria-busy", "false");
+    trigger.hidden = false; error.hidden = false; root.dataset.mediaState = "error"; busy(false);
     trigger.setAttribute("aria-label", "Try model example again"); if (refocus) trigger.focus({ preventScroll: true });
   };
   const ready = () => {
     release(); if (poster) poster.hidden = false;
-    trigger.hidden = false; error.hidden = true; root.dataset.mediaState = "ready"; player.setAttribute("aria-busy", "false");
+    trigger.hidden = false; error.hidden = true; root.dataset.mediaState = "ready"; busy(false);
     trigger.setAttribute("aria-label", "Play model example");
   };
   const start = (auto = false) => {
     if (disposed || !root.isConnected || (auto && (motion.matches || connection?.saveData || document.hidden))) return;
     automatic = auto;
-    release(); error.hidden = true; if (poster) poster.hidden = true;
-    trigger.hidden = true; root.dataset.mediaState = "loading"; player.setAttribute("aria-busy", "true");
+    release(); error.hidden = true; if (poster) poster.hidden = false;
+    trigger.hidden = true; root.dataset.mediaState = "loading"; busy(true);
     if (!/^https:\/\//.test(example.mediaUrl || "")) { failed(); return; }
     if (example.mediaType === "video") {
       media = document.createElement("video"); media.id = `${root.dataset.mediaPrefix}-video`;
@@ -1897,12 +1949,22 @@ function initOfficialMedia(example, { id = "official-media", onPlay, autoplay = 
       media.src = example.mediaUrl; media.setAttribute("aria-label", `${example.caption} by ${example.author || example.providerName}`);
       media.onerror = failed; player.appendChild(media);
       const activeMedia = media;
-      media.play().then(() => { if (!disposed && media === activeMedia) { root.dataset.mediaState = "playing"; player.setAttribute("aria-busy", "false"); onPlay?.(); } }).catch(() => { if (!disposed && media === activeMedia) ready(); });
+      const shown = () => { frameRequest = null; if (!disposed && media === activeMedia && !activeMedia.paused) { if (poster) poster.hidden = true; root.dataset.mediaState = 'playing'; busy(false); } };
+      const decoded = () => {
+        if (disposed || media !== activeMedia || activeMedia.paused || activeMedia.readyState < 2 || !activeMedia.videoWidth || frameRequest !== null) return;
+        if (activeMedia.requestVideoFrameCallback) frameRequest = activeMedia.requestVideoFrameCallback(shown);
+        else shown();
+      };
+      media.onloadeddata = media.onplaying = decoded;
+      media.onwaiting = () => { if (!disposed && media === activeMedia && !activeMedia.paused) { root.dataset.mediaState = 'loading'; busy(true); } };
+      media.onstalled = () => { if (activeMedia.readyState < 3) activeMedia.onwaiting?.(); };
+      media.onpause = () => { if (media === activeMedia) busy(false); };
+      media.play().then(() => { if (!disposed && media === activeMedia) { decoded(); onPlay?.(); } }).catch(() => { if (!disposed && media === activeMedia) ready(); });
     } else if (example.mediaType === "embed") {
       media = document.createElement("iframe"); media.id = `${root.dataset.mediaPrefix}-embed`;
       media.title = `${example.caption} by ${example.author || example.providerName}`; media.allow = "autoplay; fullscreen; picture-in-picture";
       media.allowFullscreen = true; media.referrerPolicy = "strict-origin-when-cross-origin";
-      media.onerror = failed; media.onload = () => { clearTimeout(loadingTimer); loadingTimer = null; if (!disposed) { root.dataset.mediaState = "ready"; player.setAttribute("aria-busy", "false"); } };
+      media.onerror = failed; media.onload = () => { clearTimeout(loadingTimer); loadingTimer = null; if (!disposed) { if (poster) poster.hidden = true; root.dataset.mediaState = "ready"; busy(false); } };
       const source = new URL(example.mediaUrl);
       source.searchParams.set("autoplay", /(^|\.)youtube(?:-nocookie)?\.com$/.test(source.hostname) ? "1" : "true");
       if (auto) {
@@ -3034,7 +3096,7 @@ function viewHome(main) {
     return `<article class="landing-model-row" data-model="${esc(m.id)}"><div class="landing-model-media" aria-hidden="true"><span class="landing-model-monogram">${esc(initial)}</span>${poster ? `<img src="${esc(poster)}" alt="">` : ""}</div><div class="landing-model-name"><h3>${esc(m.name)}</h3><p>${esc(m.provider)}</p></div><div class="landing-model-settings">${m.qualities.join(" / ")}<br><span class="muted">${m.formats.join(" · ")}</span></div><span class="landing-model-role">${action}</span></article>`;
   }).join("");
   main.innerHTML = `<div class="landing"><section class="landing-hero" aria-labelledby="title"><div><h1 id="title" tabindex="-1">Your next scene starts here.</h1><p class="landing-intro">Short videos for social posts, product stories and B-roll.</p><div class="landing-actions"><a class="btn primary" href="${S.signedIn ? "#/create" : "#/signin"}">${S.signedIn ? "Create a video" : "Start creating"}</a><a class="btn" href="#/community">Explore feed</a></div>${REVIEW ? '<div class="landing-caption"><button class="linkbtn" id="explore-demo" type="button">Explore workspace</button></div>' : ""}</div>
-    <div class="landing-film"><div class="landing-frame"><button class="landing-frame-switch" id="landing-frame" type="button" aria-label="Show next scene frame. Current scene: ${sceneFrames[0].alt}" aria-describedby="landing-frame-help"><img id="landing-scene" src="${sceneFrames[0].src}" data-hover-example="${sceneFrames[0].id}" alt="${sceneFrames[0].alt}"></button><a class="landing-example-watch landing-frame-watch" id="landing-example-link" href="#/community/${sceneFrames[0].id}" aria-label="Watch ${esc(sceneFrames[0].modelLabel)} model example" title="Watch ${esc(sceneFrames[0].modelLabel)} model example">${icon("play", 20)}</a></div><p class="sr" id="landing-frame-help">Choose a preview, or select the large frame for the next scene. Browsing stops automatic changes.</p><div class="landing-frame-note"><span id="landing-scene-category">${sceneFrames[0].category}</span><span id="landing-scene-model">${sceneFrames[0].modelLabel}</span></div><div class="landing-filmstrip">${sceneFrames.map((scene, i) => `<button class="landing-scene-choice${i === 0 ? " is-current" : ""}" type="button" data-scene-index="${i}" aria-label="Show ${esc(scene.caption)}" aria-controls="landing-frame" aria-pressed="${i === 0}"><img src="${scene.src}" alt=""><span class="landing-scene-caption">${scene.category}</span></button>`).join("")}</div></div></section>
+    <div class="landing-film"><div class="landing-frame"><button class="landing-frame-switch" id="landing-frame" type="button" aria-label="Show next scene frame. Current scene: ${sceneFrames[0].alt}" aria-describedby="landing-frame-help"><img id="landing-scene" data-home-preview="true" src="${sceneFrames[0].src}" data-hover-example="${sceneFrames[0].id}" alt="${sceneFrames[0].alt}"></button><a class="landing-example-watch landing-frame-watch" id="landing-example-link" href="#/community/${sceneFrames[0].id}" aria-label="Watch ${esc(sceneFrames[0].modelLabel)} model example" title="Watch ${esc(sceneFrames[0].modelLabel)} model example">${icon("play", 20)}</a></div><p class="sr" id="landing-frame-help">Choose a preview, or select the large frame for the next scene. Browsing stops automatic changes.</p><div class="landing-frame-note"><span id="landing-scene-category">${sceneFrames[0].category}</span><span id="landing-scene-model">${sceneFrames[0].modelLabel}</span></div><div class="landing-filmstrip">${sceneFrames.map((scene, i) => `<button class="landing-scene-choice${i === 0 ? " is-current" : ""}" type="button" data-scene-index="${i}" aria-label="Show ${esc(scene.caption)}" aria-controls="landing-frame" aria-pressed="${i === 0}"><img src="${scene.src}" alt=""><span class="landing-scene-caption">${scene.category}</span></button>`).join("")}</div></div></section>
     <section class="landing-section"><h2>From prompt to video.</h2><div class="landing-workflow"><div class="landing-prompt"><span class="landing-prompt-label">Your prompt</span><blockquote>“Green hills beneath a pale sky. A slow camera push. Soft light. Quiet wind.”</blockquote><div class="landing-prompt-controls">${videoFactsMarkup({ len: 8, format: "16:9" })}</div></div><ol class="landing-steps"><li><div><h3>Describe the shot</h3><p>Write a prompt or add a reference image.</p></div></li><li><div><h3>Choose your settings</h3><p>Pick a model, length and frame. Check the price.</p></div></li><li><div><h3>Keep or publish</h3><p>Your video is saved in History. Publish it in Feed, with or without its prompt.</p></div></li></ol></div></section>
     <section class="landing-section"><h2>Choose your model</h2><div class="landing-models">${modelRows}</div></section>
     <section class="landing-section landing-faq"><h2>Before you start</h2><div><details><summary>Can I buy credits without a subscription?</summary><p>Yes. Choose a credit pack or a monthly plan.</p></details><details><summary>Which settings are available?</summary><p>Length, resolution and frame shape depend on the model.</p></details><details><summary>Where are my videos?</summary><p>In History. You choose what to publish in Feed.</p></details></div></section></div>`;
@@ -4030,7 +4092,21 @@ const hoverPreviewController = (() => {
       button.setAttribute('aria-label', `${playing ? 'Pause' : 'Play'} preview: ${button.dataset.reelCaption}`);
     }
   };
-  const reelBusy = (image, value) => image?.closest('[data-reel-toggle]')?.setAttribute('aria-busy', String(value));
+  const reelBusy = (image, value) => {
+    const host = hostFor(image);
+    if (!host) return;
+    host.setAttribute('aria-busy', String(value));
+    let indicator = host.querySelector(':scope > .video-loading-indicator');
+    if (value && !indicator) { host.insertAdjacentHTML('beforeend', videoLoadingMarkup()); indicator = host.lastElementChild; }
+    if (indicator) indicator.hidden = !value;
+  };
+  const heroImage = () => document.querySelector('img[data-home-preview="true"]');
+  const heroSources = {
+    'example-kling-portrait': 'assets/hero-previews/kling-portrait.mp4',
+    'example-kling-product': 'assets/hero-previews/kling-product.mp4',
+    'example-runway-kitchen': 'assets/hero-previews/runway-kitchen.mp4',
+    'example-kling-truck': 'assets/hero-previews/kling-truck.mp4'
+  };
   const rectVisibility = image => {
     const r = image.getBoundingClientRect(), top = Math.max(0, document.querySelector("#top")?.getBoundingClientRect().bottom || 0);
     const width = Math.max(0, Math.min(innerWidth, r.right) - Math.max(0, r.left));
@@ -4081,6 +4157,10 @@ const hoverPreviewController = (() => {
     reelState(session.image, true);
     reelBusy(session.image, false);
     session.layer.classList.add("is-ready");
+    if (session.image.matches('[data-home-preview]')) {
+      session.layer.style.opacity = session.image.style.opacity;
+      session.layer.style.transition = session.image.style.transition || 'opacity 420ms ease-out';
+    }
     queueWarm(session);
   };
   const alignLayer = session => {
@@ -4088,6 +4168,10 @@ const hoverPreviewController = (() => {
     Object.assign(session.layer.style, { left: `${image.left - host.left - session.host.clientLeft + session.host.scrollLeft}px`, top: `${image.top - host.top - session.host.clientTop + session.host.scrollTop}px`, width: `${image.width}px`, height: `${image.height}px` });
   };
   const mediaSource = (example, image) => {
+    if (image.matches('[data-home-preview]')) {
+      const path = heroSources[example.id];
+      return path ? { type: 'video', url: new URL(path, document.baseURI).href } : null;
+    }
     let url;
     try { url = new URL(example.mediaUrl); } catch (_) { return null; }
     if (url.protocol !== "https:") return null;
@@ -4125,11 +4209,19 @@ const hoverPreviewController = (() => {
         return;
       }
       if (session.paused || session.suspended) return;
-      if (session.frameRequest !== undefined || session.layer.classList.contains("is-ready")) return;
+      if (session.frameRequest !== undefined) return;
+      if (session.layer.classList.contains("is-ready")) { reveal(session); return; }
       if (video.requestVideoFrameCallback) session.frameRequest = video.requestVideoFrameCallback(() => { session.frameRequest = undefined; reveal(session); });
       else reveal(session);
     };
     video.onloadeddata = video.onplaying = firstFrame;
+    const waiting = () => {
+      if (live(session) && active === session && !session.paused && !session.suspended && !video.paused) {
+        session.image.dataset.previewState = 'loading'; reelBusy(session.image, true);
+      }
+    };
+    video.addEventListener('waiting', waiting, { signal: session.abort.signal });
+    video.addEventListener('stalled', () => { if (video.readyState < 3) waiting(); }, { signal: session.abort.signal });
     video.onerror = () => fail(session);
     session.layer.appendChild(video);
     const play = () => {
@@ -4247,12 +4339,14 @@ const hoverPreviewController = (() => {
     }, 350);
   };
   const scheduleHover = image => {
-    if (!fine.matches || reelImage(image) || !allowed() || !eligible(image)) return;
+    if (!fine.matches || image?.matches('[data-home-preview]') || reelImage(image) || !allowed() || !eligible(image)) return;
     if (hoverImage === image && (hoverTimer || active?.image === image)) return;
     clearTimeout(hoverTimer); release(); hoverImage = image;
     hoverTimer = setTimeout(() => { hoverTimer = null; if (fine.matches && hoverImage === image) begin(image); }, HOVER_DELAY);
   };
   const chooseMobile = () => {
+    const hero = heroImage();
+    if (hero && hero.style.opacity !== '0' && allowed() && !['slow-2g', '2g'].includes(connection?.effectiveType) && eligible(hero) && rectVisibility(hero).ratio >= .5) { begin(hero); return; }
     const reels = reelsVisible();
     if ((!reels && (!coarse.matches || fine.matches)) || !allowed()) return;
     const center = innerHeight / 2;
@@ -4264,8 +4358,8 @@ const hoverPreviewController = (() => {
       begin(candidates[0].image);
     }
   };
-  const armMobile = (delay = reelsVisible() ? REEL_SETTLE_DELAY : SETTLE_DELAY, reset = false) => {
-    if (!(reelsVisible() || (coarse.matches && !fine.matches)) || !allowed()) return;
+  const armMobile = (delay = reelsVisible() ? REEL_SETTLE_DELAY : heroImage() ? 180 : SETTLE_DELAY, reset = false) => {
+    if (!(heroImage() || reelsVisible() || (coarse.matches && !fine.matches)) || !allowed()) return;
     const due = performance.now() + delay;
     if (!reset && settleTimer && settleDue <= due) return;
     clearTimeout(settleTimer); settleDue = due;
@@ -4277,7 +4371,7 @@ const hoverPreviewController = (() => {
     active.suspended = true; active.video?.pause(); active.hls?.stopLoad();
     if (active.frameRequest !== undefined && active.video?.cancelVideoFrameCallback) { active.video.cancelVideoFrameCallback(active.frameRequest); active.frameRequest = undefined; }
     try { active.youtube?.pauseVideo(); } catch (_) {}
-    active.image.dataset.previewState = 'suspended'; reelState(active.image, false);
+    active.image.dataset.previewState = 'suspended'; reelState(active.image, false); reelBusy(active.image, false);
   };
   const reelScrollPositions = new WeakMap();
   const toggleReel = (image, playOnly = false) => {
@@ -4291,7 +4385,7 @@ const hoverPreviewController = (() => {
       if (!active.layer.classList.contains('is-ready')) { release(); return; }
       active.paused = true; active.video?.pause();
       try { active.youtube?.pauseVideo(); } catch (_) {}
-      image.dataset.previewState = 'paused'; reelState(image, false);
+      image.dataset.previewState = 'paused'; reelState(image, false); reelBusy(image, false);
       return;
     }
     pausedReels.delete(image); failures.delete(image.dataset.hoverExample);
@@ -4346,21 +4440,39 @@ const hoverPreviewController = (() => {
   window.addEventListener("pageshow", () => armMobile());
   for (const query of [fine, coarse, motion]) query.addEventListener("change", () => { stop(); hoverImage = null; armMobile(); });
   connection?.addEventListener?.("change", () => { stop(); armMobile(); });
+  let observedHero = null;
+  const heroObserver = new IntersectionObserver(entries => {
+    for (const entry of entries) if (entry.target === observedHero) {
+      if (!entry.isIntersecting || entry.intersectionRatio < .5) { if (active?.image === observedHero) release(); }
+      else armMobile(180);
+    }
+  }, { threshold: [0, .5] });
+  const observeHero = () => {
+    const next = heroImage(); if (next === observedHero) return;
+    if (observedHero) heroObserver.unobserve(observedHero);
+    observedHero = next; if (next) heroObserver.observe(next);
+  };
   const observer = new MutationObserver(records => {
+    observeHero();
     if (active && (!active.image.isConnected || active.image.dataset.hoverExample !== active.example.id || blocked(active.manual))) release();
     if (warm && (!warm.image.isConnected || warm.image.dataset.hoverExample !== warm.example.id || blocked())) releaseWarm();
     let changed = false;
     for (const record of records) {
       if (record.type === "attributes") {
+        if (record.attributeName === 'style' && record.target === active?.image && record.target.matches('[data-home-preview]') && active.layer.classList.contains('is-ready')) {
+          active.layer.style.opacity = record.target.style.opacity;
+          active.layer.style.transition = record.target.style.transition || 'opacity 420ms ease-out';
+        }
         if (record.target.matches(HOOK)) { changed = true; if (record.target === hoverImage && fine.matches) { const image = hoverImage; stop(); hoverImage = null; scheduleHover(image); } }
         else if (record.target.matches("#publish-panel,#destructive-panel,#mobile-navigation,#menu,dialog")) changed = true;
       } else if ([...record.addedNodes, ...record.removedNodes].some(node => node instanceof Element && (node.matches(HOOK + ",#publish-panel,#destructive-panel,#mobile-navigation,#menu,dialog") || node.querySelector(HOOK + ",#publish-panel,#destructive-panel,#mobile-navigation,#menu,dialog")))) changed = true;
     }
     if (changed) armMobile();
   });
-  observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["data-hover-example", "src", "hidden", "open", "aria-expanded"] });
+  observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["data-hover-example", "src", "style", "hidden", "open", "aria-expanded"] });
+  observeHero();
   armMobile();
-  return { stop, refresh: () => armMobile(reelsVisible() ? 0 : SETTLE_DELAY), toggleReel, destroy() { disposed = true; stop(); observer.disconnect(); } };
+  return { stop, refresh: () => armMobile(reelsVisible() ? 0 : heroImage() ? 180 : SETTLE_DELAY), toggleReel, destroy() { disposed = true; stop(); observer.disconnect(); heroObserver.disconnect(); } };
 })();
 
 /* Native scroll snap keeps swipe, assistive technology and keyboard scrolling.
@@ -4504,6 +4616,15 @@ function initCommunityReels(main) {
     else { page.style.removeProperty('--community-feed-top'); lastHeight = 0; feed.scrollTop = 0; hoverPreviewController.refresh(); }
   };
   const cancelSingleTap = () => { if (singleTap) clearTimeout(singleTap.timer); singleTap = null; };
+  const likeStatus = document.createElement('span'); likeStatus.className = 'sr'; likeStatus.setAttribute('role', 'status'); likeStatus.setAttribute('aria-live', 'polite'); page.appendChild(likeStatus);
+  let likeFeedback = null, likeFeedbackTimer = null;
+  const clearLikeFeedback = () => { clearTimeout(likeFeedbackTimer); likeFeedbackTimer = null; likeFeedback?.remove(); likeFeedback = null; };
+  const confirmLike = button => {
+    clearLikeFeedback();
+    likeFeedback = document.createElement('span'); likeFeedback.className = 'reel-like-feedback is-visible'; likeFeedback.setAttribute('aria-hidden', 'true'); likeFeedback.innerHTML = icon('heart', 64);
+    button.appendChild(likeFeedback); likeStatus.textContent = 'Video liked.';
+    likeFeedbackTimer = setTimeout(clearLikeFeedback, 650);
+  };
   const activateScene = button => {
     if (!button.isConnected || signal.aborted) return;
     if (viewer) { hoverPreviewController.toggleReel(button.querySelector('img[data-hover-example]')); return; }
@@ -4517,7 +4638,7 @@ function initCommunityReels(main) {
     if (!button.isConnected || signal.aborted || (lastLikeGesture?.button === button && performance.now() - lastLikeGesture.at < 300)) return;
     lastLikeGesture = { button, at: performance.now() };
     const id = button.closest('[data-reel-post]')?.dataset.reelPost;
-    if (id) setCommunityLike(id, true);
+    if (id && setCommunityLike(id, true).liked) confirmLike(button);
   };
   feed.addEventListener('pointerdown', event => { if (event.target.closest('[data-reel-toggle]')) lastMediaPointerType = event.pointerType; }, { signal });
   feed.addEventListener('click', event => {
@@ -4544,6 +4665,7 @@ function initCommunityReels(main) {
   document.addEventListener('visibilitychange', () => { if (document.hidden) cancelSingleTap(); }, { signal });
   feed.addEventListener('scroll', () => {
     cancelSingleTap();
+    clearLikeFeedback();
     if (!enabled) return;
     communityReelPositions.set(key, nearest());
     if (viewer) { clearTimeout(settleTimer); settleTimer = setTimeout(syncViewer, 320); }
@@ -4618,7 +4740,7 @@ function initCommunityReels(main) {
       card?.querySelector(':scope > .thumb')?.focus({ preventScroll: true });
     }); });
   }
-  return () => { cancelSingleTap(); abort.abort(); observer.disconnect(); clearTimeout(settleTimer); cancelAnimationFrame(frame); cancelAnimationFrame(restoreFrame); cancelAnimationFrame(entryFrame); document.body.classList.remove('community-reels'); };
+  return () => { cancelSingleTap(); clearLikeFeedback(); abort.abort(); observer.disconnect(); clearTimeout(settleTimer); cancelAnimationFrame(frame); cancelAnimationFrame(restoreFrame); cancelAnimationFrame(entryFrame); document.body.classList.remove('community-reels'); };
 }
 
 
