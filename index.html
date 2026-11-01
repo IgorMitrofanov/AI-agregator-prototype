@@ -714,7 +714,8 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .history-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
 .history-actions .publication-actions { margin-left: 0; }
 .vside .video-actions { display: flex; flex-direction: row; align-items: center; flex-wrap: wrap; gap: 8px; }
-.publication .publication-icon-actions { gap: 8px; }
+.vside .video-actions > [data-video-delete] { margin-left: auto; }
+.publication-icon-actions { display: flex; align-items: center; gap: 8px; flex: none; }
 @media (max-width: 760px) { .hist .history-publication { display: block; } }
 .community-privacy { margin-top: 16px; min-height: 44px; display: flex; align-items: center; color: var(--text-muted); font-size: 13px; }
 .community-author { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 13px; }
@@ -736,14 +737,11 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .community-prompt { margin: 24px 0; border-top: 1px solid var(--line); padding-top: 24px; }
 .community-prompt h2 { font-size: 23px; margin-bottom: 12px; }
 .community-prompt p { color: var(--text-muted); line-height: 1.65; overflow-wrap: anywhere; margin-bottom: 20px; }
-.publication { border-top: 1px solid var(--line); margin-top: 28px; padding-top: 24px; scroll-margin-top: 110px; }
-.publication h2 { font-size: 23px; margin-bottom: 8px; }
-.publication p { color: var(--text-muted); line-height: 1.6; font-size: 14px; margin: 8px 0 16px; }
-.publication-state { font-size: 13px; color: var(--text-muted); font-weight: 500; }
-.publication .row { margin-top: 16px; }
-.publication .row, .community-detail .row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
-.publication .row > *, .community-detail .row > * { max-width: 100%; white-space: normal; }
-.publication .linkbtn, .community-detail .row .linkbtn, body[data-view="community"] .page > .linkbtn { display: inline-flex; align-items: center; min-height: 44px; }
+.publication { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid var(--line); margin-top: 16px; padding-top: 16px; scroll-margin-top: 110px; }
+.publication-state { flex: 1; min-width: 0; font-size: 13px; line-height: 1.5; color: var(--text-muted); font-weight: 500; }
+.community-detail .row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.community-detail .row > * { max-width: 100%; white-space: normal; }
+.community-detail .row .linkbtn, body[data-view="community"] .page > .linkbtn { display: inline-flex; align-items: center; min-height: 44px; }
 .publication-popover { position: fixed; inset: auto; z-index: 90; width: min(380px, calc(100vw - 32px)); margin: 0; padding: 24px; overflow-y: auto; background: var(--surface); color: var(--text); border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: 0 16px 48px var(--shadow); }
 .publication-popover[hidden] { display: none; }
 .publication-popover-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
@@ -776,7 +774,7 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 @media (max-width: 900px) {
   .vside { display: flex; flex-direction: column; }
   .vside > h1 { order: 0; }
-  .vside > .acts { order: 1; }
+  .vside > .acts { order: 1; margin-top: 20px; }
   .vside > .publication { order: 2; }
   .vside > .prompt { order: 3; margin-top: 28px; }
   .vside > .facts { order: 4; }
@@ -896,8 +894,8 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .estimate-allocation-track { height: 6px; background: var(--line); border-radius: 2px; overflow: hidden; }
 .estimate-allocation-track > span { display: block; height: 100%; background: var(--text); }
 .estimate-allocation-labels { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px; font-size: 12px; color: var(--text-muted); margin-top: 10px; font-variant-numeric: tabular-nums; }
-.estimate-use { min-height: 44px; margin-top: 24px; }
-.estimate-source { display: flex; align-items: center; width: fit-content; min-height: 44px; margin-top: 12px; font-size: 13px; color: var(--text-muted); }
+.estimate-actions { display: flex; align-items: center; gap: 8px; margin-top: 24px; }
+.estimate-actions > .estimate-use, .estimate-actions > .estimate-source { margin: 0; width: 44px; height: 44px; }
 .plan-estimate .plan-estimate-result { color: var(--text); line-height: 1.7; margin-top: 20px; }
 .plan-pending { padding: 20px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 0 0 28px; }
 .plan-pending h3, #plan-change-review h3 { font-family: var(--sans); font-size: 16px; font-weight: 600; margin-bottom: 12px; }
@@ -962,6 +960,115 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .thumbnail-live-preview > video { object-fit: cover; }
 .thumb:has(.thumbnail-live-preview) > .badge { z-index: 1; }
 @media (prefers-reduced-motion: reduce) { .thumbnail-live-preview { transition: none; } }
+
+/* The full Community feed becomes a silent, one-scene viewport on phones.
+   Cinema roles stay dark in both themes so source frames keep their contrast. */
+:root {
+  --cinema-bg: #101113;
+  --cinema-text: #f3f3f5;
+  --cinema-muted: #c3c3ca;
+  --cinema-control: #242529;
+  --cinema-line: #767680;
+  --cinema-scrim: rgb(16 17 19 / .96);
+}
+.community-feed-toolbar > .account-heading { margin-bottom: 28px; }
+.community-create > .ic, .community-use-label { display: none; }
+.community-reel-toggle { border: 0; padding: 0; color: inherit; text-align: inherit; width: 100%; }
+.reel-play-indicator { display: none; }
+.community-page.is-reels { padding: 0; max-width: none; }
+body.community-reels .site-foot { display: none; }
+.community-page.is-reels .community-feed-toolbar { padding: 8px 16px 0; background: var(--bg); }
+.community-page.is-reels .account-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0; }
+.community-page.is-reels .account-heading > div { display: block; min-width: 0; }
+.community-page.is-reels .account-heading h1 { font-size: 26px; line-height: 1.2; }
+.community-page.is-reels .account-heading .sub { display: none; }
+.community-page.is-reels .community-create { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; }
+.community-page.is-reels .community-create > .ic { display: block; }
+.community-page.is-reels .community-create > span { display: none; }
+.community-page.is-reels .community-tabs { margin: 0; gap: 24px; border-bottom: 0; }
+.community-page.is-reels .community-tabs a { min-height: 44px; padding: 10px 0; font-size: 14px; }
+.community-page.is-reels .community-feed {
+  display: block; height: calc(100dvh - var(--community-feed-top, 160px)); min-height: 180px;
+  overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: contain;
+  scroll-snap-type: y mandatory; scrollbar-width: none; touch-action: pan-y pinch-zoom;
+  background: var(--cinema-bg); color: var(--cinema-text);
+}
+.community-page.is-reels .community-feed::-webkit-scrollbar { display: none; }
+.community-page.is-reels .community-card {
+  position: relative; height: 100%; min-height: 180px; isolation: isolate;
+  display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto;
+  scroll-snap-align: start; scroll-snap-stop: always; overflow: hidden;
+  background: var(--cinema-bg); color: var(--cinema-text);
+}
+.community-page.is-reels .community-card > .thumb {
+  position: relative; grid-row: 1; min-height: 0; width: 100%; height: 100%; aspect-ratio: auto;
+  border-radius: 0; background: var(--cinema-bg); color: var(--cinema-muted);
+}
+.community-page.is-reels .thumb > img { object-fit: contain; }
+.community-page.is-reels .thumbnail-live-preview > video { object-fit: contain; }
+.community-page.is-reels .thumb > .badge { top: 16px; bottom: auto; left: 16px; background: var(--cinema-control); color: var(--cinema-text); }
+.community-page.is-reels .reel-play-indicator { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: grid; place-items: center; width: 52px; height: 52px; border: 1px solid var(--cinema-line); border-radius: 50%; background: var(--cinema-control); color: var(--cinema-text); z-index: 2; }
+.community-page.is-reels .thumb:has(img[data-preview-state="playing"]) .reel-play-indicator,
+.community-page.is-reels .thumb:has(img[data-preview-state="loading"]) .reel-play-indicator { opacity: 0; }
+.community-page.is-reels .community-reel-copy {
+  position: relative; grid-row: 2; min-width: 0; z-index: 2; padding: 16px 80px max(20px, env(safe-area-inset-bottom));
+  padding-left: 16px; background: var(--cinema-scrim);
+  pointer-events: none;
+}
+.community-page.is-reels .community-reel-copy::before { content: ''; position: absolute; inset: auto 0 100%; height: 48px; background: linear-gradient(transparent, var(--cinema-scrim)); pointer-events: none; }
+.community-page.is-reels .community-reel-copy :is(a, button) { pointer-events: auto; }
+.community-page.is-reels .community-author { margin: 0; gap: 8px; font-size: 12px; line-height: 1.45; color: var(--cinema-muted); min-width: 0; }
+.community-page.is-reels .community-author > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.community-page.is-reels .community-example-credit { flex-wrap: nowrap; }
+.community-page.is-reels .community-example-credit > span:first-child { color: var(--cinema-text); flex: none; }
+.community-page.is-reels .community-example-credit > span:nth-child(2) { min-width: 0; }
+.community-page.is-reels .community-source { flex: none; min-height: 44px; color: var(--cinema-text); }
+.community-page.is-reels .community-initials { color: var(--cinema-text); background: var(--cinema-control); }
+.community-page.is-reels .community-card h3 { margin: 4px 0 8px; font-size: 17px; line-height: 1.35; }
+.community-page.is-reels .community-card h3 a { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.community-page.is-reels .community-card-meta { justify-content: flex-start; gap: 4px 12px; color: var(--cinema-muted); font-size: 12px; line-height: 1.5; }
+.community-page.is-reels .community-card-meta > .video-facts { margin-left: 0; }
+.community-page.is-reels .community-card-meta .video-fact { color: var(--cinema-muted); }
+.community-page.is-reels .community-card-foot { margin-top: 16px; gap: 8px; }
+.community-page.is-reels .community-use { display: inline-flex; align-items: center; gap: 8px; width: auto; padding: 0 14px; min-height: 44px; background: var(--cinema-text); color: var(--cinema-bg); border-color: var(--cinema-text); font-size: 14px; }
+.community-page.is-reels .community-use:hover { background: var(--cinema-muted); }
+.community-page.is-reels .community-use-label { display: inline; }
+.community-page.is-reels .community-metrics { position: absolute; right: 12px; bottom: max(88px, calc(env(safe-area-inset-bottom) + 68px)); margin: 0; flex-direction: column; gap: 12px; pointer-events: auto; }
+.community-page.is-reels .community-metric { display: flex; flex-direction: column; gap: 2px; min-width: 44px; min-height: 44px; padding: 6px; color: var(--cinema-text); background: var(--cinema-control); border-radius: var(--r-sm); line-height: 1.25; }
+.community-page.is-reels .community-metric > .ic { width: 20px; height: 20px; }
+.community-page.is-reels .community-metric .num { color: var(--cinema-text); font-size: 12px; }
+.community-page.is-reels .community-metric:hover { background: var(--cinema-bg); }
+.community-page.is-reels .community-privacy { position: absolute; right: 12px; bottom: max(24px, calc(env(safe-area-inset-bottom) + 4px)); margin: 0; }
+.community-page.is-reels .publication-actions { margin: 0; width: 100%; gap: 8px; }
+.community-page.is-reels .publication-action { color: var(--cinema-text); background: var(--cinema-control); border-color: var(--cinema-line); }
+.community-page.is-reels :focus-visible { outline-color: var(--cinema-text); outline-offset: -3px; }
+.community-page.is-reels .community-feed-toolbar :focus-visible { outline-color: var(--accent); outline-offset: 2px; }
+.community-page.is-reels .publication-empty { padding: 32px 16px; }
+@media (orientation: landscape) and (max-height: 560px) {
+  .community-page.is-reels .community-feed-toolbar { display: flex; align-items: center; gap: 20px; padding-top: 0; }
+  .community-page.is-reels .account-heading { flex: 1; }
+  .community-page.is-reels .account-heading h1 { font-size: 23px; }
+  .community-page.is-reels .community-tabs { flex: none; }
+  .community-page.is-reels .community-create { display: none; }
+  .community-page.is-reels .community-card { display: block; }
+  .community-page.is-reels .community-card > .thumb { position: absolute; inset: 0; width: 60%; }
+  .community-page.is-reels .community-reel-copy { position: absolute; inset: 0 0 0 auto; width: 40%; padding: 8px 64px 8px 12px; display: flex; flex-direction: column; justify-content: center; background: var(--cinema-bg); }
+  .community-page.is-reels .community-reel-copy::before { display: none; }
+  .community-page.is-reels .community-card-meta > .video-facts { display: none; }
+  .community-page.is-reels .community-card-foot { margin-top: 8px; }
+  .community-page.is-reels .community-card h3 { font-size: 15px; margin: 0 0 4px; }
+  .community-page.is-reels .community-author { flex-wrap: wrap; gap: 0 8px; }
+  .community-page.is-reels .community-author > span:nth-child(2) { max-width: 100%; }
+  .community-page.is-reels .community-source { min-height: 44px; }
+  .community-page.is-reels .community-metrics { bottom: auto; top: 12px; gap: 8px; }
+  .community-page.is-reels .community-privacy { bottom: 12px; }
+  .community-page.is-reels .publication-actions { gap: 4px; }
+  .community-page.is-reels .community-card:has(.publication-actions) h3 a { -webkit-line-clamp: 1; }
+  .community-page.is-reels .community-card:has(.publication-actions) .community-example-credit > span:first-child { display: none; }
+  .community-page.is-reels .community-card:has(.publication-actions) .community-example-credit > span:nth-child(2) { flex: 1; }
+  .community-page.is-reels .community-card:has(.publication-actions) .publication-actions { position: absolute; left: calc(-150% + 12px); bottom: 12px; width: auto; }
+}
+@media (prefers-reduced-motion: reduce) { .community-page.is-reels .community-feed { scroll-behavior: auto; } }
 
 .prototype-options { margin-top: 16px; color: var(--text-muted); font-size: var(--fs-caption); }
 .prototype-options summary { cursor: pointer; padding: 8px 0; }
@@ -1850,7 +1957,7 @@ function drawHistory() {
 /* ----- Video ----- */
 function viewVideo(main, arg) {
   const v = S.videos.find(x => String(x.id) === String(arg));
-  if (!v) { const archived = findTrashedVideo(arg); main.innerHTML = archived ? `<div class="page"><div class="empty"><h2 id="title" tabindex="-1">Video is in Trash</h2><p>Restore it from Trash to return it to your videos.</p><a class="btn primary" data-open-trash href="#/history/trash">Open Trash</a></div></div>` : `<div class="page"><div class="empty"><h2 id="title" tabindex="-1">This video is gone</h2><p>It may have been deleted.</p><a class="btn primary" href="#/history">Back to history</a></div></div>`; return; }
+  if (!v) { const archived = findTrashedVideo(arg); main.innerHTML = archived ? `<div class="page"><div class="empty"><h2 id="title" tabindex="-1">Recently deleted video</h2><p>Restore it to return it to your videos.</p><a class="btn primary" data-open-trash href="#/history/trash">Open Recently deleted</a></div></div>` : `<div class="page"><div class="empty"><h2 id="title" tabindex="-1">This video is gone</h2><p>It may have been deleted.</p><a class="btn primary" href="#/history">Back to history</a></div></div>`; return; }
   const ratio = frameRatio(v.format);
   const shown = v.status === "ready";
   const example = shown ? recordOfficialExample(v) : null;
@@ -1862,9 +1969,8 @@ function viewVideo(main, arg) {
   <div class="vgrid"><div>${mediaMarkup}</div>
   <aside class="vside"><h1 id="title" tabindex="-1">${esc(titleOf(v.prompt))}</h1><p class="prompt">${esc(v.prompt)}</p>
     <dl class="facts"><div><dt>Model</dt><dd>${esc(recordModel(v).name)}</dd></div><div><dt>Length</dt><dd class="num">${v.len} s</dd></div><div><dt>Quality and format</dt><dd class="num">${v.quality}, ${v.format}</dd></div><div><dt>Credits used</dt><dd class="num">${v.refunded ? "0 · credits returned" : fmt(v.credits)}</dd></div><div><dt>Created</dt><dd>${esc(videoCreatedLabel(v))}</dd></div></dl>
-    <a class="account-link" href="#/account/credits">View credit activity</a>
     <div class="acts video-actions" role="group" aria-label="Video actions">${shown && mediaAction ? `<a class="btn primary video-icon-action" id="dl" href="${esc(mediaAction.url)}" target="_blank" rel="noopener noreferrer" aria-label="${mediaAction.label}">${icon(example?.mediaType === "video" ? "download" : "external", 18)}</a>` : ""}
-      <button class="btn video-icon-action" type="button" id="reuse" aria-label="Use this setup">${icon("setup", 18)}</button>${videoDeleteAction(v, { id: "del", compactLabel: true })}</div>
+      <button class="btn video-icon-action" type="button" id="reuse" aria-label="Use this setup">${icon("setup", 18)}</button><a class="btn video-icon-action" id="video-credit-activity" href="#/account/credits" aria-label="View credit activity">${icon("credits", 18)}</a>${videoDeleteAction(v, { id: "del", compactLabel: true })}</div>
     ${shown ? publicationMarkup(v) : ""}
   </aside></div></div>`;
   return () => {
@@ -1910,7 +2016,7 @@ function viewPlans(main) {
       <section class="plan-estimate" aria-labelledby="estimate-heading"><h2 id="estimate-heading">What your credits can create</h2>${models.length ? `
         <div class="estimate-carousel" id="estimate-carousel" role="region" aria-roledescription="carousel" aria-labelledby="estimate-heading">
           ${examples.length > 1 && activeExample ? '<p class="sr" id="estimate-browse-help">Select the frame to see another example. Browsing stops automatic changes.</p>' : ""}
-          <div class="estimate-stage"><div class="estimate-example" id="estimate-slide" role="group" aria-roledescription="slide"><figure class="estimate-visual" ${examples.length > 1 && activeExample ? 'role="button" tabindex="0" aria-label="Show next credit example" aria-describedby="estimate-browse-help"' : ""}><img id="estimate-reference" data-hover-example="${activeExample?.id || ""}" ${activeExample ? `src="${officialPoster(activeExample)}"` : ""} alt="" loading="lazy"><figcaption><span id="estimate-frame-label">Reference frame</span><span class="num" id="estimate-frame-length"></span></figcaption></figure><div class="estimate-story"><p class="estimate-budget-label" id="estimate-budget-label"></p><div class="estimate-result" id="estimate-result" role="status" aria-atomic="true"></div><p class="estimate-total" id="estimate-total-footage"></p><div class="estimate-allocation"><div class="estimate-allocation-track" id="estimate-allocation" role="meter" aria-label="Example credit allocation" aria-valuemin="0"><span></span></div><div class="estimate-allocation-labels"><span id="estimate-allocated"></span><span id="estimate-remainder"></span></div></div><button class="btn estimate-use" id="use-estimate-settings" type="button">Use these settings</button><a class="estimate-source linkbtn" id="estimate-example-link" hidden>Watch model example</a></div></div></div>
+          <div class="estimate-stage"><div class="estimate-example" id="estimate-slide" role="group" aria-roledescription="slide"><figure class="estimate-visual" ${examples.length > 1 && activeExample ? 'role="button" tabindex="0" aria-label="Show next credit example" aria-describedby="estimate-browse-help"' : ""}><img id="estimate-reference" data-hover-example="${activeExample?.id || ""}" ${activeExample ? `src="${officialPoster(activeExample)}"` : ""} alt="" loading="lazy"><figcaption><span id="estimate-frame-label">Reference frame</span><span class="num" id="estimate-frame-length"></span></figcaption></figure><div class="estimate-story"><p class="estimate-budget-label" id="estimate-budget-label"></p><div class="estimate-result" id="estimate-result" role="status" aria-atomic="true"></div><p class="estimate-total" id="estimate-total-footage"></p><div class="estimate-allocation"><div class="estimate-allocation-track" id="estimate-allocation" role="meter" aria-label="Example credit allocation" aria-valuemin="0"><span></span></div><div class="estimate-allocation-labels"><span id="estimate-allocated"></span><span id="estimate-remainder"></span></div></div><div class="estimate-actions"><button class="btn video-icon-action estimate-use" id="use-estimate-settings" type="button" aria-label="Use these settings">${icon("setup", 20)}</button><a class="btn video-icon-action estimate-source" id="estimate-example-link" aria-label="Watch model example" hidden>${icon("play", 20)}</a></div></div></div></div>
         </div>
         ` : '<p class="plan-estimate-result">No models are available for an estimate right now. Your existing credits remain available.</p>'}</section></div></div>`;
   return () => {
@@ -1935,7 +2041,7 @@ function viewPlans(main) {
       $("#estimate-frame-label").textContent = "Model example";
       const exampleLink = $("#estimate-example-link");
       exampleLink.hidden = !example;
-      if (example) exampleLink.href = "#/community/" + example.id;
+      if (example) { exampleLink.href = "#/community/" + example.id; exampleLink.setAttribute("aria-label", `Watch ${example.modelName || recordModel(example).name} example`); }
       const credits = cost({ model: estimate.id, quality, len: length, format: estimate.formats[0] });
       const valid = Number.isFinite(credits) && credits > 0 && Number.isFinite(picked.credits) && picked.credits > 0;
       const count = valid ? Math.floor(picked.credits / credits) : 0, allocated = count * (credits || 0), remainder = Math.max(0, picked.credits - allocated);
@@ -2106,7 +2212,7 @@ function viewReferrals(main) {
     <div class="linkrow"><label class="sr" for="rlink">Your referral link</label><input id="rlink" type="text" readonly value="${R.link}"><button class="btn primary" type="button" id="copy">${icon("copy")}Copy link</button></div>
     <h2 class="sec-h" style="margin-top:40px">From invite to first purchase</h2>
     <div class="funnel">${[["Invited", R.invited], ["Signed up", R.signedUp], ["Bought credits", R.bought]].map(([l, n]) => `<div class="funnel-row"><span>${l}</span><span class="track" aria-hidden="true"><i style="width:${(n / R.invited * 100).toFixed(1)}%"></i></span><span class="v num">${n}</span></div>`).join("")}</div>
-    <h2 class="sec-h" style="margin-top:40px">Reward programme</h2><p class="muted">Follow invitations, sign-ups and first purchases in one place.</p><p class="fine muted" style="margin-top:12px"></p><a class="account-link" href="#/account/overview" style="display:inline-block;margin-top:24px">Back to your account</a>
+    <a class="btn video-icon-action" id="referrals-account" href="#/account/overview" aria-label="Back to your account" style="margin-top:24px">${icon("account", 18)}</a>
   </div><div>
     <h2 class="sec-h">People who joined</h2>
     <table class="refs"><thead><tr><th scope="col">Person</th><th scope="col">Joined</th><th scope="col">Status</th></tr></thead><tbody>${R.people.map(([i, n, d, s]) => `<tr><td>${esc(n)}</td><td class="num">${d}</td><td>${s}</td></tr>`).join("")}</tbody></table>
@@ -2200,7 +2306,7 @@ function accountBilling(body) {
   body.innerHTML = `${p ? `<section class="account-plan"><div class="account-plan-head"><div><h2>${fmt(p.credits)} credits a month</h2><p class="muted">$${p.usd} per month</p></div><span class="account-status ${p.state === "active" ? "good" : "muted"}">${p.state === "active" ? "Active subscription" : "Subscription cancelled"}</span></div>
     <dl class="account-facts"><div><dt>Current period</dt><dd>${accountDate(p.periodStart)}</dd></div><div><dt>Period ends</dt><dd>${accountDate(p.periodEnd)}</dd></div><div><dt>Next payment</dt><dd>${p.state === "active" ? `$${p.pendingChange?.usd ?? p.usd} · ${accountDate(p.nextBillingAt)}` : "None scheduled"}</dd></div></dl>
     <p class="account-hint">${p.state === "active" ? "Cancelling stops future monthly payments. Your current credits stay available." : "No future payments. Current credits stay available. You can choose another plan at any time."}</p>
-    <div class="billing-actions">${p.state === "active" ? '<a class="btn" href="#/plans?tab=subs">Compare plans</a><button class="btn danger" id="cancel-subscription" type="button">Cancel subscription</button>' : '<a class="btn" href="#/plans?tab=subs">Choose a plan</a>'}<a class="linkbtn" href="#/account/credits">View credits</a></div>
+    <div class="billing-actions">${p.state === "active" ? '<a class="btn" href="#/plans?tab=subs">Compare plans</a><button class="btn danger" id="cancel-subscription" type="button">Cancel subscription</button>' : '<a class="btn" href="#/plans?tab=subs">Choose a plan</a>'}<a class="btn video-icon-action" id="billing-view-credits" href="#/account/credits" aria-label="View credit activity">${icon("credits", 18)}</a></div>
     <div id="cancel-confirm" class="account-cancel-confirm" hidden><p>Cancel future monthly payments? ${p.pendingChange ? "Your scheduled plan change will also be removed. " : ""}Your current ${fmt(S.balance)} credits stay available.</p><div class="row"><button class="btn" id="keep-subscription" type="button">Keep subscription</button><button class="btn danger" id="confirm-cancel" type="button">Confirm cancellation</button></div></div></section>${pendingPlanMarkup(p)}` : `<section class="account-empty"><h2>No monthly subscription</h2><p>Buy credits once or choose a monthly plan. You can create videos with either option.</p><a class="btn primary" href="#/plans?tab=subs">Choose credits or a plan</a></section>`}
     <div class="account-section-head"><h2>Purchase history</h2><a class="linkbtn" href="#/plans">Buy credits</a></div>${accountLedger([...S.transactions].reverse().filter(t => ["purchase", "subscription"].includes(t.kind)))}`;
   return () => {
@@ -2543,13 +2649,13 @@ window.addEventListener("hashchange", () => {
   if (!["create", "signin"].includes(currentRoute().name)) clearCommunitySetupIntent();
 });
 if (!["create", "signin"].includes(currentRoute().name)) clearCommunitySetupIntent();
-function communityCards(limit = 6, mine = false) {
+function communityCards(limit = 6, mine = false, immersive = false) {
   const posts = communityPosts(mine).slice(0, limit);
   if (!posts.length) return `<section class="publication-empty"><h2>${mine ? "Your scenes can find an audience" : "No published scenes yet"}</h2><p>${mine ? "Publish a finished video from its result page. You choose whether to share the prompt." : "Published videos will appear here."}</p><a class="btn" href="${S.signedIn ? "#/history" : "#/signin"}">${S.signedIn ? "Choose a video" : "Sign in"}</a></section>`;
-  return `<div class="community-grid">${posts.map(p => {
+  return `<div class="community-grid${immersive ? ' community-feed' : ''}">${posts.map(p => {
     const preview = recordOfficialExample(p), poster = officialPoster(preview), setupAvailable = isModelAvailable(p.model);
-    const promptAction = p.includePrompt && p.prompt ? `<a class="btn community-use" href="#/create?scene=${encodeURIComponent(p.id)}" aria-label="Use the ${setupAvailable ? "setup" : "prompt"} for ${esc(p.caption)}" data-community-tooltip="${setupAvailable ? "Use this setup" : "Use prompt"}">${icon("setup", 18)}</a>` : `<p class="community-privacy"><button class="community-metric" type="button" data-community-metric="private" aria-label="Private prompt">${icon("lock", 16)}</button></p>`;
-    return `<article class="community-card" ${p.official ? 'data-official-example="true"' : ""}><a class="thumb ${poster ? "" : "community-no-preview"}" href="#/community/${p.id}" aria-label="View ${esc(p.caption)}">${poster ? `<img src="${esc(poster)}" data-hover-example="${esc(preview.id)}" alt="${esc(preview.alt)}" loading="lazy">${Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}` : '<span>Preview unavailable</span>'}</a>${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${preview ? videoFactsMarkup(preview) : ""}</p>${communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div></article>`;
+    const promptAction = p.includePrompt && p.prompt ? `<a class="btn community-use" href="#/create?scene=${encodeURIComponent(p.id)}" aria-label="Use the ${setupAvailable ? "setup" : "prompt"} for ${esc(p.caption)}" data-community-tooltip="${setupAvailable ? "Use this setup" : "Use prompt"}">${icon("setup", 18)}${immersive ? '<span class="community-use-label">Use prompt</span>' : ''}</a>` : `<p class="community-privacy"><button class="community-metric" type="button" data-community-metric="private" aria-label="Private prompt">${icon("lock", 16)}</button></p>`;
+    return `<article class="community-card" data-reel-post="${esc(p.id)}" ${p.official ? 'data-official-example="true"' : ""}><a class="thumb ${poster ? "" : "community-no-preview"}" href="#/community/${p.id}" aria-label="View ${esc(p.caption)}">${poster ? `<img src="${esc(poster)}" data-hover-example="${esc(preview.id)}" alt="${esc(preview.alt)}" loading="lazy">${Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}` : '<span>Preview unavailable</span>'}</a>${immersive ? '<div class="community-reel-copy">' : ''}${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${preview ? videoFactsMarkup(preview) : ""}</p>${communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div>${immersive ? '</div>' : ''}</article>`;
   }).join("")}</div>`;
 }
 function unpublishPost(id) {
@@ -2568,8 +2674,8 @@ function unpublishPost(id) {
 }
 function publicationMarkup(v) {
   const post = getPublishedPost(v.id);
-  const actions = post ? `<div class="row publication-icon-actions" role="group" aria-label="Publication actions"><a class="btn video-icon-action" id="view-publication" href="#/community/${post.id}" aria-label="View publication">${icon("eye", 18)}</a><button class="btn video-icon-action" id="edit-publication-settings" data-publication-settings="${v.id}" type="button" aria-controls="publish-panel" aria-expanded="false" aria-label="Publication settings">${icon("sliders", 18)}</button><button class="btn video-icon-action" id="unpublish-video" type="button" aria-label="Unpublish from Community">${icon("eyeOff", 18)}</button></div>` : `<button class="btn video-icon-action" id="publish-video" data-publication-settings="${v.id}" type="button" aria-controls="publish-panel" aria-expanded="false" aria-label="Publish video">${icon("eye", 18)}</button>`;
-  return `<section class="publication" aria-labelledby="publication-title"><h2 id="publication-title">Publication</h2><span class="publication-state">${post ? `Published · Prompt ${post.includePrompt ? "shared" : "private"}` : "Private"}</span>${actions}</section>`;
+  const actions = post ? `<div class="publication-icon-actions" role="group" aria-label="Publication actions"><a class="btn video-icon-action" id="view-publication" href="#/community/${post.id}" aria-label="View publication">${icon("eye", 18)}</a><button class="btn video-icon-action" id="edit-publication-settings" data-publication-settings="${v.id}" type="button" aria-controls="publish-panel" aria-expanded="false" aria-label="Publication settings">${icon("sliders", 18)}</button><button class="btn video-icon-action" id="unpublish-video" type="button" aria-label="Unpublish from Community">${icon("eyeOff", 18)}</button></div>` : `<button class="btn video-icon-action" id="publish-video" data-publication-settings="${v.id}" type="button" aria-controls="publish-panel" aria-expanded="false" aria-label="Publish video">${icon("eye", 18)}</button>`;
+  return `<section class="publication" aria-labelledby="publication-title"><h2 class="sr" id="publication-title">Publication</h2><span class="publication-state">${post ? `Published · Prompt ${post.includePrompt ? "shared" : "private"}` : "Private"}</span>${actions}</section>`;
 }
 const publicationPanel = document.createElement("section");
 publicationPanel.id = "publish-panel";
@@ -2685,8 +2791,8 @@ function initPublication(v) {
 function viewCommunity(main, arg) {
   if (!arg || arg === "mine") {
     const mine = arg === "mine";
-    main.innerHTML = `<div class="page"><header class="account-heading"><div><h1 id="title" tabindex="-1">${mine ? "Your publications" : "Community"}</h1><p class="sub">${mine ? "Published by you." : "For your next scene."}</p></div><a class="btn primary" href="#/create">Create a video</a></header><nav class="community-tabs" aria-label="Community"><a href="#/community" ${!mine ? 'aria-current="page"' : ""}>All creators</a><a href="#/community/mine" ${mine ? 'aria-current="page"' : ""}>My publications</a></nav>${communityCards(100, mine)}</div>`;
-    return null;
+    main.innerHTML = `<div class="page community-page"><div class="community-feed-toolbar"><header class="account-heading"><div><h1 id="title" tabindex="-1">${mine ? "Your publications" : "Community"}</h1><p class="sub">${mine ? "Published by you." : "For your next scene."}</p></div><a class="btn primary community-create" href="#/create" aria-label="Create a video">${icon("create", 18)}<span>Create a video</span></a></header><nav class="community-tabs" aria-label="Community"><a href="#/community" ${!mine ? 'aria-current="page"' : ""}>All creators</a><a href="#/community/mine" ${mine ? 'aria-current="page"' : ""}>My publications</a></nav></div>${communityCards(100, mine, true)}</div>`;
+    return () => initCommunityReels(main);
   }
   const p = communityPosts(false).find(x => x.id === arg);
   if (!p) { main.innerHTML = '<div class="page"><h1 id="title" tabindex="-1">Publication unavailable</h1><div class="publication-empty"><p>The creator may have removed this scene.</p><a class="btn" href="#/community">Back to community</a></div></div>'; return null; }
@@ -2816,7 +2922,7 @@ function trashVideo(id, trigger = null) {
   if (origin.view === "video") go("history");
   else { route({ preserve: true }); focusAfterTrash(origin); }
   const owner = S.user.email;
-  toast(entry.posts.length ? "Video moved to Trash and unpublished." : "Video moved to Trash.", { label: "Undo", fn: () => undoTrashVideo(entryId, owner, origin) });
+  toast(entry.posts.length ? "Video deleted and unpublished." : "Moved to Recently deleted.", { label: "Undo", fn: () => undoTrashVideo(entryId, owner, origin) });
   return true;
 }
 function restoreTrashVideo(id, trigger = null) {
@@ -2836,7 +2942,7 @@ function historyNavigation(active = "videos") {
   const params = new URLSearchParams(location.hash.split("?")[1] || ""), filters = new URLSearchParams();
   for (const key of ["model", "q"]) if (params.has(key)) filters.set(key, params.get(key));
   const query = filters.size ? "?" + filters.toString() : "";
-  return `<nav class="community-tabs history-tabs" aria-label="History"><a id="history-videos-tab" href="#/history${query}" ${active === "videos" ? 'aria-current="page"' : ""}>Videos</a><a id="history-trash-tab" href="#/history/trash${query}" ${active === "trash" ? 'aria-current="page"' : ""}>Trash <span class="num" id="trash-count">${trashEntries().length}</span></a></nav>`;
+  return `<nav class="community-tabs history-tabs" aria-label="History"><a id="history-videos-tab" href="#/history${query}" ${active === "videos" ? 'aria-current="page"' : ""}>Videos</a><a id="history-trash-tab" href="#/history/trash${query}" ${active === "trash" ? 'aria-current="page"' : ""}>Recently deleted <span class="num" id="trash-count">${trashEntries().length}</span></a></nav>`;
 }
 function trashExpiryMarkup(entry) {
   const time = Date.parse(entry.purgeAt);
@@ -2848,10 +2954,10 @@ function trashExpiryMarkup(entry) {
 function drawTrash() {
   const body = $("#trash-body"); if (!body) return;
   const entries = [...trashEntries()].reverse();
-  body.innerHTML = entries.length ? `<table class="trash-list"><caption class="sr">Videos in Trash</caption><thead><tr><th scope="col">Video</th><th scope="col">Status</th><th scope="col">Deletes on</th><th scope="col"><span class="sr">Actions</span></th></tr></thead><tbody>${entries.map(entry => {
+  body.innerHTML = entries.length ? `<table class="trash-list"><caption class="sr">Recently deleted videos</caption><thead><tr><th scope="col">Video</th><th scope="col">Status</th><th scope="col">Deletes on</th><th scope="col"><span class="sr">Actions</span></th></tr></thead><tbody>${entries.map(entry => {
     const video = entry.video;
     return `<tr data-trash-id="${esc(entry.id)}"><td class="trash-scene"><div class="thumb" aria-hidden="true">${video.status === "ready" ? confirmedThumbnailMarkup(video, { compact: true }) : `<span class="preview-unavailable-label">${video.status === "failed" ? "Failed" : "Rendering"}</span>`}</div><div><strong>${esc(titleOf(video.prompt))}</strong><small>${esc(recordModel(video).name)}${recordOfficialExample(video) ? " · Model example" : ""}</small></div></td><td class="trash-status">${video.status === "ready" ? "Ready" : video.status === "failed" ? "Failed" : "Rendering"}</td><td class="trash-expiry">${trashExpiryMarkup(entry)}</td><td class="trash-action"><button class="btn video-icon-action" type="button" data-trash-restore="${esc(entry.id)}" aria-label="Restore video: ${esc(titleOf(video.prompt))}" data-community-tooltip="Restore video">${icon("reuse", 18)}</button></td></tr>`;
-  }).join("")}</tbody></table>` : '<section class="publication-empty"><h2>Trash is empty</h2><p>Videos you delete will appear here.</p><a class="btn" href="#/history">Back to videos</a></section>';
+  }).join("")}</tbody></table>` : '<section class="publication-empty"><h2>No deleted videos</h2><p>Videos you delete will appear here.</p><a class="btn" href="#/history">Back to videos</a></section>';
 }
 function refreshTrashUI() {
   const counter = $("#trash-count"); if (counter) counter.textContent = trashEntries().length;
@@ -2862,8 +2968,8 @@ function refreshTrashUI() {
 }
 function viewTrash(main) {
   pruneExpiredTrash();
-  document.title = "Trash · Aurora";
-  main.innerHTML = `<div class="page trash-page"><header><h1 id="title" tabindex="-1">Trash</h1><p class="sub">Restore a video to keep it. Restored videos are private.</p></header>${historyNavigation("trash")}<div id="trash-body"></div></div>`;
+  document.title = "Recently deleted · Aurora";
+  main.innerHTML = `<div class="page trash-page"><header><h1 id="title" tabindex="-1">Recently deleted</h1><p class="sub">Restore a video to keep it. Restored videos are private.</p></header>${historyNavigation("trash")}<div id="trash-body"></div></div>`;
   return () => drawTrash();
 }
 document.addEventListener("click", event => {
@@ -2919,20 +3025,28 @@ const hoverPreviewController = (() => {
   const HLS_INTEGRITY = "sha384-p9vgU/7IYJWd3I4STrtqxqR/2cAQlhIX7D/HrTnIMEjjcUox165b7se7sxmm3zDg";
   const fine = matchMedia("(hover: hover) and (pointer: fine)"), coarse = matchMedia("(pointer: coarse)");
   const motion = matchMedia("(prefers-reduced-motion: reduce)"), connection = navigator.connection;
-  const failures = new Map();
+  const failures = new Map(), pausedReels = new WeakSet();
   let active = null, hoverImage = null, hoverTimer = null, settleTimer = null, disposed = false;
-  const blocked = () => {
-    if (document.hidden || motion.matches || connection?.saveData) return true;
+  const blocked = (manual = false) => {
+    if (document.hidden || (!manual && (motion.matches || connection?.saveData))) return true;
     if (document.activeElement?.matches("input,textarea,select,[contenteditable='true']")) return true;
     return ["#publish-panel", "#mobile-navigation", "#menu", "dialog[open]"].some(selector => {
       const el = document.querySelector(selector);
       return el && !el.hidden && el.getClientRects().length;
     });
   };
-  const allowed = () => !disposed && !blocked();
+  const allowed = (manual = false) => !disposed && !blocked(manual);
   const exampleFor = image => OFFICIAL_EXAMPLES.find(example => example.official && example.id === image?.dataset.hoverExample);
   const hostFor = image => image?.closest(".thumb,#landing-frame,.estimate-visual") || image?.parentElement;
   const mobileImage = image => Boolean(image?.closest(".community-card .thumb,.vcard .thumb")) && !image.closest(".hist");
+  const reelImage = image => Boolean(image?.closest('.community-page.is-reels [data-reel-toggle]'));
+  const reelsVisible = () => Boolean(document.querySelector('.community-page.is-reels .community-feed'));
+  const reelState = (image, playing) => {
+    const button = image?.closest('[data-reel-toggle]');
+    if (!button) return;
+    button.setAttribute('aria-pressed', String(playing));
+    button.setAttribute('aria-label', `${playing ? 'Pause' : 'Play'} preview: ${button.dataset.reelCaption}`);
+  };
   const rectVisibility = image => {
     const r = image.getBoundingClientRect(), top = Math.max(0, document.querySelector("#top")?.getBoundingClientRect().bottom || 0);
     const width = Math.max(0, Math.min(innerWidth, r.right) - Math.max(0, r.left));
@@ -2944,7 +3058,7 @@ const hoverPreviewController = (() => {
     const r = rectVisibility(image);
     return r.rect.width > 0 && r.rect.height > 0 && r.ratio > 0 && (failures.get(image.dataset.hoverExample) || 0) < Date.now();
   };
-  const live = session => active === session && !session.abort.signal.aborted && allowed() && session.image.isConnected && session.image.dataset.hoverExample === session.example.id;
+  const live = session => active === session && !session.abort.signal.aborted && allowed(session.manual) && session.image.isConnected && session.image.dataset.hoverExample === session.example.id;
   const clearTimers = () => { clearTimeout(hoverTimer); clearTimeout(settleTimer); hoverTimer = settleTimer = null; };
   const release = () => {
     const previous = active; active = null;
@@ -2962,6 +3076,7 @@ const hoverPreviewController = (() => {
     previous.layer.remove();
     if (previous.positionAdded && previous.host.style.position === "relative") previous.host.style.position = previous.originalPosition;
     previous.image.removeAttribute("data-preview-state");
+    reelState(previous.image, false);
   };
   const stop = () => { clearTimers(); release(); };
   const fail = session => {
@@ -2973,6 +3088,7 @@ const hoverPreviewController = (() => {
     if (!live(session)) return;
     clearTimeout(session.timeout);
     session.image.dataset.previewState = "playing";
+    reelState(session.image, true);
     session.layer.classList.add("is-ready");
   };
   const alignLayer = session => {
@@ -3071,14 +3187,14 @@ const hoverPreviewController = (() => {
       }
     });
   };
-  const begin = image => {
-    if (!allowed() || !eligible(image)) return;
+  const begin = (image, manual = false) => {
+    if (!allowed(manual) || !eligible(image) || (!manual && pausedReels.has(image))) return;
     const example = exampleFor(image), source = mediaSource(example, image);
     if (!source || (active?.image === image && active.example.id === example.id)) return;
     release();
     const host = hostFor(image), layer = document.createElement("div"), abort = new AbortController();
     layer.className = "thumbnail-live-preview"; layer.setAttribute("aria-hidden", "true"); layer.dataset.example = example.id;
-    const session = { image, host, layer, example, abort, originalPosition: host.style.position, positionAdded: getComputedStyle(host).position === "static" };
+    const session = { image, host, layer, example, abort, manual, paused: false, originalPosition: host.style.position, positionAdded: getComputedStyle(host).position === "static" };
     active = session;
     if (session.positionAdded) host.style.position = "relative";
     alignLayer(session); host.insertBefore(layer, image.nextSibling);
@@ -3087,20 +3203,46 @@ const hoverPreviewController = (() => {
     Promise.resolve(source.type === "youtube" ? startYouTube(session, source) : startVideo(session, source)).catch(() => { if (live(session)) fail(session); });
   };
   const scheduleHover = image => {
-    if (!fine.matches || !allowed() || !eligible(image)) return;
+    if (!fine.matches || reelImage(image) || !allowed() || !eligible(image)) return;
     if (hoverImage === image && (hoverTimer || active?.image === image)) return;
     clearTimeout(hoverTimer); release(); hoverImage = image;
     hoverTimer = setTimeout(() => { hoverTimer = null; if (fine.matches && hoverImage === image) begin(image); }, HOVER_DELAY);
   };
   const chooseMobile = () => {
-    if (!coarse.matches || fine.matches || !allowed()) return;
+    const reels = reelsVisible();
+    if ((!reels && (!coarse.matches || fine.matches)) || !allowed()) return;
     const center = innerHeight / 2;
-    const candidates = [...document.querySelectorAll(HOOK)].filter(image => mobileImage(image) && eligible(image)).map(image => ({ image, ...rectVisibility(image) }))
+    const candidates = [...document.querySelectorAll(HOOK)].filter(image => (reels ? reelImage(image) : mobileImage(image)) && eligible(image)).map(image => ({ image, ...rectVisibility(image) }))
       .filter(item => item.rect.width >= 130 && item.rect.height >= 80 && item.ratio >= VISIBLE_RATIO)
       .sort((a, b) => Math.abs(a.rect.top + a.rect.height / 2 - center) - Math.abs(b.rect.top + b.rect.height / 2 - center));
     if (candidates[0]) begin(candidates[0].image);
   };
-  const armMobile = () => { clearTimeout(settleTimer); settleTimer = null; if (coarse.matches && !fine.matches && allowed()) settleTimer = setTimeout(() => { settleTimer = null; chooseMobile(); }, SETTLE_DELAY); };
+  const armMobile = () => { clearTimeout(settleTimer); settleTimer = null; if ((reelsVisible() || (coarse.matches && !fine.matches)) && allowed()) settleTimer = setTimeout(() => { settleTimer = null; chooseMobile(); }, reelsVisible() ? 280 : SETTLE_DELAY); };
+  const toggleReel = image => {
+    if (!reelImage(image) || !allowed(true)) return;
+    clearTimers(); hoverImage = null;
+    if (active?.image === image && !active.paused) {
+      pausedReels.add(image);
+      if (!active.layer.classList.contains('is-ready')) { release(); return; }
+      active.paused = true; active.video?.pause();
+      try { active.youtube?.pauseVideo(); } catch (_) {}
+      image.dataset.previewState = 'paused'; reelState(image, false);
+      return;
+    }
+    pausedReels.delete(image); failures.delete(image.dataset.hoverExample);
+    if (active?.image === image && active.paused) {
+      const session = active; session.paused = false; session.manual = true;
+      if (session.video) {
+        session.video.muted = true; session.video.defaultMuted = true; session.video.volume = 0;
+        session.video.play().then(() => { if (live(session)) reveal(session); }).catch(() => fail(session));
+      } else if (session.youtube) {
+        session.youtube.mute(); session.youtube.setVolume(0);
+        if (session.youtube.isMuted() && session.youtube.getVolume() === 0) session.youtube.playVideo();
+      }
+      return;
+    }
+    begin(image, true);
+  };
   const candidateAt = target => {
     if (!(target instanceof Element)) return null;
     if (target.matches(HOOK)) return target;
@@ -3113,9 +3255,9 @@ const hoverPreviewController = (() => {
     if (host && !host.contains(event.relatedTarget)) { clearTimeout(hoverTimer); hoverTimer = null; hoverImage = null; release(); }
   }, { passive: true });
   document.addEventListener("scroll", () => { stop(); hoverImage = null; armMobile(); }, { passive: true, capture: true });
-  document.addEventListener("pointerdown", () => { stop(); hoverImage = null; }, { passive: true, capture: true });
-  document.addEventListener("click", () => { stop(); hoverImage = null; armMobile(); }, { passive: true, capture: true });
-  document.addEventListener("focusin", () => { stop(); hoverImage = null; }, true);
+  document.addEventListener("pointerdown", event => { if (event.target.closest?.('.community-page.is-reels [data-reel-toggle]')) return; stop(); hoverImage = null; }, { passive: true, capture: true });
+  document.addEventListener("click", event => { if (event.target.closest?.('.community-page.is-reels [data-reel-toggle]')) return; stop(); hoverImage = null; armMobile(); }, { passive: true, capture: true });
+  document.addEventListener("focusin", event => { if (event.target.closest?.('.community-page.is-reels [data-reel-toggle]')) return; stop(); hoverImage = null; }, true);
   document.addEventListener("focusout", () => queueMicrotask(armMobile), true);
   document.addEventListener("toggle", () => { stop(); armMobile(); }, true);
   document.addEventListener("visibilitychange", () => { stop(); hoverImage = null; armMobile(); });
@@ -3126,7 +3268,7 @@ const hoverPreviewController = (() => {
   for (const query of [fine, coarse, motion]) query.addEventListener("change", () => { stop(); hoverImage = null; armMobile(); });
   connection?.addEventListener?.("change", () => { stop(); armMobile(); });
   const observer = new MutationObserver(records => {
-    if (active && (!active.image.isConnected || active.image.dataset.hoverExample !== active.example.id || blocked())) release();
+    if (active && (!active.image.isConnected || active.image.dataset.hoverExample !== active.example.id || blocked(active.manual))) release();
     let changed = false;
     for (const record of records) {
       if (record.type === "attributes") {
@@ -3138,8 +3280,84 @@ const hoverPreviewController = (() => {
   });
   observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["data-hover-example", "src", "hidden", "open", "aria-expanded"] });
   armMobile();
-  return { stop, destroy() { disposed = true; stop(); observer.disconnect(); } };
+  return { stop, refresh: armMobile, toggleReel, destroy() { disposed = true; stop(); observer.disconnect(); } };
 })();
+
+/* Native scroll snap keeps swipe, assistive technology and keyboard scrolling.
+   This owns layout only; the shared exact-source controller owns all playback. */
+const communityReelsQuery = matchMedia('(max-width: 760px), (pointer: coarse) and (max-width: 1000px)');
+const communityReelPositions = new Map();
+function initCommunityReels(main) {
+  const page = main.querySelector('.community-page'), feed = page?.querySelector('.community-feed');
+  if (!page || !feed) return null;
+  const key = location.hash.split('?')[0], cards = [...feed.children];
+  const abort = new AbortController(), signal = abort.signal;
+  let enabled = false, frame = 0, lastHeight = 0;
+  const nearest = () => Math.max(0, Math.min(cards.length - 1, Math.round(feed.scrollTop / Math.max(1, feed.clientHeight))));
+  const resize = () => {
+    if (!enabled || !feed.isConnected) return;
+    const index = lastHeight ? Math.round(feed.scrollTop / lastHeight) : communityReelPositions.get(key) || 0;
+    const top = Math.max(0, feed.getBoundingClientRect().top);
+    page.style.setProperty('--community-feed-top', `${top}px`);
+    lastHeight = feed.clientHeight;
+    feed.scrollTop = Math.min(cards.length - 1, index) * lastHeight;
+  };
+  const scheduleResize = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(resize); };
+  const update = () => {
+    enabled = communityReelsQuery.matches;
+    page.classList.toggle('is-reels', enabled);
+    document.body.classList.toggle('community-reels', enabled);
+    feed.setAttribute('aria-label', enabled ? 'Community videos. Swipe up or down for another scene.' : 'Community videos');
+    if (enabled) { feed.setAttribute('tabindex', '0'); feed.setAttribute('role', 'region'); }
+    else { feed.removeAttribute('tabindex'); feed.removeAttribute('role'); }
+    cards.forEach(card => {
+      const old = card.querySelector(':scope > .thumb');
+      if (enabled && old.tagName === 'A') {
+        const button = document.createElement('button');
+        button.type = 'button'; button.className = old.className + ' community-reel-toggle';
+        button.dataset.reelToggle = ''; button.dataset.reelHref = old.getAttribute('href');
+        button.dataset.reelCaption = card.querySelector('h3')?.textContent || 'video';
+        button.setAttribute('aria-label', `Play preview: ${button.dataset.reelCaption}`);
+        button.setAttribute('aria-pressed', 'false');
+        while (old.firstChild) button.appendChild(old.firstChild);
+        const indicator = document.createElement('span'); indicator.className = 'reel-play-indicator'; indicator.setAttribute('aria-hidden', 'true'); indicator.innerHTML = icon('play', 22);
+        button.appendChild(indicator);
+        if (!button.querySelector('img[data-hover-example]')) { button.disabled = true; button.setAttribute('aria-label', 'Preview unavailable'); }
+        old.replaceWith(button);
+      } else if (!enabled && old.tagName === 'BUTTON') {
+        const link = document.createElement('a'); link.className = old.className.replace(' community-reel-toggle', '');
+        link.href = old.dataset.reelHref; link.setAttribute('aria-label', `View ${old.dataset.reelCaption}`);
+        old.querySelector('.reel-play-indicator')?.remove();
+        while (old.firstChild) link.appendChild(old.firstChild);
+        old.replaceWith(link);
+      }
+    });
+    hoverPreviewController.stop();
+    if (enabled) { resize(); hoverPreviewController.refresh(); }
+    else { page.style.removeProperty('--community-feed-top'); lastHeight = 0; feed.scrollTop = 0; hoverPreviewController.refresh(); }
+  };
+  feed.addEventListener('click', event => {
+    const button = event.target.closest('[data-reel-toggle]');
+    if (!enabled || !button) return;
+    hoverPreviewController.toggleReel(button.querySelector('img[data-hover-example]'));
+  }, { signal });
+  feed.addEventListener('scroll', () => { if (enabled) communityReelPositions.set(key, nearest()); }, { passive: true, signal });
+  feed.addEventListener('keydown', event => {
+    if (!enabled || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.target.closest('input,textarea,select')) return;
+    const change = { ArrowDown: 1, PageDown: 1, ArrowUp: -1, PageUp: -1 }[event.key];
+    if (!change) return;
+    event.preventDefault();
+    const next = Math.max(0, Math.min(cards.length - 1, nearest() + change));
+    feed.scrollTo({ top: next * feed.clientHeight, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+    if (event.target !== feed) feed.focus({ preventScroll: true });
+  }, { signal });
+  communityReelsQuery.addEventListener('change', update, { signal });
+  window.addEventListener('resize', scheduleResize, { signal });
+  const observer = new ResizeObserver(scheduleResize);
+  observer.observe(document.querySelector('#top')); observer.observe(page.querySelector('.community-feed-toolbar'));
+  update();
+  return () => { abort.abort(); observer.disconnect(); cancelAnimationFrame(frame); document.body.classList.remove('community-reels'); };
+}
 
 
 save();
