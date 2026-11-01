@@ -110,9 +110,9 @@ main:focus, [tabindex="-1"]:focus { outline: none; }
 .balance-amount #bal-n { font-size: 15px; }
 .balance-amount > .ic { color: var(--text-muted); }
 .header-plan { display: flex; flex-direction: column; justify-content: center; gap: 2px; align-self: stretch; min-width: 0; border-left: 1px solid var(--line); padding-left: 12px; font-size: 12px; line-height: 1.25; white-space: nowrap; }
-.header-plan > span { color: var(--text-muted); font-weight: 400; }
-.header-plan > b { font-weight: 500; }
-.header-plan > b:only-child { font-size: 12px; }
+.header-plan > span, .header-plan > b:only-child { display: inline-flex; align-items: center; justify-content: center; align-self: center; height: 18px; padding: 0 6px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface-2); color: var(--text); font-size: 11px; line-height: 1; font-weight: 600; }
+.header-plan > b { align-self: center; color: var(--text-muted); font-weight: 500; line-height: 1.15; }
+.header-plan > b:only-child { min-width: 42px; height: 24px; padding: 0 10px; font-size: 12px; }
 .bal:hover { background: var(--surface-2); }
 .acct { position: relative; }
 .avatar { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--field-line); background: var(--surface); font-weight: 600; font-size: 13px; }
@@ -783,6 +783,31 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .vside > .account-link { order: 5; }
 }
 
+.video-card-actions { display: flex; justify-content: flex-end; margin-top: 12px; }
+.trash-list { width: 100%; border-collapse: collapse; }
+.trash-list th { padding: 0 16px 12px 0; border-bottom: 1px solid var(--line); font-size: var(--fs-caption); font-weight: 500; color: var(--text-muted); text-align: left; }
+.trash-list td { padding: 16px 16px 16px 0; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.trash-list .trash-action { width: 44px; padding-right: 0; }
+.trash-scene { display: flex; align-items: center; gap: 16px; }
+.trash-scene .thumb { flex: none; width: 96px; aspect-ratio: 16 / 10; }
+.trash-scene strong { display: block; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.trash-scene small, .trash-expiry small { display: block; color: var(--text-muted); font-size: 12px; margin-top: 4px; }
+.trash-expiry { font-size: 14px; }
+.trash-expiry-label { display: none; }
+.trash-status { font-size: 13px; }
+.history-tabs .num { margin-left: 4px; color: var(--text-muted); }
+@media (max-width: 760px) {
+  .trash-list, .trash-list tbody, .trash-list tr, .trash-list td { display: block; }
+  .trash-list thead { display: none; }
+  .trash-list tr { display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 12px 16px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .trash-list td { border: 0; padding: 0; }
+  .trash-list .trash-scene { display: flex; grid-column: 1 / -1; gap: 12px; }
+  .trash-scene .thumb { width: 80px; }
+  .trash-list .trash-action { grid-column: 2; grid-row: 2 / 4; align-self: center; }
+  .trash-list .trash-expiry { grid-column: 1; }
+  .trash-expiry-label { display: block; margin-bottom: 4px; color: var(--text-muted); font-size: 12px; }
+}
+
 .model-picker { display: flex; align-items: center; justify-content: space-between; gap: 20px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 20px 22px; }
 .model-picker > div { min-width: 0; }
 .model-picker strong { display: block; font-size: 17px; font-weight: 600; overflow-wrap: anywhere; }
@@ -1006,7 +1031,7 @@ body:not(.review-mode) .prototype-options, body:not(.review-mode) .model-notice 
   .mobile-signout:hover { background: var(--surface-2); }
 }
 @media (max-width: 600px) {
-  .bal { width: 168px; height: 48px; min-height: 48px; grid-template-columns: 60px minmax(0, 1fr); gap: 8px; padding: 8px; }
+  .bal { width: 168px; height: 48px; min-height: 48px; grid-template-columns: 60px minmax(0, 1fr); gap: 8px; padding: 6px 8px; }
   .balance-amount { gap: 2px; }
   .balance-amount #bal-n { font-size: 14px; }
   .balance-amount > .ic { width: 14px; height: 14px; }
@@ -1046,6 +1071,7 @@ document.body.classList.toggle("review-mode", REVIEW);
    CONFIG. Placeholders: change before launch.
    ========================================================================== */
 const CONFIG = {
+  trashRetentionDays: 30,
   creditUsd: 0.01,
   user: { name: "Alex Kim", initials: "AK", email: "alex@example.com" },
   models: [{"id": "runway", "name": "Runway Gen-4.5", "providerId": "runway", "provider": "Runway", "tag": "Text or image to video", "img": "runway_example", "status": "available", "featured": true, "inputs": ["text", "image"], "qualities": ["720p"], "lengths": [5, 8, 10], "formats": ["16:9", "9:16"], "rates": {"720p": 24}}, {"id": "seedance", "name": "Seedance 2.0 Mini", "providerId": "byteplus", "provider": "BytePlus", "detailsUrl": "https://ai.byteplus.com/lumina/en/ai-app/630454241638526503", "tag": "A starting point for drafts", "img": "", "status": "available", "featured": true, "inputs": ["text", "image"], "qualities": ["480p", "720p"], "lengths": [5, 8, 10], "formats": ["16:9", "9:16", "1:1"], "rates": {"480p": 8, "720p": 14}}, {"id": "kling", "name": "Kling 3.0", "providerId": "kling", "provider": "Kling", "tag": "More resolution options", "img": "kling_example", "status": "available", "featured": true, "inputs": ["text", "image"], "qualities": ["720p", "1080p", "4K"], "lengths": [5, 8, 10], "formats": ["16:9", "9:16", "1:1"], "rates": {"720p": 30, "1080p": 45, "4K": 80}}],
@@ -1371,6 +1397,14 @@ function initOfficialMedia(example, { id = "official-media", onPlay } = {}) {
 
 const cells = (n, on) => Array.from({ length: n }, (_, i) => `<i class="${i < on ? "on" : ""}"></i>`).join("");
 const titleOf = p => { const t = (p || "").trim().split(/(?<=[.!?])\s/)[0]; return t ? (t.length > 52 ? t.slice(0, 50).trim() + "…" : t) : "Untitled video"; };
+function videoCreatedLabel(video) {
+  const timestamp = Date.parse(video.createdAt);
+  if (!Number.isFinite(timestamp)) return video.when || "Date unavailable";
+  const date = new Date(timestamp), now = new Date();
+  if (timestamp <= now.getTime() && now.getTime() - timestamp < 60000) return "Just now";
+  if (date.toDateString() === now.toDateString()) return "Today, " + new Intl.DateTimeFormat("en-US", { hour: "2-digit", minute: "2-digit", hour12: false }).format(date);
+  return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", ...(date.getFullYear() !== now.getFullYear() ? { year: "numeric" } : {}) }).format(date);
+}
 
 /* ==========================================================================
    STATE (saved in this browser only)
@@ -1396,7 +1430,7 @@ function seed() {
     if (v.refunded) { balance += v.credits; transactions.push({ id: `TX-${String(transactions.length + 1).padStart(4, "0")}`, createdAt: v.createdAt, kind: "refund", label: "Credits returned after a failed generation", delta: v.credits, balanceAfter: balance, status: "completed", videoId: v.id, note: "Credits returned after a failed generation." }); }
   }
   return { v: 2, signedIn: false, balance, plan: null, nextId: 7, nextTransactionId: transactions.length + 1, noticeOff: false,
-    user: { ...CONFIG.user, notifications: { completed: true, receipts: true } }, transactions, posts: [],
+    user: { ...CONFIG.user, notifications: { completed: true, receipts: true } }, transactions, posts: [], trash: [], pendingJobs: [],
     draft: { prompt: "Green hills with patches of snow under a white sky. Slow push-in from a black gravel field, soft wind, quiet and still.", model: "runway", len: 8, quality: "720p", format: "16:9", imageName: "", failDemo: false }, videos };
 }
 function normalizeDraft(d) {
@@ -1414,6 +1448,8 @@ function migrateState(j) {
   if (!j || ![1, 2].includes(j.v)) return seed();
   j.user = { ...CONFIG.user, ...j.user, notifications: { completed: true, receipts: true, ...j.user?.notifications } };
   j.posts = Array.isArray(j.posts) ? j.posts : [];
+  j.trash = Array.isArray(j.trash) ? j.trash : [];
+  j.pendingJobs = Array.isArray(j.pendingJobs) ? j.pendingJobs : [];
   j.videos = Array.isArray(j.videos) ? j.videos : [];
   j.videos.forEach(v => { if (v.model === "veo") v.model = v.quality === "4K" ? "kling" : "runway"; if (!v.modelName && rawModel(v.model)) v.modelName = recordModel(v).name; });
   j.draft = normalizeDraft(j.draft || seed().draft);
@@ -1464,7 +1500,7 @@ function toast(msg, action, ttl = 5000) {
   const el = document.createElement("div"); el.className = "toast";
   el.innerHTML = `<span>${esc(msg)}</span>${action ? `<button type="button">${esc(action.label)}</button>` : ""}`;
   $("#toasts").appendChild(el);
-  const kill = () => el.remove();
+  const kill = () => { const focused = el.contains(document.activeElement); el.remove(); if (focused) $("#title")?.focus({ preventScroll: true }); };
   if (action) $("button", el).onclick = () => { action.fn(); kill(); };
   setTimeout(kill, action ? Math.max(ttl, 7000) : ttl);
 }
@@ -1527,7 +1563,7 @@ const TITLES = { home: "Your next scene", community: "Community", account: "Your
 let afterSignIn = "create";
 function signInDestination(destination = "create") {
   const path = String(destination || "create").replace(/^#\/?/, ""), pathname = path.split("?")[0];
-  return ["create", "history"].includes(pathname) || /^video\/\d+$/.test(pathname) ? path : "create";
+  return ["create", "history", "history/trash"].includes(pathname) || /^video\/\d+$/.test(pathname) ? path : "create";
 }
 let disposeView = null;
 function route(options = {}) {
@@ -1558,25 +1594,32 @@ window.addEventListener("hashchange", route);
    ========================================================================== */
 let timer = null;
 function ensureTicker() {
-  if (timer || !S.videos.some(v => v.status === "generating")) return;
+  if (timer || !allVideoJobs().some(v => v.status === "generating")) return;
   timer = setInterval(() => {
-    let any = false, finished = false;
-    for (const v of S.videos) {
+    let any = false, finished = false, archivedFinished = false;
+    const completedIds = [];
+    for (const v of allVideoJobs()) {
       if (v.status !== "generating") continue;
+      const active = S.videos.some(video => sameVideoId(video.id, v.id));
       v.filled = (v.filled || 0) + 1;
       if (v.filled >= v.len) {
         finished = true;
-        v.filled = v.len; v.when = "Just now";
+        completedIds.push(v.id);
+        if (!active) archivedFinished = true;
+        const retained = active || trashEntries().some(entry => sameVideoId(entry.video.id, v.id));
+        v.filled = v.len; if (retained) v.when = "Just now";
         if (v.failDemo) {
           v.status = "failed";
-          if (!v.refunded) { addTransaction({ kind: "refund", label: "Credits returned after a failed generation", delta: v.credits, videoId: v.id, note: "Credits returned after a failed generation." }); v.refunded = true; }
-          toast(`Generation failed. ${fmt(v.credits)} credits returned.`, { label: "View", fn: () => go("video/" + v.id) });
-        } else { v.status = "ready"; const example = recordOfficialExample(v); v.img = example?.img || ""; v.exampleId = example?.id || null; toast("Your video is ready.", { label: "Open", fn: () => go("video/" + v.id) }); }
+          if (!v.refunded) { v.refunded = true; if (!S.transactions.some(transaction => transaction.kind === "refund" && sameVideoId(transaction.videoId, v.id) && transaction.status === "completed")) addTransaction({ kind: "refund", label: "Credits returned after a failed generation", delta: v.credits, videoId: v.id, note: "Credits returned after a failed generation." }); }
+          if (active) toast(`Generation failed. ${fmt(v.credits)} credits returned.`, { label: "View", fn: () => go("video/" + v.id) });
+        } else { v.status = "ready"; if (active || trashEntries().some(entry => sameVideoId(entry.video.id, v.id))) { const example = recordOfficialExample(v); v.img = example?.img || ""; v.exampleId = example?.id || null; } if (active) toast("Your video is ready.", { label: "Open", fn: () => go("video/" + v.id) }); }
       }
       else any = true;
-      updateCard(v);
+      if (active) updateCard(v);
     }
+    settleDetachedJobs(completedIds);
     save(); renderBalance();
+    if (archivedFinished) refreshTrashUI();
     if (finished && currentRoute().name === "account" && currentRoute().arg !== "profile") route({ preserve: true });
     if (!any) { clearInterval(timer); timer = null; }
   }, REDUCED ? 300 : 650);
@@ -1604,7 +1647,7 @@ const thumb = (v, link = true) => {
     : `<div class="fail"><b>${icon("warn")}Failed</b><p>Generation did not finish.</p></div>`;
   return link ? `<a class="thumb" href="#/video/${v.id}" aria-label="Open ${esc(titleOf(v.prompt))}">${inner}</a>` : `<div class="thumb">${inner}</div>`;
 };
-const videoCard = v => `<article class="vcard" data-vid="${v.id}">${thumb(v)}<h3>${esc(titleOf(v.prompt))}</h3><p class="meta"><span class="video-card-model">${esc(recordModel(v).name)}</span>${v.status === "failed" ? `<button class="linkbtn" type="button" data-retry="${v.id}">Try again</button>` : v.status === "generating" ? "<span>Rendering</span>" : `<span>${esc(v.when)}</span>`}${videoFactsMarkup(v, { credits: true })}</p></article>`;
+const videoCard = v => `<article class="vcard" data-vid="${v.id}">${thumb(v)}<h3>${esc(titleOf(v.prompt))}</h3><p class="meta"><span class="video-card-model">${esc(recordModel(v).name)}</span>${v.status === "failed" ? `<button class="linkbtn" type="button" data-retry="${v.id}">Try again</button>` : v.status === "generating" ? "<span>Rendering</span>" : `<span>${esc(videoCreatedLabel(v))}</span>`}${videoFactsMarkup(v, { credits: true })}</p><div class="video-card-actions">${videoDeleteAction(v)}</div></article>`;
 
 /* ----- Create ----- */
 const CREATOR_STARTERS = {
@@ -1665,14 +1708,14 @@ function viewCreate(main) {
   </section>
   <section class="gallery" aria-labelledby="g-title">
     <h2 class="sr" id="g-title">My videos and the feed</h2>
-    <div class="gtabs"><button type="button" data-tab="videos" aria-pressed="${currentGalleryTab() === "videos"}">My videos</button><button type="button" data-tab="community" aria-pressed="${currentGalleryTab() === "community"}">Feed</button><a class="all linkbtn" href="#/history">All history</a></div>
+    <div class="gtabs"><button type="button" data-tab="videos" aria-pressed="${currentGalleryTab() === "videos"}">My videos</button><button type="button" data-tab="community" aria-pressed="${currentGalleryTab() === "community"}">Feed</button><a class="all linkbtn video-icon-action" href="#/history" aria-label="All history" data-community-tooltip="All history">${icon("history", 18)}</a></div>
     <div id="g-body"></div>
   </section>`;
   return () => { const cleanup = initCreate(); if (sourceId) toast(source ? (sourceAvailable ? "Prompt and settings added. Edit the scene and review the cost." : `Prompt added. ${selectedModel.name} is selected. Change it anytime.`) : "This setup is unavailable. Your draft is unchanged."); return cleanup; };
 }
 function renderGallery(tab) {
   const body = $("#g-body"); if (!body) return;
-  const all = $(".gtabs .all"); all.href = tab === "community" ? "#/community" : "#/history"; all.textContent = tab === "community" ? "Explore feed" : "All history";
+  const all = $(".gtabs .all"); all.href = tab === "community" ? "#/community" : "#/history"; all.innerHTML = icon(tab === "community" ? "community" : "history", 18); all.setAttribute("aria-label", tab === "community" ? "Explore feed" : "All history"); all.dataset.communityTooltip = tab === "community" ? "Explore feed" : "All history";
   if (tab === "community") {
     body.innerHTML = communityCards(6);
   } else {
@@ -1766,20 +1809,23 @@ function showAttached(name, url) {
 
 /* ----- History ----- */
 const historyPublication = v => {
-  if (v.status !== "ready") return `<td class="history-publication"><small>${v.status === "failed" ? "Not available" : "Available when ready"}</small></td>`;
+  if (v.status !== "ready") return `<td class="history-publication"><div class="history-publication-inner"><small>${v.status === "failed" ? "Not available" : "Available when ready"}</small><div class="history-actions">${videoDeleteAction(v)}</div></div></td>`;
   const post = getPublishedPost(v.id);
-  return `<td class="history-publication"><div class="history-publication-inner"><div><span class="history-publication-label">${post ? "Published" : "Private"}</span><small>Prompt ${post?.includePrompt ? "shared" : "private"}</small></div><div class="history-actions" role="group" aria-label="Video actions"><button class="btn video-icon-action" type="button" data-video-reuse="${v.id}" aria-label="Use this setup">${icon("setup", 18)}</button>${post ? publicationActionsMarkup(post, { history: true }) : `<a class="btn video-icon-action" data-publication-settings="${v.id}" href="#/video/${v.id}?publish=1" aria-label="Publish video" aria-controls="publish-panel" aria-expanded="false">${icon("eye", 18)}</a>`}</div></div></td>`;
+  return `<td class="history-publication"><div class="history-publication-inner"><div><span class="history-publication-label">${post ? "Published" : "Private"}</span><small>Prompt ${post?.includePrompt ? "shared" : "private"}</small></div><div class="history-actions" role="group" aria-label="Video actions"><button class="btn video-icon-action" type="button" data-video-reuse="${v.id}" aria-label="Use this setup">${icon("setup", 18)}</button>${post ? publicationActionsMarkup(post, { history: true }) : `<a class="btn video-icon-action" data-publication-settings="${v.id}" href="#/video/${v.id}?publish=1" aria-label="Publish video" aria-controls="publish-panel" aria-expanded="false">${icon("eye", 18)}</a>`}${videoDeleteAction(v)}</div></div></td>`;
 };
 const histRow = v => `<tr data-vid="${v.id}"><td class="t"><div class="hist-scene"><a class="thumb" href="#/video/${v.id}" tabindex="-1" aria-hidden="true">${v.status === "ready" ? confirmedThumbnailMarkup(v, { compact: true }) : `<span class="gen-t" style="position:absolute;inset:0;display:grid;place-items:center;font-size:13px;color:var(--text-muted)">${v.status === "failed" ? "Failed" : "Rendering"}</span>`}</a><div class="hist-title-group"><a href="#/video/${v.id}">${esc(titleOf(v.prompt))}</a><small class="hist-mobile-meta"><span>${esc(recordModel(v).name)}</span>${v.status === "ready" && recordOfficialExample(v) ? '<span class="hist-preview-credit">Model example</span>' : ""}${videoFactsMarkup(v)}</small></div></div></td>
-  <td class="hm">${esc(recordModel(v).name)}</td><td class="hm num">${v.len} s, ${esc(v.quality)}, ${esc(v.format)}</td><td class="r num">${v.status === "failed" ? "—" : fmt(v.credits)}</td><td class="hm">${esc(v.when)}</td><td class="hist-status"><span class="st ${v.status}">${v.status === "ready" ? "Ready" : v.status === "failed" ? "Failed" : "Rendering"}</span></td>${historyPublication(v)}</tr>`;
+  <td class="hm">${esc(recordModel(v).name)}</td><td class="hm num">${v.len} s, ${esc(v.quality)}, ${esc(v.format)}</td><td class="r num">${v.status === "failed" ? "—" : fmt(v.credits)}</td><td class="hm">${esc(videoCreatedLabel(v))}</td><td class="hist-status"><span class="st ${v.status}">${v.status === "ready" ? "Ready" : v.status === "failed" ? "Failed" : "Rendering"}</span></td>${historyPublication(v)}</tr>`;
 let hFilter = "all", hQuery = "";
-function viewHistory(main) {
+function viewHistory(main, arg) {
+  if (arg === "trash") return viewTrash(main);
+  pruneExpiredTrash();
   const params = new URLSearchParams(location.hash.split("?")[1] || "");
-  const historyModels = [...new Map(S.videos.map(v => [v.model, recordModel(v).name])).entries()];
+  const historyModels = [...new Map([...S.videos, ...trashEntries().map(entry => entry.video)].map(v => [v.model, recordModel(v).name])).entries()];
+  if (params.get("model") && params.get("model") !== "all" && !historyModels.some(([id]) => id === params.get("model"))) historyModels.push([params.get("model"), model(params.get("model")).name]);
   hFilter = historyModels.some(([id]) => id === params.get("model")) ? params.get("model") : "all";
   hQuery = params.get("q") || "";
   main.innerHTML = `<div class="page"><header><h1 id="title" tabindex="-1">History</h1></header>
-  <div class="filters"><label class="sr" for="history-model">Filter by model</label><select class="history-model" id="history-model">${[["all", "All models"], ...historyModels].map(([k, l]) => `<option value="${esc(k)}" ${hFilter === k ? "selected" : ""}>${esc(l)}</option>`).join("")}</select>
+  ${historyNavigation()}<div class="filters"><label class="sr" for="history-model">Filter by model</label><select class="history-model" id="history-model">${[["all", "All models"], ...historyModels].map(([k, l]) => `<option value="${esc(k)}" ${hFilter === k ? "selected" : ""}>${esc(l)}</option>`).join("")}</select>
   <label class="sr" for="q">Search your prompts</label><input class="search" id="q" type="search" placeholder="Search your prompts" value="${esc(hQuery)}"></div>
   <div id="h-body"></div></div>`;
   return () => { drawHistory(); $("#q").addEventListener("input", e => { hQuery = e.target.value; saveHistoryFilters(); drawHistory(); });
@@ -1789,7 +1835,10 @@ function saveHistoryFilters() {
   const params = new URLSearchParams();
   if (hFilter !== "all") params.set("model", hFilter);
   if (hQuery) params.set("q", hQuery);
-  history.replaceState(null, "", "#/history" + (params.size ? "?" + params.toString() : ""));
+  const query = params.size ? "?" + params.toString() : "";
+  history.replaceState(null, "", "#/history" + query);
+  $("#history-videos-tab")?.setAttribute("href", "#/history" + query);
+  $("#history-trash-tab")?.setAttribute("href", "#/history/trash" + query);
 }
 function drawHistory() {
   const list = S.videos.filter(v => (hFilter === "all" || v.model === hFilter) && (!hQuery || v.prompt.toLowerCase().includes(hQuery.toLowerCase())));
@@ -1801,7 +1850,7 @@ function drawHistory() {
 /* ----- Video ----- */
 function viewVideo(main, arg) {
   const v = S.videos.find(x => String(x.id) === String(arg));
-  if (!v) { main.innerHTML = `<div class="page"><div class="empty"><h2 id="title" tabindex="-1">This video is gone</h2><p>It may have been deleted.</p><a class="btn primary" href="#/history">Back to history</a></div></div>`; return; }
+  if (!v) { const archived = findTrashedVideo(arg); main.innerHTML = archived ? `<div class="page"><div class="empty"><h2 id="title" tabindex="-1">Video is in Trash</h2><p>Restore it from Trash to return it to your videos.</p><a class="btn primary" data-open-trash href="#/history/trash">Open Trash</a></div></div>` : `<div class="page"><div class="empty"><h2 id="title" tabindex="-1">This video is gone</h2><p>It may have been deleted.</p><a class="btn primary" href="#/history">Back to history</a></div></div>`; return; }
   const ratio = frameRatio(v.format);
   const shown = v.status === "ready";
   const example = shown ? recordOfficialExample(v) : null;
@@ -1812,18 +1861,16 @@ function viewVideo(main, arg) {
   main.innerHTML = `<div class="page"><nav class="crumb" aria-label="Back"><a href="#/history">← History</a></nav>
   <div class="vgrid"><div>${mediaMarkup}</div>
   <aside class="vside"><h1 id="title" tabindex="-1">${esc(titleOf(v.prompt))}</h1><p class="prompt">${esc(v.prompt)}</p>
-    <dl class="facts"><div><dt>Model</dt><dd>${esc(recordModel(v).name)}</dd></div><div><dt>Length</dt><dd class="num">${v.len} s</dd></div><div><dt>Quality and format</dt><dd class="num">${v.quality}, ${v.format}</dd></div><div><dt>Credits used</dt><dd class="num">${v.refunded ? "0 · credits returned" : fmt(v.credits)}</dd></div><div><dt>Created</dt><dd>${esc(v.when)}</dd></div></dl>
+    <dl class="facts"><div><dt>Model</dt><dd>${esc(recordModel(v).name)}</dd></div><div><dt>Length</dt><dd class="num">${v.len} s</dd></div><div><dt>Quality and format</dt><dd class="num">${v.quality}, ${v.format}</dd></div><div><dt>Credits used</dt><dd class="num">${v.refunded ? "0 · credits returned" : fmt(v.credits)}</dd></div><div><dt>Created</dt><dd>${esc(videoCreatedLabel(v))}</dd></div></dl>
     <a class="account-link" href="#/account/credits">View credit activity</a>
     <div class="acts video-actions" role="group" aria-label="Video actions">${shown && mediaAction ? `<a class="btn primary video-icon-action" id="dl" href="${esc(mediaAction.url)}" target="_blank" rel="noopener noreferrer" aria-label="${mediaAction.label}">${icon(example?.mediaType === "video" ? "download" : "external", 18)}</a>` : ""}
-      <button class="btn video-icon-action" type="button" id="reuse" aria-label="Use this setup">${icon("setup", 18)}</button><button class="btn danger video-icon-action" type="button" id="del" aria-label="Delete video">${icon("trash", 18)}</button></div>
+      <button class="btn video-icon-action" type="button" id="reuse" aria-label="Use this setup">${icon("setup", 18)}</button>${videoDeleteAction(v, { id: "del", compactLabel: true })}</div>
     ${shown ? publicationMarkup(v) : ""}
   </aside></div></div>`;
   return () => {
     initPublication(v);
     const disposeMedia = example ? initOfficialMedia(example, { id: "video-example-media" }) : null;
     $("#reuse").onclick = () => reuseVideoSettings(v);
-    $("#del").onclick = () => { const i = S.videos.findIndex(x => x.id === v.id), copy = S.videos[i], published = S.posts.map((post, index) => ({ post, index })).filter(entry => entry.post.videoId === v.id); S.posts = S.posts.filter(p => p.videoId !== v.id); S.videos.splice(i, 1); save(); go("history");
-      toast(published.length ? "Video deleted and publication removed." : "Video deleted.", { label: "Undo", fn: () => { if (!S.signedIn || S.videos.some(video => video.id === copy.id)) return; S.videos.splice(i, 0, copy); published.forEach(({ post, index }) => { if (!S.posts.some(p => p.id === post.id)) S.posts.splice(Math.min(index, S.posts.length), 0, post); }); save(); if (currentRoute().name === "history") { route(); ($(`tr[data-vid="${copy.id}"] .hist-title-group > a`) || $("#title"))?.focus({ preventScroll: true }); } } }); };
     return () => disposeMedia?.();
   };
 }
@@ -2509,9 +2556,10 @@ function unpublishPost(id) {
   const post = S.posts.find(p => p.id === id);
   if (!ownsPublication(post)) return;
   const index = S.posts.indexOf(post);
+  const owner = S.user.email;
   S.posts = S.posts.filter(p => p.id !== id); save(); route({ preserve: true }); ($("#publish-video") || $("#title"))?.focus({ preventScroll: true });
   toast("Publication removed. Your video is still private in History.", { label: "Undo", fn: () => {
-    if (S.signedIn && !S.posts.some(p => p.id === post.id) && S.videos.some(v => v.id === post.videoId && v.status === "ready")) {
+    if (S.signedIn && S.user.email === owner && !S.posts.some(p => p.id === post.id) && S.videos.some(v => v.id === post.videoId && v.status === "ready")) {
       S.posts.splice(Math.min(index, S.posts.length), 0, post); save(); route({ preserve: true });
       const actions = $$(".publication-actions").find(group => group.dataset.publicationPost === post.id);
       ((actions && $("[data-publication-action='unpublish']", actions)) || $("#unpublish-video") || $("#title"))?.focus({ preventScroll: true });
@@ -2656,6 +2704,180 @@ function viewCommunity(main, arg) {
     return preview ? initOfficialMedia(preview, { id: "community-example-media", onPlay: () => recordCommunityView(p.id) }) : null;
   };
 }
+
+/* Result retention is separate from generation jobs and the credit ledger. */
+const trashRetentionDays = () => Number.isFinite(Number(CONFIG.trashRetentionDays)) && Number(CONFIG.trashRetentionDays) > 0 ? Number(CONFIG.trashRetentionDays) : 30;
+const trashEntries = () => Array.isArray(S.trash) ? S.trash : (S.trash = []);
+const sameVideoId = (a, b) => String(a) === String(b);
+const liveTrashEntry = id => trashEntries().find(entry => entry.id === id);
+const expiredTrashEntry = entry => Number.isFinite(Date.parse(entry.purgeAt)) && Date.parse(entry.purgeAt) <= Date.now();
+function pendingJobReference(video) {
+  return { id: video.id, model: video.model, credits: video.credits, status: "generating", len: video.len, filled: video.filled || 0,
+    failDemo: Boolean(video.failDemo), refunded: Boolean(video.refunded), createdAt: video.createdAt || new Date().toISOString() };
+}
+function allVideoJobs() {
+  const records = [...S.videos, ...trashEntries().map(entry => entry.video), ...(S.pendingJobs || [])];
+  const jobs = new Map();
+  records.forEach(video => { if (video && video.id != null && !video.official && !jobs.has(String(video.id))) jobs.set(String(video.id), video); });
+  return [...jobs.values()];
+}
+function settleDetachedJobs(completedIds = []) {
+  const completed = new Set(completedIds.map(String));
+  S.pendingJobs = (S.pendingJobs || []).filter(job => job.status === "generating" && !completed.has(String(job.id)) && ![...S.videos, ...trashEntries().map(entry => entry.video)].some(video => sameVideoId(video.id, job.id) && video.status !== "generating"));
+}
+function pruneExpiredTrash({ rerender = false } = {}) {
+  const expired = trashEntries().filter(expiredTrashEntry);
+  if (!expired.length) { if (rerender) refreshTrashUI(); return 0; }
+  S.pendingJobs ||= [];
+  for (const entry of expired) {
+    if (entry.video?.status === "generating" && !S.videos.some(video => sameVideoId(video.id, entry.video.id)) && !S.pendingJobs.some(job => sameVideoId(job.id, entry.video.id))) S.pendingJobs.push(pendingJobReference(entry.video));
+  }
+  const removed = new Set(expired.map(entry => entry.id));
+  S.trash = trashEntries().filter(entry => !removed.has(entry.id));
+  save(); ensureTicker();
+  if (rerender) refreshTrashUI();
+  return expired.length;
+}
+function findTrashedVideo(id) {
+  pruneExpiredTrash();
+  return trashEntries().find(entry => entry.video && sameVideoId(entry.video.id, id)) || null;
+}
+/* Keep relative order even when several removals are undone out of order. */
+function mergeRecordOrder(base, sequence) {
+  const order = [...base];
+  sequence.forEach((id, index) => {
+    if (order.includes(id)) return;
+    const next = sequence.slice(index + 1).find(candidate => order.includes(candidate));
+    if (next !== undefined) order.splice(order.indexOf(next), 0, id);
+    else {
+      const previous = sequence.slice(0, index).reverse().find(candidate => order.includes(candidate));
+      order.splice(previous === undefined ? order.length : order.indexOf(previous) + 1, 0, id);
+    }
+  });
+  return order;
+}
+function retainedRecordOrder(kind) {
+  const stored = kind === "video" ? S.videos : S.posts;
+  const key = kind === "video" ? "videoOrder" : "postOrder";
+  let order = [];
+  trashEntries().forEach(entry => { order = mergeRecordOrder(order, entry[key] || []); });
+  order = mergeRecordOrder(order, stored.map(record => String(record.id)));
+  const retained = kind === "video" ? trashEntries().map(entry => String(entry.video.id)) : trashEntries().flatMap(entry => (entry.posts || []).map(item => String(item.post.id)));
+  const known = new Set([...stored.map(record => String(record.id)), ...retained]);
+  return order.filter(id => known.has(id));
+}
+function insertRetainedRecord(records, record, order, originalIndex, newestFirst = false) {
+  const rank = order.indexOf(String(record.id));
+  const next = rank < 0 ? undefined : order.slice(rank + 1).find(id => records.some(item => String(item.id) === id));
+  const previous = rank < 0 ? undefined : order.slice(0, rank).reverse().find(id => records.some(item => String(item.id) === id));
+  const at = next !== undefined ? records.findIndex(item => String(item.id) === next) : previous !== undefined ? records.findIndex(item => String(item.id) === previous) + 1 : rank >= 0 ? (newestFirst ? records.length : 0) : Math.max(0, Math.min(Number(originalIndex) || 0, records.length));
+  records.splice(at, 0, record);
+}
+function videoDeleteAction(video, { id = "", compactLabel = false } = {}) {
+  if (!S.signedIn || video.official || !S.videos.some(own => sameVideoId(own.id, video.id))) return "";
+  const label = compactLabel ? "Delete video" : `Delete video: ${titleOf(video.prompt)}`;
+  return `<button class="btn danger video-icon-action" ${id ? `id="${esc(id)}"` : ""} type="button" data-video-delete="${esc(video.id)}" aria-label="${esc(label)}" data-community-tooltip="Delete video">${icon("trash", 18)}</button>`;
+}
+function trashOrigin(video, trigger) {
+  const visible = $$("#main [data-video-delete]").map(button => button.dataset.videoDelete);
+  const index = visible.indexOf(String(video.id));
+  return { path: location.hash, view: currentRoute().name, videoId: String(video.id), nextId: visible[index + 1] ?? visible[index - 1] ?? null, scrollX, scrollY };
+}
+function focusAfterTrash(origin, restored = false) {
+  if (location.hash === origin.path) {
+    const target = restored ? $(`[data-video-delete="${origin.videoId}"]`) : origin.nextId && $(`[data-video-delete="${origin.nextId}"]`);
+    (target || $("#title"))?.focus({ preventScroll: true });
+    if (restored) window.scrollTo(origin.scrollX, origin.scrollY);
+  } else if (restored && origin.view === "video" && currentRoute().name === "history" && currentRoute().arg !== "trash") ($(`tr[data-vid="${origin.videoId}"] .hist-title-group > a`) || $("#title"))?.focus({ preventScroll: true });
+  else if (restored) $("#title")?.focus({ preventScroll: true });
+}
+function undoTrashVideo(id, owner, origin) {
+  if (!S.signedIn || S.user.email !== owner) return false;
+  const entry = liveTrashEntry(id);
+  if (!entry || !entry.video || entry.video.official || expiredTrashEntry(entry) || S.videos.some(video => sameVideoId(video.id, entry.video.id))) { pruneExpiredTrash({ rerender: true }); return false; }
+  S.trash = trashEntries().filter(item => item.id !== id);
+  insertRetainedRecord(S.videos, entry.video, entry.videoOrder || [], entry.index, true);
+  for (const item of entry.posts || []) if (!S.posts.some(post => post.id === item.post.id)) insertRetainedRecord(S.posts, item.post, entry.postOrder || [], item.index);
+  save(); ensureTicker(); route({ preserve: true }); focusAfterTrash(origin, true);
+  return true;
+}
+function trashVideo(id, trigger = null) {
+  if (!S.signedIn) return false;
+  const index = S.videos.findIndex(video => sameVideoId(video.id, typeof id === "object" ? id?.id : id) && !video.official);
+  if (index < 0) return false;
+  pruneExpiredTrash();
+  const video = S.videos[index], now = Date.now(), origin = trashOrigin(video, trigger);
+  const entryId = `trash-${globalThis.crypto?.randomUUID?.() || `${now.toString(36)}-${Math.random().toString(36).slice(2)}`}`;
+  const entry = { id: entryId, video, index, deletedAt: new Date(now).toISOString(), purgeAt: new Date(now + trashRetentionDays() * 86400000).toISOString(),
+    posts: S.posts.map((post, index) => ({ post, index })).filter(item => sameVideoId(item.post.videoId, video.id)), videoOrder: retainedRecordOrder("video"), postOrder: retainedRecordOrder("post") };
+  trashEntries().push(entry);
+  S.posts = S.posts.filter(post => !sameVideoId(post.videoId, video.id)); S.videos.splice(index, 1);
+  save(); ensureTicker();
+  if (origin.view === "video") go("history");
+  else { route({ preserve: true }); focusAfterTrash(origin); }
+  const owner = S.user.email;
+  toast(entry.posts.length ? "Video moved to Trash and unpublished." : "Video moved to Trash.", { label: "Undo", fn: () => undoTrashVideo(entryId, owner, origin) });
+  return true;
+}
+function restoreTrashVideo(id, trigger = null) {
+  if (!S.signedIn) return false;
+  const entry = liveTrashEntry(id);
+  if (!entry || !entry.video || expiredTrashEntry(entry) || entry.video.official || S.videos.some(video => sameVideoId(video.id, entry.video.id))) { pruneExpiredTrash({ rerender: true }); return false; }
+  const rows = $$("[data-trash-restore]").map(button => button.dataset.trashRestore), at = rows.indexOf(id), nextId = rows[at + 1] ?? rows[at - 1];
+  S.trash = trashEntries().filter(item => item.id !== id);
+  S.posts = S.posts.filter(post => !sameVideoId(post.videoId, entry.video.id));
+  insertRetainedRecord(S.videos, entry.video, entry.videoOrder || [], entry.index, true);
+  save(); ensureTicker(); route({ preserve: true });
+  ((nextId && $(`[data-trash-restore="${nextId}"]`)) || $("#title"))?.focus({ preventScroll: true });
+  toast("Video restored. It is private.");
+  return true;
+}
+function historyNavigation(active = "videos") {
+  const params = new URLSearchParams(location.hash.split("?")[1] || ""), filters = new URLSearchParams();
+  for (const key of ["model", "q"]) if (params.has(key)) filters.set(key, params.get(key));
+  const query = filters.size ? "?" + filters.toString() : "";
+  return `<nav class="community-tabs history-tabs" aria-label="History"><a id="history-videos-tab" href="#/history${query}" ${active === "videos" ? 'aria-current="page"' : ""}>Videos</a><a id="history-trash-tab" href="#/history/trash${query}" ${active === "trash" ? 'aria-current="page"' : ""}>Trash <span class="num" id="trash-count">${trashEntries().length}</span></a></nav>`;
+}
+function trashExpiryMarkup(entry) {
+  const time = Date.parse(entry.purgeAt);
+  if (!Number.isFinite(time)) return '<span class="muted">Expiry unavailable</span>';
+  const remaining = Math.max(0, time - Date.now()), days = Math.ceil(remaining / 86400000);
+  const date = new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(time));
+  return `<span class="trash-expiry-label">Deletes on</span><time data-trash-purge-at datetime="${esc(entry.purgeAt)}">${esc(date)}</time><small data-trash-remaining="${esc(entry.id)}">${remaining >= 86400000 ? `${days} ${days === 1 ? "day" : "days"} left` : "Less than a day left"}</small>`;
+}
+function drawTrash() {
+  const body = $("#trash-body"); if (!body) return;
+  const entries = [...trashEntries()].reverse();
+  body.innerHTML = entries.length ? `<table class="trash-list"><caption class="sr">Videos in Trash</caption><thead><tr><th scope="col">Video</th><th scope="col">Status</th><th scope="col">Deletes on</th><th scope="col"><span class="sr">Actions</span></th></tr></thead><tbody>${entries.map(entry => {
+    const video = entry.video;
+    return `<tr data-trash-id="${esc(entry.id)}"><td class="trash-scene"><div class="thumb" aria-hidden="true">${video.status === "ready" ? confirmedThumbnailMarkup(video, { compact: true }) : `<span class="preview-unavailable-label">${video.status === "failed" ? "Failed" : "Rendering"}</span>`}</div><div><strong>${esc(titleOf(video.prompt))}</strong><small>${esc(recordModel(video).name)}${recordOfficialExample(video) ? " · Model example" : ""}</small></div></td><td class="trash-status">${video.status === "ready" ? "Ready" : video.status === "failed" ? "Failed" : "Rendering"}</td><td class="trash-expiry">${trashExpiryMarkup(entry)}</td><td class="trash-action"><button class="btn video-icon-action" type="button" data-trash-restore="${esc(entry.id)}" aria-label="Restore video: ${esc(titleOf(video.prompt))}" data-community-tooltip="Restore video">${icon("reuse", 18)}</button></td></tr>`;
+  }).join("")}</tbody></table>` : '<section class="publication-empty"><h2>Trash is empty</h2><p>Videos you delete will appear here.</p><a class="btn" href="#/history">Back to videos</a></section>';
+}
+function refreshTrashUI() {
+  const counter = $("#trash-count"); if (counter) counter.textContent = trashEntries().length;
+  if (currentRoute().name !== "history" || currentRoute().arg !== "trash") return;
+  const focused = document.activeElement?.closest("[data-trash-restore]")?.dataset.trashRestore;
+  drawTrash();
+  if (focused) (($$("[data-trash-restore]").find(button => button.dataset.trashRestore === focused)) || $("[data-trash-restore]") || $("#title"))?.focus({ preventScroll: true });
+}
+function viewTrash(main) {
+  pruneExpiredTrash();
+  document.title = "Trash · Aurora";
+  main.innerHTML = `<div class="page trash-page"><header><h1 id="title" tabindex="-1">Trash</h1><p class="sub">Restore a video to keep it. Restored videos are private.</p></header>${historyNavigation("trash")}<div id="trash-body"></div></div>`;
+  return () => drawTrash();
+}
+document.addEventListener("click", event => {
+  const remove = event.target.closest("[data-video-delete]");
+  if (remove && !event.defaultPrevented) { trashVideo(remove.dataset.videoDelete, remove); return; }
+  const restore = event.target.closest("[data-trash-restore]");
+  if (restore && !event.defaultPrevented) restoreTrashVideo(restore.dataset.trashRestore, restore);
+});
+S.trash ||= [];
+S.pendingJobs = (S.pendingJobs || []).filter(job => job.status === "generating").map(pendingJobReference);
+settleDetachedJobs();
+pruneExpiredTrash();
+setInterval(() => pruneExpiredTrash({ rerender: true }), 60000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) pruneExpiredTrash({ rerender: true }); });
 
 function renderModelPicker(d) {
   const m = model(d.model), providers = [...new Set(availableModels().map(x => x.provider))].sort();
