@@ -484,9 +484,11 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .account-toolbar { display: flex; gap: 16px; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; }
 .account-toolbar .seg > button { min-height: 44px; }
 .account-hint { color: var(--text-muted); font-size: 13px; line-height: 1.6; margin-top: 18px; max-width: 70ch; }
-.account-summary-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; padding: 20px 0; border-top: 1px solid var(--line); margin-top: 24px; }
-.account-summary-line strong { font-size: 28px; font-weight: 500; }
-.account-summary-line span { color: var(--text-muted); }
+.account-credit-balance { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px 24px; padding-bottom: 28px; margin-bottom: 28px; border-bottom: 1px solid var(--line); }
+.account-credit-balance > div { min-width: 0; max-width: 100%; }
+.account-credit-label { display: block; margin-bottom: 6px; color: var(--text-muted); font-size: 14px; }
+.account-credit-balance strong { display: block; font-size: clamp(30px, 3.8vw, 44px); line-height: 1.1; font-weight: 500; overflow-wrap: anywhere; }
+.account-credit-balance > .btn { flex: none; width: 128px; min-height: 44px; max-width: 100%; }
 .account-empty { border-top: 1px solid var(--line); padding: 32px 0; }
 .account-empty h2, .account-empty h3 { font-size: 23px; margin-bottom: 8px; }
 .account-empty p { color: var(--text-muted); margin-bottom: 20px; max-width: 48ch; }
@@ -532,6 +534,10 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .profile-photo-row { align-items: flex-start; gap: 16px; }
   .profile-photo-actions { flex-direction: column; gap: 8px; }
   .profile-photo-actions .btn { width: 100%; padding-right: 12px; padding-left: 12px; }
+}
+@media (max-width: 359px) {
+  .account-toolbar .seg { width: 100%; }
+  .account-toolbar .seg > button { flex: 1; min-width: 0; padding: 10px 6px; font-size: 13px; }
 }
 @media (max-width: 700px) {
   .account-heading { align-items: flex-start; gap: 16px; }
@@ -737,6 +743,11 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .skeleton-form { max-width: 640px; min-height: 720px; margin-top: 32px; }
 .skeleton-field { margin: 24px 0 32px; height: 48px; }
 .app-loading, .loading-body, .loading-body > * { min-width: 0; }
+.app-loading:is(.app-loading-credits, .app-loading-analytics, .app-loading-billing, .app-loading-profile) > header { margin-bottom: 32px; }
+@media (max-width: 700px) {
+  .app-loading:is(.app-loading-credits, .app-loading-analytics, .app-loading-billing, .app-loading-profile) > header { margin-bottom: 28px; }
+  .app-loading:is(.app-loading-credits, .app-loading-analytics, .app-loading-billing, .app-loading-profile) > header h1 { font-size: 32px; }
+}
 .skeleton-action { width: 120px; max-width: 100%; height: 44px; flex: none; }
 .skeleton-heading { width: min(220px, 80%); height: 24px; margin-bottom: 24px; }
 .skeleton-avatar { width: 32px; height: 32px; border-radius: 50%; }
@@ -765,10 +776,19 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .skeleton-details { width: 72px; margin-left: 8px; }
 .skeleton-viewer { width: min(1180px, calc(100% - 112px)); margin: 8px auto 0; }
 .skeleton-viewer-unit { display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: center; overflow: hidden; border-radius: var(--r-md); background: var(--cinema-bg); }
-.skeleton-viewer-picture { width: 100%; aspect-ratio: 16 / 9; border-radius: 0; }
+.skeleton-viewer-picture { width: 100%; aspect-ratio: var(--scene-ratio, 16 / 9); border-radius: 0; }
 .skeleton-viewer-copy { min-width: 0; padding: 24px; }
 .skeleton-viewer-copy > .skeleton-action { margin-top: 24px; }
 .skeleton-viewer-copy .skeleton-action-row .skeleton-action { width: 44px; }
+@media (min-width: 761px) and (min-height: 561px), (min-width: 1001px) {
+  .app-loading-viewer > .loading-scene-toolbar { width: min(1180px, calc(100% - 112px)); }
+  .app-loading-viewer > .loading-body { flex: 1; min-height: 0; padding: 8px 32px 24px; }
+  .app-loading-viewer .skeleton-viewer { width: min(1180px, calc(100% - 48px)); height: calc(100dvh - var(--workspace-header-height, 81px) - 120px); margin: 12px auto 0; }
+  .app-loading-viewer .skeleton-viewer-unit { height: 100%; background: transparent; }
+  .app-loading-viewer .skeleton-viewer-copy { display: flex; flex-direction: column; justify-content: center; height: 100%; }
+  .app-loading-viewer .skeleton-viewer-picture { width: min(100%, calc((100dvh - var(--workspace-header-height, 81px) - 120px) * var(--scene-ratio, 1.777777778))); justify-self: center; background: var(--surface-2); }
+  .app-loading-viewer .skeleton-viewer-copy .skeleton { background: var(--line); }
+}
 .app-loading-detail > .loading-scene-toolbar { margin-bottom: 24px; }
 .skeleton-detail { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(260px, 1fr); gap: 40px; }
 .skeleton-detail > * { min-width: 0; }
@@ -792,6 +812,8 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .skeleton-chart > span { max-width: 24px; width: 100%; justify-self: center; border-radius: var(--r-sm) var(--r-sm) 0 0; }
 .skeleton-model-row { margin: 28px 0; }
 .skeleton-model-track { height: 8px; margin-top: 12px; }
+.skeleton-credit-amount, .skeleton-credit-action { color: transparent !important; user-select: none; }
+.skeleton-credit-amount { width: max-content; min-width: 5ch; max-width: 100%; }
 .skeleton-model-donut { position: relative; display: block; width: 200px; height: 200px; max-width: 100%; margin: 8px auto 24px; border-radius: 50%; }
 .skeleton-model-donut::after { content: ""; position: absolute; inset: 28%; border-radius: 50%; background: var(--bg); }
 .skeleton-referrals { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; }
@@ -877,6 +899,7 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; opacity: 0.75; } }
 
 .community-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 24px; }
+.community-publication-total { margin-top: 6px; color: var(--text-muted); font-size: 12px; line-height: 1.4; }
 .community-card { min-width: 0; }
 .community-card .thumb { aspect-ratio: 16 / 11; }
 .community-no-preview { display: grid; place-items: center; color: var(--text-muted); font-size: 14px; }
@@ -1361,20 +1384,22 @@ body.community-reels .site-foot { display: none; }
    links and quiet previous/next tools. Phones retain the portrait composition. */
 .community-page.is-reels .community-viewer-toolbar { display: flex; align-items: center; gap: 12px; padding: 8px 16px; }
 .community-viewer-scene { display: contents; }
-.community-viewer-back { display: inline-flex; align-items: center; min-height: 44px; margin-right: auto; padding: 8px 12px; font-size: 14px; white-space: nowrap; }
+.community-viewer-back { display: inline-flex; align-items: center; justify-content: center; min-width: 64px; min-height: 44px; margin-right: auto; padding: 8px 12px; font-size: 14px; white-space: nowrap; }
 .community-viewer-steps { display: flex; gap: 4px; }
 .community-viewer-steps button:disabled { color: var(--text-muted); opacity: .45; cursor: default; }
 .community-viewer-steps .reel-step-down { transform: rotate(180deg); }
-.community-viewer-toolbar #viewer-details { min-height: 44px; padding: 8px 12px; font-size: 14px; }
+.community-viewer-toolbar #viewer-details { width: 72px; flex: none; min-height: 44px; padding: 8px 12px; font-size: 14px; }
 @media (min-width: 761px) and (min-height: 561px), (min-width: 1001px) {
-  .community-viewer.is-reels .community-viewer-toolbar { width: var(--viewer-unit-width, 1180px); max-width: calc(100% - 112px); margin: 0 auto; padding: 10px 0; }
-  .community-viewer-stage { max-width: 1440px; margin: 0 auto; padding: 8px 32px 24px; }
+  .community-viewer, .app-loading-viewer { position: fixed; inset: var(--workspace-header-height, 81px) 0 0 0; z-index: 15; display: flex; flex-direction: column; width: auto; max-width: none; min-height: 0; margin: 0; padding: 0; overflow: hidden; background: var(--bg); }
+  .community-viewer .community-viewer-toolbar, .app-loading-viewer > .loading-scene-toolbar { flex: none; }
+  .community-viewer.is-reels .community-viewer-toolbar { width: 1180px; max-width: calc(100% - 112px); margin: 0 auto; padding: 10px 0; }
+  .community-viewer-stage { flex: 1; min-height: 0; width: 100%; max-width: 1440px; margin: 0 auto; padding: 8px 32px 24px; display: flex; flex-direction: column; }
   .community-viewer-stage { cursor: pointer; }
-  .community-viewer.is-reels .community-feed { height: calc(100dvh - var(--community-feed-top, 160px) - 24px); border-radius: 0; background: var(--bg); }
+  .community-viewer.is-reels .community-feed { flex: 1; height: auto; min-height: 0; border-radius: 0; background: var(--bg); }
   .community-viewer.is-reels .community-card { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); place-items: start center; padding: 12px 24px; background: var(--bg); }
-  .community-viewer.is-reels .community-viewer-scene { display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: center; width: min(100%, var(--scene-unit-width, 1180px)); max-height: 100%; overflow: hidden; border-radius: var(--r-md); background: var(--cinema-bg); color: var(--cinema-text); cursor: default; }
-  .community-viewer.is-reels .community-card .thumb { position: relative; inset: auto; grid-column: 1; grid-row: 1; width: 100%; height: auto; aspect-ratio: var(--scene-ratio, 16 / 9); align-self: center; }
-  .community-viewer.is-reels .community-reel-copy { position: relative; inset: auto; width: auto; grid-column: 2; grid-row: 1; display: flex; flex-direction: column; justify-content: center; padding: 24px; background: var(--cinema-bg); }
+  .community-viewer.is-reels .community-viewer-scene { display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: center; width: 100%; height: 100%; max-height: 100%; overflow: visible; background: transparent; color: var(--cinema-text); cursor: default; }
+  .community-viewer.is-reels .community-card .thumb { position: relative; inset: auto; grid-column: 1; grid-row: 1; width: min(100%, calc((100dvh - var(--workspace-header-height, 81px) - 120px) * var(--scene-ratio, 1.777777778))); height: auto; max-height: 100%; aspect-ratio: var(--scene-ratio, 16 / 9); align-self: center; justify-self: center; border-radius: var(--r-md); }
+  .community-viewer.is-reels .community-reel-copy { position: relative; inset: auto; width: auto; height: 100%; min-height: 0; overflow-y: auto; grid-column: 2; grid-row: 1; display: flex; flex-direction: column; justify-content: center; padding: 24px; background: var(--bg); color: var(--text); }
   .community-viewer.is-reels .community-reel-copy::before { display: none; }
   .community-viewer.is-reels .community-author { flex-wrap: nowrap; }
   .community-viewer.is-reels .community-card-meta { flex-direction: column; gap: 8px; }
@@ -1385,17 +1410,23 @@ body.community-reels .site-foot { display: none; }
   .community-viewer.is-reels .publication-actions { position: static; width: 100%; gap: 8px; }
   .community-viewer.is-reels .community-card:has(.publication-actions) .publication-actions { position: static; width: 100%; }
 }
+@media (min-width: 761px) and (min-height: 561px) and (pointer: fine), (min-width: 1001px) {
+  .community-viewer.is-reels .community-reel-copy { --cinema-bg: var(--bg); --cinema-text: var(--text); --cinema-muted: var(--text-muted); --cinema-control: var(--surface-2); --cinema-line: var(--field-line); }
+}
 @media (max-width: 360px) {
   .community-page.is-reels .community-viewer-toolbar { gap: 8px; padding-right: 12px; padding-left: 12px; }
+}
+@media (min-width: 1001px) {
+  .workspace-shell .community-viewer, .workspace-shell .app-loading-viewer { left: var(--sidebar-width); }
 }
 
 /* A selected scene owns the phone viewport; the browse feed keeps its chrome. */
 @media (max-width: 760px), (pointer: coarse) and (max-width: 1000px) {
   body:has(.community-viewer), body:has(.app-loading-viewer) { overflow: hidden; }
   body:has(.community-viewer) #top, body:has(.community-viewer) .site-foot,
-  body:has(.app-loading-viewer) #top, body:has(.app-loading-viewer) .site-foot { display: none; }
+  body:has(.app-loading-viewer) #top, body:has(.app-loading-viewer) .site-foot { visibility: hidden; pointer-events: none; }
   body:has(.community-viewer) #toasts { top: calc(max(12px, env(safe-area-inset-top)) + 60px); bottom: auto; }
-  .community-viewer.is-reels, .app-loading-viewer {
+  .community-viewer, .app-loading-viewer {
     position: fixed; inset: 0; z-index: 35; width: 100%; max-width: none;
     height: 100dvh; min-height: 0; margin: 0; padding: 0;
     overflow: hidden; background: var(--cinema-bg); color: var(--cinema-text);
@@ -1414,13 +1445,13 @@ body.community-reels .site-foot { display: none; }
   .community-viewer.is-reels .community-feed { height: 100dvh; min-height: 0; border-radius: 0; background: var(--cinema-bg); }
   .community-viewer.is-reels .community-card { display: block; min-height: 0; padding: 0; background: var(--cinema-bg); }
   .community-viewer.is-reels .community-viewer-scene { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; width: 100%; height: 100%; border-radius: 0; }
-  .community-viewer.is-reels .community-card .thumb { position: relative; inset: auto; grid-column: 1; grid-row: 1; width: 100%; height: 100%; min-height: 0; aspect-ratio: auto; }
+  .community-viewer.is-reels .community-card .thumb { position: relative; inset: auto; grid-column: 1; grid-row: 1; width: 100%; height: 100%; min-height: 0; aspect-ratio: auto; border-radius: 0; }
   .community-viewer.is-reels .thumb > img,
   .community-viewer.is-reels .thumbnail-live-preview > video { object-fit: contain; }
   .community-viewer.is-reels .thumb > .badge,
   .community-viewer.is-reels .video-quality-badge { top: calc(max(12px, env(safe-area-inset-top)) + 60px); }
   .community-viewer.is-reels .community-reel-copy {
-    position: relative; inset: auto; grid-column: 1; grid-row: 2; display: block; width: 100%;
+    position: relative; inset: auto; grid-column: 1; grid-row: 2; display: block; width: 100%; height: auto; overflow: visible; color: var(--cinema-text);
     padding: 16px 80px max(20px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
     background: var(--cinema-scrim);
   }
@@ -1441,8 +1472,8 @@ body.community-reels .site-foot { display: none; }
     padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left));
   }
   .app-loading-viewer .skeleton-step { display: none; }
-  .app-loading-viewer > .loading-body { height: 100%; }
-  .app-loading-viewer .skeleton-viewer { height: 100%; margin: 0; }
+  .app-loading-viewer > .loading-body { height: 100%; padding: 0; }
+  .app-loading-viewer .skeleton-viewer { width: 100%; height: 100%; margin: 0; }
   .app-loading-viewer .skeleton-reel { display: grid; grid-template-rows: minmax(0, 1fr) auto; }
   .app-loading-viewer .skeleton-reel-stage { position: relative; inset: auto; width: 100%; }
   .app-loading-viewer .skeleton-reel-copy { position: relative; inset: auto; width: 100%; padding-bottom: max(24px, env(safe-area-inset-bottom)); }
@@ -1501,12 +1532,12 @@ body.community-reels .site-foot { display: none; }
 .referral-copy-status { color: var(--text-muted); font-size: 13px; line-height: 1.5; min-height: 20px; margin-top: 12px; }
 .referral-summary { margin: 36px 0 40px; }
 .referral-summary dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
-.referral-summary dl > div { padding: 0 28px; min-width: 0; }
+.referral-summary dl > div { display: flex; flex-direction: column; padding: 0 28px; min-width: 0; }
 .referral-summary dl > div:first-child { padding-left: 0; }
 .referral-summary dl > div:last-child { padding-right: 0; }
 .referral-summary dl > div + div { border-left: 1px solid var(--line); } /* design-tells: ignore (neutral divider between actual data columns) */
 .referral-summary dt { display: flex; align-items: center; gap: 9px; color: var(--text-muted); margin-bottom: 12px; font-size: 14px; }
-.referral-summary dd { margin: 0; font-size: clamp(28px, 3.1vw, 42px); line-height: 1.15; font-weight: 500; overflow-wrap: anywhere; }
+.referral-summary dd { margin: auto 0 0; font-size: clamp(28px, 3.1vw, 42px); line-height: 1.15; font-weight: 500; overflow-wrap: anywhere; }
 .referral-levels { border-top: 1px solid var(--line); padding-top: 28px; }
 .referral-levels ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 680px; list-style: none; padding: 0; margin: 28px 0 0; }
 .referral-levels li { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 0; padding: 8px 0 0; }
@@ -1572,6 +1603,7 @@ body.community-reels .site-foot { display: none; }
 
 /* The same left navigation at every size; fixed portrait frames contain uploaded photos. */
 :root { --sidebar-width: 224px; }
+html { scrollbar-gutter: stable; }
 .workspace-sidebar { display: none; }
 .workspace-location { color: var(--text-muted); font-size: 14px; }
 .workspace-current-mark { display: inline-flex; flex: none; margin-left: auto; color: var(--text); }
@@ -1591,13 +1623,13 @@ body.community-reels .site-foot { display: none; }
 .workspace-account-link[aria-current="page"], .workspace-sidebar .nav a[aria-current="page"] { background: var(--surface-2); color: var(--text); font-weight: 600; box-shadow: inset 0 0 0 1px var(--line); }
 .workspace-sidebar .nav a[href="#/create"] { color: var(--text); font-weight: 600; }
 .workspace-navigation-footer { flex: none; padding-top: 16px; margin-top: 16px; border-top: 1px solid var(--line); }
-.workspace-theme-heading { display: flex; align-items: center; gap: 8px; min-height: 16px; margin-bottom: 8px; color: var(--text-muted); font-size: 12px; }
+.workspace-theme-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 16px; margin-bottom: 8px; padding: 0 12px; color: var(--text-muted); font-size: 12px; }
 .workspace-theme-auto { display: inline-block; opacity: 0; visibility: hidden; pointer-events: none; }
 .workspace-theme-auto.is-auto { opacity: 1; visibility: visible; }
 .workspace-theme-auto.is-entering { animation: workspace-theme-auto-enter 180ms ease-out; }
 .workspace-theme-auto.is-leaving { visibility: visible; animation: workspace-theme-auto-leave 180ms ease-out; }
-.workspace-theme-options { display: flex; width: 100%; }
-.workspace-theme-options > button { display: inline-flex; align-items: center; justify-content: center; flex: 1; min-height: 44px; gap: 5px; padding: 8px 4px; border: 0; background: none; color: var(--text-muted); font-size: 12px; font-weight: 400; }
+.workspace-theme-options { display: flex; gap: 4px; width: 100%; }
+.workspace-theme-options > button { display: inline-flex; align-items: center; justify-content: flex-start; flex: 0 1 88px; min-width: 0; min-height: 44px; gap: 12px; padding: 8px 12px; border: 0; background: none; color: var(--text-muted); font-size: 12px; font-weight: 400; }
 .workspace-theme-options > button:hover { color: var(--text); }
 .workspace-theme-options > button[aria-pressed="true"] { color: var(--text); font-weight: 600; }
 .workspace-theme-options > button[aria-pressed="true"] .ic { stroke-width: 1.8; }
@@ -1668,8 +1700,6 @@ body.community-reels .site-foot { display: none; }
   .workspace-shell .header-plan > span, .workspace-shell .header-plan > b:only-child { padding-left: 3px; padding-right: 3px; font-size: 10px; }
   .workspace-shell .header-plan > b { font-size: 10px; }
 }
-body.workspace-shell:has(.community-viewer), body.workspace-shell:has(.app-loading-viewer) { padding-left: 0; }
-body:has(.community-viewer) .workspace-sidebar, body:has(.app-loading-viewer) .workspace-sidebar { display: none; }
 
 .signin-options > .muted { margin-top: 12px; }
 .signin-options .signin-google { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 48px; width: 100%; margin-top: 28px; background: var(--surface); border-color: var(--field-line); font-weight: 500; }
@@ -1815,7 +1845,7 @@ const CONFIG = {
     { id: "s2", credits: 4000,  usd: 29, note: "Each month" },
     { id: "s3", credits: 10000, usd: 65, note: "Each month" },
   ],
-  referral: { link: "aurora.example/r/alex-k4m2", invited: REVIEW ? 12 : 0, signedUp: REVIEW ? 7 : 0, bought: REVIEW ? 3 : 0, subscribers: 0, earnedUsd: 0, currentLevel: 1 },
+  referral: { link: "aurora.example/r/alex-k4m2", invited: REVIEW ? 12 : 0, signedUp: REVIEW ? 7 : 0, bought: REVIEW ? 3 : 0, subscribers: 0, earnedCredits: 0, currentLevel: 1 },
 };
 const IMG = {"runway_example": "assets/posters/runway_example.jpg", "kling_example": "assets/posters/kling_example.jpg", "kling_product": "assets/posters/kling_product.jpg", "kling_portrait": "assets/posters/kling_portrait.jpg", "seedance_standard": "assets/posters/seedance_standard.jpg", "kling4_doorway": "assets/posters/kling4_doorway.jpg", "kling4_corgi": "assets/posters/kling4_corgi.jpg", "kling4_fashion": "assets/posters/kling4_fashion.jpg", "kling4_canyon": "assets/posters/kling4_canyon.jpg", "avatar_runway": "assets/posters/avatar_runway.png", "avatar_kling": "assets/posters/avatar_kling.png", "avatar_byteplus": "assets/posters/avatar_byteplus.png", "avatar_deepmind": "assets/posters/avatar_deepmind.png", "avatar_dave": "assets/posters/avatar_dave.jpg"};
 
@@ -2260,6 +2290,8 @@ const LOCAL_EXAMPLE_PREVIEWS = Object.freeze({
   "example-kling-portrait": { src: "assets/hero-previews/kling-portrait.mp4", bytes: 158056 },
   "example-kling-product": { src: "assets/hero-previews/kling-product.mp4", bytes: 148957 },
   "example-runway-kitchen": { src: "assets/hero-previews/runway-kitchen.mp4", bytes: 139022 },
+  "example-runway-underwater": { src: "assets/hero-previews/runway-underwater.mp4", bytes: 159122 },
+  "example-runway-whale": { src: "assets/hero-previews/runway-whale.mp4", bytes: 133098 },
   "example-kling-truck": { src: "assets/hero-previews/kling-truck.mp4", bytes: 177126 },
   "example-seedance2-skincare": { src: "assets/portrait-previews/seedance2-skincare.mp4", bytes: 125196 },
   "example-seedance2-sketch-car": { src: "assets/portrait-previews/seedance2-sketch-car.mp4", bytes: 109600 },
@@ -3205,7 +3237,7 @@ function viewAccount(main, arg) {
 }
 function accountCredits(body) {
   const filter = new URLSearchParams(location.hash.split("?")[1] || "").get("type") || "all";
-  body.innerHTML = `<div class="account-toolbar"><div class="seg" role="group" aria-label="Filter credit activity">${[["all", "All activity"], ["in", "Credits in"], ["out", "Credits out"]].map(([id, label]) => `<button type="button" id="credit-filter-${id}" data-credit-filter="${id}" aria-pressed="${filter === id}">${label}</button>`).join("")}</div><button class="btn" id="export-credits" type="button">Export CSV</button></div><div id="credit-list"></div><p class="account-hint">All amounts are in credits. Declined payments leave your balance unchanged. Credits returned after a failed generation appear here.</p><div class="account-summary-line"><span>Available balance</span><strong class="num" id="account-balance">${fmt(S.balance)}</strong><span>credits</span></div>`;
+  body.innerHTML = `<section class="account-credit-balance" aria-labelledby="account-credit-balance-label"><div><span class="account-credit-label" id="account-credit-balance-label">Available credits</span><strong class="num" id="account-balance">${fmt(S.balance)}</strong></div><a class="btn primary" id="account-buy-credits" href="#/plans?tab=packs">Buy credits</a></section><div class="account-toolbar"><div class="seg" role="group" aria-label="Filter credit activity">${[["all", "All activity"], ["in", "Credits in"], ["out", "Credits out"]].map(([id, label]) => `<button type="button" id="credit-filter-${id}" data-credit-filter="${id}" aria-pressed="${filter === id}">${label}</button>`).join("")}</div><button class="btn" id="export-credits" type="button">Export CSV</button></div><div id="credit-list"></div><p class="account-hint">All amounts are in credits. Declined payments leave your balance unchanged. Credits returned after a failed generation appear here.</p>`;
   const draw = selected => {
     const items = [...S.transactions].reverse().filter(t => selected === "in" ? t.delta > 0 : selected === "out" ? t.delta < 0 : true);
     $("#credit-list").innerHTML = items.length ? accountLedger(items) : `<div class="account-empty"><h2>No ${selected === "in" ? "credits received" : "credits spent"} yet</h2><p>${selected === "in" ? "Credit purchases will appear here." : "Your video costs will appear here after you launch a generation."}</p><button class="btn" id="clear-credit-filter" type="button">Show all activity</button></div>`;
@@ -3228,8 +3260,8 @@ function accountBilling(body) {
     <dl class="account-facts"><div><dt>Current period</dt><dd>${accountDate(p.periodStart)}</dd></div><div><dt>Period ends</dt><dd>${accountDate(p.periodEnd)}</dd></div><div><dt>Next payment</dt><dd>${p.state === "active" ? `$${p.pendingChange?.usd ?? p.usd} · ${accountDate(p.nextBillingAt)}` : "None scheduled"}</dd></div></dl>
     <p class="account-hint">${p.state === "active" ? "Cancelling stops future monthly payments. Your current credits stay available." : "No future payments. Current credits stay available. You can choose another plan at any time."}</p>
     <div class="billing-actions">${p.state === "active" ? '<a class="btn" href="#/plans?tab=subs">Compare plans</a><button class="btn danger" id="cancel-subscription" type="button">Cancel subscription</button>' : '<a class="btn" href="#/plans?tab=subs">Choose a plan</a>'}<a class="btn" id="billing-view-credits" href="#/account/credits">View credits</a></div>
-    <div id="cancel-confirm" class="account-cancel-confirm" hidden><p>Cancel future monthly payments? ${p.pendingChange ? "Your scheduled plan change will also be removed. " : ""}Your current ${fmt(S.balance)} credits stay available.</p><div class="row"><button class="btn" id="keep-subscription" type="button">Keep subscription</button><button class="btn danger" id="confirm-cancel" type="button">Confirm cancellation</button></div></div></section>${pendingPlanMarkup(p)}` : `<section class="account-empty"><h2>No monthly subscription</h2><p>Buy credits once or choose a monthly plan. You can create videos with either option.</p><a class="btn primary" href="#/plans?tab=subs">Choose credits or a plan</a></section>`}
-    <div class="account-section-head"><h2>Purchase history</h2><a class="linkbtn" href="#/plans">Buy credits</a></div>${accountLedger([...S.transactions].reverse().filter(t => ["purchase", "subscription"].includes(t.kind)))}`;
+    <div id="cancel-confirm" class="account-cancel-confirm" hidden><p>Cancel future monthly payments? ${p.pendingChange ? "Your scheduled plan change will also be removed. " : ""}Your current ${fmt(S.balance)} credits stay available.</p><div class="row"><button class="btn" id="keep-subscription" type="button">Keep subscription</button><button class="btn danger" id="confirm-cancel" type="button">Confirm cancellation</button></div></div></section>${pendingPlanMarkup(p)}` : `<section class="account-empty"><h2>No monthly subscription</h2><p>Buy credits once or choose a monthly plan. You can create videos with either option.</p><div class="billing-actions"><a class="btn primary" id="billing-buy-credits" href="#/plans?tab=packs">Buy credits</a><a class="btn" href="#/plans?tab=subs">Choose a plan</a></div></section>`}
+    <div class="account-section-head"><h2>Purchase history</h2>${p ? '<a class="linkbtn" id="billing-buy-credits" href="#/plans?tab=packs">Buy credits</a>' : ""}</div>${accountLedger([...S.transactions].reverse().filter(t => ["purchase", "subscription"].includes(t.kind)))}`;
   return () => {
     initPendingPlanChange();
     $("#cancel-subscription")?.addEventListener("click", () => { $("#cancel-confirm").hidden = false; $("#cancel-subscription").hidden = true; $("#keep-subscription").focus(); });
@@ -3531,14 +3563,16 @@ function viewHome(main) {
       if (poster.complete) { if (poster.naturalWidth) ready(); else failed(); }
     });
     if (returnContext) {
-      restoreFrame = requestAnimationFrame(() => { restoreFrame = requestAnimationFrame(() => {
+      const restore = () => {
         if (returnContext.path !== homePath() || !main.querySelector(".home-workspace")) return;
         const card = [...main.querySelectorAll("[data-reel-post]")].find(card => card.dataset.reelPost === returnContext.postId);
         if (!card) return;
         if (returnContext.scrollY === null) card.scrollIntoView({ block: "center", behavior: "instant" });
         else window.scrollTo(returnContext.scrollX || 0, returnContext.scrollY || 0);
         card.querySelector("a.community-watch")?.focus({ preventScroll: true });
-      }); });
+      };
+      restore();
+      restoreFrame = requestAnimationFrame(restore);
     }
     return () => cancelAnimationFrame(restoreFrame);
   };
@@ -3584,10 +3618,10 @@ function loadingHeader(name, arg, label) {
 function loadingMarkup(name, arg) {
   if (name === "account") {
     if (arg === "analytics") return skeletonAnalytics();
-    if (arg === "credits") return `<div class="skeleton-list-controls">${skeletonAction("skeleton-filter")}${skeletonAction()}</div>${skeletonLedger()}`;
+    if (arg === "credits") return `<section class="account-credit-balance" aria-hidden="true"><div><span class="account-credit-label">Available credits</span><strong class="num skeleton skeleton-credit-amount">${fmt(S.balance)}</strong></div><span class="btn primary skeleton skeleton-credit-action">Buy credits</span></section><div class="skeleton-list-controls">${skeletonAction("skeleton-filter")}${skeletonAction()}</div>${skeletonLedger()}`;
     if (arg === "billing") return `<div class="skeleton-billing"><span class="skeleton skeleton-heading"></span>${skeletonLines()}<div class="skeleton-billing-facts">${skeletonLines()}${skeletonLines()}${skeletonLines()}</div><div class="skeleton-action-row">${skeletonAction()}${skeletonAction()}${skeletonAction()}</div></div>${skeletonLedger()}`;
     if (arg === "profile") return `<div class="skeleton-profile"><div class="skeleton-form">${skeletonProfilePhoto()}<span class="skeleton skeleton-heading"></span>${skeletonLines()}<div class="skeleton skeleton-field"></div>${skeletonLines()}<div class="skeleton skeleton-field"></div>${skeletonLines()}${skeletonAction()}</div></div>`;
-    return `<div class="skeleton-list-controls">${skeletonAction("skeleton-filter")}${skeletonAction()}</div>${skeletonLedger()}`;
+    return `<section class="account-credit-balance" aria-hidden="true"><div><span class="account-credit-label">Available credits</span><strong class="num skeleton skeleton-credit-amount">${fmt(S.balance)}</strong></div><span class="btn primary skeleton skeleton-credit-action">Buy credits</span></section><div class="skeleton-list-controls">${skeletonAction("skeleton-filter")}${skeletonAction()}</div>${skeletonLedger()}`;
   }
   if (name === "community") return skeletonCommunity(arg);
   return name === "history" ? skeletonHistory(arg === "trash") : skeletonReferrals();
@@ -3602,7 +3636,10 @@ function loadView(main, name, arg, mount) {
   const labels = { account: accountTitles[arg] || "Credit activity", history: arg === "trash" ? "Recently deleted" : "My videos", referrals: "Referrals", community: arg === "watch" ? "Feed viewer" : arg === "mine" ? "Your publications" : arg ? "Video details" : "Feed" };
   main.setAttribute("aria-busy", "true");
   const chromeHeight = Math.round($("#top").getBoundingClientRect().height);
-  main.innerHTML = `<div class="page app-loading app-loading-${loadingSurface(name, arg)}" style="--loading-chrome-height:${chromeHeight}px">${loadingHeader(name, arg, labels[name])}<p class="sr" role="status">Loading ${labels[name].toLowerCase()}.</p><div class="loading-body" aria-hidden="true">${loadingMarkup(name, arg)}</div></div>`;
+  const scene = name === "community" && arg === "watch" ? communityPosts(params.get("scope") === "mine").find(post => post.id === params.get("scene")) : null;
+  const preview = scene ? recordOfficialExample(scene) : null, frame = String(preview?.format || scene?.format || "16:9").split(":").map(Number);
+  const ratio = preview?.sourceWidth > 0 && preview?.sourceHeight > 0 ? preview.sourceWidth / preview.sourceHeight : frame.length === 2 && frame.every(value => value > 0) ? frame[0] / frame[1] : 16 / 9;
+  main.innerHTML = `<div class="page app-loading app-loading-${loadingSurface(name, arg)}" style="--loading-chrome-height:${chromeHeight}px;--scene-ratio:${ratio}">${loadingHeader(name, arg, labels[name])}<p class="sr" role="status">Loading ${labels[name].toLowerCase()}.</p><div class="loading-body" aria-hidden="true">${loadingMarkup(name, arg)}</div></div>`;
   $("#title").focus({ preventScroll: true });
   viewLoadTimer = setTimeout(() => {
     if (id !== viewLoadId) return;
@@ -3626,21 +3663,21 @@ function loadView(main, name, arg, mount) {
 function referralSummary() {
   const source = CONFIG.referral || {};
   const count = value => Number.isFinite(Number(value)) && Number(value) >= 0 ? Math.floor(Number(value)) : 0;
-  const earnedUsd = Number(source.earnedUsd);
+  const earnedCredits = Number(source.earnedCredits);
   return {
     link: String(source.link || ""),
     invited: count(source.invited),
     // A credit-pack buyer is not evidence of a subscription.
     subscribers: count(source.subscribers),
-    earnedUsd: Number.isFinite(earnedUsd) && earnedUsd >= 0 ? earnedUsd : 0,
+    earnedCredits: Number.isFinite(earnedCredits) && earnedCredits >= 0 ? earnedCredits : 0,
   };
 }
 
 function viewReferrals(main) {
   const referral = referralSummary();
   const link = /^https?:\/\//i.test(referral.link) ? referral.link : `https://${referral.link}`;
-  const earnings = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(referral.earnedUsd);
-  const levels = [[1, 10], [2, 5], [3, 3]];
+  const earnings = fmt(referral.earnedCredits);
+  const levels = [[1, 3], [2, 5], [3, 10]];
   const configuredLevel = Number(CONFIG.referral?.currentLevel);
   const currentLevel = [1, 2, 3].includes(configuredLevel) ? configuredLevel : 1;
   main.innerHTML = `<div class="page referral-page">
@@ -3653,7 +3690,7 @@ function viewReferrals(main) {
     <section class="referral-summary" aria-label="Referral activity"><dl>
       <div><dt>${icon("referrals", 18)}<span>Invited</span></dt><dd class="num" id="referral-invited">${fmt(referral.invited)}</dd></div>
       <div><dt>${icon("plans", 18)}<span>Subscribers</span></dt><dd class="num" id="referral-subscribers">${fmt(referral.subscribers)}</dd></div>
-      <div><dt>${icon("credits", 18)}<span>Earned</span></dt><dd class="num" id="referral-earned">${esc(earnings)}</dd></div>
+      <div><dt>${icon("credits", 18)}<span>Earned credits</span></dt><dd class="num" id="referral-earned" title="From referral credit purchases paid for with real money" aria-label="${esc(earnings)} credits earned from referral credit purchases paid for with real money">${esc(earnings)}</dd></div>
     </dl></section>
     <section class="referral-levels" aria-labelledby="referral-levels-heading">
       <h2 id="referral-levels-heading">Referral levels</h2>
@@ -3698,6 +3735,48 @@ function skeletonReferrals() {
     <div class="referral-loading-summary">${Array.from({ length: 3 }, () => '<div><span class="skeleton skeleton-line short"></span><span class="skeleton referral-loading-number"></span></div>').join("")}</div>
     <div class="referral-loading-levels"><span class="skeleton skeleton-heading"></span><div>${Array.from({ length: 3 }, () => '<span class="skeleton referral-loading-rate"></span>').join("")}</div></div>
   </div>`;
+}
+
+/* Fictional presentation activity requested by Igor on 2026-11-02.
+   Media, provider credits and source links remain factual. These are not provider metrics. */
+const COMMUNITY_DEMO_ACTIVITY_ENABLED = new URLSearchParams(location.search).get('activity') !== '0';
+const COMMUNITY_DEMO_ZERO = Object.freeze({ views: 0, likes: 0, promptUses: 0 });
+const COMMUNITY_DEMO_ACTIVITY = Object.freeze(Object.fromEntries([
+  ['example-runway-kitchen', 1384, 87, 16, [['Maya', 'That little train makes the whole scene.'], ['Theo', 'The light across the counter is lovely.'], ['Nora', 'Such a good everyday detail.']]],
+  ['example-kling-truck', 720, 49, 8, [['Liam', 'The cuts work really well together.'], ['Maya', 'Great atmosphere.']]],
+  ['example-kling-product', 1980, 128, 24, [['Nora', 'The glass catches the light so nicely.'], ['Eli', 'Love these warm tones.'], ['June', 'That slow camera move is the best part.'], ['Owen', 'This would make a beautiful product intro.']]],
+  ['example-kling-portrait', 540, 32, 6, [['Maya', 'Lovely soft light.'], ['Ava', 'A quiet moment, nicely done.']]],
+  ['example-runway-whale', 1258, 96, 18, [['Theo', 'The scale of this is incredible.'], ['Iris', 'That first frame stopped me scrolling.']]],
+  ['example-runway-underwater', 2114, 142, 31, [['June', 'The colour and movement are so good.'], ['Alex', 'An entire little world in one shot.'], ['Sam', 'I watched this twice.']]],
+  ['example-runway-fox', 890, 67, 9, [['Lena', 'This has so much character.'], ['Owen', 'Would happily watch a longer version.']]],
+  ['example-runway-forest', 410, 24, 4, [['Iris', 'That light through the trees.']]],
+  ['example-kling-rider', 620, 42, 6, [['Liam', 'The motion feels really smooth.']]],
+  ['example-kling-station', 349, 19, 3, [['Lena', 'Nice quiet build-up.']]],
+  ['example-kling-madrid', 796, 58, 11, [['Maya', 'A lovely little scene.'], ['Sam', 'The colours work so well here.']]],
+  ['example-kling-villa', 451, 27, 5, [['Nora', 'That soft morning light is everything.']]],
+  ['example-seedance-standard', 304, 18, 4, [['Eli', 'The texture looks great.']]],
+  ['example-veo-showreel', 0, 0, 0, []],
+  ['example-kling4-doorway', 746, 54, 8, [['Alex', 'Love how the three characters move together.'], ['June', 'Keeping the camera still really works.']]],
+  ['example-kling4-corgi', 1630, 108, 23, [['Ava', 'This tiny winter world is adorable.'], ['Owen', 'So much detail in such a short shot.'], ['Maya', 'The dog is the star here.']]],
+  ['example-kling4-fashion', 2360, 156, 36, [['Lena', 'The fabric movement is beautiful.'], ['Nora', 'Clean framing and lovely details.'], ['Iris', 'Saving this for a fashion idea.'], ['Eli', 'The close-ups really work.']]],
+  ['example-kling4-canyon', 1034, 73, 14, [['Liam', 'Great sense of speed.'], ['Sam', 'That opening angle is strong.']]],
+  ['example-seedance2-skincare', 1840, 119, 27, [['Nora', 'Simple light, really nice texture.'], ['June', 'This works so well in portrait.'], ['Maya', 'The glass reflections are my favourite part.']]],
+  ['example-seedance2-sketch-car', 1710, 112, 21, [['Theo', 'The sketch turning into the car is so satisfying.'], ['Alex', 'That transition is clever.'], ['Owen', 'A great opening for a short ad.']]],
+  ['example-seedance2-dessert-selfie', 642, 44, 6, [['Ava', 'Such a playful camera move.'], ['Lena', 'The shop feels full of life.']]],
+  ['example-seedance2-city-walk', 892, 63, 12, [['Iris', 'Love the shift from warm to cool light.'], ['Sam', 'The movement through the doorway feels natural.']]],
+].map(([postId, views, likes, promptUses, comments], postIndex) => [postId, Object.freeze({
+  views, likes, promptUses,
+  comments: Object.freeze(comments.map(([author, body], index) => Object.freeze({
+    id: `demo-comment:${postId}:${index + 1}`, postId, owner: '', author, avatar: '', body, demo: true,
+    createdAt: new Date(Date.UTC(2026, 10, 1, 21, 40) + (postIndex % 9) * 30000 + index * 60000).toISOString(),
+  }))),
+})])));
+function communityDemoCounts(id) {
+  return COMMUNITY_DEMO_ACTIVITY_ENABLED && OFFICIAL_EXAMPLES.some(post => post.official && post.id === id) ? COMMUNITY_DEMO_ACTIVITY[id] || COMMUNITY_DEMO_ZERO : COMMUNITY_DEMO_ZERO;
+}
+function communityDemoComments() {
+  if (!COMMUNITY_DEMO_ACTIVITY_ENABLED) return [];
+  return OFFICIAL_EXAMPLES.flatMap(post => post.official ? COMMUNITY_DEMO_ACTIVITY[post.id]?.comments || [] : []);
 }
 
 /* Published provider examples and the current account's publication snapshots. */
@@ -3752,7 +3831,7 @@ function communityShuffleRank(value) {
 function communityPosts(mine = false, options = {}) {
   const posts = mine ? (S.signedIn ? [...S.posts].reverse() : []) : [...S.posts].reverse().concat(OFFICIAL_EXAMPLES);
   const { sort, seed } = communityFeedSettings(options), likes = communityActivity().likesByAccount;
-  const count = id => Object.values(likes).filter(ids => ids.includes(id)).length;
+  const count = id => (typeof communityDemoCounts === "function" ? communityDemoCounts(id).likes : 0) + Object.values(likes).filter(ids => ids.includes(id)).length;
   const published = post => communityPublicationTimestamp(post) ?? 0;
   return posts.map((post, index) => ({ post, index })).sort((a, b) => {
     if (!mine && sort === "shuffle") return communityShuffleRank(seed + ":" + a.post.id) - communityShuffleRank(seed + ":" + b.post.id) || a.index - b.index;
@@ -3814,8 +3893,8 @@ function saveCommunityActivity(activity) {
   try { localStorage.setItem(COMMUNITY_ACTIVITY_STORE, JSON.stringify(activity)); } catch (e) {}
 }
 function communityCounts(id) {
-  const activity = communityActivity();
-  return { views: activity.viewedPosts.includes(id) ? 1 : 0, promptUses: activity.setupEvents.filter(e => e?.postId === id).length, likes: Object.values(activity.likesByAccount).filter(ids => ids.includes(id)).length };
+  const activity = communityActivity(), base = typeof communityDemoCounts === "function" ? communityDemoCounts(id) : { views: 0, promptUses: 0, likes: 0 };
+  return { views: base.views + (activity.viewedPosts.includes(id) ? 1 : 0), promptUses: base.promptUses + activity.setupEvents.filter(e => e?.postId === id).length, likes: base.likes + Object.values(activity.likesByAccount).filter(ids => ids.includes(id)).length };
 }
 const communityLikeIdentity = () => S.signedIn && typeof S.user.email === "string" ? S.user.email.trim().toLowerCase() : "";
 const communityLiked = id => Boolean(communityLikeIdentity() && communityActivity().likesByAccount[communityLikeIdentity()]?.includes(id));
@@ -4173,7 +4252,7 @@ function viewCommunity(main, arg) {
     }
     const tabs = [["trending", "Trending"], ["latest", "Latest"], ["shuffle", "Shuffle"], ["mine", "My"]];
     const shuffleHref = communityFeedHref("shuffle", communityNewShuffleSeed());
-    main.innerHTML = `<div class="page community-page"><div class="community-feed-toolbar"><header class="account-heading"><div><h1 id="title" tabindex="-1">${mine ? "Your publications" : "Feed"}</h1></div><a class="btn primary community-create" href="#/create">Create video</a></header><nav class="community-tabs" aria-label="Feed">${tabs.map(([sort, label]) => `<a href="${sort === "mine" ? "#/community/mine" : sort === "shuffle" ? shuffleHref : communityFeedHref(sort)}" ${(mine ? sort === "mine" : sort === settings.sort) ? 'aria-current="page"' : ""}>${label}</a>`).join("")}</nav></div>${communityCards(100, mine, true)}</div>`;
+    main.innerHTML = `<div class="page community-page"><div class="community-feed-toolbar"><header class="account-heading"><div><h1 id="title" tabindex="-1">${mine ? "Your publications" : "Feed"}</h1>${mine ? `<p class="community-publication-total" id="my-publication-count"><span class="num">${fmt(S.posts.length)}</span> published</p>` : ""}</div><a class="btn primary community-create" href="#/create">Create video</a></header><nav class="community-tabs" aria-label="Feed">${tabs.map(([sort, label]) => `<a href="${sort === "mine" ? "#/community/mine" : sort === "shuffle" ? shuffleHref : communityFeedHref(sort)}" ${(mine ? sort === "mine" : sort === settings.sort) ? 'aria-current="page"' : ""}>${label}</a>`).join("")}</nav></div>${communityCards(100, mine, true)}</div>`;
     return () => initCommunityReels(main);
   }
   const p = communityPosts(false).find(x => x.id === arg);
@@ -4197,14 +4276,18 @@ function viewCommunity(main, arg) {
 const COMMUNITY_COMMENTS_STORE = "aurora-community-comments-v1";
 const communityCommentDrafts = new Map();
 const communityCommentOwner = () => S.signedIn && typeof S.user?.email === "string" ? S.user.email.trim().toLowerCase() : "";
-function communityComments() {
+function communityLocalComments() {
   try {
     const rows = JSON.parse(localStorage.getItem(COMMUNITY_COMMENTS_STORE) || "[]");
-    return Array.isArray(rows) ? rows.filter(row => row && typeof row.id === "string" && typeof row.postId === "string" && typeof row.owner === "string" && typeof row.author === "string" && typeof row.body === "string" && row.body.trim().length > 0 && row.body.length <= 500 && Number.isFinite(Date.parse(row.createdAt))).slice(-1000) : [];
+    return Array.isArray(rows) ? rows.filter(row => row && row.demo !== true && typeof row.id === "string" && !row.id.startsWith('demo-comment:') && typeof row.postId === "string" && typeof row.owner === "string" && typeof row.author === "string" && typeof row.body === "string" && row.body.trim().length > 0 && row.body.length <= 500 && Number.isFinite(Date.parse(row.createdAt))).slice(-1000) : [];
   } catch (_) { return []; }
 }
+function communityComments() {
+  return (typeof communityDemoComments === 'function' ? communityDemoComments() : []).concat(communityLocalComments());
+}
 function saveCommunityComments(rows) {
-  try { localStorage.setItem(COMMUNITY_COMMENTS_STORE, JSON.stringify(rows)); return true; }
+  const own = rows.filter(row => row && row.demo !== true && typeof row.id === 'string' && !row.id.startsWith('demo-comment:'));
+  try { localStorage.setItem(COMMUNITY_COMMENTS_STORE, JSON.stringify(own)); return true; }
   catch (_) { return false; }
 }
 const communityCommentPost = id => communityPosts(false).find(post => post.id === id);
@@ -4314,7 +4397,7 @@ function openCommunityComments(id, trigger = null) {
       const body = field.value.trim();
       if (!body || body.length > 500) { commentError('Enter a comment with 1 to 500 characters.'); field.setAttribute('aria-invalid', 'true'); field.focus({ preventScroll: true }); return; }
       const rows = communityComments();
-      if (rows.length >= 1000) { commentError('Comments could not be saved. Try again later.'); return; }
+      if (communityLocalComments().length >= 1000) { commentError('Comments could not be saved. Try again later.'); return; }
       const user = accountUser();
       rows.push({ id: globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`, postId: id, owner, author: user.name, avatar: userAvatarSource(user.avatar), body, createdAt: new Date().toISOString() });
       if (!saveCommunityComments(rows)) { commentError('We couldn’t save your comment. Try again.'); return; }
@@ -5199,13 +5282,13 @@ function viewCommunityViewer(main) {
 window.addEventListener('hashchange', () => {
   if (!communityViewerReturn?.fromCreate || communityViewerReturn.path !== location.hash) return;
   const context = communityViewerReturn;
-  requestAnimationFrame(() => requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
     if (context.path !== location.hash) return;
     const card = [...document.querySelectorAll('#g-body .community-card')].find(card => card.dataset.reelPost === context.postId);
     if (context.scrollY === null) card?.scrollIntoView({ block: 'center', behavior: 'instant' });
     else window.scrollTo(context.scrollX, context.scrollY);
     card?.querySelector('a.community-watch')?.focus({ preventScroll: true });
-  }));
+  });
 });
 function initCommunityReels(main) {
   const page = main.querySelector('.community-page'), feed = page?.querySelector('.community-feed');
@@ -5366,10 +5449,10 @@ function initCommunityReels(main) {
   if (viewer) {
     $('#viewer-previous').addEventListener('click', () => move(-1), { signal });
     $('#viewer-next').addEventListener('click', () => move(1), { signal });
-    const panelOpen = () => ['#publish-panel', '#destructive-panel', '#mobile-navigation', '#menu', 'dialog[open]'].some(selector => {
+    const panelOpen = () => ['#publish-panel', '#destructive-panel', '#community-comments-panel', '#mobile-navigation', '#menu', 'dialog[open]'].some(selector => {
       const panel = document.querySelector(selector); return panel && !panel.hidden && panel.getClientRects().length;
     });
-    const outside = target => target instanceof Element && page.contains(target) && !target.closest('.community-viewer-scene,.community-viewer-toolbar,a,button,input,textarea,select,[contenteditable="true"]');
+    const outside = target => target instanceof Element && page.contains(target) && !target.closest('.thumb,.community-reel-copy,.community-viewer-toolbar,a,button,input,textarea,select,[contenteditable="true"]');
     let pointer = null, candidate = null;
     window.addEventListener('pointerdown', event => {
       candidate = null;
@@ -5407,14 +5490,16 @@ function initCommunityReels(main) {
     });
   }
   if (!viewer && communityViewerReturn?.path === location.hash) {
-    restoreFrame = requestAnimationFrame(() => { restoreFrame = requestAnimationFrame(() => {
+    const restore = () => {
       if (signal.aborted) return;
       const card = cards.find(card => card.dataset.reelPost === communityViewerReturn.postId);
       if (enabled) feed.scrollTop = Math.max(0, cards.indexOf(card)) * feed.clientHeight;
       if (communityViewerReturn.scrollY === null && !enabled) card?.scrollIntoView({ block: 'center', behavior: 'instant' });
       else window.scrollTo(communityViewerReturn.scrollX, communityViewerReturn.scrollY || 0);
       card?.querySelector(':scope > .thumb')?.focus({ preventScroll: true });
-    }); });
+    };
+    restore();
+    restoreFrame = requestAnimationFrame(restore);
   }
   return () => { cancelSingleTap(); clearLikeFeedback(); abort.abort(); observer.disconnect(); clearTimeout(settleTimer); cancelAnimationFrame(frame); cancelAnimationFrame(restoreFrame); cancelAnimationFrame(entryFrame); document.body.classList.remove('community-reels'); };
 }
@@ -5428,6 +5513,11 @@ Object.assign(ICONS, {
 let workspaceThemeTransition = null;
 function workspaceRoute() {
   const route = currentRoute();
+  if (route.name === "community" && route.arg === "watch" && communityViewerReturn?.path) {
+    const source = communityViewerReturn.path.split("?")[0];
+    if (["#/home", "", "#"].includes(source)) return "home";
+    if (source === "#/create") return "create";
+  }
   return route.name === "video" ? (privateVideoReturnContext()?.path === "#/create?gallery=videos" ? "create" : "history") : route.name;
 }
 function workspaceLinksMarkup(mobile = false) {
