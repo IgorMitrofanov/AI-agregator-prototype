@@ -462,32 +462,14 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .account-heading { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; }
 .account-heading .sub { overflow-wrap: anywhere; }
 .account-page > .account-heading { margin-bottom: 32px; }
-.account-columns { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(240px, 1fr); gap: 48px; align-items: start; }
-.account-main, .account-side { min-width: 0; }
-.account-balance { border-bottom: 1px solid var(--line); padding: 0 0 28px; margin-bottom: 32px; }
-.account-balance .account-caption { display: block; color: var(--text-muted); margin-bottom: 8px; }
-.account-amount { font-size: clamp(48px, 6vw, 76px); line-height: 1.05; letter-spacing: -0.025em; font-weight: 500; }
-.account-unit { margin-left: 10px; font-size: 18px; font-weight: 400; color: var(--text-muted); }
-.account-balance-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 20px; }
-.account-balance-foot p { color: var(--text-muted); font-size: 14px; max-width: 33ch; }
 .account-section-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 20px; margin: 0 0 16px; }
-.account-section-head h2, .account-side h2 { font-size: 23px; }
+.account-section-head h2 { font-size: 23px; }
 .account-section-head a { font-size: 14px; }
-.account-section-head .linkbtn, .account-side .linkbtn { display: inline-flex; align-items: center; min-height: 44px; }
-.account-side { border-left: 1px solid var(--line); padding-left: 32px; }
-.account-side section + section { border-top: 1px solid var(--line); margin-top: 32px; padding-top: 24px; }
-.account-side p { margin: 10px 0 16px; color: var(--text-muted); line-height: 1.6; overflow-wrap: anywhere; }
-.account-side .account-plan-price { color: var(--text); font-size: 24px; }
-.account-side .account-plan-price span { color: var(--text-muted); font-size: 14px; }
+.account-section-head .linkbtn { display: inline-flex; align-items: center; min-height: 44px; }
 .account-status { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
 .account-status.good { color: var(--good); }
 .account-status.bad { color: var(--bad); }
 .account-status.muted { color: var(--text-muted); }
-.account-recent { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 36px; }
-.account-recent article { min-width: 0; }
-.account-recent .thumb { display: block; border-radius: var(--r-sm); overflow: hidden; aspect-ratio: 16 / 10; }
-.account-recent h3 { font-family: var(--sans); font-size: 14px; font-weight: 600; margin: 10px 0 4px; line-height: 1.4; }
-.account-recent p { color: var(--text-muted); font-size: 13px; }
 .account-ledger-wrap { overflow-x: auto; }
 .account-ledger { width: 100%; border-collapse: collapse; font-size: 14px; }
 .account-ledger th { text-align: left; color: var(--text-muted); font-size: 13px; font-weight: 500; padding: 0 12px 12px 0; border-bottom: 1px solid var(--line); white-space: nowrap; }
@@ -533,10 +515,8 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .account-toggle { display: flex; align-items: flex-start; gap: 12px; min-height: 48px; margin-bottom: 16px; cursor: pointer; }
 .account-toggle input { accent-color: var(--fill); width: 18px; height: 18px; flex: none; margin-top: 3px; }
 .account-toggle small { display: block; color: var(--text-muted); font-size: 13px; margin-top: 4px; }
-.account-profile-layout { display: grid; grid-template-columns: minmax(0, 640px) minmax(220px, 1fr); gap: 64px; }
-.account-profile-note { border-top: 1px solid var(--line); padding-top: 20px; }
-.account-profile-note h2 { font-size: 23px; }
-.account-profile-note p { color: var(--text-muted); margin: 12px 0 20px; line-height: 1.6; }
+.account-profile-layout { max-width: 760px; }
+.account-profile-layout > .account-form { max-width: none; }
 .avatar, .mobile-account-initials { position: relative; overflow: hidden; }
 .user-avatar-initials { position: relative; z-index: 0; }
 .user-avatar-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
@@ -553,23 +533,11 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .profile-photo-actions { flex-direction: column; gap: 8px; }
   .profile-photo-actions .btn { width: 100%; padding-right: 12px; padding-left: 12px; }
 }
-@media (max-width: 900px) {
-  .account-columns { gap: 28px; grid-template-columns: minmax(0, 1.5fr) minmax(210px, 1fr); }
-  .account-side { padding-left: 24px; }
-  .account-recent { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .account-recent article:nth-child(3) { display: none; }
-  .account-profile-layout { gap: 32px; }
-}
 @media (max-width: 700px) {
   .account-heading { align-items: flex-start; gap: 16px; }
   .account-heading > .btn { padding: 10px 14px; flex: none; font-size: 14px; }
   .account-page .account-heading h1 { font-size: 32px; }
   .account-page > .account-heading { margin-bottom: 28px; }
-  .account-columns, .account-profile-layout { display: block; }
-  .account-side { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); padding-top: 28px; margin-top: 32px; }
-  .account-balance-foot { flex-wrap: wrap; align-items: flex-start; }
-  .account-amount { font-size: 60px; }
-  .account-unit { font-size: 16px; }
   .account-ledger { min-width: 0; }
   .account-ledger:not(.compact) thead { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
   .account-ledger:not(.compact) tbody { display: block; }
@@ -590,7 +558,6 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .account-facts { grid-template-columns: 1fr; gap: 16px; }
   .account-facts > div { display: flex; justify-content: space-between; gap: 16px; }
   .account-facts dt { margin: 0; }
-  .account-profile-note { margin-top: 32px; }
   .account-section-head { gap: 12px; }
   .account-section-head h2 { font-size: 22px; }
 }
@@ -631,17 +598,29 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .analytics-bar { display: block; flex: 1; min-width: 0; max-width: 14px; }
 .analytics-bar.is-zero { visibility: hidden; }
 .analytics-range { display: flex; justify-content: space-between; gap: 16px; margin: 12px 0 0 44px; color: var(--text-muted); font-size: 12px; }
-.analytics-model-list { list-style: none; padding: 0; margin: 24px 0 0; }
-.analytics-model-list li { position: relative; margin: 0 0 22px; padding-right: 42px; }
+.analytics-donut { position: relative; width: 188px; height: 188px; max-width: 100%; margin: 20px auto 12px; }
+.analytics-donut svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.analytics-donut-sector { stroke: var(--bg); stroke-width: 2; }
+.analytics-donut-total { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+.analytics-donut-total strong { max-width: 108px; overflow-wrap: anywhere; font-size: 28px; line-height: 1.1; font-weight: 500; text-align: center; }
+.analytics-donut-total > span { color: var(--text-muted); font-size: 12px; margin-top: 5px; }
+.analytics-model-list { list-style: none; padding: 0; margin: 12px 0 0; }
+.analytics-model-list li { display: grid; grid-template-columns: minmax(0, 1fr) 38px; gap: 12px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line); }
 .analytics-model-label { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; font-size: 13px; }
-.analytics-model-label > span { min-width: 0; overflow-wrap: anywhere; }
+.analytics-model-label > span { display: flex; align-items: baseline; gap: 8px; min-width: 0; overflow-wrap: anywhere; }
 .analytics-model-label > strong { flex: none; font-weight: 500; }
-.analytics-model-track { height: 6px; margin-top: 9px; background: var(--line); overflow: hidden; }
-.analytics-model-track > span { display: block; height: 100%; background: var(--text); }
-.analytics-model-share { position: absolute; right: 0; bottom: -3px; color: var(--text-muted); font-size: 12px; }
+.analytics-model-swatch { display: inline-block; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--analytics-model-tone); }
+.analytics-model-share { color: var(--text-muted); font-size: 12px; text-align: right; }
+.analytics-more > summary { display: flex; align-items: baseline; gap: 8px; width: 100%; }
+.analytics-more > summary::after { content: "+"; order: -1; color: var(--text-muted); }
+.analytics-more[open] > summary::after { content: "−"; }
+.analytics-more > summary > span:first-of-type { flex: 1; }
+.analytics-more > summary > strong { font-size: 13px; font-weight: 500; }
+.analytics-more > summary > .analytics-model-share { width: 38px; margin-left: 4px; }
 .analytics-note { margin-top: 20px; line-height: 1.5; }
 .analytics-data { margin-top: 20px; }
-.analytics-data > summary, .analytics-more > summary { display: list-item; width: fit-content; min-height: 44px; padding: 10px 0; cursor: pointer; font-size: 13px; }
+.analytics-data > summary, .analytics-more > summary { min-height: 44px; padding: 10px 0; cursor: pointer; font-size: 13px; }
+.analytics-data > summary { display: list-item; width: fit-content; }
 .analytics-data-scroll { overflow-x: auto; margin-top: 8px; }
 .analytics-data table { width: 100%; min-width: 380px; border-collapse: collapse; font-size: 12px; }
 .analytics-data th, .analytics-data td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); }
@@ -649,6 +628,10 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .analytics-data td, .analytics-data thead th:not(:first-child) { text-align: right; }
 .analytics-empty { margin-top: 12px; }
 .analytics-empty h2 { margin-bottom: 20px; }
+@media (forced-colors: active) {
+  .analytics-donut-sector { fill: Canvas; stroke: CanvasText; }
+  .analytics-model-swatch { background: CanvasText; }
+}
 @media (max-width: 900px) { .analytics-layout { gap: 32px; grid-template-columns: minmax(0, 1.5fr) minmax(230px, 1fr); } }
 @media (max-width: 700px) {
   .analytics-layout { display: block; }
@@ -808,14 +791,16 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .skeleton-chart > span { max-width: 24px; width: 100%; justify-self: center; border-radius: var(--r-sm) var(--r-sm) 0 0; }
 .skeleton-model-row { margin: 28px 0; }
 .skeleton-model-track { height: 8px; margin-top: 12px; }
+.skeleton-model-donut { position: relative; display: block; width: 200px; height: 200px; max-width: 100%; margin: 8px auto 24px; border-radius: 50%; }
+.skeleton-model-donut::after { content: ""; position: absolute; inset: 28%; border-radius: 50%; background: var(--bg); }
 .skeleton-referrals { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; }
 .skeleton-link-row { display: flex; gap: 16px; margin: 24px 0 40px; }
 .skeleton-link-row .skeleton-field { min-width: 0; flex: 1; height: 44px; margin: 0; }
 .skeleton-funnel { display: grid; gap: 24px; margin: 24px 0 32px; }
 .skeleton-funnel > div { display: grid; grid-template-columns: 100px minmax(0, 1fr) 28px; gap: 12px; }
 .skeleton-referrals .skeleton-ledger { margin-top: 24px; }
-.skeleton-profile { display: grid; grid-template-columns: minmax(0, 640px) minmax(240px, 1fr); gap: 56px; }
-.skeleton-profile .skeleton-form { margin: 0; }
+.skeleton-profile { max-width: 760px; }
+.skeleton-profile .skeleton-form { margin: 0; max-width: none; }
 .skeleton-billing { padding: 28px; border: 1px solid var(--line); border-radius: var(--r-md); }
 .skeleton-billing-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
 .app-load-error { max-width: 640px; margin: 40px 0 200px; padding-top: 32px; border-top: 1px solid var(--line); }
@@ -828,7 +813,6 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .skeleton-scenes > :nth-child(3) { display: none; }
   .skeleton-detail, .skeleton-referrals { grid-template-columns: minmax(0, 1fr); gap: 36px; }
   .skeleton-analytics-layout { grid-template-columns: minmax(0, 1.5fr) minmax(230px, 1fr); gap: 32px; }
-  .skeleton-profile { grid-template-columns: minmax(0, 1fr); gap: 36px; }
 }
 @media (max-width: 760px) {
   input[type="text"], input[type="email"], input[type="search"] { font-size: 16px; }
@@ -1461,7 +1445,7 @@ body.community-reels .site-foot { display: none; }
   .reel-like-feedback.is-visible { animation: none; opacity: 1; transform: translate(-50%, -50%); }
 }
 
-/* Direction D: a referral statement with an even, neutral rate scale.
+/* Direction D: a referral statement with explicit invitation-depth rates.
    Referral depth is not an earned loyalty or unlock state. */
 .referral-page { max-width: 1080px; }
 .referral-page .referral-heading { margin-bottom: 32px; }
@@ -1482,24 +1466,22 @@ body.community-reels .site-foot { display: none; }
 .referral-summary dt { display: flex; align-items: center; gap: 9px; color: var(--text-muted); margin-bottom: 12px; font-size: 14px; }
 .referral-summary dd { margin: 0; font-size: clamp(28px, 3.1vw, 42px); line-height: 1.15; font-weight: 500; overflow-wrap: anywhere; }
 .referral-levels { border-top: 1px solid var(--line); padding-top: 28px; }
-.referral-scale { position: relative; margin-top: 28px; }
-.referral-scale-track { position: absolute; width: 100%; height: 16px; bottom: 0; left: 0; color: var(--field-line); pointer-events: none; }
-.referral-levels ol { position: relative; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 0; margin: 0; }
-.referral-levels li { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 0; }
-.referral-levels li > span { color: var(--text-muted); font-size: 14px; }
-.referral-rate { display: inline-flex; align-items: center; justify-content: center; color: var(--text); font-family: var(--serif); font-size: 44px; line-height: 1.1; font-weight: 400; }
-.referral-scale-marker { position: relative; flex: none; margin-top: 12px; color: var(--text); }
-.referral-scale-marker circle { fill: var(--bg); }
+.referral-depth-explanation { color: var(--text-muted); margin-top: 8px; font-size: 15px; line-height: 1.5; }
+.referral-levels ol { list-style: none; padding: 0; margin: 20px 0 0; }
+.referral-levels li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 24px; min-width: 0; padding: 16px 0; }
+.referral-levels li + li { border-top: 1px solid var(--line); }
+.referral-depth-label { display: grid; grid-template-columns: 88px minmax(0, 1fr); align-items: baseline; gap: 24px; min-width: 0; }
+.referral-depth-number { color: var(--text-muted); font-size: 13px; }
+.referral-depth-people { font-size: 16px; line-height: 1.5; }
+.referral-rate { display: inline-flex; align-items: center; justify-content: flex-end; min-width: 82px; color: var(--text); font-family: var(--serif); font-size: 38px; line-height: 1.1; font-weight: 400; }
 .referral-rate-text { color: var(--text); }
-/* design-tells: ignore (requested soft neutral lettering; track and markers remain static) */
+/* design-tells: ignore (requested soft neutral lettering; the rate mapping remains static) */
 @supports ((background-clip: text) or (-webkit-background-clip: text)) {
   @media (prefers-reduced-motion: no-preference) {
     .referral-rate-text { background-image: linear-gradient(100deg, var(--text-muted) 34%, var(--text) 50%, var(--text-muted) 66%); background-size: 250% 100%; background-repeat: no-repeat; background-position: 100% 0; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: referral-rate-glint 12s linear infinite; }
     @keyframes referral-rate-glint { 0%, 15% { background-position: 100% 0; } 85%, 100% { background-position: 0% 0; } }
   }
 }
-.referral-footer { border-top: 1px solid var(--line); padding-top: 28px; margin-top: 28px; }
-.referral-footer .btn { min-height: 44px; }
 .referral-loading { max-width: 1016px; }
 .referral-loading-link { padding: 28px 32px 44px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); }
 .referral-loading-link > div:first-child { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
@@ -1510,15 +1492,13 @@ body.community-reels .site-foot { display: none; }
 .referral-loading-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 36px 0 40px; }
 .referral-loading-summary .skeleton-line { width: min(100%, 96px); height: 20px; margin: 0 0 12px; }
 .referral-loading-number { display: block; width: min(100%, 128px); height: 48px; }
-.referral-loading-levels { border-top: 1px solid var(--line); padding: 28px 0 26px; margin-bottom: 28px; border-bottom: 1px solid var(--line); }
-.referral-loading-levels .skeleton-heading { margin: 0 0 28px; height: 30px; width: 160px; }
-.referral-loading-levels > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); justify-items: center; min-height: 112px; }
-.referral-loading-rate { display: block; width: 80px; max-width: 80%; height: 72px; }
+.referral-loading-levels { border-top: 1px solid var(--line); padding: 28px 0 16px; }
+.referral-loading-levels .skeleton-heading { margin: 0 0 52px; height: 30px; width: 220px; }
+.referral-loading-levels > div { display: grid; gap: 16px; }
+.referral-loading-rate { display: block; width: 100%; height: 58px; }
 
 @media (forced-colors: active) {
   .referral-rate-text { color: CanvasText; -webkit-text-fill-color: currentColor; background: none; animation: none; }
-  .referral-scale-track, .referral-scale-marker { color: CanvasText; }
-  .referral-scale-marker circle { fill: Canvas; }
 }
 @media (max-width: 600px) {
   .referral-page .referral-heading { margin-bottom: 24px; }
@@ -1533,19 +1513,20 @@ body.community-reels .site-foot { display: none; }
   .referral-summary dt > span { flex-basis: 100%; }
   .referral-summary dd { font-size: clamp(23px, 6.2vw, 32px); }
   .referral-levels { padding-top: 24px; }
-  .referral-scale { margin-top: 24px; }
-  .referral-rate { font-size: 38px; }
-  .referral-levels li > span { font-size: 13px; }
-  .referral-footer { padding-top: 24px; margin-top: 24px; }
+  .referral-levels ol { margin-top: 16px; }
+  .referral-levels li { gap: 16px; padding: 16px 0; }
+  .referral-depth-label { grid-template-columns: minmax(0, 1fr); gap: 3px; }
+  .referral-depth-people { font-size: 15px; }
+  .referral-rate { min-width: 64px; font-size: 36px; }
   .referral-loading-link { padding: 20px 20px 44px; }
   .referral-loading-link > div:first-child { margin-bottom: 20px; }
   .referral-loading .referral-link-controls > .skeleton-action { width: 100%; }
   .referral-loading-summary { gap: 12px; margin: 28px 0 32px; }
   .referral-loading-summary .skeleton-line { height: 44px; margin-bottom: 10px; }
   .referral-loading-number { height: 36px; }
-  .referral-loading-levels { padding-top: 24px; margin-bottom: 24px; }
-  .referral-loading-levels .skeleton-heading { margin-bottom: 24px; }
-  .referral-loading-rate { width: 72px; }
+  .referral-loading-levels { padding-top: 24px; }
+  .referral-loading-levels .skeleton-heading { margin-bottom: 68px; }
+  .referral-loading-rate { height: 70px; }
 }
 
 /* The same left navigation at every size; fixed portrait frames contain uploaded photos. */
@@ -1570,8 +1551,11 @@ body.community-reels .site-foot { display: none; }
 .workspace-sidebar .nav a[href="#/create"] { color: var(--text); font-weight: 600; }
 .workspace-navigation-footer { flex: none; padding-top: 16px; margin-top: 16px; border-top: 1px solid var(--line); }
 .workspace-theme > span { display: block; color: var(--text-muted); font-size: 12px; margin-bottom: 8px; }
-.workspace-theme .seg { display: flex; width: 100%; }
-.workspace-theme .seg > button { flex: 1; min-height: 44px; gap: 5px; padding: 8px 4px; font-size: 12px; }
+.workspace-theme-options { display: flex; width: 100%; }
+.workspace-theme-options > button { display: inline-flex; align-items: center; justify-content: center; flex: 1; min-height: 44px; gap: 5px; padding: 8px 4px; border: 0; background: none; color: var(--text-muted); font-size: 12px; font-weight: 400; }
+.workspace-theme-options > button:hover { color: var(--text); }
+.workspace-theme-options > button[aria-pressed="true"] { color: var(--text); font-weight: 600; }
+.workspace-theme-options > button[aria-pressed="true"] .ic { stroke-width: 1.8; }
 .workspace-theme-glyph { display: inline-flex; flex: none; transform-origin: center; }
 .workspace-theme-glyph.is-changing { animation: workspace-theme-change 180ms ease-out; }
 .workspace-signout { display: flex; align-items: center; gap: 12px; min-height: 44px; width: 100%; padding: 8px 12px; margin-top: 8px; border: 0; border-radius: var(--r-sm); color: var(--text-muted); background: none; text-align: left; font-size: 14px; }
@@ -2287,7 +2271,7 @@ function cancelSubscription() {
   delete S.plan.pendingChange;
   S.plan.state = "cancelled"; S.plan.cancelledAt = new Date().toISOString(); save();
 }
-function enterDemoAccount() { S = seed(); S.signedIn = true; save(); go("account/overview"); }
+function enterDemoAccount() { S = seed(); S.signedIn = true; save(); go("account/credits"); }
 let attachedUrl = "";
 
 /* ==========================================================================
@@ -2328,12 +2312,12 @@ function clearStatusToasts() { $$('#toasts .toast[data-toast-kind="status"]').fo
 /* ==========================================================================
    CHROME: header and navigation
    ========================================================================== */
-const NAV = [["home", "Home"], ["community", "Feed"], ["create", "Create"], ["history", "My videos"], ["plans", "Plans"], ["referrals", "Referrals"]];
-const ACCOUNT_NAV = [["overview", "Overview"], ["credits", "Credit activity"], ["analytics", "Analytics"], ["billing", "Billing"], ["profile", "Profile"]];
+const NAV = [["home", "Home"], ["community", "Feed"], ["create", "Create"], ["history", "My videos"], ["plans", "Plans"]];
+const ACCOUNT_NAV = [["credits", "Credit activity"], ["analytics", "Analytics"], ["billing", "Billing"], ["profile", "Profile"]];
 function accountLinksMarkup(mobile = false) {
   const route = currentRoute();
-  const active = route.name === "account" ? (ACCOUNT_NAV.some(([id]) => id === route.arg) ? route.arg : "overview") : null;
-  return ACCOUNT_NAV.map(([id, label]) => `<a class="${mobile ? "mobile-account-link" : "item"}" ${mobile && id === "overview" ? 'id="mobile-account-link"' : ""} href="#/account/${id}" ${active === id ? 'aria-current="page"' : ""}>${label}</a>`).join("");
+  const active = route.name === "account" ? (ACCOUNT_NAV.some(([id]) => id === route.arg) ? route.arg : "credits") : null;
+  return ACCOUNT_NAV.map(([id, label]) => `<a class="${mobile ? "mobile-account-link" : "item"}" ${mobile && id === "credits" ? 'id="mobile-account-link"' : ""} href="#/account/${id}" ${active === id ? 'aria-current="page"' : ""}>${label}</a>`).join("");
 }
 let menuOpen = false, mobileNavOpen = false;
 const mobileChrome = matchMedia("(max-width: 1000px)");
@@ -2404,6 +2388,11 @@ function route(options = {}) {
   let { name, arg } = currentRoute();
   if (!S.signedIn && !["home", "community", "signin", "terms", "privacy"].includes(name)) { afterSignIn = signInDestination(location.hash); go("signin"); return; }
   if (S.signedIn && name === "signin") { go("create"); return; }
+  if (name === "account" && !ACCOUNT_NAV.some(([id]) => id === arg)) {
+    arg = "credits";
+    const query = location.hash.includes("?") ? "?" + location.hash.split("?")[1] : "";
+    history.replaceState(history.state, "", `#/account/credits${query}`);
+  }
   const views = { home: viewHome, community: viewCommunity, account: viewAccount, create: viewCreate, history: viewHistory, plans: viewPlans, referrals: viewReferrals, video: viewVideo, signin: viewSignin, terms: viewLegal, privacy: viewLegal };
   if (!views[name]) { go(S.signedIn ? "create" : "home"); return; }
   menuOpen = false; mobileNavOpen = false; renderChrome();
@@ -3006,25 +2995,17 @@ function accountLedger(transactions, compact = false) {
     }).join("")}</tbody></table></div>`;
 }
 function viewAccount(main, arg) {
-  const section = ACCOUNT_NAV.some(([id]) => id === arg) ? arg : "overview";
-  const headings = { overview: "Your account", credits: "Credit activity", analytics: "Analytics", billing: "Subscription & purchases", profile: "Profile & preferences" };
-  main.innerHTML = `<div class="page account-page"><header class="account-heading"><div><h1 id="title" tabindex="-1">${headings[section]}</h1></div>${section === "overview" ? '<a class="btn primary" href="#/create">Create a video</a>' : ""}</header>
+  const sections = { credits: accountCredits, analytics: accountAnalytics, billing: accountBilling, profile: accountProfile };
+  const section = Object.hasOwn(sections, arg) ? arg : "credits";
+  const headings = { credits: "Credit activity", analytics: "Analytics", billing: "Subscription & purchases", profile: "Profile" };
+  main.innerHTML = `<div class="page account-page"><header class="account-heading"><div><h1 id="title" tabindex="-1">${headings[section]}</h1></div></header>
     <div id="account-body"></div></div>`;
   const body = $("#account-body");
-  return { overview: accountOverview, credits: accountCredits, analytics: accountAnalytics, billing: accountBilling, profile: accountProfile }[section](body);
-}
-function accountOverview(body) {
-  const recent = S.videos.slice(0, 3), plan = S.plan;
-  body.innerHTML = `<div class="account-columns"><div class="account-main"><section class="account-balance" aria-label="Credit balance"><span class="account-caption">Available to create</span><p><strong class="account-amount num" id="account-balance">${fmt(S.balance)}</strong><span class="account-unit">credits</span></p><div class="account-balance-foot"><p>See the cost before you launch each video.</p><a class="btn" href="#/plans">Buy credits</a></div></section>
-    <section aria-labelledby="account-videos"><div class="account-section-head"><h2 id="account-videos">Your latest scenes</h2><a class="linkbtn" href="#/history">All videos</a></div>${recent.length ? `<div class="account-recent">${recent.map(v => `<article>${thumb(v)}<h3><a href="#/video/${v.id}">${esc(titleOf(v.prompt))}</a></h3><p>${esc(recordModel(v).name)} · ${v.len} s</p>${getPublishedPost(v.id) ? `<a class="account-link" href="#/community/${getPublishedPost(v.id).id}" style="font-size:12px">Published</a>` : ""}</article>`).join("")}</div>` : `<div class="account-empty"><h3>Your first scene starts here</h3><p>Describe a scene and choose a model. You can review the price before you start.</p><a class="btn primary" href="#/create">Create your first video</a></div>`}</section>
-    <section><div class="account-section-head"><h2>Recent credit activity</h2><a class="linkbtn" href="#/account/credits">Full activity</a></div>${accountLedger([...S.transactions].reverse().slice(0, 4), true)}</section></div>
-    <aside class="account-side"><section><h2>${plan?.state === "active" ? "Your monthly plan" : plan ? "Subscription cancelled" : "Create at your pace"}</h2>${plan?.state === "active" ? `<p class="account-plan-price num">${fmt(plan.credits)} <span>credits / month</span></p><p>Next payment: $${plan.pendingChange?.usd ?? plan.usd} on ${accountDate(plan.nextBillingAt)}.</p>${plan.pendingChange ? `<p>${fmt(plan.pendingChange.credits)} credits per month are scheduled from that date.</p>` : ""}<a class="linkbtn" href="#/account/billing">Manage subscription</a>` : `<p>${plan ? "No future payments are scheduled. Your current credits stay available." : "You do not have a subscription. Buy credits when you need them, or choose a monthly plan."}</p><a class="linkbtn" href="#/plans?tab=subs">Explore plans</a>`}</section>
-    <section><h2>Your publications</h2><p>${S.posts.length ? `${S.posts.length} scene${S.posts.length === 1 ? "" : "s"} published in the feed.` : "Choose which finished videos appear in the feed."}</p><a class="linkbtn" href="#/community/mine">Manage publications</a></section><section><h2>Invite someone</h2><p>Find your referral link and follow the people who join.</p><a class="linkbtn" href="#/referrals">Open referrals</a></section><section><h2>Your preferences</h2><p>${esc(accountUser().name)}<br>${esc(accountUser().email)}</p><a class="linkbtn" href="#/account/profile">Edit profile</a></section></aside></div>`;
-  return null;
+  return sections[section](body);
 }
 function accountCredits(body) {
   const filter = new URLSearchParams(location.hash.split("?")[1] || "").get("type") || "all";
-  body.innerHTML = `<div class="account-toolbar"><div class="seg" role="group" aria-label="Filter credit activity">${[["all", "All activity"], ["in", "Credits in"], ["out", "Credits out"]].map(([id, label]) => `<button type="button" id="credit-filter-${id}" data-credit-filter="${id}" aria-pressed="${filter === id}">${label}</button>`).join("")}</div><button class="btn" id="export-credits" type="button">Export CSV</button></div><div id="credit-list"></div><p class="account-hint">All amounts are in credits. Declined payments leave your balance unchanged. Credits returned after a failed generation appear here.</p><div class="account-summary-line"><span>Available balance</span><strong class="num">${fmt(S.balance)}</strong><span>credits</span></div>`;
+  body.innerHTML = `<div class="account-toolbar"><div class="seg" role="group" aria-label="Filter credit activity">${[["all", "All activity"], ["in", "Credits in"], ["out", "Credits out"]].map(([id, label]) => `<button type="button" id="credit-filter-${id}" data-credit-filter="${id}" aria-pressed="${filter === id}">${label}</button>`).join("")}</div><button class="btn" id="export-credits" type="button">Export CSV</button></div><div id="credit-list"></div><p class="account-hint">All amounts are in credits. Declined payments leave your balance unchanged. Credits returned after a failed generation appear here.</p><div class="account-summary-line"><span>Available balance</span><strong class="num" id="account-balance">${fmt(S.balance)}</strong><span>credits</span></div>`;
   const draw = selected => {
     const items = [...S.transactions].reverse().filter(t => selected === "in" ? t.delta > 0 : selected === "out" ? t.delta < 0 : true);
     $("#credit-list").innerHTML = items.length ? accountLedger(items) : `<div class="account-empty"><h2>No ${selected === "in" ? "credits received" : "credits spent"} yet</h2><p>${selected === "in" ? "Credit purchases will appear here." : "Your video costs will appear here after you launch a generation."}</p><button class="btn" id="clear-credit-filter" type="button">Show all activity</button></div>`;
@@ -3060,7 +3041,7 @@ function accountProfile(body) {
   const u = accountUser();
   body.innerHTML = `<div class="account-profile-layout"><form class="account-form" id="profile-form" novalidate><section class="profile-photo-section" aria-labelledby="profile-photo-heading"><h2 id="profile-photo-heading">Profile photo</h2><div class="profile-photo-row"><span class="profile-photo-preview" id="profile-photo-preview" role="img" aria-label="Profile photo preview"></span><div class="profile-photo-controls"><div class="profile-photo-actions"><button class="btn" id="profile-photo-upload" type="button">Upload photo</button><button class="btn" id="profile-photo-remove" type="button">Remove photo</button></div><p class="account-hint" id="profile-photo-hint">JPG, PNG or WebP. Max 8 MB.</p></div></div><input id="profile-photo-file" type="file" accept="image/jpeg,image/png,image/webp" aria-label="Choose profile photo" hidden><p class="account-hint" id="profile-photo-status" role="status"></p><p class="err profile-photo-error" id="profile-photo-error" role="alert" hidden></p></section><section><h2>Your details</h2><div class="account-field"><label for="profile-name">Display name</label><input id="profile-name" type="text" value="${esc(u.name)}" autocomplete="name" maxlength="60" aria-describedby="profile-name-error"><p class="err" role="alert" id="profile-name-error" hidden>Enter a name with 1 to 60 characters.</p></div><div class="account-field"><label for="profile-email">Email for sign-in</label><input id="profile-email" type="email" value="${esc(u.email)}" readonly><p>Contact support to change your sign-in email.</p></div></section>
     <section><h2>Notifications</h2><label class="account-toggle"><input type="checkbox" id="notify-completed" ${u.notifications.completed ? "checked" : ""}><span>Video completed<small>Notify me when my video is ready.</small></span></label><label class="account-toggle"><input type="checkbox" id="notify-receipts" ${u.notifications.receipts ? "checked" : ""}><span>Purchase receipts<small>Send a record of my credit purchases.</small></span></label></section><button class="btn primary" id="profile-save" type="submit">Save changes</button><p id="profile-saved" role="status" class="account-hint"></p></form>
-    <aside class="account-profile-note"><h2>Appearance</h2><div class="seg" role="group" aria-label="Account appearance">${["auto", "light", "dark"].map(t => `<button type="button" data-account-theme="${t}" aria-pressed="${themePref() === t}">${t === "auto" ? "System" : t[0].toUpperCase() + t.slice(1)}</button>`).join("")}</div><h2 style="margin-top:32px">Sign-in</h2><p>Use your email and a six-digit code to sign in.</p><button class="btn" id="account-signout" type="button">Sign out</button></aside></div>`;
+    </div>`;
   return () => {
     const form = $("#profile-form"), input = $("#profile-photo-file"), preview = $("#profile-photo-preview"), owner = String(u.email).trim().toLowerCase();
     let draftAvatar = userAvatarSource(u.avatar), processing = false, disposed = false, revision = 0, pending = null;
@@ -3157,8 +3138,6 @@ function accountProfile(body) {
       }
       clearError(); renderChrome(); $("#profile-photo-status").textContent = ""; $("#profile-name-error").hidden = true; $("#profile-name").removeAttribute("aria-invalid"); $("#profile-saved").textContent = "Changes saved.";
     };
-    $$("[data-account-theme]").forEach(b => b.onclick = () => { setTheme(b.dataset.accountTheme); $$("[data-account-theme]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); b.focus(); });
-    $("#account-signout").onclick = () => { S.signedIn = false; save(); go("home"); };
     drawPhoto();
     return () => { disposed = true; revision++; cancelPending(); objectURLs.forEach(url => URL.revokeObjectURL(url)); objectURLs.clear(); };
   };
@@ -3240,9 +3219,33 @@ function creditAnalytics(state = S, options = {}, now = Date.now()) {
   return { period, from, to, invalid, singleDay, totals, buckets, models: [...models.values()].sort((a, b) => b.used - a.used || a.name.localeCompare(b.name)), hasActivity: Object.values(totals).some(n => n > 0) };
 }
 const analyticsNumber = n => n >= 1000000 ? new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(n) : fmt(n);
-function analyticsModelRow(row, total) {
+const analyticsShare = (amount, total) => {
+  const share = total > 0 ? amount / total * 100 : 0;
+  return share > 0 && share < 1 ? "<1%" : `${Math.round(share)}%`;
+};
+const analyticsModelTone = (index, count = 6) => `color-mix(in srgb, var(--text) ${100 - Math.min(index / Math.max(1, count - 1), 1) * 100}%, var(--field-line))`;
+function analyticsDonutPath(start, end) {
+  const point = (angle, radius) => `${100 + Math.sin(angle) * radius},${100 - Math.cos(angle) * radius}`;
+  if (end - start >= Math.PI * 2 - .000001) return "M100 16A84 84 0 1 1 100 184A84 84 0 1 1 100 16M100 43A57 57 0 1 0 100 157A57 57 0 1 0 100 43Z";
+  const large = end - start > Math.PI ? 1 : 0;
+  return `M${point(start, 84)}A84 84 0 ${large} 1 ${point(end, 84)}L${point(end, 57)}A57 57 0 ${large} 0 ${point(start, 57)}Z`;
+}
+function analyticsModelDonut(data) {
+  if (!data.totals.used || !data.models.length) return "";
+  const rows = data.models.slice(0, 5), rest = data.models.slice(5);
+  if (rest.length) rows.push({ name: "Other models", used: rest.reduce((sum, row) => sum + row.used, 0) });
+  let position = 0;
+  const sectors = rows.map((row, index) => {
+    const start = position, share = row.used / data.totals.used;
+    position += share * Math.PI * 2;
+    return `<path class="analytics-donut-sector" data-model-credits="${row.used}" data-model-share="${share}" d="${analyticsDonutPath(start, position)}" fill="${analyticsModelTone(index, rows.length)}" fill-rule="evenodd"><title>${esc(row.name)}: ${fmt(row.used)} credits, ${esc(analyticsShare(row.used, data.totals.used))}</title></path>`;
+  }).join("");
+  const description = data.models.map(row => `${row.name}: ${fmt(row.used)} credits, ${analyticsShare(row.used, data.totals.used)}`).join(". ");
+  return `<figure class="analytics-donut" aria-labelledby="analytics-donut-title" aria-describedby="analytics-donut-description"><svg viewBox="0 0 200 200" role="img" aria-labelledby="analytics-donut-title analytics-donut-description"><title id="analytics-donut-title">Generation credits by model</title><desc id="analytics-donut-description">${esc(description)}.${rest.length ? " Five largest models shown separately; remaining models grouped as Other models." : ""}</desc>${sectors}</svg><div class="analytics-donut-total" aria-hidden="true"><strong class="num">${analyticsNumber(data.totals.used)}</strong><span>credits used</span></div></figure>`;
+}
+function analyticsModelRow(row, total, index = 0, count = 6) {
   const share = total > 0 ? row.used / total * 100 : 0;
-  return `<li><div class="analytics-model-label"><span>${esc(row.name)}</span><strong class="num"><span aria-hidden="true">${analyticsNumber(row.used)}</span><span class="sr">${fmt(row.used)} credits</span></strong></div><div class="analytics-model-track" aria-hidden="true"><span style="width:${share}%"></span></div><span class="analytics-model-share num">${share < 1 && share > 0 ? "&lt;1" : Math.round(share)}%</span></li>`;
+  return `<li style="--analytics-model-tone:${analyticsModelTone(index, count)}"><div class="analytics-model-label"><span><i class="analytics-model-swatch" aria-hidden="true"></i>${esc(row.name)}</span><strong class="num"><span aria-hidden="true">${analyticsNumber(row.used)}</span><span class="sr">${fmt(row.used)} credits</span></strong></div><span class="analytics-model-share num">${share < 1 && share > 0 ? "&lt;1" : Math.round(share)}%</span></li>`;
 }
 function analyticsCharts(data) {
   const series = ["used", "added", ...(data.totals.returned ? ["returned"] : [])];
@@ -3255,7 +3258,7 @@ function analyticsCharts(data) {
       <figure class="analytics-chart" role="img" aria-label="${esc(summary)}" aria-describedby="analytics-data-help"><div class="analytics-axis" aria-hidden="true"><span>${analyticsNumber(max)}</span><span>${analyticsNumber(Math.round(max / 2))}</span><span>0</span></div><div class="analytics-chart-area" aria-hidden="true"><span class="analytics-grid-line"></span><span class="analytics-grid-line"></span><span class="analytics-grid-line"></span><div class="analytics-bars" style="--analytics-buckets:${data.buckets.length}">${data.buckets.map(bucket => `<div class="analytics-pair">${series.map(key => `<span class="analytics-bar ${key}${bucket[key] ? "" : " is-zero"}" style="height:${bucket[key] / max * 100}%"></span>`).join("")}</div>`).join("")}</div></div></figure>
       <div class="analytics-range" aria-hidden="true"><span>${data.singleDay ? "00:00" : analyticsDateLabel(data.from)}</span><span>${data.singleDay ? "24:00" : analyticsDateLabel(data.to)}</span></div><p class="sr" id="analytics-data-help">Exact amounts for each bar are available in View totals.</p>
       <details class="analytics-data"><summary>View totals</summary><div class="analytics-data-scroll" tabindex="0" role="region" aria-label="Credit flow totals"><table><caption class="sr">Credit flow in credits. Calendar dates use Europe/Moscow.</caption><thead><tr><th scope="col">${data.singleDay ? "Time" : "Date"}</th><th scope="col">Used</th><th scope="col">Added</th><th scope="col">Returned</th></tr></thead><tbody>${data.buckets.map(bucket => `<tr><th scope="row">${esc(bucket.label)}</th><td class="num">${fmt(bucket.used)}</td><td class="num">${fmt(bucket.added)}</td><td class="num">${fmt(bucket.returned)}</td></tr>`).join("")}</tbody></table></div></details></section>
-      <section class="analytics-models" aria-labelledby="analytics-models-title"><header class="analytics-section-head"><h2 id="analytics-models-title">Usage by model</h2></header>${data.models.length ? `<ol class="analytics-model-list">${data.models.slice(0, 5).map(row => analyticsModelRow(row, data.totals.used)).join("")}</ol>${data.models.length > 5 ? `<details class="analytics-more"><summary>${data.models.length - 5} more models</summary><ol class="analytics-model-list">${data.models.slice(5).map(row => analyticsModelRow(row, data.totals.used)).join("")}</ol></details>` : ""}${data.totals.returned ? '<p class="analytics-note">Usage before returned credits.</p>' : ""}` : '<p class="analytics-note">No generation costs in this period.</p>'}</section></div>`;
+      <section class="analytics-models" aria-labelledby="analytics-models-title"><header class="analytics-section-head"><h2 id="analytics-models-title">Usage by model</h2></header>${data.models.length ? `${analyticsModelDonut(data)}<ol class="analytics-model-list">${data.models.slice(0, 5).map((row, index) => analyticsModelRow(row, data.totals.used, index, Math.min(6, data.models.length))).join("")}</ol>${data.models.length > 5 ? `<details class="analytics-more"><summary><i class="analytics-model-swatch" style="--analytics-model-tone:${analyticsModelTone(5)}" aria-hidden="true"></i><span>${data.models.length - 5} more models</span><strong class="num">${analyticsNumber(data.models.slice(5).reduce((sum, row) => sum + row.used, 0))}</strong><span class="analytics-model-share num">${esc(analyticsShare(data.models.slice(5).reduce((sum, row) => sum + row.used, 0), data.totals.used))}</span></summary><ol class="analytics-model-list">${data.models.slice(5).map(row => analyticsModelRow(row, data.totals.used, 5)).join("")}</ol></details>` : ""}${data.totals.returned ? '<p class="analytics-note">Usage before returned credits.</p>' : ""}` : '<p class="analytics-note">No generation costs in this period.</p>'}</section></div>`;
 }
 function accountAnalytics(body) {
   const params = new URLSearchParams(location.hash.split("?")[1] || ""), data = creditAnalytics(S, { period: params.get("period"), from: params.get("from"), to: params.get("to") });
@@ -3379,14 +3382,14 @@ function skeletonHistory(trash) {
   return `${skeletonTabs([72, 136])}${trash ? "" : `<div class="skeleton-list-controls">${skeletonAction("skeleton-filter")}${skeletonAction("skeleton-search")}</div>`}<div class="skeleton-history">${Array.from({ length: 5 }, () => `<div class="skeleton-history-row"><div class="skeleton-history-scene"><span class="skeleton skeleton-history-picture"></span>${skeletonLines()}</div><span class="skeleton skeleton-line skeleton-history-meta"></span><div class="skeleton-history-actions">${skeletonAction()}${skeletonAction()}</div></div>`).join("")}</div>`;
 }
 function skeletonAnalytics() {
-  return `<div class="skeleton-analytics"><div class="skeleton-analytics-controls">${skeletonAction("skeleton-filter")}</div><div class="skeleton-analytics-summary">${Array.from({ length: 3 }, () => '<div><span class="skeleton skeleton-line medium"></span><span class="skeleton skeleton-total"></span></div>').join("")}</div><div class="skeleton-analytics-layout"><div><span class="skeleton skeleton-heading"></span><div class="skeleton-chart">${Array.from({ length: 10 }, () => '<span class="skeleton"></span>').join("")}</div></div><div><span class="skeleton skeleton-heading"></span>${Array.from({ length: 3 }, () => `<div class="skeleton-model-row"><span class="skeleton skeleton-line medium"></span><span class="skeleton skeleton-model-track"></span></div>`).join("")}</div></div></div>`;
+  return `<div class="skeleton-analytics"><div class="skeleton-analytics-controls">${skeletonAction("skeleton-filter")}</div><div class="skeleton-analytics-summary">${Array.from({ length: 3 }, () => '<div><span class="skeleton skeleton-line medium"></span><span class="skeleton skeleton-total"></span></div>').join("")}</div><div class="skeleton-analytics-layout"><div><span class="skeleton skeleton-heading"></span><div class="skeleton-chart">${Array.from({ length: 10 }, () => '<span class="skeleton"></span>').join("")}</div></div><div><span class="skeleton skeleton-heading"></span><span class="skeleton skeleton-model-donut"></span>${Array.from({ length: 3 }, () => `<div class="skeleton-model-row"><span class="skeleton skeleton-line medium"></span><span class="skeleton skeleton-model-track"></span></div>`).join("")}</div></div></div>`;
 }
 function skeletonReferrals() {
   return `<div class="skeleton-referrals"><div><span class="skeleton skeleton-heading"></span><div class="skeleton-link-row"><span class="skeleton skeleton-field"></span>${skeletonAction()}</div><span class="skeleton skeleton-heading"></span><div class="skeleton-funnel">${Array.from({ length: 3 }, () => '<div><span class="skeleton skeleton-line"></span><span class="skeleton skeleton-line"></span><span class="skeleton skeleton-line"></span></div>').join("")}</div>${skeletonAction()}</div><div><span class="skeleton skeleton-heading"></span>${skeletonLedger()}</div></div>`;
 }
 function loadingSurface(name, arg) {
   if (name === "community") return !arg || arg === "mine" ? "feed" : arg === "watch" ? "viewer" : "detail";
-  return name === "account" ? ["overview", "credits", "analytics", "billing", "profile"].includes(arg) ? arg : "overview" : name;
+  return name === "account" ? ["credits", "analytics", "billing", "profile"].includes(arg) ? arg : "credits" : name;
 }
 function loadingHeader(name, arg, label) {
   const title = `<h1 id="title" tabindex="-1">${label}</h1>`;
@@ -3399,8 +3402,8 @@ function loadingMarkup(name, arg) {
     if (arg === "analytics") return skeletonAnalytics();
     if (arg === "credits") return `<div class="skeleton-list-controls">${skeletonAction("skeleton-filter")}${skeletonAction()}</div>${skeletonLedger()}`;
     if (arg === "billing") return `<div class="skeleton-billing"><span class="skeleton skeleton-heading"></span>${skeletonLines()}<div class="skeleton-billing-facts">${skeletonLines()}${skeletonLines()}${skeletonLines()}</div><div class="skeleton-action-row">${skeletonAction()}${skeletonAction()}${skeletonAction()}</div></div>${skeletonLedger()}`;
-    if (arg === "profile") return `<div class="skeleton-profile"><div class="skeleton-form">${skeletonProfilePhoto()}<span class="skeleton skeleton-heading"></span>${skeletonLines()}<div class="skeleton skeleton-field"></div>${skeletonLines()}<div class="skeleton skeleton-field"></div>${skeletonLines()}${skeletonAction()}</div><div class="skeleton-profile-note"><span class="skeleton skeleton-heading"></span><div class="skeleton skeleton-field"></div>${skeletonLines()}${skeletonAction()}</div></div>`;
-    return `<div class="skeleton-account"><div><span class="skeleton skeleton-line short"></span><span class="skeleton skeleton-number"></span>${skeletonLines()}${skeletonScenes()}${skeletonLedger()}</div><div class="skeleton-aside">${skeletonLines()}${skeletonLines()}${skeletonLines()}</div></div>`;
+    if (arg === "profile") return `<div class="skeleton-profile"><div class="skeleton-form">${skeletonProfilePhoto()}<span class="skeleton skeleton-heading"></span>${skeletonLines()}<div class="skeleton skeleton-field"></div>${skeletonLines()}<div class="skeleton skeleton-field"></div>${skeletonLines()}${skeletonAction()}</div></div>`;
+    return `<div class="skeleton-list-controls">${skeletonAction("skeleton-filter")}${skeletonAction()}</div>${skeletonLedger()}`;
   }
   if (name === "community") return skeletonCommunity(arg);
   return name === "history" ? skeletonHistory(arg === "trash") : skeletonReferrals();
@@ -3411,8 +3414,8 @@ function loadView(main, name, arg, mount) {
   const key = `${S.user.email}:${name}`;
   if (loadedViews.has(key) && !mode) return false;
   const id = viewLoadId;
-  const accountTitles = { overview: "Your account", credits: "Credit activity", analytics: "Analytics", billing: "Subscription & purchases", profile: "Profile & preferences" };
-  const labels = { account: accountTitles[arg] || "Your account", history: arg === "trash" ? "Recently deleted" : "My videos", referrals: "Referrals", community: arg === "watch" ? "Feed viewer" : arg === "mine" ? "Your publications" : arg ? "Video details" : "Feed" };
+  const accountTitles = { credits: "Credit activity", analytics: "Analytics", billing: "Subscription & purchases", profile: "Profile" };
+  const labels = { account: accountTitles[arg] || "Credit activity", history: arg === "trash" ? "Recently deleted" : "My videos", referrals: "Referrals", community: arg === "watch" ? "Feed viewer" : arg === "mine" ? "Your publications" : arg ? "Video details" : "Feed" };
   main.setAttribute("aria-busy", "true");
   const chromeHeight = Math.round($("#top").getBoundingClientRect().height);
   main.innerHTML = `<div class="page app-loading app-loading-${loadingSurface(name, arg)}" style="--loading-chrome-height:${chromeHeight}px">${loadingHeader(name, arg, labels[name])}<p class="sr" role="status">Loading ${labels[name].toLowerCase()}.</p><div class="loading-body" aria-hidden="true">${loadingMarkup(name, arg)}</div></div>`;
@@ -3453,7 +3456,7 @@ function viewReferrals(main) {
   const referral = referralSummary();
   const link = /^https?:\/\//i.test(referral.link) ? referral.link : `https://${referral.link}`;
   const earnings = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(referral.earnedUsd);
-  const levels = [[1, 10], [2, 5], [3, 3]];
+  const levels = [[1, 10, "People you invite"], [2, 5, "People invited by level 1"], [3, 3, "People invited by level 2"]];
   main.innerHTML = `<div class="page referral-page">
     <header class="referral-heading"><h1 id="title" tabindex="-1">Referrals</h1></header>
     <section class="referral-link-panel" aria-labelledby="referral-link-heading">
@@ -3467,13 +3470,10 @@ function viewReferrals(main) {
       <div><dt>${icon("credits", 18)}<span>Earned</span></dt><dd class="num" id="referral-earned">${esc(earnings)}</dd></div>
     </dl></section>
     <section class="referral-levels" aria-labelledby="referral-levels-heading">
-      <h2 id="referral-levels-heading">Three levels</h2>
-      <div class="referral-scale">
-        <svg class="referral-scale-track" viewBox="0 0 900 16" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true" focusable="false"><path d="M150 8H750" vector-effect="non-scaling-stroke"/></svg>
-        <ol role="list" aria-label="Referral reward levels">${levels.map(([level, rate]) => `<li><span>Level ${level}</span><strong class="referral-rate num"><span class="referral-rate-text">${rate}%</span></strong><svg class="referral-scale-marker" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="4.5"/></svg></li>`).join("")}</ol>
-      </div>
+      <h2 id="referral-levels-heading">Your referral rates</h2>
+      <p class="referral-depth-explanation">Each level is one invitation further from you.</p>
+      <ol role="list" aria-label="Your referral rates by invitation depth">${levels.map(([level, rate, people]) => `<li><div class="referral-depth-label"><span class="referral-depth-number">Level ${level}</span><span class="referral-depth-people">${esc(people)}</span></div><strong class="referral-rate num"><span class="referral-rate-text">${rate}%</span></strong></li>`).join("")}</ol>
     </section>
-    <div class="referral-footer"><a class="btn" id="referrals-account" href="#/account/overview">Your account</a></div>
   </div>`;
   return () => {
     const button = $("#copy", main), input = $("#rlink", main), status = $("#referral-copy-status", main);
@@ -3512,7 +3512,6 @@ function skeletonReferrals() {
     <div class="referral-loading-link"><div><span class="skeleton skeleton-heading"></span><span class="skeleton referral-loading-icon"></span></div><div class="referral-link-controls"><span class="skeleton skeleton-field"></span>${skeletonAction()}</div></div>
     <div class="referral-loading-summary">${Array.from({ length: 3 }, () => '<div><span class="skeleton skeleton-line short"></span><span class="skeleton referral-loading-number"></span></div>').join("")}</div>
     <div class="referral-loading-levels"><span class="skeleton skeleton-heading"></span><div>${Array.from({ length: 3 }, () => '<span class="skeleton referral-loading-rate"></span>').join("")}</div></div>
-    ${skeletonAction()}
   </div>`;
 }
 
@@ -5058,17 +5057,19 @@ function workspaceLinksMarkup(mobile = false) {
   const main = S.signedIn ? NAV : NAV.filter(([key]) => ["home", "community", "create"].includes(key));
   const mark = '<span class="workspace-current-mark">' + icon("check", 14) + '</span>';
   const links = main.map(([key, label]) => `<a href="#/${key}" ${active === key ? 'aria-current="page"' : ""}>${icon(key, 18)}<span>${esc(label)}</span>${active === key ? mark : ""}</a>`).join("");
-  const section = ACCOUNT_NAV.some(([id]) => id === route.arg) ? route.arg : "overview";
-  const accountIcons = { overview: "account", credits: "credits", analytics: "sliders", billing: "plans", profile: "account" };
-  const account = S.signedIn ? `<div class="workspace-account-heading">Account</div><div class="${mobile ? "mobile-account-links" : "workspace-account-links"}" role="group" aria-label="Account">${ACCOUNT_NAV.map(([key, label]) => {
-    const selected = route.name === "account" && key === section;
-    return `<a class="${mobile ? "mobile-account-link" : "workspace-account-link"}" ${mobile && key === "overview" ? 'id="mobile-account-link"' : ""} href="#/account/${key}" ${selected ? 'aria-current="page"' : ""}>${icon(accountIcons[key], 18)}<span>${label}</span>${selected ? mark : ""}</a>`;
+  const section = ACCOUNT_NAV.some(([id]) => id === route.arg) ? route.arg : "credits";
+  const accountIcons = { credits: "credits", analytics: "sliders", billing: "plans", referrals: "referrals", profile: "account" };
+  const accountEntries = [...ACCOUNT_NAV.filter(([key]) => key !== "profile"), ["referrals", "Referrals"], ...ACCOUNT_NAV.filter(([key]) => key === "profile")];
+  const account = S.signedIn ? `<div class="workspace-account-heading">Account</div><div class="${mobile ? "mobile-account-links" : "workspace-account-links"}" role="group" aria-label="Account">${accountEntries.map(([key, label]) => {
+    const selected = key === "referrals" ? route.name === key : route.name === "account" && key === section;
+    const path = key === "referrals" ? key : `account/${key}`;
+    return `<a class="${mobile ? "mobile-account-link" : "workspace-account-link"}" ${mobile && key === "credits" ? 'id="mobile-account-link"' : ""} href="#/${path}" ${selected ? 'aria-current="page"' : ""}>${icon(accountIcons[key], 18)}<span>${label}</span>${selected ? mark : ""}</a>`;
   }).join("")}</div>` : "";
   return `<div class="${mobile ? "mobile-nav-links" : "nav"}" role="group" aria-label="Workspace">${links}</div>${account}`;
 }
 function workspaceFooterMarkup(mobile = false) {
   const prefix = mobile ? "mobile" : "desktop";
-  return `<div class="workspace-navigation-footer"><div class="workspace-theme"><span id="${prefix}-theme-label">Appearance</span><div class="seg" role="group" aria-labelledby="${prefix}-theme-label">${["auto", "light", "dark"].map(theme => {
+  return `<div class="workspace-navigation-footer"><div class="workspace-theme"><span id="${prefix}-theme-label">Appearance</span><div class="workspace-theme-options" role="group" aria-labelledby="${prefix}-theme-label">${["auto", "light", "dark"].map(theme => {
     const label = theme[0].toUpperCase() + theme.slice(1);
     const moving = workspaceThemeTransition?.theme === theme && workspaceThemeTransition.surface === prefix;
     return `<button type="button" data-workspace-theme="${theme}" data-workspace-surface="${prefix}" aria-pressed="${themePref() === theme}" title="${theme === "auto" ? "Use system appearance" : `${label} appearance`}"><span class="workspace-theme-glyph${moving ? " is-changing" : ""}">${icon(`theme${label}`, 17)}</span><span>${label}</span></button>`;
