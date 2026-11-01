@@ -652,70 +652,23 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .analytics-dates button, .analytics-dates .err { grid-column: 1 / -1; }
 }
 
-.landing { max-width: 1360px; margin: auto; padding: 32px 32px 64px; }
-.home-heading, .home-section-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px 24px; }
-.home-heading { margin-bottom: 28px; }
+.landing { max-width: 1360px; margin: auto; padding: 40px 32px 72px; }
+.home-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px 24px; margin-bottom: 28px; }
 .home-heading-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-.home-heading h1 { min-width: 0; font-size: clamp(32px, 3.2vw, 44px); line-height: 1.12; letter-spacing: -0.015em; text-wrap: balance; }
+.home-heading h1 { min-width: 0; font-size: 36px; line-height: 1.15; letter-spacing: -0.015em; text-wrap: balance; }
 .home-heading .btn { flex: none; }
-.home-scene-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 20px; }
-.home-portrait-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.home-wide-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 32px; }
-.home-scene-card { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; }
-.home-workspace .home-scene-card .home-scene-watch { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--r-sm); background: var(--cinema-bg); color: var(--cinema-text); }
-.home-workspace .home-portrait-card .home-scene-watch { aspect-ratio: 9 / 16; border: 1px solid var(--cinema-line); }
-.home-workspace .home-wide-card .home-scene-watch { aspect-ratio: 16 / 9; }
-.home-scene-watch > img { position: relative; display: block; width: 100%; height: 100%; object-fit: contain; }
-.home-scene-watch > img[hidden] { display: none; }
-.home-scene-watch .thumbnail-live-preview > video { object-fit: contain; }
 .home-scene-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; color: var(--cinema-muted); font-size: 13px; }
 .home-scene-watch:not(.has-no-poster) .home-scene-fallback { visibility: hidden; }
 .home-scene-watch.is-loading { background: var(--surface-2); }
 .home-poster-loading { position: absolute; inset: 0; z-index: 3; border-radius: inherit; }
-.home-scene-watch:not(.is-loading) > .home-poster-loading, .home-feed-preview:not(.is-loading) > .home-poster-loading { display: none; }
-.home-feed-preview:not(.has-no-poster) > .home-scene-fallback { visibility: hidden; }
-.home-feed-preview > img[hidden] { display: none; }
-.home-scene-watch:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
-.home-scene-play { position: absolute; right: 12px; bottom: 12px; display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--cinema-line); border-radius: var(--r-sm); color: var(--cinema-text); background: var(--cinema-control); }
-.home-scene-watch:hover .home-scene-play, .home-scene-watch:focus-visible .home-scene-play { background: var(--cinema-bg); }
-.home-scene-watch > .badge, .home-scene-watch > .video-quality-badge, .home-scene-play { z-index: 2; }
-.home-scene-heading { display: grid; align-content: start; gap: 6px; width: 100%; margin-top: 14px; margin-bottom: 16px; }
-.home-scene-heading h2 { min-width: 0; font-family: var(--sans); font-size: 16px; line-height: 1.4; font-weight: 600; overflow-wrap: anywhere; }
-.home-portrait-card .home-scene-heading h2 { min-height: 2.8em; }
-.home-scene-meta { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; color: var(--text-muted); font-size: 13px; line-height: 1.4; }
-.home-scene-card .home-scene-use { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: auto; min-width: 132px; height: auto; min-height: 44px; padding: 10px 16px; margin-top: auto; }
-.home-publications { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--line); }
-.home-section-heading { margin-bottom: 24px; }
-.home-section-heading h2 { font-size: 30px; line-height: 1.2; }
-.home-publications .community-grid { gap: 36px 20px; }
-.home-publications .community-use { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: auto; min-width: 132px; min-height: 44px; height: auto; padding: 10px 16px; }
+.home-scene-watch:not(.is-loading) > .home-poster-loading { display: none; }
 .home-review { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 13px; color: var(--text-muted); }
 .home-review .linkbtn { min-height: 44px; }
-@media (max-width: 1100px) {
-  .landing { padding-right: 24px; padding-left: 24px; }
-  .home-scene-grid { gap: 28px 16px; }
-}
 @media (max-width: 760px) {
   .landing { padding: 24px 16px 40px; }
   .home-heading { align-items: flex-start; gap: 16px; margin-bottom: 24px; }
   .home-heading h1 { max-width: 12ch; font-size: 34px; }
   .home-create { min-width: 120px; }
-  .home-scene-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 12px; }
-  .home-scene-heading { gap: 5px; margin-top: 12px; margin-bottom: 12px; }
-  .home-scene-heading h2 { font-size: 14px; line-height: 1.4; min-height: 2.8em; }
-  .home-scene-meta { font-size: 12px; }
-  .home-scene-card .home-scene-use { width: 100%; min-width: 0; padding: 10px 8px; font-size: 13px; gap: 6px; }
-  .home-scene-play { width: 28px; height: 28px; right: 8px; bottom: 8px; }
-  .home-scene-watch > .video-quality-badge { top: 6px; right: 6px; padding: 3px 5px; }
-  .home-scene-watch > .badge { left: 6px; bottom: 6px; font-size: 11px; padding: 3px 5px; }
-  .home-publications { margin-top: 36px; padding-top: 28px; }
-  .home-section-heading h2 { font-size: 28px; }
-  .home-publications .community-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
-  .home-publications .community-card-meta { gap: 6px; }
-  .home-publications .community-card-meta .video-facts { margin-left: 0; }
-  .home-publications .community-metrics { gap: 4px; }
-  .home-publications .community-author-name { white-space: normal; }
-  .home-publications .community-use { width: 100%; min-width: 0; padding: 10px 8px; font-size: 13px; gap: 6px; }
 }
 @media (max-width: 359px) {
   .home-heading { align-items: center; }
@@ -898,12 +851,25 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 }
 @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; opacity: 0.75; } }
 
-.community-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 24px; }
+.community-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 24px; }
+.community-page:not(.is-reels) { max-width: 1360px; }
 .community-publication-total { margin-top: 6px; color: var(--text-muted); font-size: 12px; line-height: 1.4; }
 .community-card { min-width: 0; }
-.community-card .thumb { aspect-ratio: 16 / 11; }
+.community-card .thumb { aspect-ratio: 4 / 5; background: var(--cinema-bg); color: var(--cinema-text); }
+.community-card .thumb > img { display: block; object-fit: contain; }
+.community-card .thumb > img[hidden] { display: none; }
+.community-card .thumbnail-live-preview > video { object-fit: contain; }
+.scene-card-play { position: absolute; right: 12px; bottom: 12px; z-index: 2; display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--cinema-line); border-radius: var(--r-sm); color: var(--cinema-text); background: var(--cinema-control); }
+.community-watch:hover .scene-card-play, .community-watch:focus-visible .scene-card-play { background: var(--cinema-bg); }
+.community-page.is-reels .scene-card-play { display: none; }
+:where(.home-workspace, .community-page:not(.is-reels), #g-body) .scene-card { display: flex; flex-direction: column; }
+:where(.home-workspace, .community-page:not(.is-reels), #g-body) .scene-card .community-reel-copy { display: flex; flex: 1; min-width: 0; flex-direction: column; }
+:where(.home-workspace, .community-page:not(.is-reels), #g-body) .scene-card .community-card-foot { margin-top: auto; padding-top: 16px; }
+.scene-card .community-use-label { display: inline; }
+.scene-card .community-use { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: auto; min-width: 132px; min-height: 44px; height: auto; padding: 10px 14px; margin-top: 0; }
+.scene-card .community-metrics { gap: 4px; }
 .community-no-preview { display: grid; place-items: center; color: var(--text-muted); font-size: 14px; }
-.community-card h3 { font-family: var(--sans); font-size: 16px; font-weight: 600; margin: 12px 0 6px; overflow-wrap: anywhere; }
+.community-card h3 { font-family: var(--sans); font-size: 16px; line-height: 1.4; font-weight: 600; margin: 12px 0 6px; overflow-wrap: anywhere; }
 .community-card h3 a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .community-card-meta { color: var(--text-muted); font-size: 13px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; }
 .community-card-meta > span { min-width: 0; overflow-wrap: anywhere; }
@@ -997,9 +963,10 @@ body[data-view="video"] .crumb .btn { color: var(--text); text-decoration: none;
 .publication-empty h2 { font-size: 28px; }
 .publication-empty p { color: var(--text-muted); max-width: 48ch; margin: 12px 0 24px; }
 @media (max-width: 900px) { .community-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .community-detail { grid-template-columns: 1fr; } }
+@media (min-width: 1400px) { .community-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (max-width: 600px) {
   .community-grid { grid-template-columns: 1fr; gap: 32px; }
-  .community-card .thumb { aspect-ratio: 16 / 10; }
+  .community-card .thumb { aspect-ratio: 4 / 5; }
   .community-detail { gap: 28px; }
   .publication-popover { padding: 20px; }
   body[data-view="community"] .account-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; }
@@ -1017,46 +984,68 @@ body[data-view="video"] .crumb .btn { color: var(--text); text-decoration: none;
   .vside > .account-link { order: 5; }
 }
 
-/* Comments share the publication sheet's solid surfaces and native controls. */
-.community-comments-panel { position: fixed; inset: auto; z-index: 92; margin: 0; padding: 20px; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 16px; overflow: auto; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); color: var(--text); box-shadow: 0 16px 48px var(--shadow); }
+/* A viewer's discussion occupies its existing information column. */
+.community-comments-panel { position: fixed; inset: auto; z-index: 92; margin: 0; padding: 12px 16px 16px; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; overflow: hidden; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); color: var(--text); box-shadow: 0 12px 32px var(--shadow); font-family: var(--sans); }
 .community-comments-panel[hidden] { display: none; }
-.community-comments-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.community-comments-heading h2 { font-family: var(--serif); font-size: 26px; line-height: 1.2; }
-.community-comments-heading h2 > span { margin-left: 8px; color: var(--text-muted); font-family: var(--sans); font-size: 14px; }
-.community-comments-list { list-style: none; margin: 0; padding: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
-.community-comments-empty { color: var(--text-muted); font-size: 14px; padding: 20px 0; }
-.community-comment { display: flex; align-items: flex-start; gap: 12px; padding: 16px 0; }
-.community-comment + .community-comment { border-top: 1px solid var(--line); }
-.community-comment > .community-avatar { flex: none; margin-top: 2px; }
+.community-comments-panel[data-layout="docked"] { box-shadow: none; }
+.community-comments-grab { display: none; }
+.community-comments-heading { display: flex; align-items: center; justify-content: space-between; min-height: 44px; gap: 12px; }
+.community-comments-heading h2 { margin: 0; font-family: var(--sans); font-size: 16px; font-weight: 600; line-height: 1.4; text-wrap: nowrap; }
+.community-comments-heading h2 > span { margin-left: 6px; color: var(--text-muted); font-size: 13px; font-weight: 400; }
+.community-comments-heading .publication-popover-close { margin-right: -10px; }
+.community-comments-list { list-style: none; margin: 0; padding: 0 2px 0 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--field-line) transparent; }
+.community-comments-empty { display: grid; place-items: center; height: 100%; color: var(--text-muted); font-size: 14px; padding: 24px 0; }
+.community-comment { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0 12px; }
+.community-comment > .community-avatar { flex: none; width: 28px; height: 28px; margin-top: 2px; }
 .community-comment-copy { min-width: 0; flex: 1; }
-.community-comment-author { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
-.community-comment-author strong { font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.community-comment-author { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; line-height: 1.5; }
+.community-comment-author strong { font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
 .community-comment-author time { color: var(--text-muted); font-size: 12px; }
-.community-comment-copy > p { margin-top: 6px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+.community-comment-copy > p { margin-top: 2px; font-size: 14px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
 .community-comment-delete { display: inline-flex; align-items: center; min-height: 44px; padding: 4px 0; border: 0; background: none; color: var(--text-muted); font-size: 12px; }
 .community-comment-delete:hover { color: var(--text); }
 .community-comment-confirm { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; margin-top: 8px; }
 .community-comment-confirm[hidden], .community-comment-delete[hidden] { display: none; }
 .community-comment-confirm > span { flex-basis: 100%; }
 .community-comment-confirm > .btn { min-height: 44px; }
-.community-comment-form { border-top: 1px solid var(--line); padding-top: 16px; }
-.community-comment-form textarea { display: block; width: 100%; min-height: 72px; max-height: 140px; resize: vertical; padding: 12px; border: 1px solid var(--field-line); border-radius: var(--r-sm); background: var(--bg); color: var(--text); font: inherit; font-size: 16px; line-height: 1.5; }
+.community-comment-form { min-width: 0; border-top: 1px solid var(--line); padding-top: 12px; }
+.community-comment-compose-row { display: flex; align-items: flex-end; gap: 8px; min-width: 0; padding: 0 4px 0 12px; border: 1px solid var(--field-line); border-radius: var(--r-md); background: var(--bg); }
+.community-comment-compose-row:focus-within { outline: 2px solid var(--text-muted); outline-offset: 2px; }
+.community-comment-form textarea { display: block; flex: 1; min-width: 0; width: 0; min-height: 44px; max-height: 100px; resize: none; padding: 10px 0; border: 0; border-radius: 0; outline: 0; background: transparent; color: var(--text); font: inherit; font-size: 16px; line-height: 24px; }
+.community-comment-form textarea:focus { outline: none; box-shadow: none; }
+.community-comment-form textarea::placeholder { color: var(--text-muted); opacity: 1; }
+.community-comment-compose-row > button { flex: none; min-width: 44px; min-height: 44px; padding: 8px; border: 0; border-radius: var(--r-sm); background: transparent; color: var(--text); font: inherit; font-size: 14px; font-weight: 600; }
+.community-comment-compose-row > button:hover:not(:disabled) { background: var(--surface-2); }
+.community-comment-compose-row > button:disabled { color: var(--text-muted); opacity: .55; cursor: default; }
 .community-comment-form .err { margin-top: 8px; font-size: 13px; }
-.community-comment-compose-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; }
-.community-comment-compose-foot .btn { min-height: 44px; }
-.community-comment-length { color: var(--text-muted); font-size: 12px; }
+.community-comment-length { display: block; margin-top: 4px; text-align: right; color: var(--text-muted); font-size: 12px; }
+.community-comment-length[hidden] { display: none; }
 .community-comment-feedback { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--text-muted); font-size: 13px; }
 .community-comment-feedback:has(#comment-status:not(:empty)) { margin-top: 8px; }
 .community-comment-feedback .linkbtn { min-height: 44px; }
 .community-comment-feedback [hidden] { display: none; }
-.community-comment-signin { border-top: 1px solid var(--line); padding-top: 16px; }
-.community-comment-signin > .btn { min-height: 44px; }
+.community-comment-signin { border-top: 1px solid var(--line); padding-top: 12px; }
+.community-comment-signin > .btn { width: 100%; min-height: 44px; }
 body.community-comments-open { overflow: hidden; }
 body.community-comments-open .community-page.is-reels .community-feed { overflow: hidden; scroll-snap-type: none; }
-@media (max-width: 760px) {
-  .community-comments-panel { padding: 16px; padding-bottom: max(16px, env(safe-area-inset-bottom)); gap: 12px; }
-  .community-comment-form { padding-top: 12px; }
+.community-comments-panel[data-layout="sheet"] { padding: 24px 16px max(16px, env(safe-area-inset-bottom)); border-width: 1px 0 0; border-radius: 16px 16px 0 0; box-shadow: 0 -12px 32px var(--shadow); }
+.community-comments-panel[data-layout="sheet"] .community-comments-grab { position: absolute; display: flex; justify-content: center; inset: 0 0 auto; height: 24px; touch-action: none; cursor: grab; }
+.community-comments-grab > span { width: 32px; height: 4px; margin-top: 8px; border-radius: 2px; background: var(--text-muted); opacity: .5; }
+.community-comments-panel[data-dragging] { cursor: grabbing; user-select: none; }
+.community-comments-panel[data-compact] { gap: 6px; padding: 20px 12px max(8px, env(safe-area-inset-bottom)); }
+.community-comments-panel[data-compact] .community-comment-form { padding-top: 8px; }
+.community-comments-panel[data-compact] .community-comment-form textarea { max-height: 44px; }
+.community-comments-panel[data-compact] .community-comment-length { margin-top: 0; }
+.community-comments-panel[data-compact] .community-comment-form .err { margin-top: 4px; line-height: 1.4; }
+.community-comments-panel[data-compact] .community-comment-feedback:has(#comment-status:not(:empty)) { margin-top: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .community-comments-panel { animation: comments-appear 180ms ease-out; }
+  .community-comments-panel[data-layout="sheet"] { animation-name: comments-sheet-appear; }
+  .community-comments-panel[data-layout="sheet"]:not([data-dragging]) { transition: transform 180ms ease-out; }
+  .community-comments-panel[data-dragging] { animation: none; }
 }
+@keyframes comments-appear { from { opacity: 0; } to { opacity: 1; } }
+@keyframes comments-sheet-appear { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
 .video-card-actions { display: flex; justify-content: flex-end; margin-top: 12px; }
 .destructive-popover { width: min(380px, calc(100vw - 32px)); z-index: 92; }
@@ -3522,28 +3511,13 @@ function viewHome(main) {
   const returnContext = main.querySelector('[data-community-viewer="true"], .app-loading-viewer') && communityViewerReturn?.path === homePath()
     ? communityViewerReturn : null;
   const featuredIds = ["example-seedance2-skincare", "example-seedance2-sketch-car", "example-seedance2-dessert-selfie", "example-seedance2-city-walk", "example-kling4-corgi", "example-kling4-fashion", "example-kling4-canyon", "example-kling4-doorway", "example-kling-product", "example-runway-kitchen"];
-  const scenes = featuredIds.map(id => OFFICIAL_EXAMPLES.find(example => example.id === id)).filter(Boolean);
-  const sceneCard = (scene, index) => {
-    const poster = officialPoster(scene), model = recordModel(scene);
-    const watch = communityWatchHref(scene.id);
-    return `<article class="home-scene-card community-card${sceneFrameNumber(scene.format) < 1 ? " home-portrait-card" : " home-wide-card"}" data-reel-post="${esc(scene.id)}" data-home-scene="${esc(scene.id)}" data-source-format="${esc(scene.format)}">
-      <a class="thumb community-watch home-scene-watch${poster ? " is-loading" : " has-no-poster"}" href="${esc(watch)}" aria-label="Watch ${esc(scene.caption)}">
-        <span class="home-scene-fallback" aria-hidden="true">${icon("play", 24)}<span>Preview unavailable</span></span>
-        <span class="skeleton home-poster-loading" aria-hidden="true"></span>
-        ${poster ? `<img src="${esc(poster)}" data-hover-example="${esc(scene.id)}" alt="${esc(scene.alt)}" loading="${index === 0 ? "eager" : "lazy"}" fetchpriority="${index === 0 ? "high" : "auto"}" decoding="async">` : ""}
-        ${Number.isFinite(scene.len) && scene.len > 0 ? `<span class="badge num">${tc(scene.len)}</span>` : ""}${videoQualityBadgeMarkup(scene)}
-        <span class="home-scene-play" aria-hidden="true">${icon("play", 18)}</span>
-      </a>
-      <div class="home-scene-heading"><h2>${esc(scene.caption)}</h2><div class="home-scene-meta"><span>${esc(model.name)}</span><span class="num">${esc(scene.format)}</span></div></div>
-      <a class="btn community-use home-scene-use" href="#/create?scene=${encodeURIComponent(scene.id)}&preset=scene" aria-label="Use scene ${esc(scene.caption)}" data-community-tooltip="Use scene">${icon("setup", 18)}<span>Use scene</span></a>
-    </article>`;
-  };
-  const portraits = scenes.filter(scene => sceneFrameNumber(scene.format) < 1).map(sceneCard).join("");
-  const wides = scenes.filter(scene => sceneFrameNumber(scene.format) >= 1).map((scene, index) => sceneCard(scene, index + 8)).join("");
+  const posts = new Map(communityPosts(false).map(post => [post.id, post]));
+  const scenes = featuredIds.map(id => posts.get(id)).filter(Boolean);
+  const cards = scenes.map((scene, index) => communityCardMarkup(scene, { featured: true, index })).join("");
 
   main.innerHTML = `<div class="landing home-workspace">
     <header class="home-heading"><h1 id="title" tabindex="-1">Featured</h1><div class="home-heading-actions"><a class="btn" href="#/community">View feed</a><a class="btn primary home-create" href="#/create">Create video</a></div></header>
-    <section class="home-scenes" aria-label="Ready-made scenes"><div class="home-scene-grid home-portrait-grid">${portraits}</div><div class="home-scene-grid home-wide-grid">${wides}</div></section>
+    <section class="home-scenes" aria-label="Ready-made scenes"><div class="community-grid home-scene-grid">${cards}</div></section>
     ${REVIEW ? '<div class="home-review"><button class="linkbtn" id="explore-demo" type="button">Explore workspace</button></div>' : ""}
   </div>`;
   return () => {
@@ -4101,16 +4075,26 @@ document.addEventListener("click", event => {
   const link = event.target.closest("a[href]");
   if (currentRoute().name === "signin" && link && !event.defaultPrevented && event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) clearCommunityLikeIntent(true);
 });
+/* The same publication card serves Featured, Feed and the explicit viewer. */
+function communityCardMarkup(p, { mine = false, immersive = false, featured = false, index = 0 } = {}) {
+  const preview = recordOfficialExample(p), poster = officialPoster(preview), setupAvailable = isModelAvailable(p.model);
+  const readyScene = featured || (immersive && currentRoute().arg === "watch" && communityViewerReturn?.path?.split("?")[0] === "#/home" && p.official);
+  const actionLabel = readyScene ? "Use scene" : setupAvailable ? "Use setup" : "Use prompt";
+  const promptAction = p.includePrompt && p.prompt ? `<a class="btn community-use${featured ? " home-scene-use" : ""}" href="#/create?scene=${encodeURIComponent(p.id)}${readyScene ? "&preset=scene" : ""}" aria-label="${actionLabel} for ${esc(p.caption)}" data-community-tooltip="${actionLabel}">${icon("setup", 18)}<span class="community-use-label scene-card-action-label">${actionLabel}</span></a>` : `<p class="community-privacy"><button class="community-metric" type="button" data-community-metric="private" aria-label="Private prompt">${icon("lock", 16)}</button></p>`;
+  const facts = preview ? videoFactsMarkup(immersive && currentRoute().arg === "watch" ? preview : { format: preview.format }) : "";
+  const frameClass = sceneFrameNumber(preview?.format || p.format) < 1 ? " home-portrait-card" : " home-wide-card";
+  const mediaClass = featured ? ` home-scene-watch${poster ? " is-loading" : " has-no-poster"}` : "";
+  const image = poster ? `<img src="${esc(poster)}" data-hover-example="${esc(preview.id)}" alt="${esc(preview.alt)}" loading="${index === 0 ? "eager" : "lazy"}" fetchpriority="${index === 0 ? "high" : "auto"}" decoding="async">` : "";
+  const fallback = featured ? `<span class="home-scene-fallback" aria-hidden="true">${icon("play", 24)}<span>Preview unavailable</span></span><span class="skeleton home-poster-loading" aria-hidden="true"></span>` : !poster ? '<span>Preview unavailable</span>' : "";
+  return `<article class="community-card scene-card${featured ? ` home-scene-card${frameClass}` : ""}" data-reel-post="${esc(p.id)}" data-source-format="${esc(preview?.format || p.format || "")}"${featured ? ` data-home-scene="${esc(p.id)}"` : ""}${p.official ? ' data-official-example="true"' : ""}>
+    <a class="thumb community-watch${mediaClass}${poster ? "" : " community-no-preview"}" href="${communityWatchHref(p.id, mine, currentRoute().name === 'create')}" aria-label="Watch ${esc(p.caption)}">${fallback}${image}${poster && Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}${videoQualityBadgeMarkup(preview)}<span class="scene-card-play" aria-hidden="true">${icon("play", 18)}</span></a>
+    <div class="community-reel-copy${featured ? " home-scene-heading" : ""}">${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview, { withAvatar: false }) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${facts}</p>${communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div></div>
+  </article>`;
+}
 function communityCards(limit = 6, mine = false, immersive = false) {
   const posts = communityPosts(mine).slice(0, limit);
   if (!posts.length) return `<section class="publication-empty"><h2>${mine ? "Your scenes can find an audience" : "No published scenes yet"}</h2><p>${mine ? "Publish a finished video from its result page. You choose whether to share the prompt." : "Published videos will appear here."}</p><a class="btn" href="${S.signedIn ? "#/history" : "#/signin"}">${S.signedIn ? "Choose a video" : "Sign in"}</a></section>`;
-  return `<div class="community-grid${immersive ? ' community-feed' : ''}">${posts.map(p => {
-    const preview = recordOfficialExample(p), poster = officialPoster(preview), setupAvailable = isModelAvailable(p.model), qualityBadge = videoQualityBadgeMarkup(preview);
-    const readyScene = immersive && currentRoute().arg === "watch" && communityViewerReturn?.path?.split("?")[0] === "#/home" && p.official;
-    const actionLabel = readyScene ? "Use scene" : setupAvailable ? "Use this setup" : "Use prompt";
-    const promptAction = p.includePrompt && p.prompt ? `<a class="btn community-use" href="#/create?scene=${encodeURIComponent(p.id)}${readyScene ? "&preset=scene" : ""}" aria-label="${actionLabel} for ${esc(p.caption)}" data-community-tooltip="${actionLabel}">${icon("setup", 18)}${immersive ? `<span class="community-use-label">${readyScene ? "Use scene" : "Use prompt"}</span>` : ''}</a>` : `<p class="community-privacy"><button class="community-metric" type="button" data-community-metric="private" aria-label="Private prompt">${icon("lock", 16)}</button></p>`;
-    return `<article class="community-card" data-reel-post="${esc(p.id)}" ${p.official ? 'data-official-example="true"' : ""}><a class="thumb community-watch ${poster ? "" : "community-no-preview"}" href="${communityWatchHref(p.id, mine, currentRoute().name === 'create')}" aria-label="Watch ${esc(p.caption)}">${poster ? `<img src="${esc(poster)}" data-hover-example="${esc(preview.id)}" alt="${esc(preview.alt)}" loading="lazy">${Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}` : '<span>Preview unavailable</span>'}${qualityBadge}</a>${immersive ? '<div class="community-reel-copy">' : ''}${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview, { withAvatar: false }) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${preview ? videoFactsMarkup(preview) : ""}</p>${communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div>${immersive ? '</div>' : ''}</article>`;
-  }).join("")}</div>`;
+  return `<div class="community-grid${immersive ? ' community-feed' : ''}">${posts.map((post, index) => communityCardMarkup(post, { mine, immersive, index })).join("")}</div>`;
 }
 function unpublishPost(id) {
   const post = S.posts.find(p => p.id === id);
@@ -4320,19 +4304,47 @@ try {
 } catch (_) {}
 if (pendingCommunityComments && location.hash === '#/signin') afterSignIn = pendingCommunityComments.destination;
 function clearCommunityCommentIntent() { pendingCommunityComments = null; try { sessionStorage.removeItem(COMMUNITY_COMMENT_INTENT); } catch (_) {} }
-const commentDate = iso => Date.now() - Date.parse(iso) < 60000 ? 'Just now' : new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Moscow' });
+const commentDate = iso => {
+  const minutes = Math.max(0, Math.floor((Date.now() - Date.parse(iso)) / 60000));
+  return minutes < 1 ? 'Now' : minutes < 60 ? `${minutes}m` : minutes < 1440 ? `${Math.floor(minutes / 60)}h` : minutes < 43200 ? `${Math.floor(minutes / 1440)}d` : new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'Europe/Moscow' });
+};
 const commentDraftKey = (id, owner = communityCommentOwner()) => owner + ':' + id;
+function sizeCommunityCommentInput() {
+  const field = $('#comment-text', communityCommentsPanel);
+  if (!field) return;
+  const limit = communityCommentsPanel.hasAttribute('data-compact') ? 44 : 100;
+  field.style.height = '0px';
+  const needed = field.scrollHeight;
+  field.style.height = `${Math.min(limit, Math.max(44, needed))}px`;
+  field.style.overflowY = needed > limit ? 'auto' : 'hidden';
+}
 function positionCommunityComments() {
   if (!communityCommentsContext) return;
   const viewport = window.visualViewport;
   const width = viewport?.width || innerWidth, height = viewport?.height || innerHeight;
-  const x = viewport?.offsetLeft || 0, y = viewport?.offsetTop || 0, phone = width <= 760;
-  const panelWidth = Math.min(phone ? width - 16 : 420, width - 32);
-  const panelHeight = Math.min(phone ? height * .76 : height - 48, 620);
+  const x = viewport?.offsetLeft || 0, y = viewport?.offsetTop || 0;
+  const phone = matchMedia('(max-width: 760px), (pointer: coarse) and (max-width: 1000px)').matches;
+  const trigger = communityCommentsContext.trigger;
+  const column = trigger?.closest('.community-viewer .community-card')?.querySelector('.community-reel-copy');
+  const dock = !phone && column?.getBoundingClientRect();
+  const anchor = trigger?.getBoundingClientRect();
+  const panelWidth = phone ? width : dock ? Math.min(dock.width, width - 32) : Math.min(340, width - 32);
+  const typing = !!document.activeElement?.closest('#comment-form');
+  // The visual keyboard can outlive textarea focus while Post or Undo receives it.
+  // Keep that geometry until the viewport grows again, including pointerdown/up.
+  communityCommentsContext.keyboardExpanded = phone && height < 500 && (typing || communityCommentsContext.keyboardExpanded);
+  const header = $('#top');
+  const minimumTop = !phone && !dock && header && getComputedStyle(header).visibility !== 'hidden' ? Math.max(y + 16, header.getBoundingClientRect().bottom + 12) : y + 16;
+  const panelHeight = phone ? height * (communityCommentsContext.keyboardExpanded ? .96 : .76) : dock ? Math.min(dock.height, height - 32) : Math.min(560, y + height - minimumTop - 16);
+  const clamp = (value, min, max) => Math.max(min, Math.min(value, max));
+  const anchorTop = anchor ? (y + height - anchor.bottom >= panelHeight + 24 ? anchor.bottom + 8 : anchor.top - panelHeight - 8) : y + (height - panelHeight) / 2;
+  communityCommentsPanel.dataset.layout = phone ? 'sheet' : dock ? 'docked' : 'anchored';
+  communityCommentsPanel.toggleAttribute('data-compact', phone && height < 400);
   communityCommentsPanel.style.width = `${panelWidth}px`;
   communityCommentsPanel.style.height = `${panelHeight}px`;
-  communityCommentsPanel.style.left = `${phone ? x + (width - panelWidth) / 2 : x + width - panelWidth - 24}px`;
-  communityCommentsPanel.style.top = `${phone ? y + height - panelHeight - 8 : y + (height - panelHeight) / 2}px`;
+  communityCommentsPanel.style.left = `${phone ? x : clamp(dock ? dock.left : anchor ? anchor.left : x + (width - panelWidth) / 2, x + 16, x + width - panelWidth - 16)}px`;
+  communityCommentsPanel.style.top = `${phone ? y + height - panelHeight : clamp(dock ? dock.top : anchorTop, minimumTop, y + height - panelHeight - 16)}px`;
+  sizeCommunityCommentInput();
 }
 function closeCommunityComments({ restore = true } = {}) {
   const context = communityCommentsContext;
@@ -4344,6 +4356,8 @@ function closeCommunityComments({ restore = true } = {}) {
   if (communityCommentsPanel.contains(document.activeElement)) document.activeElement.blur();
   if (nativeCommunityComments && communityCommentsPanel.matches(':popover-open')) communityCommentsPanel.hidePopover();
   communityCommentsPanel.hidden = true;
+  communityCommentsPanel.style.removeProperty('transform');
+  communityCommentsPanel.removeAttribute('data-dragging');
   document.body.classList.remove('community-comments-open');
   if (restore && location.hash === context.path && context.trigger?.isConnected) context.trigger.focus({ preventScroll: true });
   if (typeof hoverPreviewController !== 'undefined') hoverPreviewController.refresh();
@@ -4353,7 +4367,7 @@ function renderCommunityCommentList() {
   if (!context) return;
   const rows = communityComments().filter(row => row.postId === context.postId), owner = communityCommentOwner();
   $('#comments-title-count').textContent = fmt(rows.length);
-  $('#comments-list').innerHTML = rows.length ? rows.map(row => `<li class="community-comment" data-comment-id="${esc(row.id)}">${communityAvatarMarkup({ author: row.author, avatar: row.avatar })}<div class="community-comment-copy"><div class="community-comment-author"><strong>${esc(row.author)}</strong><time datetime="${esc(row.createdAt)}">${esc(commentDate(row.createdAt))}</time></div><p>${esc(row.body)}</p>${owner && row.owner === owner ? `<button class="community-comment-delete" type="button" data-comment-delete="${esc(row.id)}">Delete</button><div class="community-comment-confirm" data-comment-confirm="${esc(row.id)}" hidden><span>Delete this comment?</span><button class="btn danger" type="button" data-comment-confirm-delete="${esc(row.id)}">Delete</button><button class="btn" type="button" data-comment-keep="${esc(row.id)}">Keep</button></div>` : ''}</div></li>`).join('') : '<li class="community-comments-empty">No comments yet.</li>';
+  $('#comments-list').innerHTML = rows.length ? rows.map(row => `<li class="community-comment" data-comment-id="${esc(row.id)}">${communityAvatarMarkup({ author: row.author, avatar: row.avatar })}<div class="community-comment-copy"><div class="community-comment-author"><strong>${esc(row.author)}</strong><time datetime="${esc(row.createdAt)}" title="${esc(new Date(row.createdAt).toLocaleString('en-US', { timeZone: 'Europe/Moscow' }))}">${esc(commentDate(row.createdAt))}</time></div><p>${esc(row.body)}</p>${owner && row.owner === owner ? `<button class="community-comment-delete" type="button" data-comment-delete="${esc(row.id)}">Delete</button><div class="community-comment-confirm" data-comment-confirm="${esc(row.id)}" hidden><span>Delete this comment?</span><button class="btn danger" type="button" data-comment-confirm-delete="${esc(row.id)}">Delete</button><button class="btn" type="button" data-comment-keep="${esc(row.id)}">Keep</button></div>` : ''}</div></li>`).join('') : '<li class="community-comments-empty">No comments yet.</li>';
   refreshCommunityComments(context.postId);
 }
 function commentError(message) {
@@ -4371,7 +4385,7 @@ function openCommunityComments(id, trigger = null) {
   const owner = communityCommentOwner();
   communityCommentsContext = { postId: id, trigger, owner, path: location.hash };
   trigger?.setAttribute('aria-expanded', 'true');
-  communityCommentsPanel.innerHTML = `<header class="community-comments-heading"><h2 id="comments-title">Comments <span class="num" id="comments-title-count"></span></h2><button class="publication-popover-close" id="comments-close" type="button" aria-label="Close comments">${icon('x', 18)}</button></header><ol class="community-comments-list" id="comments-list" aria-label="Comments"></ol>${owner ? `<form class="community-comment-form" id="comment-form" novalidate><label class="sr" for="comment-text">Add a comment</label><textarea id="comment-text" maxlength="500" rows="2" placeholder="Add a comment" aria-describedby="comment-error">${esc(communityCommentDrafts.get(commentDraftKey(id, owner)) || '')}</textarea><p class="err" id="comment-error" role="alert" hidden></p><div class="community-comment-compose-foot"><span class="community-comment-length num" id="comment-length"></span><button class="btn primary" type="submit" id="comment-post">Post</button></div><div class="community-comment-feedback"><span role="status" id="comment-status"></span><button class="linkbtn" id="comment-undo" type="button" hidden>Undo</button></div></form>` : '<div class="community-comment-signin"><a class="btn" id="comment-signin" href="#/signin">Sign in to comment</a></div>'}`;
+  communityCommentsPanel.innerHTML = `<div class="community-comments-grab" data-comments-grab aria-hidden="true"><span></span></div><header class="community-comments-heading"><h2 id="comments-title">Comments <span class="num" id="comments-title-count"></span></h2><button class="publication-popover-close" id="comments-close" type="button" aria-label="Close comments">${icon('x', 18)}</button></header><ol class="community-comments-list" id="comments-list" aria-label="Comments"></ol>${owner ? `<form class="community-comment-form" id="comment-form" novalidate><label class="sr" for="comment-text">Add a comment</label><div class="community-comment-compose-row"><textarea id="comment-text" maxlength="500" rows="1" placeholder="Add a comment" aria-describedby="comment-error">${esc(communityCommentDrafts.get(commentDraftKey(id, owner)) || '')}</textarea><button type="submit" id="comment-post">Post</button></div><span class="community-comment-length num" id="comment-length" hidden></span><p class="err" id="comment-error" role="alert" hidden></p><div class="community-comment-feedback"><span role="status" id="comment-status"></span><button class="linkbtn" id="comment-undo" type="button" hidden>Undo</button></div></form>` : '<div class="community-comment-signin"><a class="btn" id="comment-signin" href="#/signin">Sign in to comment</a></div>'}`;
   renderCommunityCommentList();
   communityCommentsPanel.hidden = false;
   document.body.classList.add('community-comments-open');
@@ -4389,8 +4403,17 @@ function openCommunityComments(id, trigger = null) {
   });
   const form = $('#comment-form'), field = $('#comment-text');
   if (form) {
-    const update = () => { $('#comment-length').textContent = `${field.value.length} / 500`; $('#comment-post').disabled = !field.value.trim(); field.removeAttribute('aria-invalid'); commentError(''); if ($('#comment-undo').hidden) $('#comment-status').textContent = ''; communityCommentDrafts.set(commentDraftKey(id, owner), field.value); };
+    const update = () => {
+      const length = $('#comment-length');
+      length.textContent = `${field.value.length} / 500`; length.hidden = field.value.length < 450;
+      sizeCommunityCommentInput();
+      $('#comment-post').disabled = !field.value.trim(); field.removeAttribute('aria-invalid'); commentError('');
+      if ($('#comment-undo').hidden) $('#comment-status').textContent = '';
+      communityCommentDrafts.set(commentDraftKey(id, owner), field.value);
+    };
     field.addEventListener('input', update); update();
+    field.addEventListener('focus', positionCommunityComments);
+    field.addEventListener('blur', positionCommunityComments);
     form.onsubmit = event => {
       event.preventDefault();
       if (communityCommentsContext?.postId !== id || communityCommentOwner() !== owner || !communityCommentPost(id)) { closeCommunityComments(); return; }
@@ -4440,14 +4463,58 @@ communityCommentsPanel.addEventListener('click', event => {
   $('#comment-undo').hidden = false; $('#comment-undo').onclick = undo;
   toast('Comment deleted.', { label: 'Undo', fn: undo });
 });
+communityCommentsPanel.addEventListener('mousedown', event => {
+  // Keep the keyboard open until these actions have received their native click.
+  const field = $('#comment-text', communityCommentsPanel);
+  if (field === document.activeElement && event.target.closest('#comment-post, #comment-undo, #comments-close')) event.preventDefault();
+});
 communityCommentsPanel.addEventListener('keydown', event => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeCommunityComments(); } });
 communityCommentsPanel.addEventListener('toggle', event => { if (event.newState === 'closed' && communityCommentsContext && !communityCommentsPanel.matches(':popover-open')) closeCommunityComments({ restore: false }); });
+// Only the handle owns this gesture; dragging the comment list still scrolls it.
+let communityCommentsDrag = null;
+communityCommentsPanel.addEventListener('pointerdown', event => {
+  const handle = event.target.closest('[data-comments-grab]');
+  if (!handle || communityCommentsPanel.dataset.layout !== 'sheet' || event.button !== 0) return;
+  communityCommentsDrag = { id: event.pointerId, start: event.clientY, distance: 0 };
+  handle.setPointerCapture(event.pointerId);
+  communityCommentsPanel.dataset.dragging = 'true';
+});
+communityCommentsPanel.addEventListener('pointermove', event => {
+  if (!communityCommentsDrag || event.pointerId !== communityCommentsDrag.id) return;
+  const distance = communityCommentsDrag.distance = Math.max(0, event.clientY - communityCommentsDrag.start);
+  communityCommentsPanel.style.transform = `translateY(${distance}px)`;
+  event.preventDefault();
+});
+function finishCommunityCommentsDrag(event) {
+  if (!communityCommentsDrag || event.pointerId !== communityCommentsDrag.id) return;
+  const dismiss = event.type !== 'pointercancel' && communityCommentsDrag.distance > Math.min(96, communityCommentsPanel.clientHeight * .22);
+  communityCommentsDrag = null;
+  communityCommentsPanel.removeAttribute('data-dragging');
+  communityCommentsPanel.style.removeProperty('transform');
+  if (dismiss) closeCommunityComments();
+}
+communityCommentsPanel.addEventListener('pointerup', finishCommunityCommentsDrag);
+communityCommentsPanel.addEventListener('pointercancel', finishCommunityCommentsDrag);
 document.addEventListener('click', event => {
   const trigger = event.target.closest('[data-comments-post]');
   if (!trigger || event.defaultPrevented) return;
   event.preventDefault(); openCommunityComments(trigger.dataset.commentsPost, trigger);
 });
-document.addEventListener('pointerdown', event => { if (communityCommentsContext && !communityCommentsPanel.contains(event.target) && !communityCommentsContext.trigger?.contains(event.target)) closeCommunityComments({ restore: false }); }, true);
+let communityCommentsOutsideTap = false;
+document.addEventListener('pointerdown', event => {
+  communityCommentsOutsideTap = false;
+  if (!communityCommentsContext || communityCommentsPanel.contains(event.target) || communityCommentsContext.trigger?.contains(event.target)) return;
+  // Dismissing a sheet must not also play, like or navigate the covered page.
+  communityCommentsOutsideTap = true;
+  event.preventDefault(); event.stopImmediatePropagation();
+  closeCommunityComments({ restore: false });
+  setTimeout(() => { communityCommentsOutsideTap = false; }, 800);
+}, true);
+document.addEventListener('click', event => {
+  if (!communityCommentsOutsideTap) return;
+  communityCommentsOutsideTap = false;
+  event.preventDefault(); event.stopImmediatePropagation();
+}, true);
 window.addEventListener('hashchange', () => {
   closeCommunityComments({ restore: false });
   if (pendingCommunityComments && !['#/signin', '#/' + pendingCommunityComments.destination].includes(location.hash)) clearCommunityCommentIntent();
