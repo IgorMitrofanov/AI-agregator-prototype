@@ -863,11 +863,11 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .community-publication-total { margin-top: 6px; color: var(--text-muted); font-size: 12px; line-height: 1.4; }
 .community-card { min-width: 0; }
 .community-card .thumb { aspect-ratio: 4 / 5; background: var(--cinema-bg); color: var(--cinema-text); }
-.community-card .thumb > img { display: block; object-fit: contain; }
+.community-card .thumb > img { display: block; object-fit: cover; }
 .community-card .thumb > img[hidden] { display: none; }
-.community-card .thumbnail-live-preview > video { object-fit: contain; }
+.community-card .thumbnail-live-preview > video { object-fit: cover; }
 :where(.home-workspace, .community-page:not(.is-reels):not(.community-viewer), #g-body) .scene-card .thumb { --scene-overlay-gap: 12px; }
-:where(.home-workspace, .community-page:not(.is-reels):not(.community-viewer), #g-body) .scene-card .thumb > .badge { left: calc(var(--scene-media-inset-x, 0%) + var(--scene-overlay-gap)); bottom: calc(var(--scene-media-inset-y, 0%) + var(--scene-overlay-gap)); }
+:where(.home-workspace, .community-page:not(.is-reels):not(.community-viewer), #g-body) .scene-card .thumb > .badge { left: var(--scene-overlay-gap); bottom: var(--scene-overlay-gap); }
 :where(.home-workspace, .community-page:not(.is-reels), #g-body) .scene-card { display: flex; flex-direction: column; }
 :where(.home-workspace, .community-page:not(.is-reels), #g-body) .scene-card .community-reel-copy { display: flex; flex: 1; min-width: 0; flex-direction: column; }
 :where(.home-workspace, .community-page:not(.is-reels), #g-body) .scene-card .community-card-foot { margin-top: auto; padding-top: 16px; }
@@ -1751,6 +1751,49 @@ html { scrollbar-gutter: stable; }
 .signin-options #sf .row > button { min-height: 44px; }
 
 /* Ready scenes use the existing composer controls without a separate reference panel. */
+
+/* Quiet route navigation; all creation types use the same graphite/stone roles. */
+.create-media-types { display: flex; gap: 20px; margin: 0 0 24px; border-bottom: 1px solid var(--line); }
+.create-media-types > a { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 72px; min-height: 44px; margin-bottom: -1px; padding: 10px 2px; border-bottom: 2px solid transparent; color: var(--text-muted); font-family: var(--sans); font-size: 14px; text-decoration: none; }
+.create-media-types > a:hover { color: var(--text); }
+.create-media-types > a[aria-current="page"] { border-color: var(--text); color: var(--text); font-weight: 600; }
+.create-media-types > a:focus-visible { outline: 2px solid var(--text-muted); outline-offset: 3px; border-radius: 2px; }
+.create-media-workspace > .display { margin-bottom: 24px; }
+.create-media-composer { margin-top: 0; }
+.create-media-composer .prompt-wrap { padding-top: 20px; }
+.create-media-composer textarea { min-height: 160px; }
+.create-media-tools { justify-content: space-between; flex-wrap: wrap; gap: 4px 16px; }
+.create-media-draft-status { min-width: 0; min-height: 20px; flex: 1; overflow-wrap: anywhere; color: var(--text-muted); font-size: 12px; line-height: 20px; text-align: right; }
+.create-media-settings { display: grid; grid-template-columns: minmax(0, 1fr) 240px; align-items: center; gap: 24px; padding: 20px 24px; border-top: 1px solid var(--line); }
+.create-media-control { min-width: 0; margin: 0; padding: 0; border: 0; }
+.create-media-control > :is(legend, label) { display: block; margin-bottom: 12px; color: var(--text-muted); font-size: 13px; line-height: 20px; }
+.create-media-control .seg { max-width: 100%; }
+.create-media-control .seg label { min-height: 44px; }
+.create-media-preview { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 208px; min-width: 0; margin: 0; }
+.create-image-canvas { display: grid; place-items: center; flex: none; width: min(100%, calc(160px * var(--draft-ratio))); max-height: 160px; aspect-ratio: var(--draft-ratio); border: 1px solid var(--text-muted); border-radius: var(--r-sm); color: var(--text-muted); background: var(--bg); }
+.create-media-preview figcaption { display: flex; align-self: stretch; justify-content: space-between; gap: 12px; margin-top: 12px; color: var(--text-muted); font-size: 12px; line-height: 20px; }
+.create-audio-duration { display: flex; align-items: center; gap: 12px; color: var(--text-muted); font-size: 14px; }
+.create-audio-duration > input { width: 104px; min-height: 44px; padding: 10px 12px; border: 1px solid var(--field-line); border-radius: var(--r-sm); color: var(--text); background: var(--bg); font: inherit; font-size: 16px; }
+.create-audio-target { width: 100%; color: var(--text-muted); }
+.create-audio-draft-label { display: block; margin-bottom: 16px; color: var(--text); font-size: 14px; }
+.create-audio-target > svg { display: block; width: 100%; height: 32px; }
+.create-audio-target-times { display: flex; justify-content: space-between; gap: 12px; margin-top: 4px; font-size: 12px; }
+.create-media-model-state { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 24px; border-top: 1px solid var(--line); }
+.create-media-model-state h2 { margin: 0; font-family: var(--sans); font-size: 15px; font-weight: 600; line-height: 1.5; }
+.create-media-foot { justify-content: flex-end; }
+.create-media-foot > .go { min-width: 176px; min-height: 48px; opacity: .5; cursor: not-allowed; }
+@media (max-width: 600px) {
+  .create-media-types { justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+  .create-media-types > a { flex: 1; min-width: 0; }
+  .create-media-workspace > .display { margin-bottom: 20px; }
+  .create-media-composer .prompt-wrap { padding-top: 16px; }
+  .create-media-settings { grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 16px; }
+  .create-media-preview { height: 140px; }
+  .create-image-canvas { width: min(100%, calc(104px * var(--draft-ratio))); max-height: 104px; }
+  .create-audio-preview { height: 120px; }
+  .create-media-model-state { align-items: flex-start; flex-direction: column; gap: 12px; padding: 16px; }
+  .create-media-foot > .go { width: 100%; min-width: 0; }
+}
 
 .prototype-options { margin-top: 16px; color: var(--text-muted); font-size: var(--fs-caption); }
 .prototype-options summary { cursor: pointer; padding: 8px 0; }
@@ -2641,7 +2684,7 @@ const TITLES = { home: "Home", community: "Feed", account: "Your account", creat
 let afterSignIn = "create";
 function signInDestination(destination = "create") {
   const path = String(destination || "create").replace(/^#\/?/, ""), pathname = path.split("?")[0];
-  return ["create", "history", "history/trash"].includes(pathname) || /^video\/\d+$/.test(pathname) || /^community(?:\/[a-zA-Z0-9_-]+)?$/.test(pathname) ? path : "create";
+  return ["create", "create/image", "create/audio", "history", "history/trash"].includes(pathname) || /^video\/\d+$/.test(pathname) || /^community(?:\/[a-zA-Z0-9_-]+)?$/.test(pathname) ? path : "create";
 }
 let disposeView = null;
 function route(options = {}) {
@@ -2660,7 +2703,7 @@ function route(options = {}) {
     const query = location.hash.includes("?") ? "?" + location.hash.split("?")[1] : "";
     history.replaceState(history.state, "", `#/account/credits${query}`);
   }
-  const views = { home: viewHome, community: viewCommunity, account: viewAccount, create: viewCreate, history: viewHistory, plans: viewPlans, referrals: viewReferrals, video: viewVideo, signin: viewSignin, terms: viewLegal, privacy: viewLegal };
+  const views = { home: viewHome, community: viewCommunity, account: viewAccount, create: viewCreateMediaType, history: viewHistory, plans: viewPlans, referrals: viewReferrals, video: viewVideo, signin: viewSignin, terms: viewLegal, privacy: viewLegal };
   if (!views[name]) { go(S.signedIn ? "create" : "home"); return; }
   menuOpen = false; mobileNavOpen = false; renderChrome();
   const main = $("#main");
@@ -2668,7 +2711,7 @@ function route(options = {}) {
   document.title = (TITLES[name] || "Aurora") + " · Aurora";
   if (!options.preserve) window.scrollTo(0, 0);
   const mount = (focus = !options.preserve) => { const init = views[name](main, arg); main.setAttribute("aria-busy", "false"); if (focus) { const h = $("#title"); (h || main).focus({ preventScroll: true }); } if (init) { const cleanup = init(); if (typeof cleanup === "function") disposeView = cleanup; } if (previousFocus) document.getElementById(previousFocus)?.focus({ preventScroll: true }); else if (previousHref) $$('a[href]').find(a => a.getAttribute('href') === previousHref && a.getClientRects().length)?.focus({ preventScroll: true }); };
-  if (loadView(main, name, arg, mount)) return;
+  if (!(name === "create" && ["image", "audio"].includes(arg)) && loadView(main, name, arg, mount)) return;
   mount();
 }
 /* Private video links retain their gallery separately from Feed's viewer. */
@@ -4128,16 +4171,6 @@ document.addEventListener("click", event => {
   const link = event.target.closest("a[href]");
   if (currentRoute().name === "signin" && link && !event.defaultPrevented && event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) clearCommunityLikeIntent(true);
 });
-/* Insets of the source frame when it is contained in the common 4:5 grid slot. */
-function communityCardMediaInsets(record) {
-  const width = Number(record?.sourceWidth), height = Number(record?.sourceHeight), target = 4 / 5;
-  const measured = width / height, format = sceneFrameNumber(record?.format);
-  const ratio = Number.isFinite(width) && width > 0 && Number.isFinite(height) && height > 0 && Number.isFinite(measured) && measured > 0
-    ? measured : Number.isFinite(format) && format > 0 ? format : target;
-  const x = Math.max(0, (1 - ratio / target) / 2) * 100;
-  const y = Math.max(0, (1 - target / ratio) / 2) * 100;
-  return `--scene-media-inset-x:${x.toFixed(6)}%;--scene-media-inset-y:${y.toFixed(6)}%;`;
-}
 /* The same publication card serves Trending, Feed and the explicit viewer. */
 function communityCardMarkup(p, { mine = false, immersive = false, featured = false, index = 0 } = {}) {
   const preview = recordOfficialExample(p), poster = officialPoster(preview), setupAvailable = isModelAvailable(p.model);
@@ -4150,8 +4183,8 @@ function communityCardMarkup(p, { mine = false, immersive = false, featured = fa
   const image = poster ? `<img src="${esc(poster)}" data-hover-example="${esc(preview.id)}" alt="${esc(preview.alt)}" loading="${index === 0 ? "eager" : "lazy"}" fetchpriority="${index === 0 ? "high" : "auto"}" decoding="async">` : "";
   const fallback = featured ? `<span class="home-scene-fallback" aria-hidden="true">${icon("play", 24)}<span>Preview unavailable</span></span><span class="skeleton home-poster-loading" aria-hidden="true"></span>` : !poster ? '<span>Preview unavailable</span>' : "";
   return `<article class="community-card scene-card${featured ? ` home-scene-card${frameClass}` : ""}" data-reel-post="${esc(p.id)}" data-source-format="${esc(preview?.format || p.format || "")}"${featured ? ` data-home-scene="${esc(p.id)}"` : ""}${p.official ? ' data-official-example="true"' : ""}>
-    <a class="thumb community-watch${mediaClass}${poster ? "" : " community-no-preview"}" style="${communityCardMediaInsets(preview || p)}" href="${communityWatchHref(p.id, mine, currentRoute().name === 'create')}" aria-label="Watch ${esc(p.caption)}">${fallback}${image}${poster && Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}</a>
-    <div class="community-reel-copy${featured ? " home-scene-heading" : ""}">${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview, { withAvatar: false }) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${facts}</p>${communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div>${immersive && currentRoute().arg === 'watch' ? communityCommentPreviewMarkup(p) : ''}</div>
+    <a class="thumb community-watch${mediaClass}${poster ? "" : " community-no-preview"}" href="${communityWatchHref(p.id, mine, currentRoute().name === 'create')}" aria-label="Watch ${esc(p.caption)}">${fallback}${image}${poster && Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}</a>
+    <div class="community-reel-copy${featured ? " home-scene-heading" : ""}">${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview, { withAvatar: false }) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${facts}</p>${featured ? "" : communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div>${immersive && currentRoute().arg === 'watch' ? communityCommentPreviewMarkup(p) : ''}</div>
   </article>`;
 }
 function communityCards(limit = 6, mine = false, immersive = false) {
@@ -4651,6 +4684,111 @@ function applyScenePreset(source, draft) {
   return normalizeDraft(draft);
 }
 
+/* Type-specific local drafts. Video keeps its existing composer and accounting. */
+const CREATE_MEDIA_TYPES = Object.freeze([
+  Object.freeze({ id: 'video', label: 'Video', icon: 'create', route: 'create' }),
+  Object.freeze({ id: 'image', label: 'Image', icon: 'image', route: 'create/image', heading: 'Create image', promptLabel: 'Describe your image', placeholder: 'A ceramic cup on a linen table, soft window light.', empty: 'No image models available', generate: 'Generate image' }),
+  Object.freeze({ id: 'audio', label: 'Audio', icon: 'createAudio', route: 'create/audio', heading: 'Create audio', promptLabel: 'Describe your audio', placeholder: 'Gentle rain on a window, with a quiet room in the background.', empty: 'No audio models available', generate: 'Generate audio' }),
+]);
+const CREATE_MEDIA_DRAFT_STORE = 'aurora-create-media-drafts-v1:';
+const CREATE_IMAGE_FORMATS = Object.freeze(['16:9', '9:16', '1:1']);
+ICONS.createAudio = '<path d="M2 6v4M5 3v10M8 1v14M11 4v8M14 6v4"/>';
+
+const createMediaOwner = () => S.signedIn && typeof S.user?.email === 'string' ? S.user.email.trim().toLowerCase() : '';
+const createMediaArchiveKey = owner => CREATE_MEDIA_DRAFT_STORE + encodeURIComponent(owner);
+function normalizeMediaDrafts(value, owner) {
+  return {
+    owner, updatedAt: Number.isFinite(value?.updatedAt) && value.updatedAt > 0 ? value.updatedAt : 0,
+    image: { prompt: typeof value?.image?.prompt === 'string' ? value.image.prompt.slice(0, 1000) : '', format: CREATE_IMAGE_FORMATS.includes(value?.image?.format) ? value.image.format : '1:1' },
+    // This is a draft target, not a statement of a provider's supported lengths.
+    audio: { prompt: typeof value?.audio?.prompt === 'string' ? value.audio.prompt.slice(0, 1000) : '', seconds: Number.isInteger(value?.audio?.seconds) && value.audio.seconds >= 1 && value.audio.seconds <= 600 ? value.audio.seconds : 15 },
+  };
+}
+function currentMediaDrafts() {
+  const owner = createMediaOwner();
+  if (!owner) return null;
+  let archive = null;
+  try { archive = JSON.parse(localStorage.getItem(createMediaArchiveKey(owner))); } catch (_) {}
+  if (archive?.owner !== owner) archive = null;
+  const current = S.createMediaDrafts?.owner === owner ? S.createMediaDrafts : null;
+  const latest = archive && (!current || archive.updatedAt > current.updatedAt) ? archive : current;
+  S.createMediaDrafts = normalizeMediaDrafts(latest, owner);
+  return S.createMediaDrafts;
+}
+function persistMediaDrafts(owner) {
+  if (!owner || createMediaOwner() !== owner || S.createMediaDrafts?.owner !== owner) return false;
+  S.createMediaDrafts.updatedAt = Date.now();
+  const snapshot = JSON.stringify(S.createMediaDrafts);
+  save();
+  try {
+    localStorage.setItem(createMediaArchiveKey(owner), snapshot);
+    return localStorage.getItem(createMediaArchiveKey(owner)) === snapshot;
+  } catch (_) {
+    try { return JSON.stringify(JSON.parse(localStorage.getItem(STORE))?.createMediaDrafts) === snapshot; } catch (_) { return false; }
+  }
+}
+function createMediaNavigation(type) {
+  return `<nav class="create-media-types" aria-label="Create media">${CREATE_MEDIA_TYPES.map(item => `<a href="#/${item.route}" ${item.id === type ? 'aria-current="page"' : ''}>${icon(item.icon, 18)}<span>${item.label}</span></a>`).join('')}</nav>`;
+}
+function createMediaFormatPreview(format) {
+  const ratio = format === '16:9' ? 16 / 9 : format === '9:16' ? 9 / 16 : 1;
+  return `<figure class="create-media-preview"><div class="create-image-canvas" style="--draft-ratio:${ratio}" role="img" aria-label="Canvas ${format.replace(':', ' by ')}">${icon('image', 28)}</div><figcaption><span>Canvas</span><span class="num" data-media-format-label>${format}</span></figcaption></figure>`;
+}
+const createMediaClock = seconds => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+function createAudioTargetPreview(seconds) {
+  return `<figure class="create-media-preview create-audio-preview"><div class="create-audio-target" role="img" aria-label="Target length ${seconds} seconds"><span class="create-audio-draft-label">Audio draft</span><svg viewBox="0 0 240 32" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M1 16h238M1 6v20M40 12v8M80 12v8M120 8v16M160 12v8M200 12v8M239 6v20"/></svg><div class="create-audio-target-times num"><span>0:00</span><span data-media-duration-label>${createMediaClock(seconds)}</span></div></div><figcaption><span>Target length</span><span class="num" data-media-seconds-label>${seconds} s</span></figcaption></figure>`;
+}
+function viewCreateMediaType(main, arg) {
+  const type = CREATE_MEDIA_TYPES.find(item => item.id === arg) || CREATE_MEDIA_TYPES[0];
+  if (type.id === 'video') {
+    const initializeVideo = viewCreate(main, arg);
+    const heading = $('#title', main);
+    if (heading) heading.insertAdjacentHTML('beforebegin', createMediaNavigation('video'));
+    return initializeVideo;
+  }
+  const state = currentMediaDrafts(), owner = createMediaOwner();
+  if (!state || !owner) { main.innerHTML = '<section class="hero"><h1 id="title" tabindex="-1">Sign in to create</h1><a class="btn" href="#/signin">Sign in</a></section>'; return null; }
+  const draft = state[type.id];
+  const controls = type.id === 'image'
+    ? `<fieldset class="create-media-control"><legend>Canvas</legend><div class="seg">${CREATE_IMAGE_FORMATS.map(format => `<label><input type="radio" name="media-format" value="${format}" ${draft.format === format ? 'checked' : ''}><span class="num">${format}</span></label>`).join('')}</div></fieldset>`
+    : `<div class="create-media-control"><label for="create-audio-seconds">Target length</label><div class="create-audio-duration"><input class="num" id="create-audio-seconds" type="number" inputmode="numeric" min="1" max="600" step="1" value="${draft.seconds}"><span>seconds</span></div></div>`;
+  main.innerHTML = `<section class="hero create-media-workspace" aria-labelledby="title">${createMediaNavigation(type.id)}<h1 class="display" id="title" tabindex="-1">${type.heading}</h1><form class="composer create-media-composer" id="create-media-form" novalidate><label class="sr" for="create-media-prompt">${type.promptLabel}</label><div class="prompt-wrap"><textarea id="create-media-prompt" rows="4" maxlength="1000" placeholder="${type.placeholder}">${esc(draft.prompt)}</textarea></div><div class="tools create-media-tools"><span class="count num"><span id="create-media-count">${draft.prompt.length}</span> / 1,000</span><span class="create-media-draft-status" id="create-media-draft-status" role="status"></span></div><div class="create-media-settings">${controls}<div id="create-media-preview">${type.id === 'image' ? createMediaFormatPreview(draft.format) : createAudioTargetPreview(draft.seconds)}</div></div><section class="create-media-model-state" aria-labelledby="create-media-model-title"><h2 id="create-media-model-title">${type.empty}</h2></section><div class="foot create-media-foot"><button class="go" type="submit" id="create-media-generate" aria-describedby="create-media-model-title" disabled>${type.generate}</button></div></form></section>`;
+  return () => {
+    const controller = new AbortController(), signal = controller.signal;
+    const form = $('#create-media-form', main), field = $('#create-media-prompt', main);
+    const valid = () => !signal.aborted && form.isConnected && createMediaOwner() === owner && S.createMediaDrafts === state;
+    const keep = () => {
+      if (!valid()) return;
+      const saved = persistMediaDrafts(owner);
+      $('#create-media-draft-status', main).textContent = saved ? 'Saved' : 'Could not save. Keep this page open.';
+    };
+    field.addEventListener('input', () => {
+      if (!valid()) return;
+      draft.prompt = field.value.slice(0, 1000);
+      if (field.value !== draft.prompt) field.value = draft.prompt;
+      $('#create-media-count', main).textContent = String(draft.prompt.length);
+      keep();
+    }, { signal });
+    form.addEventListener('change', event => {
+      if (!valid()) return;
+      if (type.id === 'image' && event.target.name === 'media-format' && CREATE_IMAGE_FORMATS.includes(event.target.value)) {
+        draft.format = event.target.value;
+        $('#create-media-preview', main).innerHTML = createMediaFormatPreview(draft.format);
+        keep();
+      }
+      if (type.id === 'audio' && event.target.id === 'create-audio-seconds') {
+        const seconds = Number(event.target.value);
+        if (Number.isInteger(seconds) && seconds >= 1 && seconds <= 600) draft.seconds = seconds;
+        event.target.value = String(draft.seconds);
+        $('#create-media-preview', main).innerHTML = createAudioTargetPreview(draft.seconds);
+        keep();
+      }
+    }, { signal });
+    form.addEventListener('submit', event => event.preventDefault(), { signal });
+    return () => controller.abort();
+  };
+}
+
 /* Result retention is separate from generation jobs and the credit ledger. */
 const trashRetentionDays = () => Number.isFinite(Number(CONFIG.trashRetentionDays)) && Number(CONFIG.trashRetentionDays) > 0 ? Number(CONFIG.trashRetentionDays) : 30;
 const trashEntries = () => Array.isArray(S.trash) ? S.trash : (S.trash = []);
@@ -5103,7 +5241,7 @@ const hoverPreviewController = (() => {
     const video = document.createElement("video"); session.video = video;
     video.className = warm === session ? "thumbnail-warm-video" : "thumbnail-live-video"; video.muted = true; video.defaultMuted = true; video.volume = 0;
     video.playsInline = true; video.loop = true; video.preload = warm === session ? source.local ? "auto" : "metadata" : "none"; video.controls = false; video.autoplay = false;
-    if (warm === session) Object.assign(video.style, { position: 'absolute', inset: '0', width: '100%', height: '100%', objectFit: 'contain' });
+    if (warm === session) Object.assign(video.style, { position: 'absolute', inset: '0', width: '100%', height: '100%', objectFit: getComputedStyle(session.image).objectFit });
     video.setAttribute("muted", ""); video.setAttribute("playsinline", ""); video.setAttribute("aria-hidden", "true"); video.tabIndex = -1;
     video.addEventListener("volumechange", () => { if (!video.muted || video.volume !== 0) { video.muted = true; video.volume = 0; } }, { signal: session.abort.signal });
     const firstFrame = () => {
