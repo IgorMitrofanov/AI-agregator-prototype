@@ -866,13 +866,8 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .community-card .thumb > img { display: block; object-fit: contain; }
 .community-card .thumb > img[hidden] { display: none; }
 .community-card .thumbnail-live-preview > video { object-fit: contain; }
-.scene-card-play { position: absolute; right: 12px; bottom: 12px; z-index: 2; display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--cinema-line); border-radius: var(--r-sm); color: var(--cinema-text); background: var(--cinema-control); }
-.community-watch:hover .scene-card-play, .community-watch:focus-visible .scene-card-play { background: var(--cinema-bg); }
-.community-page.is-reels .scene-card-play { display: none; }
 :where(.home-workspace, .community-page:not(.is-reels):not(.community-viewer), #g-body) .scene-card .thumb { --scene-overlay-gap: 12px; }
 :where(.home-workspace, .community-page:not(.is-reels):not(.community-viewer), #g-body) .scene-card .thumb > .badge { left: calc(var(--scene-media-inset-x, 0%) + var(--scene-overlay-gap)); bottom: calc(var(--scene-media-inset-y, 0%) + var(--scene-overlay-gap)); }
-:where(.home-workspace, .community-page:not(.is-reels):not(.community-viewer), #g-body) .scene-card .thumb > .video-quality-badge { top: calc(var(--scene-media-inset-y, 0%) + var(--scene-overlay-gap)); right: calc(var(--scene-media-inset-x, 0%) + var(--scene-overlay-gap)); }
-:where(.home-workspace, .community-page:not(.is-reels):not(.community-viewer), #g-body) .scene-card .thumb > .scene-card-play { right: calc(var(--scene-media-inset-x, 0%) + var(--scene-overlay-gap)); bottom: calc(var(--scene-media-inset-y, 0%) + var(--scene-overlay-gap)); }
 :where(.home-workspace, .community-page:not(.is-reels), #g-body) .scene-card { display: flex; flex-direction: column; }
 :where(.home-workspace, .community-page:not(.is-reels), #g-body) .scene-card .community-reel-copy { display: flex; flex: 1; min-width: 0; flex-direction: column; }
 :where(.home-workspace, .community-page:not(.is-reels), #g-body) .scene-card .community-card-foot { margin-top: auto; padding-top: 16px; }
@@ -907,6 +902,7 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .publication-action:hover { background: var(--surface-2); color: var(--text); }
 .publication-action:active { background: var(--surface); color: var(--text); }
 .publication-action .ic { flex: none; }
+.history-publication .publication-action-label { display: inline-flex; align-items: center; justify-content: center; width: auto; min-width: 44px; gap: 8px; padding: 0 12px; }
 .community-detail .publication-actions { justify-content: flex-start; margin: 24px 0 0; gap: 8px; }
 .video-icon-action { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; }
 .history-publication-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 12px; }
@@ -1545,10 +1541,12 @@ body.community-reels .site-foot { display: none; }
   .reel-like-feedback.is-visible { animation: none; opacity: 1; transform: translate(-50%, -50%); }
 }
 
-/* Direction D: a referral statement with a read-only configured current level.
-   Display selection does not infer qualification or change financial records. */
+/* Direction D: three simultaneous network depths, with earnings in USD.
+   This summary does not calculate or transfer actual rewards. */
 .referral-page { max-width: 1080px; }
+.workspace-shell .page.referral-page, .workspace-shell .page.app-loading-referrals { max-width: 1080px; }
 .referral-page .referral-heading { margin-bottom: 32px; }
+.app-loading-referrals > header { margin-bottom: 32px; }
 .referral-link-panel { padding: 28px 32px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); }
 .referral-link-top { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 24px; }
 .referral-link-top h2, .referral-levels h2 { font-size: 25px; line-height: 1.2; }
@@ -1564,24 +1562,21 @@ body.community-reels .site-foot { display: none; }
 .referral-summary dl > div:last-child { padding-right: 0; }
 .referral-summary dl > div + div { border-left: 1px solid var(--line); } /* design-tells: ignore (neutral divider between actual data columns) */
 .referral-summary dt { display: flex; align-items: center; gap: 9px; color: var(--text-muted); margin-bottom: 12px; font-size: 14px; }
+.referral-summary dt small { margin-left: 4px; font-size: 11px; }
 .referral-summary dd { margin: auto 0 0; font-size: clamp(28px, 3.1vw, 42px); line-height: 1.15; font-weight: 500; overflow-wrap: anywhere; }
 .referral-levels { border-top: 1px solid var(--line); padding-top: 28px; }
-.referral-levels ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 680px; list-style: none; padding: 0; margin: 28px 0 0; }
-.referral-levels li { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 0; padding: 8px 0 0; }
-.referral-levels li::after { content: ""; width: 56px; height: 2px; margin-top: 8px; background: transparent; }
-.referral-levels li[aria-current="true"]::after { background: var(--text); }
+.referral-basis { margin-top: 8px; color: var(--text-muted); font-size: 14px; line-height: 1.5; }
+.referral-levels ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); list-style: none; padding: 0; margin: 28px 0 0; }
+.referral-levels li { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; min-width: 0; padding: 0 28px; }
+.referral-levels li:first-child { padding-left: 0; }
+.referral-levels li:last-child { padding-right: 0; }
 .referral-depth-number { display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 13px; line-height: 20px; }
-.referral-levels li[aria-current="true"] .referral-depth-number { color: var(--text); font-weight: 600; }
-.referral-rate { display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted); font-family: var(--serif); font-size: 36px; line-height: 1.1; font-weight: 400; }
-.referral-rate-text { color: var(--text-muted); }
-.referral-levels li[aria-current="true"] .referral-rate-text { color: var(--text); }
-/* design-tells: ignore (requested soft neutral lettering; the rate mapping remains static) */
-@supports ((background-clip: text) or (-webkit-background-clip: text)) {
-  @media (prefers-reduced-motion: no-preference) {
-    .referral-levels li[aria-current="true"] .referral-rate-text { background-image: linear-gradient(100deg, var(--text-muted) 34%, var(--text) 50%, var(--text-muted) 66%); background-size: 250% 100%; background-repeat: no-repeat; background-position: 100% 0; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: referral-rate-glint 12s linear infinite; }
-    @keyframes referral-rate-glint { 0%, 15% { background-position: 100% 0; } 85%, 100% { background-position: 0% 0; } }
-  }
-}
+.referral-depth-description { min-height: 36px; color: var(--text-muted); font-size: 13px; line-height: 18px; }
+.referral-rate { display: inline-flex; align-items: center; color: var(--text); font-family: var(--serif); font-size: 36px; line-height: 1.1; font-weight: 400; }
+.referral-rate-text { color: var(--text); }
+.referral-example { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--text-muted); font-size: 13px; line-height: 1.5; }
+.referral-example-values { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.referral-example strong { color: var(--text); font-weight: 600; }
 .referral-loading { max-width: 1016px; }
 .referral-loading-link { padding: 28px 32px 44px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); }
 .referral-loading-link > div:first-child { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
@@ -1590,19 +1585,28 @@ body.community-reels .site-foot { display: none; }
 .referral-loading .referral-link-controls > span { width: 100%; margin: 0; height: 48px; }
 .referral-loading .referral-link-controls > .skeleton-action { width: 132px; }
 .referral-loading-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 36px 0 40px; }
-.referral-loading-summary .skeleton-line { width: min(100%, 96px); height: 20px; margin: 0 0 12px; }
-.referral-loading-number { display: block; width: min(100%, 128px); height: 48px; }
-.referral-loading-levels { border-top: 1px solid var(--line); padding: 28px 0 16px; }
-.referral-loading-levels .skeleton-heading { margin: 0 0 28px; height: 30px; width: 180px; }
-.referral-loading-levels > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); justify-items: center; max-width: 680px; min-height: 86px; }
-.referral-loading-rate { display: block; width: 64px; max-width: 80%; height: 58px; }
+.referral-loading-summary .skeleton-line { width: min(100%, 96px); height: 21px; margin: 0 0 12px; }
+.referral-loading-number { display: block; width: min(100%, 128px); height: calc(clamp(28px, 3.1vw, 42px) * 1.15); }
+.referral-loading-levels { border-top: 1px solid var(--line); padding-top: 28px; }
+.referral-loading-levels .skeleton-heading { margin: 0; height: 30px; width: 180px; }
+.referral-loading-basis { width: 168px; max-width: 100%; height: 21px; margin-top: 8px; }
+.referral-loading-depths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 28px; }
+.referral-loading-depths > div { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; min-width: 0; padding: 0 28px; }
+.referral-loading-depths > div:first-child { padding-left: 0; }
+.referral-loading-depths > div:last-child { padding-right: 0; }
+.referral-loading-level { width: 48px; max-width: 100%; height: 20px; }
+.referral-loading-rate { width: 64px; max-width: 100%; height: 39.6px; }
+.referral-loading-description { width: 100px; max-width: 100%; height: 36px; }
+.referral-loading-example > span { height: 19.5px; max-width: 100%; }
+.referral-loading-example > span:first-child { width: 88px; }
+.referral-loading-example > span:last-child { width: 225px; }
 
 @media (forced-colors: active) {
-  .referral-levels .referral-rate-text, .referral-levels li[aria-current="true"] .referral-rate-text { color: CanvasText; -webkit-text-fill-color: currentColor; background: none; animation: none; }
-  .referral-levels li[aria-current="true"]::after { background: CanvasText; }
+  .referral-levels .referral-rate-text { color: CanvasText; }
 }
 @media (max-width: 600px) {
   .referral-page .referral-heading { margin-bottom: 24px; }
+  .app-loading-referrals > header { margin-bottom: 24px; }
   .referral-link-panel { padding: 20px 20px 12px; }
   .referral-link-top { gap: 12px; margin-bottom: 20px; }
   .referral-link-top h2, .referral-levels h2 { font-size: 24px; }
@@ -1615,6 +1619,7 @@ body.community-reels .site-foot { display: none; }
   .referral-summary dd { font-size: clamp(23px, 6.2vw, 32px); }
   .referral-levels { padding-top: 24px; }
   .referral-levels ol { margin-top: 24px; }
+  .referral-levels li { padding-right: 12px; padding-left: 12px; }
   .referral-depth-number { font-size: 12px; line-height: 18px; }
   .referral-rate { font-size: 32px; }
   .referral-loading-link { padding: 20px 20px 44px; }
@@ -1622,10 +1627,13 @@ body.community-reels .site-foot { display: none; }
   .referral-loading .referral-link-controls > .skeleton-action { width: 100%; }
   .referral-loading-summary { gap: 12px; margin: 28px 0 32px; }
   .referral-loading-summary .skeleton-line { height: 44px; margin-bottom: 10px; }
-  .referral-loading-number { height: 36px; }
+  .referral-loading-number { height: calc(clamp(23px, 6.2vw, 32px) * 1.15); }
   .referral-loading-levels { padding-top: 24px; }
-  .referral-loading-levels .skeleton-heading { margin-bottom: 24px; }
-  .referral-loading-rate { width: 48px; height: 56px; }
+  .referral-loading-levels .skeleton-heading { height: 28.8px; }
+  .referral-loading-depths { margin-top: 24px; }
+  .referral-loading-depths > div { padding-right: 12px; padding-left: 12px; }
+  .referral-loading-level { height: 18px; }
+  .referral-loading-rate { width: 48px; height: 35.2px; }
 }
 
 /* The same left navigation at every size; fixed portrait frames contain uploaded photos. */
@@ -1872,7 +1880,7 @@ const CONFIG = {
     { id: "s2", credits: 4000,  usd: 29, note: "Each month" },
     { id: "s3", credits: 10000, usd: 65, note: "Each month" },
   ],
-  referral: { link: "aurora.example/r/alex-k4m2", invited: REVIEW ? 12 : 0, signedUp: REVIEW ? 7 : 0, bought: REVIEW ? 3 : 0, subscribers: 0, earnedCredits: 0, currentLevel: 1 },
+  referral: { link: "aurora.example/r/alex-k4m2", invited: REVIEW ? 12 : 0, signedUp: REVIEW ? 7 : 0, bought: REVIEW ? 3 : 0, subscribers: 0, earnedUsd: 0, networkRates: [10, 5, 3], rewardBasis: "paid_credit_purchases" },
 };
 const IMG = {"runway_example": "assets/posters/runway_example.jpg", "kling_example": "assets/posters/kling_example.jpg", "kling_product": "assets/posters/kling_product.jpg", "kling_portrait": "assets/posters/kling_portrait.jpg", "seedance_standard": "assets/posters/seedance_standard.jpg", "kling4_doorway": "assets/posters/kling4_doorway.jpg", "kling4_corgi": "assets/posters/kling4_corgi.jpg", "kling4_fashion": "assets/posters/kling4_fashion.jpg", "kling4_canyon": "assets/posters/kling4_canyon.jpg", "avatar_runway": "assets/posters/avatar_runway.png", "avatar_kling": "assets/posters/avatar_kling.png", "avatar_byteplus": "assets/posters/avatar_byteplus.png", "avatar_deepmind": "assets/posters/avatar_deepmind.png", "avatar_dave": "assets/posters/avatar_dave.jpg"};
 
@@ -2787,7 +2795,7 @@ const videoCard = v => `<article class="vcard" data-vid="${v.id}">${thumb(v, tru
 function viewCreate(main) {
   if (!availableModels().length) {
     clearCommunitySetupIntent();
-    main.innerHTML = `<section class="hero"><h1 id="title" tabindex="-1">Describe your scene</h1><p class="lead">Your draft stays here while models are unavailable.</p><div class="composer"><label class="sr" for="prompt">Describe your video</label><div class="prompt-wrap"><textarea id="prompt" rows="4" maxlength="1000">${esc(S.draft.prompt)}</textarea></div><div class="empty" role="status"><h2>No models available right now</h2><p>You can keep writing. Try again to check the catalog.</p><button class="btn" id="retry-models" type="button">Try again</button></div></div></section>`;
+    main.innerHTML = `<section class="hero"><h1 id="title" tabindex="-1">Create video</h1><p class="lead">Your draft stays here while models are unavailable.</p><div class="composer"><label class="sr" for="prompt">Describe your video</label><div class="prompt-wrap"><textarea id="prompt" rows="4" maxlength="1000">${esc(S.draft.prompt)}</textarea></div><div class="empty" role="status"><h2>No models available right now</h2><p>You can keep writing. Try again to check the catalog.</p><button class="btn" id="retry-models" type="button">Try again</button></div></div></section>`;
     return () => { restorePrivateVideoReturn(); $("#prompt").oninput = e => { S.draft.prompt = e.target.value; save(); }; $("#retry-models").onclick = () => route(); };
   }
   const sourceParams = new URLSearchParams(location.hash.split("?")[1] || "");
@@ -2806,7 +2814,7 @@ function viewCreate(main) {
   const d = normalizeDraft(S.draft), selectedModel = model(d.model);
   main.innerHTML = `
   <section class="hero" aria-labelledby="title">
-    <h1 class="display" id="title" tabindex="-1">Describe your scene</h1>
+    <h1 class="display" id="title" tabindex="-1">Create video</h1>
     <p class="lead">Your ideas, in motion.</p>
     <form class="composer" id="composer" novalidate>
       <label class="sr" for="prompt">Describe your video</label>
@@ -2935,7 +2943,7 @@ function showAttached(name, url) {
 const historyPublication = v => {
   if (v.status !== "ready") return `<td class="history-publication"><div class="history-publication-inner"><small>${v.status === "failed" ? "Not available" : "Available when ready"}</small><div class="history-actions">${videoDeleteAction(v)}</div></div></td>`;
   const post = getPublishedPost(v.id);
-  return `<td class="history-publication"><div class="history-publication-inner"><div><span class="history-publication-label">${post ? "Published" : "Private"}</span><small>Prompt ${post?.includePrompt ? "shared" : "private"}</small></div><div class="history-actions" role="group" aria-label="Video actions"><button class="btn video-icon-action" type="button" data-video-reuse="${v.id}" aria-label="Use this setup">${icon("setup", 18)}</button>${post ? publicationActionsMarkup(post, { history: true }) : `<a class="btn video-icon-action" data-publication-settings="${v.id}" href="#/video/${v.id}?publish=1" aria-label="Publish video" aria-controls="publish-panel" aria-expanded="false">${icon("eye", 18)}</a>`}${videoDeleteAction(v)}</div></div></td>`;
+  return `<td class="history-publication"><div class="history-publication-inner"><div><span class="history-publication-label">${post ? "Published" : "Private"}</span><small>Prompt ${post?.includePrompt ? "shared" : "private"}</small></div><div class="history-actions" role="group" aria-label="Video actions"><button class="btn video-icon-action" type="button" data-video-reuse="${v.id}" aria-label="Use this setup">${icon("setup", 18)}</button>${post ? publicationActionsMarkup(post, { history: true }) : `<a class="btn history-publish" data-publication-settings="${v.id}" href="#/video/${v.id}?publish=1" aria-label="Publish video" aria-controls="publish-panel" aria-expanded="false">${icon("eye", 18)}<span>Publish</span></a>`}${videoDeleteAction(v)}</div></div></td>`;
 };
 const histRow = v => `<tr data-vid="${v.id}"><td class="t"><div class="hist-scene"><a class="thumb" data-private-video href="${esc(privateVideoHref(v.id, "history"))}" tabindex="-1" aria-hidden="true">${v.status === "ready" ? confirmedThumbnailMarkup(v, { compact: true }) : `<span class="gen-t" style="position:absolute;inset:0;display:grid;place-items:center;font-size:13px;color:var(--text-muted)">${v.status === "failed" ? "Failed" : "Rendering"}</span>`}</a><div class="hist-title-group"><a data-private-video href="${esc(privateVideoHref(v.id, "history"))}">${esc(titleOf(v.prompt))}</a><small class="hist-mobile-meta"><span>${esc(recordModel(v).name)}</span>${v.status === "ready" && recordOfficialExample(v) ? '<span class="hist-preview-credit">Model example</span>' : ""}${videoFactsMarkup(v)}</small></div></div></td>
   <td class="hm">${esc(recordModel(v).name)}</td><td class="hm num">${v.len} s, ${esc(v.quality)}, ${esc(v.format)}</td><td class="r num">${v.status === "failed" ? "—" : fmt(v.credits)}</td><td class="hm">${esc(videoCreatedLabel(v))}</td><td class="hist-status"><span class="st ${v.status}">${v.status === "ready" ? "Ready" : v.status === "failed" ? "Failed" : "Rendering"}</span></td>${historyPublication(v)}</tr>`;
@@ -3554,7 +3562,7 @@ function viewHome(main) {
   const cards = scenes.map((scene, index) => communityCardMarkup(scene, { featured: true, index })).join("");
 
   main.innerHTML = `<div class="landing home-workspace">
-    <header class="home-heading"><h1 id="title" tabindex="-1">Featured</h1><div class="home-heading-actions"><a class="btn" href="#/community">View feed</a><a class="btn primary home-create" href="#/create">Create video</a></div></header>
+    <header class="home-heading"><h1 id="title" tabindex="-1">Trending</h1><div class="home-heading-actions"><a class="btn" href="#/community">View feed</a><a class="btn primary home-create" href="#/create">Create video</a></div></header>
     <section class="home-scenes" aria-label="Ready-made scenes"><div class="community-grid home-scene-grid">${cards}</div></section>
     ${REVIEW ? '<div class="home-review"><button class="linkbtn" id="explore-demo" type="button">Explore workspace</button></div>' : ""}
   </div>`;
@@ -3673,26 +3681,30 @@ function loadView(main, name, arg, mount) {
 }
 
 /* Referral summaries are separate from payment and credit ledgers. */
+ICONS.referralEarnings = '<rect x="1.5" y="3.5" width="13" height="9" rx="1.5"/><circle cx="8" cy="8" r="2"/><path d="M4 8h.01M12 8h.01"/>';
+ICONS.referralArrow = '<path d="M2 8h12m-4-4 4 4-4 4"/>';
 function referralSummary() {
   const source = CONFIG.referral || {};
   const count = value => Number.isFinite(Number(value)) && Number(value) >= 0 ? Math.floor(Number(value)) : 0;
-  const earnedCredits = Number(source.earnedCredits);
+  const earnedUsd = Number(source.earnedUsd);
   return {
     link: String(source.link || ""),
     invited: count(source.invited),
     // A credit-pack buyer is not evidence of a subscription.
     subscribers: count(source.subscribers),
-    earnedCredits: Number.isFinite(earnedCredits) && earnedCredits >= 0 ? earnedCredits : 0,
+    earnedUsd: Number.isFinite(earnedUsd) && earnedUsd >= 0 ? earnedUsd : 0,
   };
 }
 
 function viewReferrals(main) {
   const referral = referralSummary();
   const link = /^https?:\/\//i.test(referral.link) ? referral.link : `https://${referral.link}`;
-  const earnings = fmt(referral.earnedCredits);
-  const levels = [[1, 3], [2, 5], [3, 10]];
-  const configuredLevel = Number(CONFIG.referral?.currentLevel);
-  const currentLevel = [1, 2, 3].includes(configuredLevel) ? configuredLevel : 1;
+  const money = value => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
+  const earnings = money(referral.earnedUsd);
+  const configuredRates = CONFIG.referral?.networkRates;
+  const rates = Array.isArray(configuredRates) && configuredRates.length === 3 && configuredRates.every(rate => Number.isFinite(rate) && rate >= 0 && rate <= 100) ? configuredRates : [10, 5, 3];
+  const levels = [[1, rates[0], "Direct referrals"], [2, rates[1], "Invited by level 1"], [3, rates[2], "Invited by level 2"]];
+  const exampleEarnings = money(rates[0]).replace(/\.00$/, "");
   main.innerHTML = `<div class="page referral-page">
     <header class="referral-heading"><h1 id="title" tabindex="-1">Referrals</h1></header>
     <section class="referral-link-panel" aria-labelledby="referral-link-heading">
@@ -3703,11 +3715,13 @@ function viewReferrals(main) {
     <section class="referral-summary" aria-label="Referral activity"><dl>
       <div><dt>${icon("referrals", 18)}<span>Invited</span></dt><dd class="num" id="referral-invited">${fmt(referral.invited)}</dd></div>
       <div><dt>${icon("plans", 18)}<span>Subscribers</span></dt><dd class="num" id="referral-subscribers">${fmt(referral.subscribers)}</dd></div>
-      <div><dt>${icon("credits", 18)}<span>Earned credits</span></dt><dd class="num" id="referral-earned" title="From referral credit purchases paid for with real money" aria-label="${esc(earnings)} credits earned from referral credit purchases paid for with real money">${esc(earnings)}</dd></div>
+      <div><dt>${icon("referralEarnings", 18)}<span>Earned <small>USD</small></span></dt><dd class="num" id="referral-earned" title="USD · Paid credit purchases" aria-label="${esc(earnings)} USD earned from paid credit purchases by referrals">${esc(earnings)}</dd></div>
     </dl></section>
     <section class="referral-levels" aria-labelledby="referral-levels-heading">
-      <h2 id="referral-levels-heading">Referral levels</h2>
-      <ol role="list" aria-label="Referral levels">${levels.map(([level, rate]) => `<li data-referral-level="${level}"${level === currentLevel ? ' aria-current="true"' : ""}><span class="referral-depth-number">Level ${level}${level === currentLevel ? icon("check", 14) : ""}</span>${level === currentLevel ? '<span class="sr">Your level</span>' : ""}<strong class="referral-rate num"><span class="referral-rate-text">${rate}%</span></strong></li>`).join("")}</ol>
+      <h2 id="referral-levels-heading">Referral rates</h2>
+      <p class="referral-basis">On paid credit purchases.</p>
+      <ol role="list" aria-label="Referral network rates">${levels.map(([level, rate, description]) => `<li data-referral-level="${level}"><span class="referral-depth-number">Level ${level}</span><strong class="referral-rate num"><span class="referral-rate-text">${rate}%</span></strong><span class="referral-depth-description">${description}</span></li>`).join("")}</ol>
+      <div class="referral-example" aria-label="A $100 paid credit purchase by a direct referral earns ${esc(exampleEarnings)}"><span>Direct referral</span><span class="referral-example-values"><strong class="num">$100</strong><span>purchase</span>${icon("referralArrow", 16)}<strong class="num">${esc(exampleEarnings)}</strong><span>earned</span></span></div>
     </section>
   </div>`;
   return () => {
@@ -3746,7 +3760,7 @@ function skeletonReferrals() {
   return `<div class="referral-loading">
     <div class="referral-loading-link"><div><span class="skeleton skeleton-heading"></span><span class="skeleton referral-loading-icon"></span></div><div class="referral-link-controls"><span class="skeleton skeleton-field"></span>${skeletonAction()}</div></div>
     <div class="referral-loading-summary">${Array.from({ length: 3 }, () => '<div><span class="skeleton skeleton-line short"></span><span class="skeleton referral-loading-number"></span></div>').join("")}</div>
-    <div class="referral-loading-levels"><span class="skeleton skeleton-heading"></span><div>${Array.from({ length: 3 }, () => '<span class="skeleton referral-loading-rate"></span>').join("")}</div></div>
+    <div class="referral-loading-levels"><span class="skeleton skeleton-heading"></span><span class="skeleton referral-loading-basis"></span><div class="referral-loading-depths">${Array.from({ length: 3 }, () => '<div><span class="skeleton referral-loading-level"></span><span class="skeleton referral-loading-rate"></span><span class="skeleton referral-loading-description"></span></div>').join("")}</div><div class="referral-example referral-loading-example"><span class="skeleton"></span><span class="skeleton"></span></div></div>
   </div>`;
 }
 
@@ -3878,7 +3892,7 @@ function publicationActionsMarkup(post, { detail = false, history = false } = {}
   if (!ownsPublication(post)) return "";
   const original = history ? "" : `<a class="publication-action" data-publication-action="original" href="#/video/${post.videoId}" aria-label="Your original video">${icon("create", 18)}</a>`;
   const settings = history ? `<a class="publication-action" data-publication-action="settings" data-publication-settings="${post.videoId}" href="#/video/${post.videoId}?publish=1" aria-label="Publication settings" aria-controls="publish-panel" aria-expanded="false">${icon("sliders", 18)}</a>` : `<button class="publication-action" ${detail ? 'id="publication-settings"' : ""} data-publication-action="settings" data-publication-settings="${post.videoId}" type="button" aria-label="Publication settings" aria-controls="publish-panel" aria-expanded="false">${icon("sliders", 18)}</button>`;
-  return `<div class="publication-actions" role="group" aria-label="Publication actions" data-publication-post="${esc(post.id)}">${original}${settings}<button class="publication-action" ${detail ? 'id="unpublish-video"' : ""} data-publication-action="unpublish" type="button" aria-label="Unpublish from Feed">${icon("eyeOff", 18)}</button></div>`;
+  return `<div class="publication-actions" role="group" aria-label="Publication actions" data-publication-post="${esc(post.id)}">${original}${settings}<button class="publication-action${history ? " publication-action-label" : ""}" ${detail ? 'id="unpublish-video"' : ""} data-publication-action="unpublish" type="button" aria-label="${history ? "Hide from Feed" : "Unpublish from Feed"}">${icon("eyeOff", 18)}${history ? '<span>Hide</span>' : ""}</button></div>`;
 }
 function reuseVideoSettings(video, { readyOnly = false } = {}) {
   if (!S.signedIn || !video || !S.videos.some(v => v.id === video.id) || (readyOnly && video.status !== "ready")) return;
@@ -4124,7 +4138,7 @@ function communityCardMediaInsets(record) {
   const y = Math.max(0, (1 - target / ratio) / 2) * 100;
   return `--scene-media-inset-x:${x.toFixed(6)}%;--scene-media-inset-y:${y.toFixed(6)}%;`;
 }
-/* The same publication card serves Featured, Feed and the explicit viewer. */
+/* The same publication card serves Trending, Feed and the explicit viewer. */
 function communityCardMarkup(p, { mine = false, immersive = false, featured = false, index = 0 } = {}) {
   const preview = recordOfficialExample(p), poster = officialPoster(preview), setupAvailable = isModelAvailable(p.model);
   const readyScene = featured || (immersive && currentRoute().arg === "watch" && communityViewerReturn?.path?.split("?")[0] === "#/home" && p.official);
@@ -4136,7 +4150,7 @@ function communityCardMarkup(p, { mine = false, immersive = false, featured = fa
   const image = poster ? `<img src="${esc(poster)}" data-hover-example="${esc(preview.id)}" alt="${esc(preview.alt)}" loading="${index === 0 ? "eager" : "lazy"}" fetchpriority="${index === 0 ? "high" : "auto"}" decoding="async">` : "";
   const fallback = featured ? `<span class="home-scene-fallback" aria-hidden="true">${icon("play", 24)}<span>Preview unavailable</span></span><span class="skeleton home-poster-loading" aria-hidden="true"></span>` : !poster ? '<span>Preview unavailable</span>' : "";
   return `<article class="community-card scene-card${featured ? ` home-scene-card${frameClass}` : ""}" data-reel-post="${esc(p.id)}" data-source-format="${esc(preview?.format || p.format || "")}"${featured ? ` data-home-scene="${esc(p.id)}"` : ""}${p.official ? ' data-official-example="true"' : ""}>
-    <a class="thumb community-watch${mediaClass}${poster ? "" : " community-no-preview"}" style="${communityCardMediaInsets(preview || p)}" href="${communityWatchHref(p.id, mine, currentRoute().name === 'create')}" aria-label="Watch ${esc(p.caption)}">${fallback}${image}${poster && Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}${videoQualityBadgeMarkup(preview)}<span class="scene-card-play" aria-hidden="true">${icon("play", 18)}</span></a>
+    <a class="thumb community-watch${mediaClass}${poster ? "" : " community-no-preview"}" style="${communityCardMediaInsets(preview || p)}" href="${communityWatchHref(p.id, mine, currentRoute().name === 'create')}" aria-label="Watch ${esc(p.caption)}">${fallback}${image}${poster && Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}</a>
     <div class="community-reel-copy${featured ? " home-scene-heading" : ""}">${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview, { withAvatar: false }) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${facts}</p>${communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div>${immersive && currentRoute().arg === 'watch' ? communityCommentPreviewMarkup(p) : ''}</div>
   </article>`;
 }
