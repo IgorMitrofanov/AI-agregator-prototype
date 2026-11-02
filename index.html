@@ -733,9 +733,14 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .skeleton-viewer-copy { min-width: 0; padding: 24px; }
 .skeleton-viewer-copy > .skeleton-action { margin-top: 24px; }
 .skeleton-viewer-copy .skeleton-action-row .skeleton-action { width: 44px; }
+.skeleton-viewer-comments { flex: none; height: 204px; margin-top: 16px; padding-top: 8px; border-top: 1px solid var(--line); }
+.skeleton-viewer-comments > .skeleton-line { height: 16px; margin: 14px 0 22px; }
+.skeleton-viewer-comments > div { display: flex; align-items: center; gap: 8px; min-height: 40px; margin-bottom: 8px; }
+.skeleton-viewer-comments .skeleton-avatar { width: 24px; height: 24px; }
+.skeleton-viewer-comments > div > .skeleton-line { flex: 1; }
 @media (min-width: 761px) and (min-height: 561px), (min-width: 1001px) {
   .app-loading-viewer > .loading-scene-toolbar { width: min(1180px, calc(100% - 112px)); }
-  .app-loading-viewer > .loading-body { flex: 1; min-height: 0; padding: 8px 32px 24px; }
+  .app-loading-viewer > .loading-body { flex: 1; min-height: 0; width: 100%; max-width: 1440px; margin: 0 auto; padding: 8px 32px 24px; }
   .app-loading-viewer .skeleton-viewer { width: min(1180px, calc(100% - 48px)); height: calc(100dvh - var(--workspace-header-height, 81px) - 120px); margin: 12px auto 0; }
   .app-loading-viewer .skeleton-viewer-unit { height: 100%; background: transparent; }
   .app-loading-viewer .skeleton-viewer-copy { display: flex; flex-direction: column; justify-content: center; height: 100%; }
@@ -826,6 +831,8 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .skeleton-feed-grid, .skeleton-viewer-unit { display: none; }
   .skeleton-reel { display: grid; grid-template-rows: minmax(0, 1fr) auto; flex: 1; }
   .app-loading-viewer > .loading-scene-toolbar { flex: none; width: 100%; margin: 0; padding: 8px 16px; }
+  .skeleton-viewer-comments { height: 148px; margin-top: 12px; padding-top: 4px; }
+  .skeleton-viewer-comments > div:last-child { display: none; }
 }
 @media (orientation: landscape) and (max-height: 560px) and (max-width: 1000px) {
   .app-loading-feed > .loading-feed-toolbar { display: flex; align-items: center; gap: 20px; padding-top: 0; }
@@ -862,6 +869,10 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .scene-card-play { position: absolute; right: 12px; bottom: 12px; z-index: 2; display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--cinema-line); border-radius: var(--r-sm); color: var(--cinema-text); background: var(--cinema-control); }
 .community-watch:hover .scene-card-play, .community-watch:focus-visible .scene-card-play { background: var(--cinema-bg); }
 .community-page.is-reels .scene-card-play { display: none; }
+:where(.home-workspace, .community-page:not(.is-reels):not(.community-viewer), #g-body) .scene-card .thumb { --scene-overlay-gap: 12px; }
+:where(.home-workspace, .community-page:not(.is-reels):not(.community-viewer), #g-body) .scene-card .thumb > .badge { left: calc(var(--scene-media-inset-x, 0%) + var(--scene-overlay-gap)); bottom: calc(var(--scene-media-inset-y, 0%) + var(--scene-overlay-gap)); }
+:where(.home-workspace, .community-page:not(.is-reels):not(.community-viewer), #g-body) .scene-card .thumb > .video-quality-badge { top: calc(var(--scene-media-inset-y, 0%) + var(--scene-overlay-gap)); right: calc(var(--scene-media-inset-x, 0%) + var(--scene-overlay-gap)); }
+:where(.home-workspace, .community-page:not(.is-reels):not(.community-viewer), #g-body) .scene-card .thumb > .scene-card-play { right: calc(var(--scene-media-inset-x, 0%) + var(--scene-overlay-gap)); bottom: calc(var(--scene-media-inset-y, 0%) + var(--scene-overlay-gap)); }
 :where(.home-workspace, .community-page:not(.is-reels), #g-body) .scene-card { display: flex; flex-direction: column; }
 :where(.home-workspace, .community-page:not(.is-reels), #g-body) .scene-card .community-reel-copy { display: flex; flex: 1; min-width: 0; flex-direction: column; }
 :where(.home-workspace, .community-page:not(.is-reels), #g-body) .scene-card .community-card-foot { margin-top: auto; padding-top: 16px; }
@@ -967,6 +978,7 @@ body[data-view="video"] .crumb .btn { color: var(--text); text-decoration: none;
 @media (max-width: 600px) {
   .community-grid { grid-template-columns: 1fr; gap: 32px; }
   .community-card .thumb { aspect-ratio: 4 / 5; }
+  :where(.home-workspace, .community-page:not(.is-reels):not(.community-viewer), #g-body) .scene-card .thumb { --scene-overlay-gap: 8px; }
   .community-detail { gap: 28px; }
   .publication-popover { padding: 20px; }
   body[data-view="community"] .account-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; }
@@ -984,6 +996,28 @@ body[data-view="video"] .crumb .btn { color: var(--text); text-decoration: none;
   .vside > .account-link { order: 5; }
 }
 
+/* The compact discussion reserves its space before the full panel is opened. */
+.community-inline-comments { --community-inline-comments-height: 204px; flex: none; height: var(--community-inline-comments-height); min-height: var(--community-inline-comments-height); margin-top: 16px; padding-top: 8px; overflow: hidden; border-top: 1px solid var(--line); color: var(--text); }
+.community-inline-comments-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 44px; margin-bottom: 8px; }
+.community-inline-comments-heading h4 { margin: 0; font-family: var(--sans); font-size: 14px; line-height: 1.4; font-weight: 600; }
+.community-inline-comments-heading h4 > span { margin-left: 4px; color: var(--text-muted); font-weight: 400; }
+.community-inline-comments-open { flex: none; min-height: 44px; margin-right: -8px; padding: 8px; border: 0; border-radius: var(--r-sm); background: transparent; color: var(--text); font: inherit; font-size: 13px; }
+.community-inline-comments-open:hover { background: var(--surface-2); }
+.community-inline-comments-list { display: grid; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.community-inline-comment { display: flex; align-items: flex-start; gap: 8px; height: 40px; min-width: 0; }
+.community-inline-comment > .community-avatar { width: 24px; height: 24px; margin-top: 2px; }
+.community-inline-comment > p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; min-width: 0; margin: 0; overflow: hidden; overflow-wrap: anywhere; font-family: var(--sans); font-size: 14px; line-height: 20px; }
+.community-inline-comment strong { font-weight: 600; }
+.community-inline-comments-empty { color: var(--text-muted); font-size: 14px; line-height: 20px; }
+@media (max-width: 760px), (pointer: coarse) and (max-width: 1000px) {
+  .community-inline-comments { --community-inline-comments-height: 148px; margin-top: 12px; padding-top: 0; color: var(--cinema-text); border-color: var(--cinema-line); }
+  .community-inline-comments-heading { margin-bottom: 4px; }
+  .community-inline-comments-heading h4 > span, .community-inline-comments-empty { color: var(--cinema-muted); }
+  .community-inline-comments-open { color: var(--cinema-text); }
+  .community-inline-comments-open:hover { background: var(--cinema-control); }
+  .community-inline-comment { height: auto; min-height: 24px; max-height: 40px; }
+  .community-inline-comment:nth-child(n+3) { display: none; }
+}
 /* A viewer's discussion occupies its existing information column. */
 .community-comments-panel { position: fixed; inset: auto; z-index: 92; margin: 0; padding: 12px 16px 16px; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; overflow: hidden; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); color: var(--text); box-shadow: 0 12px 32px var(--shadow); font-family: var(--sans); }
 .community-comments-panel[hidden] { display: none; }
@@ -1380,19 +1414,21 @@ body.community-reels .site-foot { display: none; }
 .community-viewer-toolbar #viewer-details { width: 72px; flex: none; min-height: 44px; padding: 8px 12px; font-size: 14px; }
 @media (min-width: 761px) and (min-height: 561px), (min-width: 1001px) {
   .community-viewer, .app-loading-viewer { position: fixed; inset: var(--workspace-header-height, 81px) 0 0 0; z-index: 15; display: flex; flex-direction: column; width: auto; max-width: none; min-height: 0; margin: 0; padding: 0; overflow: hidden; background: var(--bg); }
+  /* Full-window viewers must not inherit the later workspace .page measure. */
+  .workspace-shell .page.community-viewer, .workspace-shell .page.app-loading-viewer { max-width: none; padding: 0; }
   .community-viewer .community-viewer-toolbar, .app-loading-viewer > .loading-scene-toolbar { flex: none; }
   .community-viewer.is-reels .community-viewer-toolbar { width: 1180px; max-width: calc(100% - 112px); margin: 0 auto; padding: 10px 0; }
   .community-viewer-stage { flex: 1; min-height: 0; width: 100%; max-width: 1440px; margin: 0 auto; padding: 8px 32px 24px; display: flex; flex-direction: column; }
   .community-viewer-stage { cursor: pointer; }
   .community-viewer.is-reels .community-feed { flex: 1; height: auto; min-height: 0; border-radius: 0; background: var(--bg); }
   .community-viewer.is-reels .community-card { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); place-items: start center; padding: 12px 24px; background: var(--bg); }
-  .community-viewer.is-reels .community-viewer-scene { display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: center; width: 100%; height: 100%; max-height: 100%; overflow: visible; background: transparent; color: var(--cinema-text); cursor: default; }
+  .community-viewer.is-reels .community-viewer-scene { display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: center; width: min(100%, 1180px); height: 100%; max-height: 100%; overflow: visible; background: transparent; color: var(--cinema-text); cursor: default; }
   .community-viewer.is-reels .community-card .thumb { position: relative; inset: auto; grid-column: 1; grid-row: 1; width: min(100%, calc((100dvh - var(--workspace-header-height, 81px) - 120px) * var(--scene-ratio, 1.777777778))); height: auto; max-height: 100%; aspect-ratio: var(--scene-ratio, 16 / 9); align-self: center; justify-self: center; border-radius: var(--r-md); }
   .community-viewer.is-reels .community-reel-copy { position: relative; inset: auto; width: auto; height: 100%; min-height: 0; overflow-y: auto; grid-column: 2; grid-row: 1; display: flex; flex-direction: column; justify-content: center; padding: 24px; background: var(--bg); color: var(--text); }
   .community-viewer.is-reels .community-reel-copy::before { display: none; }
   .community-viewer.is-reels .community-author { flex-wrap: nowrap; }
   .community-viewer.is-reels .community-card-meta { flex-direction: column; gap: 8px; }
-  .community-viewer.is-reels .community-metrics { position: static; flex-direction: row; gap: 12px; margin-top: 16px; }
+  .community-viewer.is-reels .community-metrics { position: static; flex-direction: row; gap: 4px; margin-top: 16px; }
   .community-viewer.is-reels .community-metric { flex-direction: row; gap: 6px; background: transparent; }
   .community-viewer.is-reels .community-metric:hover { background: var(--cinema-control); }
   .community-viewer.is-reels .community-privacy { position: static; margin: 0; }
@@ -1419,6 +1455,7 @@ body.community-reels .site-foot { display: none; }
     position: fixed; inset: 0; z-index: 35; width: 100%; max-width: none;
     height: 100dvh; min-height: 0; margin: 0; padding: 0;
     overflow: hidden; background: var(--cinema-bg); color: var(--cinema-text);
+    --viewer-copy-height: min(372px, 52dvh);
   }
   .community-viewer.is-reels .community-viewer-toolbar {
     position: absolute; inset: 0 0 auto; z-index: 6; width: 100%; max-width: none; margin: 0;
@@ -1440,7 +1477,7 @@ body.community-reels .site-foot { display: none; }
   .community-viewer.is-reels .thumb > .badge,
   .community-viewer.is-reels .video-quality-badge { top: calc(max(12px, env(safe-area-inset-top)) + 60px); }
   .community-viewer.is-reels .community-reel-copy {
-    position: relative; inset: auto; grid-column: 1; grid-row: 2; display: block; width: 100%; height: auto; overflow: visible; color: var(--cinema-text);
+    position: relative; inset: auto; grid-column: 1; grid-row: 2; display: block; width: 100%; height: var(--viewer-copy-height); overflow-y: auto; overscroll-behavior-y: contain; pointer-events: auto; color: var(--cinema-text);
     padding: 16px 80px max(20px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
     background: var(--cinema-scrim);
   }
@@ -1465,7 +1502,7 @@ body.community-reels .site-foot { display: none; }
   .app-loading-viewer .skeleton-viewer { width: 100%; height: 100%; margin: 0; }
   .app-loading-viewer .skeleton-reel { display: grid; grid-template-rows: minmax(0, 1fr) auto; }
   .app-loading-viewer .skeleton-reel-stage { position: relative; inset: auto; width: 100%; }
-  .app-loading-viewer .skeleton-reel-copy { position: relative; inset: auto; width: 100%; padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+  .app-loading-viewer .skeleton-reel-copy { position: relative; inset: auto; width: 100%; height: var(--viewer-copy-height); overflow: hidden; padding-bottom: max(24px, env(safe-area-inset-bottom)); }
 }
 @media (orientation: landscape) and (max-height: 560px) and (max-width: 1000px) and (pointer: coarse),
        (orientation: landscape) and (max-height: 560px) and (max-width: 760px) {
@@ -1473,6 +1510,7 @@ body.community-reels .site-foot { display: none; }
   .community-viewer.is-reels .community-card .thumb { position: absolute; inset: 0; width: 60%; }
   .community-viewer.is-reels .community-reel-copy {
     position: absolute; inset: calc(max(12px, env(safe-area-inset-top)) + 60px) 0 0 auto; width: 40%;
+    height: auto;
     display: flex; flex-direction: column; justify-content: center;
     padding: 8px max(64px, calc(env(safe-area-inset-right) + 52px)) max(12px, env(safe-area-inset-bottom)) 12px;
     background: var(--cinema-bg);
@@ -1483,7 +1521,7 @@ body.community-reels .site-foot { display: none; }
   .community-viewer.is-reels .community-card:has(.publication-actions) .publication-actions { position: absolute; left: calc(-150% + 12px); bottom: 12px; width: auto; gap: 4px; }
   .app-loading-viewer .skeleton-reel { display: block; }
   .app-loading-viewer .skeleton-reel-stage { position: absolute; inset: 0 auto 0 0; width: 60%; }
-  .app-loading-viewer .skeleton-reel-copy { position: absolute; inset: 72px 64px 0 auto; width: calc(40% - 76px); padding: 0; }
+  .app-loading-viewer .skeleton-reel-copy { position: absolute; inset: 72px 64px 0 auto; width: calc(40% - 76px); height: auto; padding: 0; }
   .app-loading-viewer .skeleton-reel-metrics { top: 76px; }
 }
 
@@ -3564,10 +3602,11 @@ const skeletonLedger = () => `<div class="skeleton-ledger">${Array.from({ length
 const skeletonAction = (extra = "") => `<span class="skeleton skeleton-action ${extra}"></span>`;
 const skeletonTabs = widths => `<div class="skeleton-tabs">${widths.map(width => `<span class="skeleton" style="width:${width}px"></span>`).join("")}</div>`;
 const skeletonProfilePhoto = () => `<div class="skeleton-profile-photo"><span class="skeleton skeleton-heading"></span><div class="skeleton-profile-photo-row"><span class="skeleton skeleton-profile-avatar"></span><div class="skeleton-profile-photo-controls"><div class="skeleton-action-row">${skeletonAction()}${skeletonAction()}</div><span class="skeleton skeleton-line medium"></span></div></div><span class="skeleton skeleton-line short"></span></div>`;
-const skeletonReel = () => `<div class="skeleton-reel"><div class="skeleton-reel-stage"><span class="skeleton skeleton-reel-picture"></span></div><div class="skeleton-reel-copy"><span class="skeleton skeleton-avatar"></span>${skeletonLines()}${skeletonAction()}</div><div class="skeleton-reel-metrics">${skeletonAction()}${skeletonAction()}${skeletonAction()}</div></div>`;
+const skeletonViewerComments = () => `<div class="skeleton-viewer-comments"><span class="skeleton skeleton-line medium"></span>${Array.from({ length: 3 }, () => '<div><span class="skeleton skeleton-avatar"></span><span class="skeleton skeleton-line"></span></div>').join('')}</div>`;
+const skeletonReel = (comments = false) => `<div class="skeleton-reel"><div class="skeleton-reel-stage"><span class="skeleton skeleton-reel-picture"></span></div><div class="skeleton-reel-copy"><span class="skeleton skeleton-avatar"></span>${skeletonLines()}${skeletonAction()}${comments ? skeletonViewerComments() : ''}</div><div class="skeleton-reel-metrics">${skeletonAction()}${skeletonAction()}${skeletonAction()}</div></div>`;
 function skeletonCommunity(arg) {
   if (!arg || arg === "mine") return `<div class="skeleton-feed"><div class="skeleton-feed-grid">${skeletonScenes()}${skeletonScenes()}</div>${skeletonReel()}</div>`;
-  if (arg === "watch") return `<div class="skeleton-viewer"><div class="skeleton-viewer-unit"><span class="skeleton skeleton-viewer-picture"></span><div class="skeleton-viewer-copy"><span class="skeleton skeleton-avatar"></span>${skeletonLines()}<div class="skeleton-action-row">${skeletonAction()}${skeletonAction()}</div>${skeletonAction()}</div></div>${skeletonReel()}</div>`;
+  if (arg === "watch") return `<div class="skeleton-viewer"><div class="skeleton-viewer-unit"><span class="skeleton skeleton-viewer-picture"></span><div class="skeleton-viewer-copy"><span class="skeleton skeleton-avatar"></span>${skeletonLines()}<div class="skeleton-action-row">${skeletonAction()}${skeletonAction()}</div>${skeletonAction()}${skeletonViewerComments()}</div></div>${skeletonReel(true)}</div>`;
   return `<div class="skeleton-detail"><span class="skeleton skeleton-detail-picture"></span><div><span class="skeleton skeleton-heading"></span>${skeletonLines()}<div class="skeleton-detail-facts">${Array.from({ length: 3 }, () => '<span class="skeleton skeleton-line"></span>').join("")}</div>${skeletonLines()}${skeletonAction()}</div></div>`;
 }
 function skeletonHistory(trash) {
@@ -4075,6 +4114,16 @@ document.addEventListener("click", event => {
   const link = event.target.closest("a[href]");
   if (currentRoute().name === "signin" && link && !event.defaultPrevented && event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) clearCommunityLikeIntent(true);
 });
+/* Insets of the source frame when it is contained in the common 4:5 grid slot. */
+function communityCardMediaInsets(record) {
+  const width = Number(record?.sourceWidth), height = Number(record?.sourceHeight), target = 4 / 5;
+  const measured = width / height, format = sceneFrameNumber(record?.format);
+  const ratio = Number.isFinite(width) && width > 0 && Number.isFinite(height) && height > 0 && Number.isFinite(measured) && measured > 0
+    ? measured : Number.isFinite(format) && format > 0 ? format : target;
+  const x = Math.max(0, (1 - ratio / target) / 2) * 100;
+  const y = Math.max(0, (1 - target / ratio) / 2) * 100;
+  return `--scene-media-inset-x:${x.toFixed(6)}%;--scene-media-inset-y:${y.toFixed(6)}%;`;
+}
 /* The same publication card serves Featured, Feed and the explicit viewer. */
 function communityCardMarkup(p, { mine = false, immersive = false, featured = false, index = 0 } = {}) {
   const preview = recordOfficialExample(p), poster = officialPoster(preview), setupAvailable = isModelAvailable(p.model);
@@ -4087,8 +4136,8 @@ function communityCardMarkup(p, { mine = false, immersive = false, featured = fa
   const image = poster ? `<img src="${esc(poster)}" data-hover-example="${esc(preview.id)}" alt="${esc(preview.alt)}" loading="${index === 0 ? "eager" : "lazy"}" fetchpriority="${index === 0 ? "high" : "auto"}" decoding="async">` : "";
   const fallback = featured ? `<span class="home-scene-fallback" aria-hidden="true">${icon("play", 24)}<span>Preview unavailable</span></span><span class="skeleton home-poster-loading" aria-hidden="true"></span>` : !poster ? '<span>Preview unavailable</span>' : "";
   return `<article class="community-card scene-card${featured ? ` home-scene-card${frameClass}` : ""}" data-reel-post="${esc(p.id)}" data-source-format="${esc(preview?.format || p.format || "")}"${featured ? ` data-home-scene="${esc(p.id)}"` : ""}${p.official ? ' data-official-example="true"' : ""}>
-    <a class="thumb community-watch${mediaClass}${poster ? "" : " community-no-preview"}" href="${communityWatchHref(p.id, mine, currentRoute().name === 'create')}" aria-label="Watch ${esc(p.caption)}">${fallback}${image}${poster && Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}${videoQualityBadgeMarkup(preview)}<span class="scene-card-play" aria-hidden="true">${icon("play", 18)}</span></a>
-    <div class="community-reel-copy${featured ? " home-scene-heading" : ""}">${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview, { withAvatar: false }) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${facts}</p>${communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div></div>
+    <a class="thumb community-watch${mediaClass}${poster ? "" : " community-no-preview"}" style="${communityCardMediaInsets(preview || p)}" href="${communityWatchHref(p.id, mine, currentRoute().name === 'create')}" aria-label="Watch ${esc(p.caption)}">${fallback}${image}${poster && Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}${videoQualityBadgeMarkup(preview)}<span class="scene-card-play" aria-hidden="true">${icon("play", 18)}</span></a>
+    <div class="community-reel-copy${featured ? " home-scene-heading" : ""}">${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview, { withAvatar: false }) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${facts}</p>${communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div>${immersive && currentRoute().arg === 'watch' ? communityCommentPreviewMarkup(p) : ''}</div>
   </article>`;
 }
 function communityCards(limit = 6, mine = false, immersive = false) {
@@ -4280,13 +4329,31 @@ function communityCommentsTrigger(post) {
   const count = communityCommentCount(post.id);
   return `<button class="community-metric community-comments-trigger" data-community-metric="comments" data-comments-post="${esc(post.id)}" type="button" aria-controls="community-comments-panel" aria-expanded="false" aria-label="${fmt(count)} ${count === 1 ? "comment" : "comments"}">${icon("comment", 18)}<span class="num" data-comment-count aria-hidden="true">${fmt(count)}</span></button>`;
 }
+function communityRecentComments(id) {
+  return communityComments().filter(row => row.postId === id).sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
+}
+function communityCommentPreviewRows(rows) {
+  return rows.length ? rows.slice(0, 3).map(row => `<li class="community-inline-comment">${communityAvatarMarkup({ author: row.author, avatar: row.avatar })}<p><strong>${esc(row.author)}</strong> <span>${esc(row.body)}</span></p></li>`).join('') : '<li class="community-inline-comments-empty">No comments yet.</li>';
+}
+function communityCommentPreviewMarkup(post) {
+  const rows = communityRecentComments(post.id), count = rows.length;
+  return `<section class="community-inline-comments" data-comments-preview="${esc(post.id)}" aria-label="Recent comments"><div class="community-inline-comments-heading"><h4>Comments <span class="num" data-preview-count>${fmt(count)}</span></h4><button class="community-inline-comments-open" data-comments-post="${esc(post.id)}" type="button" aria-controls="community-comments-panel" aria-expanded="false" aria-label="${count ? `View all ${fmt(count)} comments` : 'Add a comment'}"><span data-preview-open-label>${count ? 'View all' : 'Add comment'}</span><span class="sr" data-comment-count>${fmt(count)}</span></button></div><ol class="community-inline-comments-list" aria-label="Recent comments">${communityCommentPreviewRows(rows)}</ol></section>`;
+}
+function refreshCommunityCommentPreviews(id, rows = communityRecentComments(id)) {
+  $$('[data-comments-preview]').filter(preview => preview.dataset.commentsPreview === id).forEach(preview => {
+    $('[data-preview-count]', preview).textContent = fmt(rows.length);
+    $('[data-preview-open-label]', preview).textContent = rows.length ? 'View all' : 'Add comment';
+    $('.community-inline-comments-list', preview).innerHTML = communityCommentPreviewRows(rows);
+  });
+}
 ICONS.comment = '<path d="M13.5 8.7a1.8 1.8 0 0 1-1.8 1.8H6L2.5 13V4.5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2Z"/><path d="M5.5 5.5h5M5.5 7.5h3"/>';
 function refreshCommunityComments(id) {
   const count = communityCommentCount(id);
   $$('[data-comments-post]').filter(button => button.dataset.commentsPost === id).forEach(button => {
     $('[data-comment-count]', button).textContent = fmt(count);
-    button.setAttribute('aria-label', `${fmt(count)} ${count === 1 ? 'comment' : 'comments'}`);
+    button.setAttribute('aria-label', button.classList.contains('community-inline-comments-open') ? (count ? `View all ${fmt(count)} comments` : 'Add a comment') : `${fmt(count)} ${count === 1 ? 'comment' : 'comments'}`);
   });
+  refreshCommunityCommentPreviews(id);
 }
 const communityCommentsPanel = document.createElement('section');
 communityCommentsPanel.id = 'community-comments-panel';
@@ -4524,7 +4591,7 @@ window.visualViewport?.addEventListener('resize', positionCommunityComments);
 window.visualViewport?.addEventListener('scroll', positionCommunityComments);
 window.addEventListener('storage', event => {
   if (event.key === COMMUNITY_COMMENTS_STORE) {
-    $$('[data-comments-post]').forEach(button => refreshCommunityComments(button.dataset.commentsPost));
+    new Set($$('[data-comments-post]').map(button => button.dataset.commentsPost)).forEach(id => refreshCommunityComments(id));
     renderCommunityCommentList();
   }
 });
