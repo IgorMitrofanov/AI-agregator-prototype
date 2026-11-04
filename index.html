@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aurora</title>
+<title>Loom</title>
 <meta name="theme-color" content="#d7d6d1">
 <script>
   /* Set the theme before first paint: stored choice, else the system setting. */
@@ -653,6 +653,15 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 }
 
 .landing { max-width: 1360px; margin: auto; padding: 40px 32px 72px; }
+.home-create-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 40px; }
+.home-create-action { display: flex; align-items: center; gap: 16px; min-height: 100px; padding: 24px; border: 1px solid var(--field-line); border-radius: var(--r-sm); background: var(--surface); color: var(--text); font-weight: 600; text-decoration: none; }
+.home-create-action:hover { background: var(--surface-2); }
+.community-prompt-action { gap: 8px; }
+@media (max-width: 760px) {
+  .home-create-actions { gap: 8px; margin-bottom: 28px; }
+  .home-create-kind { display: block; }
+  .home-create-action { flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 12px; padding: 16px 12px; font-size: 14px; }
+}
 .home-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px 24px; margin-bottom: 28px; }
 .home-heading-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
 .home-heading h1 { min-width: 0; font-size: 36px; line-height: 1.15; letter-spacing: -0.015em; text-wrap: balance; }
@@ -894,7 +903,7 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 @media (pointer: coarse), (max-width: 760px) { .community-metric { min-width: 44px; min-height: 44px; } }
 .community-detail .community-metrics { margin: -12px 0 24px; }
 .community-use { display: grid; place-items: center; flex: none; width: 44px; height: 44px; margin-top: 16px; padding: 0; }
-.community-prompt-action { display: grid; place-items: center; width: 48px; height: 48px; padding: 0; }
+.community-prompt-action { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 12px 16px; }
 .community-card-foot { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
 .community-card-foot > .community-use, .community-card-foot > .community-privacy { margin-top: 0; }
 .publication-actions { display: flex; align-items: center; gap: 4px; margin-left: auto; }
@@ -1898,7 +1907,7 @@ body:not(.review-mode) .prototype-options, body:not(.review-mode) .model-notice 
 <a class="skip" href="#main">Skip to content</a>
 <header class="top" id="top"></header>
 <main id="main" tabindex="-1"></main>
-<footer class="site-foot"><span>Aurora</span><a href="#/home">Home</a><a href="#/community">Feed</a><a href="#/terms">Terms of service</a><a href="#/privacy">Privacy policy</a></footer>
+<footer class="site-foot"><span>Loom</span><a href="#/home">Home</a><a href="#/community">Feed</a><a href="#/terms">Terms of service</a><a href="#/privacy">Privacy policy</a></footer>
 <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
 <dialog id="dlg" aria-labelledby="dlg-title"></dialog>
 
@@ -1925,7 +1934,7 @@ const CONFIG = {
     { id: "s2", credits: 4000,  usd: 29, note: "Each month" },
     { id: "s3", credits: 10000, usd: 65, note: "Each month" },
   ],
-  referral: { link: "aurora.example/r/alex-k4m2", invited: REVIEW ? 12 : 0, signedUp: REVIEW ? 7 : 0, bought: REVIEW ? 3 : 0, subscribers: 0, earnedUsd: 0, networkRates: [10, 5, 3], rewardBasis: "paid_credit_purchases" },
+  referral: { link: "loom-ai.pro/r/alex-k4m2", invited: REVIEW ? 12 : 0, signedUp: REVIEW ? 7 : 0, bought: REVIEW ? 3 : 0, subscribers: 0, earnedUsd: 0, networkRates: [10, 5, 3], rewardBasis: "paid_credit_purchases" },
 };
 const IMG = {"runway_example": "assets/posters/runway_example.jpg", "kling_example": "assets/posters/kling_example.jpg", "kling_product": "assets/posters/kling_product.jpg", "kling_portrait": "assets/posters/kling_portrait.jpg", "seedance_standard": "assets/posters/seedance_standard.jpg", "kling4_doorway": "assets/posters/kling4_doorway.jpg", "kling4_corgi": "assets/posters/kling4_corgi.jpg", "kling4_fashion": "assets/posters/kling4_fashion.jpg", "kling4_canyon": "assets/posters/kling4_canyon.jpg", "avatar_runway": "assets/posters/avatar_runway.png", "avatar_kling": "assets/posters/avatar_kling.png", "avatar_byteplus": "assets/posters/avatar_byteplus.png", "avatar_deepmind": "assets/posters/avatar_deepmind.png", "avatar_dave": "assets/posters/avatar_dave.jpg"};
 
@@ -1988,7 +1997,7 @@ const cost = d => {
 };
 const frameRatio = format => /^\d+(?:\.\d+)?:\d+(?:\.\d+)?$/.test(format || "") ? format.replace(":", "/") : "16/9";
 
-/* Published provider examples. Suggested prompts are Aurora's own starting points. */
+/* Published provider examples. Suggested prompts are Loom's own starting points. */
 const OFFICIAL_EXAMPLES = [
   {
     id: "example-runway-kitchen", model: "runway", modelName: "Runway Gen-4.5", providerName: "Runway", caption: "A kitchen in moving light",
@@ -2315,7 +2324,7 @@ const OFFICIAL_EXAMPLES = [
     "curatedAt": "2026-11-02T00:35:01+03:00",
     "prompt": "Follow a person in a coat out of a warmly lit cafe and into a cool evening street, continuing toward a subway entrance in one steady shot."
   }
-].map(example => ({ ...example, curatedAt: example.curatedAt || "2026-11-01T01:55:49+03:00" })); // Aurora registration, not the provider's publication date. Older fourteen: 6d37da5.
+].map(example => ({ ...example, curatedAt: example.curatedAt || "2026-11-01T01:55:49+03:00" })); // Loom registration, not the provider's publication date. Older fourteen: 6d37da5.
 const officialExample = modelId => OFFICIAL_EXAMPLES.find(example => example.model === modelId) || null;
 const officialPoster = record => IMG[record?.img] || record?.posterUrl || "";
 
@@ -2640,7 +2649,7 @@ function renderChrome() {
   const activeRoute = currentRoute().name;
   const r = activeRoute === "video" ? (privateVideoReturnContext()?.path === "#/create?gallery=videos" ? "create" : "history") : activeRoute;
   const signed = S.signedIn;
-  $("#top").innerHTML = `<div class="top-in"><a class="logo" href="#/home" aria-label="Aurora, home">Aurora</a>${signed ? `
+  $("#top").innerHTML = `<div class="top-in"><a class="logo" href="#/home" aria-label="Loom, home">Loom</a>${signed ? `
     <nav class="nav" aria-label="Main">${NAV.map(([k, l]) => `<a href="#/${k}" ${r === k || (k === "history" && r === "video") ? 'aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
     <a class="bal" href="${S.plan?.state === "active" ? "#/account/billing" : "#/plans"}" aria-label="${walletLabel()}" title="${fmt(S.balance)} credits"><span class="balance-amount"><b class="num" id="bal-n">${walletAmount(S.balance)}</b>${icon("credits", 16)}</span><span class="header-plan" id="header-plan">${S.plan?.state === "active" ? `<span><span class="wallet-status-text">Monthly</span></span><b class="num">${walletAmount(S.plan.credits)}/month</b>` : '<b><span class="wallet-status-text">Free</span></b>'}</span></a>
     <div class="acct"><button class="avatar" id="acct-btn" type="button" aria-expanded="${menuOpen}" aria-controls="menu" aria-label="Account menu">${accountAvatarMarkup(accountUser())}</button>
@@ -2683,7 +2692,9 @@ mobileChrome.addEventListener("change", () => {
 const go = r => { location.hash = "#/" + r; };
 function currentRoute() { const [name, arg] = location.hash.replace(/^#\/?/, "").split("?")[0].split("/"); return { name: name || (S.signedIn ? "create" : "home"), arg }; }
 const TITLES = { home: "Home", community: "Feed", account: "Your account", create: "Create", history: "My videos", plans: "Plans", referrals: "Referrals", video: "Video", signin: "Sign in", terms: "Terms of service", privacy: "Privacy policy" };
-let afterSignIn = "create";
+// Preserve only the selected media type across a sign-in page reload.
+const signInMedia = new URLSearchParams(location.hash.split("?")[1] || "").get("media");
+let afterSignIn = currentRoute().name === "signin" && ["image", "audio"].includes(signInMedia) ? "create/" + signInMedia : "create";
 function signInDestination(destination = "create") {
   const path = String(destination || "create").replace(/^#\/?/, ""), pathname = path.split("?")[0];
   return ["create", "create/image", "create/audio", "history", "history/trash"].includes(pathname) || /^video\/\d+$/.test(pathname) || /^community(?:\/[a-zA-Z0-9_-]+)?$/.test(pathname) ? path : "create";
@@ -2698,7 +2709,7 @@ function route(options = {}) {
   cancelViewLoad();
   if (disposeView) { disposeView(); disposeView = null; }
   let { name, arg } = currentRoute();
-  if (!S.signedIn && !["home", "community", "signin", "terms", "privacy"].includes(name)) { afterSignIn = signInDestination(location.hash); go("signin"); return; }
+  if (!S.signedIn && !["home", "community", "signin", "terms", "privacy"].includes(name)) { afterSignIn = signInDestination(location.hash); go(name === "create" && ["image", "audio"].includes(arg) ? "signin?media=" + arg : "signin"); return; }
   if (S.signedIn && name === "signin") { go("create"); return; }
   if (name === "account" && !ACCOUNT_NAV.some(([id]) => id === arg)) {
     arg = "credits";
@@ -2710,7 +2721,7 @@ function route(options = {}) {
   menuOpen = false; mobileNavOpen = false; renderChrome();
   const main = $("#main");
   document.body.dataset.view = name;
-  document.title = (TITLES[name] || "Aurora") + " · Aurora";
+  document.title = (TITLES[name] || "Loom") + " · Loom";
   if (!options.preserve) window.scrollTo(0, 0);
   const mount = (focus = !options.preserve) => { const init = views[name](main, arg); main.setAttribute("aria-busy", "false"); if (focus) { const h = $("#title"); (h || main).focus({ preventScroll: true }); } if (init) { const cleanup = init(); if (typeof cleanup === "function") disposeView = cleanup; } if (previousFocus) document.getElementById(previousFocus)?.focus({ preventScroll: true }); else if (previousHref) $$('a[href]').find(a => a.getAttribute('href') === previousHref && a.getClientRects().length)?.focus({ preventScroll: true }); };
   if (!(name === "create" && ["image", "audio"].includes(arg)) && loadView(main, name, arg, mount)) return;
@@ -3138,7 +3149,7 @@ function viewPlans(main) {
     <div class="plan-layout"><div class="plan-options"><nav class="seg plan-tabs" aria-label="Purchase type">${[["packs", "Credit packs"], ["subs", "Monthly subscription"]].map(([id, label]) => `<button type="button" data-ptab="${id}" aria-pressed="${tab === id}">${label}</button>`).join("")}</nav>
       <fieldset class="opts" id="opts"><legend class="sr">${sub ? "Choose a monthly plan" : "Choose a credit pack"}</legend>${list.map(o => `<label class="opt"><input type="radio" name="opt" value="${o.id}" ${o.id === picked.id ? "checked" : ""}><span class="dot"></span><span><b class="num">${fmt(o.credits)} credits</b><span class="d">${sub ? active && current?.id === o.id ? "Current plan" : active && S.plan.pendingChange?.id === o.id ? "Scheduled for next payment" : "Each month" : esc(o.note)}</span></span><span class="p num">$${o.usd}<small>${sub ? "per month" : "one payment"}</small></span></label>`).join("")}</fieldset></div>
       <aside class="plan-summary" aria-labelledby="summary-heading"><h2 id="summary-heading">${sub ? active ? "Your selection" : "Monthly credits" : "Extra credits"}</h2><p class="plan-summary-credits num" id="s-big"></p><p class="plan-summary-price num" id="s-price"></p><div id="plan-action"></div><p class="fine muted" id="fine"></p><div id="plan-change-review" hidden></div></aside>
-      <section class="plan-estimate" aria-labelledby="estimate-heading"><div class="plan-brand" aria-hidden="true"><span>Aurora</span></div><div class="estimate-calculator"><h2 id="estimate-heading">Credit estimate</h2>${models.length ? `
+      <section class="plan-estimate" aria-labelledby="estimate-heading"><div class="plan-brand" aria-hidden="true"><span>Loom</span></div><div class="estimate-calculator"><h2 id="estimate-heading">Credit estimate</h2>${models.length ? `
         <fieldset class="estimate-settings"><legend class="sr">Generation settings for your estimate</legend>
           <div class="estimate-model-field"><label for="estimate-model">Model</label><select id="estimate-model">${models.map(model => `<option value="${esc(model.id)}" ${model.id === estimate.id ? "selected" : ""}>${esc(model.name)}</option>`).join("")}</select></div>
           <div><label for="estimate-quality">Quality</label><select id="estimate-quality"></select></div>
@@ -3265,7 +3276,7 @@ function viewReferrals(main) {
 function viewLegal(main) {
   const priv = currentRoute().name === "privacy";
   main.innerHTML = `<div class="legal"><h1 id="title" tabindex="-1">${priv ? "Privacy policy" : "Terms of service"}</h1>
-    <p>${priv ? "How Aurora collects and uses your data will be written here." : "The offer text will be written here."}</p>
+    <p>${priv ? "How Loom collects and uses your data will be written here." : "The offer text will be written here."}</p>
     <a class="btn" href="${S.signedIn ? "#/create" : "#/signin"}">Back</a></div>`;
   return null;
 }
@@ -3274,7 +3285,7 @@ function viewLegal(main) {
 function viewSignin(main) {
   let step = 1, email = "";
   const draw = (focusInput = false) => {
-    main.innerHTML = `<div class="signin"><h1 id="title" tabindex="-1">${step === 1 ? "Sign in to Aurora" : "Check your email"}</h1>
+    main.innerHTML = `<div class="signin"><h1 id="title" tabindex="-1">${step === 1 ? "Sign in to Loom" : "Check your email"}</h1>
       <p class="muted">${step === 1 ? "Enter your email to sign in or create an account." : `Enter the verification code for ${esc(email)}.`}</p>
       <form id="sf" novalidate>${step === 1 ? `<div><label for="em">Email</label><input id="em" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" value="${esc(email)}"><p class="err" id="e" role="alert" hidden>${icon("warn", 14)}Enter a valid email, like you@example.com.</p></div><button class="go" type="submit" style="justify-content:center">Send code</button>`
         : `<div><label for="cd">6-digit code</label><input class="code" id="cd" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000"><p class="err" id="e" role="alert" hidden>${icon("warn", 14)}Enter all 6 digits.</p></div><button class="go" type="submit" style="justify-content:center">Sign in</button>
@@ -3607,7 +3618,8 @@ function viewHome(main) {
   const cards = scenes.map((scene, index) => communityCardMarkup(scene, { featured: true, index })).join("");
 
   main.innerHTML = `<div class="landing home-workspace">
-    <header class="home-heading"><h1 id="title" tabindex="-1">Trending</h1><div class="home-heading-actions"><a class="btn" href="#/community">View feed</a><a class="btn primary home-create" href="#/create">Create video</a></div></header>
+    <nav class="home-create-actions" aria-label="Create media">${["image", "video", "audio"].map(id => { const type = CREATE_MEDIA_TYPES.find(item => item.id === id); return `<a href="#/${type.route}" class="home-create-action">${icon(type.icon, 24)}<span>Create <span class="home-create-kind">${id}</span></span></a>`; }).join("")}</nav>
+    <header class="home-heading"><h1 id="title" tabindex="-1">Trending</h1><div class="home-heading-actions"><a class="btn" href="#/community">View feed</a></div></header>
     <section class="home-scenes" aria-label="Ready-made scenes"><div class="community-grid home-scene-grid">${cards}</div></section>
     ${REVIEW ? '<div class="home-review"><button class="linkbtn" id="explore-demo" type="button">Explore workspace</button></div>' : ""}
   </div>`;
@@ -3868,7 +3880,7 @@ function communityPublicationTimestamp(post) {
 function communityPublicationDateMarkup(post) {
   const timestamp = communityPublicationTimestamp(post);
   if (timestamp === null) return "";
-  const label = communityDateFormat.format(new Date(timestamp)), meaning = `${post.official ? "Added to Aurora" : "Published"} ${label}`;
+  const label = communityDateFormat.format(new Date(timestamp)), meaning = `${post.official ? "Added to Loom" : "Published"} ${label}`;
   return `<time class="community-publication-date" datetime="${esc(post.official ? post.curatedAt : post.createdAt)}" aria-label="${esc(meaning)}" title="${esc(meaning)}">${post.official ? "Added " : ""}${esc(label)}</time>`;
 }
 const COMMUNITY_SHUFFLE_STORE = "aurora-community-shuffle-seed-v1";
@@ -4018,9 +4030,8 @@ function communityLikeContinuation(destination) {
 }
 function communityMetricItems(p) {
   const counts = communityCounts(p.id);
-  const metric = (key, label) => `<button class="community-metric" data-community-metric="${key}" type="button" aria-label="${fmt(counts[key])} ${label}">${icon(key === "views" ? "eye" : "reuse", 16)}<span class="num" data-community-count="${key}" aria-hidden="true">${fmt(counts[key])}</span></button>`;
   const like = `<button class="community-metric community-like" data-community-metric="likes" data-community-like="${esc(p.id)}" type="button" aria-pressed="${communityLiked(p.id)}" aria-label="${communityLikeLabel(p.id, counts.likes)}">${icon("heart", 18)}<span class="num" data-community-count="likes" aria-hidden="true">${fmt(counts.likes)}</span></button>`;
-  return `${like}${typeof communityCommentsTrigger === "function" ? communityCommentsTrigger(p) : ""}${metric("views", counts.views === 1 ? "view" : "views")}${p.includePrompt && p.prompt ? metric("promptUses", counts.promptUses === 1 ? "prompt use" : "prompt uses") : ""}`;
+  return `${like}${typeof communityCommentsTrigger === "function" ? communityCommentsTrigger(p) : ""}${p.includePrompt && p.prompt ? `<a class="community-metric" href="#/community/${encodeURIComponent(p.id)}?prompt=show" data-community-tooltip="View and reuse prompt" aria-label="View and reuse prompt, ${fmt(counts.promptUses)} uses">${icon("reuse", 16)}<span class="num" data-community-count="promptUses">${fmt(counts.promptUses)}</span></a>` : ""}`;
 }
 function communityMetrics(p, live = false) {
   return `<p class="community-metrics" data-community-post="${esc(p.id)}" ${live ? 'aria-live="polite" aria-atomic="true"' : ""}>${communityMetricItems(p)}</p>`;
@@ -4063,7 +4074,7 @@ function showCommunityMetricTooltip(button, pinned = false) {
   clearTimeout(communityMetricDismiss); communityMetricDismiss = null;
   communityMetricPinned = pinned || (communityMetricAnchor === button && communityMetricPinned);
   communityMetricAnchor = button;
-  communityMetricTooltip.textContent = button.classList.contains("community-metric") ? { likes: button.getAttribute("aria-pressed") === "true" ? "Unlike" : "Like", comments: "Comments", views: "Views", promptUses: "Prompt uses", private: "Private prompt" }[button.dataset.communityMetric] || "" : button.dataset.communityTooltip || button.getAttribute("aria-label");
+  communityMetricTooltip.textContent = button.dataset.communityTooltip || (button.classList.contains("community-metric") ? { likes: button.getAttribute("aria-pressed") === "true" ? "Unlike" : "Like", comments: "Comments", views: "Views", promptUses: "Prompt uses", private: "Private prompt" }[button.dataset.communityMetric] || "" : button.dataset.communityTooltip || button.getAttribute("aria-label"));
   communityMetricTooltip.hidden = false; positionCommunityMetricTooltip();
 }
 function dismissCommunityMetricTooltipSoon() {
@@ -4346,9 +4357,10 @@ function viewCommunity(main, arg) {
   main.innerHTML = `<div class="page"><a class="btn" href="#/community">Back</a><div class="community-detail"><div class="community-detail-media">${player}${videoQualityBadgeMarkup(preview)}</div><aside>
     <h1 id="title" tabindex="-1">${esc(p.caption)}</h1>${communityPublisherMarkup(p)}${communityMetrics(p, true)}
     <dl class="facts"><div><dt>Model</dt><dd>${esc(recordModel(p).name)}</dd></div>${preview && Number.isFinite(preview.len) && preview.len > 0 ? `<div><dt>${p.official ? "Length" : "Preview length"}</dt><dd class="num">${preview.len} s</dd></div>` : ""}${preview && (preview.quality || preview.format) ? `<div><dt>Frame</dt><dd>${[preview.quality, preview.format].filter(Boolean).map(esc).join(" · ")}</dd></div>` : ""}</dl>
-    <section class="community-prompt"><h2>${p.includePrompt ? p.promptKind === "suggested" ? "Suggested prompt" : "Creator’s prompt" : "A private prompt"}</h2><p>${p.includePrompt ? esc(p.prompt) : "The creator has chosen not to share the prompt."}</p>${p.includePrompt && !setupAvailable ? '<p>Choose an available model in Create.</p>' : ""}${p.includePrompt ? `<button class="btn primary community-prompt-action" id="use-community-prompt" type="button" aria-label="${promptActionLabel}">${icon("setup", 20)}</button>` : '<a class="btn" href="#/create">Create your own scene</a>'}</section>
+    <section class="community-prompt" id="shared-prompt" tabindex="-1"><h2>${p.includePrompt ? p.promptKind === "suggested" ? "Suggested prompt" : "Creator’s prompt" : "A private prompt"}</h2><p>${p.includePrompt ? esc(p.prompt) : "The creator has chosen not to share the prompt."}</p>${p.includePrompt && !setupAvailable ? '<p>Choose an available model in Create.</p>' : ""}${p.includePrompt ? `<button class="btn primary community-prompt-action" id="use-community-prompt" type="button" aria-label="${promptActionLabel}">${icon("setup", 20)}<span>${setupAvailable ? "Use this setup" : "Use prompt"}</span></button>` : '<a class="btn" href="#/create">Create your own scene</a>'}</section>
     ${publicationActionsMarkup(p, { detail: true })}</aside></div></div>`;
   return () => {
+    if (new URLSearchParams(location.hash.split("?")[1] || "").get("prompt") === "show") { $("#shared-prompt")?.focus(); }
     $("#use-community-prompt")?.addEventListener("click", () => beginCommunitySetup(p.id));
     return preview ? initOfficialMedia(preview, { id: "community-example-media", autoplay: true, onPlay: () => recordCommunityView(p.id) }) : null;
   };
@@ -5048,7 +5060,7 @@ function refreshTrashUI() {
 }
 function viewTrash(main) {
   pruneExpiredTrash();
-  document.title = "Recently deleted · Aurora";
+  document.title = "Recently deleted · Loom";
   main.innerHTML = `<div class="page trash-page"><header><h1 id="title" tabindex="-1">Recently deleted</h1><p class="sub">Restore a video to keep it. Restored videos are private.</p></header>${historyNavigation("trash")}<div id="trash-body"></div></div>`;
   return () => drawTrash();
 }
@@ -5841,13 +5853,13 @@ function renderWorkspaceChrome() {
   if (!sidebar) {
     sidebar = document.createElement("aside"); sidebar.id = "workspace-sidebar"; sidebar.className = "workspace-sidebar"; sidebar.setAttribute("aria-label", "Workspace"); $("#top").before(sidebar);
   }
-  sidebar.innerHTML = `<a class="logo sidebar-brand" href="#/home" aria-label="Aurora, home">Aurora</a><nav class="workspace-navigation" aria-label="Main navigation">${workspaceLinksMarkup()}</nav>${workspaceFooterMarkup()}`;
+  sidebar.innerHTML = `<a class="logo sidebar-brand" href="#/home" aria-label="Loom, home">Loom</a><nav class="workspace-navigation" aria-label="Main navigation">${workspaceLinksMarkup()}</nav>${workspaceFooterMarkup()}`;
   $(".workspace-navigation", sidebar).scrollTop = sidebarScroll;
   const allowance = S.plan?.state === "active" ? (mobileChrome.matches ? walletCompact.format(S.plan.credits) : walletAmount(S.plan.credits)) : "";
   const period = mobileChrome.matches && allowance.length > 2 ? "mo" : "month";
   const wallet = S.signedIn ? `<a class="bal" href="${S.plan?.state === "active" ? "#/account/billing" : "#/plans"}" aria-label="${walletLabel()}" title="${fmt(S.balance)} credits"><span class="balance-amount"><b class="num" id="bal-n">${walletAmount(S.balance)}</b>${icon("credits", 16)}</span><span class="header-plan" id="header-plan">${S.plan?.state === "active" ? `<span><span class="wallet-status-text">Monthly</span></span><b class="num">${allowance}/${period}</b>` : '<b><span class="wallet-status-text">Free</span></b>'}</span></a>` : '<a class="btn primary workspace-header-signin" href="#/signin">Sign in</a>';
   const portrait = S.signedIn ? `<div class="acct workspace-profile"><a class="workspace-profile-link" id="profile-shortcut" href="#/account/profile" aria-label="Your profile" title="${esc(accountUser().name)}"><span class="workspace-avatar-frame">${accountAvatarMarkup(accountUser())}</span></a></div>` : "";
-  $("#top").innerHTML = `<div class="top-in${S.signedIn ? " is-signed-in" : " is-guest"}"><button class="mobile-nav-btn" id="mobile-nav-btn" type="button" aria-expanded="${mobileNavOpen}" aria-controls="mobile-navigation" aria-label="${mobileNavOpen ? "Close navigation" : "Open navigation"}">${icon(mobileNavOpen ? "x" : "navigation", 22)}</button><a class="logo" href="#/home" aria-label="Aurora, home">Aurora</a><span class="workspace-location">Workspace</span>${wallet}${portrait}</div><nav class="mobile-navigation" id="mobile-navigation" aria-label="Main navigation" ${mobileNavOpen ? "" : "hidden"}><div class="mobile-navigation-content">${S.signedIn ? `<p class="workspace-mobile-name">${esc(accountUser().name)}</p>` : ""}${workspaceLinksMarkup(true)}${workspaceFooterMarkup(true)}</div></nav>`;
+  $("#top").innerHTML = `<div class="top-in${S.signedIn ? " is-signed-in" : " is-guest"}"><button class="mobile-nav-btn" id="mobile-nav-btn" type="button" aria-expanded="${mobileNavOpen}" aria-controls="mobile-navigation" aria-label="${mobileNavOpen ? "Close navigation" : "Open navigation"}">${icon(mobileNavOpen ? "x" : "navigation", 22)}</button><a class="logo" href="#/home" aria-label="Loom, home">Loom</a><span class="workspace-location">Workspace</span>${wallet}${portrait}</div><nav class="mobile-navigation" id="mobile-navigation" aria-label="Main navigation" ${mobileNavOpen ? "" : "hidden"}><div class="mobile-navigation-content">${S.signedIn ? `<p class="workspace-mobile-name">${esc(accountUser().name)}</p>` : ""}${workspaceLinksMarkup(true)}${workspaceFooterMarkup(true)}</div></nav>`;
   document.body.classList.toggle("workspace-nav-open", mobileNavOpen && mobileChrome.matches);
   if (mobileNavOpen && mobileChrome.matches) $("#mobile-navigation").scrollTop = panelScroll;
 }
@@ -5896,7 +5908,7 @@ function viewSignin(main) {
   };
   const draw = (focusInput = false) => {
     stopGoogle();
-    main.innerHTML = `<div class="signin signin-options"><h1 id="title" tabindex="-1">${step === 1 ? "Sign in to Aurora" : "Check your email"}</h1>
+    main.innerHTML = `<div class="signin signin-options"><h1 id="title" tabindex="-1">${step === 1 ? "Sign in to Loom" : "Check your email"}</h1>
       <p class="muted">${step === 1 ? "Sign in or create an account." : `Enter the verification code for ${esc(email)}.`}</p>
       ${step === 1 ? `<button class="btn signin-google" type="button" id="signin-google">${signinGoogleIcon()}<span>Continue with Google</span></button>
         <div class="signin-google-status" id="signin-google-status" hidden><p role="alert">Google sign-in is unavailable right now.</p><button class="btn" id="signin-email-fallback" type="button">Continue with email</button></div>
