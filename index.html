@@ -1401,7 +1401,8 @@ body.community-reels .site-foot { display: none; }
 .community-viewer-steps { display: flex; gap: 4px; }
 .community-viewer-steps button:disabled { color: var(--text-muted); opacity: .45; cursor: default; }
 .community-viewer-steps .reel-step-down { transform: rotate(180deg); }
-.community-viewer-toolbar #viewer-details { width: 72px; flex: none; min-height: 44px; padding: 8px 12px; font-size: 14px; }
+.community-viewer-toolbar #viewer-use-prompt[hidden] { display: none; }
+.community-viewer-toolbar #viewer-use-prompt { width: 104px; white-space: nowrap; flex: none; min-height: 44px; padding: 8px 12px; font-size: 14px; }
 @media (min-width: 761px) and (min-height: 561px), (min-width: 1001px) {
   .community-viewer, .app-loading-viewer { position: fixed; inset: var(--workspace-header-height, 81px) 0 0 0; z-index: 15; display: flex; flex-direction: column; width: auto; max-width: none; min-height: 0; margin: 0; padding: 0; overflow: hidden; background: var(--bg); }
   /* Full-window viewers must not inherit the later workspace .page measure. */
@@ -1533,6 +1534,48 @@ body.community-reels .site-foot { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .reel-like-feedback.is-visible { animation: none; opacity: 1; transform: translate(-50%, -50%); }
+}
+
+/* Compact actions below the caption in the mobile browse feed. */
+.community-browse.is-reels .community-metrics {
+  position: static;
+  flex-direction: row;
+  gap: 4px;
+  margin-top: 4px;
+}
+.community-browse.is-reels .community-metric {
+  flex-direction: row;
+  gap: 4px;
+  background: transparent;
+  border: 0;
+}
+.community-browse.is-reels .community-metric > .ic { width: 16px; height: 16px; }
+
+@media (max-width: 760px), (pointer: coarse) and (max-width: 1000px) {
+  .community-viewer.is-reels .community-viewer-scene { display: block; position: relative; }
+  .community-viewer.is-reels .community-card .thumb { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .community-viewer.is-reels .thumb > img,
+  .community-viewer.is-reels .thumbnail-live-preview > video { object-fit: cover; }
+  .community-viewer.is-reels .community-reel-copy {
+    position: absolute; inset: auto 0 0;
+    display: block; width: 100%; height: auto; overflow: visible;
+    padding: 32px max(76px, calc(env(safe-area-inset-right) + 64px)) max(20px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    background: linear-gradient(transparent, var(--cinema-scrim));
+    pointer-events: none;
+  }
+  .community-viewer.is-reels .community-metrics {
+    top: auto; bottom: max(24px, env(safe-area-inset-bottom));
+    gap: 4px;
+  }
+  .community-viewer.is-reels .community-metric,
+  .community-viewer.is-reels .community-metric:hover {
+    background: transparent; border: 0;
+    text-shadow: 0 1px 3px var(--cinema-bg);
+  }
+  .community-viewer.is-reels .community-metric > .ic {
+    width: 18px; height: 18px;
+    filter: drop-shadow(0 1px 2px var(--cinema-bg));
+  }
 }
 
 /* Direction D: three simultaneous network depths, with earnings in USD.
@@ -3641,7 +3684,7 @@ function viewHome(main) {
 
   main.innerHTML = `<div class="landing home-workspace">
     ${createMediaShortcuts()}
-    <header class="home-heading"><h1 id="title" tabindex="-1">Trending</h1><div class="home-heading-actions"><a class="btn" href="#/community">View feed</a></div></header>
+    <header class="home-heading"><h1 id="title" tabindex="-1">Trending</h1></header>
     <section class="home-scenes" aria-label="Ready-made scenes"><div class="community-grid home-scene-grid">${cards}</div></section>
     ${REVIEW ? '<div class="home-review"><button class="linkbtn" id="explore-demo" type="button">Explore workspace</button></div>' : ""}
   </div>`;
@@ -4053,7 +4096,7 @@ function communityLikeContinuation(destination) {
 function communityMetricItems(p) {
   const counts = communityCounts(p.id);
   const like = `<button class="community-metric community-like" data-community-metric="likes" data-community-like="${esc(p.id)}" type="button" aria-pressed="${communityLiked(p.id)}" aria-label="${communityLikeLabel(p.id, counts.likes)}">${icon("heart", 18)}<span class="num" data-community-count="likes" aria-hidden="true">${fmt(counts.likes)}</span></button>`;
-  return `${like}${typeof communityCommentsTrigger === "function" ? communityCommentsTrigger(p) : ""}${p.includePrompt && p.prompt ? `<a class="community-metric" data-reuse-prompt href="#/create?scene=${encodeURIComponent(p.id)}" data-community-tooltip="Use prompt" aria-label="Use prompt, ${fmt(counts.promptUses)} ${counts.promptUses === 1 ? "use" : "uses"}">${icon("reuse", 16)}<span class="num" data-community-count="promptUses">${fmt(counts.promptUses)}</span></a>` : ""}`;
+  return `${like}${typeof communityCommentsTrigger === "function" ? communityCommentsTrigger(p) : ""}${countableCommunitySetup(p) ? `<a class="community-metric" data-reuse-prompt href="#/create?scene=${encodeURIComponent(p.id)}" data-community-tooltip="Use prompt" aria-label="Use prompt, ${fmt(counts.promptUses)} ${counts.promptUses === 1 ? "use" : "uses"}">${icon("reuse", 16)}<span class="num" data-community-count="promptUses">${fmt(counts.promptUses)}</span></a>` : ""}`;
 }
 function communityMetrics(p, live = false) {
   return `<p class="community-metrics" data-community-post="${esc(p.id)}" ${live ? 'aria-live="polite" aria-atomic="true"' : ""}>${communityMetricItems(p)}</p>`;
@@ -5677,7 +5720,7 @@ function viewCommunityViewer(main) {
     return null;
   }
   if (!matchingReturn) communityViewerReturn = { path: returnPath, scope: mine ? 'mine' : 'all', sort: settings.sort, seed: settings.seed || '', fromCreate, postId: selected, scrollX: 0, scrollY: null };
-  main.innerHTML = `<div class="page community-page community-viewer" data-community-viewer="true" data-viewer-scene="${esc(selected)}"><div class="community-feed-toolbar community-viewer-toolbar"><a class="btn community-viewer-back" id="viewer-back" href="${esc(returnPath)}">Back</a><h1 class="sr" id="title" tabindex="-1">Feed viewer</h1><span class="sr" id="viewer-position" role="status" aria-live="polite"></span><div class="community-viewer-steps" role="group" aria-label="Browse videos"><button class="btn video-icon-action" id="viewer-previous" type="button" aria-label="Previous video">${communityStepIcon(false)}</button><button class="btn video-icon-action" id="viewer-next" type="button" aria-label="Next video">${communityStepIcon(true)}</button></div><a class="btn" id="viewer-details" href="#/community/${esc(selected)}">Details</a></div><div class="community-viewer-stage">${communityCards(100, mine, true)}</div></div>`;
+  main.innerHTML = `<div class="page community-page community-viewer" data-community-viewer="true" data-viewer-scene="${esc(selected)}"><div class="community-feed-toolbar community-viewer-toolbar"><a class="btn community-viewer-back" id="viewer-back" href="${esc(returnPath)}">Back</a><h1 class="sr" id="title" tabindex="-1">Feed viewer</h1><span class="sr" id="viewer-position" role="status" aria-live="polite"></span><div class="community-viewer-steps" role="group" aria-label="Browse videos"><button class="btn video-icon-action" id="viewer-previous" type="button" aria-label="Previous video">${communityStepIcon(false)}</button><button class="btn video-icon-action" id="viewer-next" type="button" aria-label="Next video">${communityStepIcon(true)}</button></div><a class="btn" id="viewer-use-prompt" data-reuse-prompt href="#/create?scene=${encodeURIComponent(selected)}" ${countableCommunitySetup(posts.find(post => post.id === selected)) ? "" : "hidden"}>Use prompt</a></div><div class="community-viewer-stage">${communityCards(100, mine, true)}</div></div>`;
   return () => initCommunityReels(main);
 }
 window.addEventListener('hashchange', () => {
@@ -5719,7 +5762,11 @@ function initCommunityReels(main) {
     const sceneWidth = card.querySelector('.community-viewer-scene').getBoundingClientRect().width;
     if (sceneWidth > 0) page.style.setProperty('--viewer-unit-width', `${sceneWidth}px`);
     $('#viewer-previous').disabled = index === 0; $('#viewer-next').disabled = index === cards.length - 1;
-    $('#viewer-details').href = '#/community/' + id;
+    const usePrompt = $('#viewer-use-prompt');
+    const reuse = card.querySelector('[data-reuse-prompt]');
+    usePrompt.hidden = !reuse;
+    if (reuse) usePrompt.href = reuse.href;
+    else usePrompt.removeAttribute('href');
     $('#viewer-position').textContent = `${index + 1} of ${cards.length}. ${card.querySelector('h3').textContent}`;
     const href = communityWatchHref(id, mine, fromCreate, settings);
     if (location.hash !== href) history.replaceState(history.state, '', href);
