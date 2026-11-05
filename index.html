@@ -166,9 +166,9 @@ main { display: block; }
 .hero { max-width: 920px; margin: 0 auto; padding: 48px 32px 0; }
 h1.display { font-size: var(--fs-h1); line-height: 1.1; letter-spacing: -0.02em; }
 .lead { color: var(--text-muted); font-size: var(--fs-lead); margin: 8px 0 28px; }
-.page { max-width: 1200px; margin: 0 auto; padding: 40px 32px 72px; }
+.page, .landing { --page-top: 40px; --page-inline: 32px; --page-title-size: 36px; max-width: 1200px; margin: 0 auto; padding: var(--page-top) var(--page-inline) 72px; }
 .page > header { margin-bottom: 28px; }
-.page h1 { font-size: 36px; line-height: 1.15; letter-spacing: -0.015em; }
+.page h1 { font-size: var(--page-title-size); line-height: 1.15; letter-spacing: -0.015em; }
 .page .sub { color: var(--text-muted); margin-top: 6px; max-width: 62ch; }
 
 /* ==========================================================================
@@ -434,8 +434,7 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .gtabs { gap: 20px; }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 12px; }
   .vcard .meta { flex-direction: column; gap: 0; }
-  .page { padding: 24px 16px 48px; }
-  .page h1 { font-size: 30px; }
+  .page, .landing { --page-top: 24px; --page-inline: 16px; --page-title-size: 30px; padding-bottom: 48px; }
   .filters .search { width: 100%; margin-left: 0; order: 5; }
   .hist thead { display: none; }
   .hist, .hist tbody, .hist tr, .hist td { display: block; }
@@ -652,16 +651,6 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
   .analytics-dates button, .analytics-dates .err { grid-column: 1 / -1; }
 }
 
-.landing { max-width: 1360px; margin: auto; padding: 40px 32px 72px; }
-.home-create-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 40px; }
-.home-create-action { display: flex; align-items: center; gap: 16px; min-height: 100px; padding: 24px; border: 1px solid var(--field-line); border-radius: var(--r-sm); background: var(--surface); color: var(--text); font-weight: 600; text-decoration: none; }
-.home-create-action:hover { background: var(--surface-2); }
-.community-prompt-action { gap: 8px; }
-@media (max-width: 760px) {
-  .home-create-actions { gap: 8px; margin-bottom: 28px; }
-  .home-create-kind { display: block; }
-  .home-create-action { flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 12px; padding: 16px 12px; font-size: 14px; }
-}
 .home-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px 24px; margin-bottom: 28px; }
 .home-heading-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
 .home-heading h1 { min-width: 0; font-size: 36px; line-height: 1.15; letter-spacing: -0.015em; text-wrap: balance; }
@@ -674,7 +663,7 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .home-review { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 13px; color: var(--text-muted); }
 .home-review .linkbtn { min-height: 44px; }
 @media (max-width: 760px) {
-  .landing { padding: 24px 16px 40px; }
+  .landing { padding-bottom: 40px; }
   .home-heading { align-items: flex-start; gap: 16px; margin-bottom: 24px; }
   .home-heading h1 { max-width: 12ch; font-size: 34px; }
   .home-create { min-width: 120px; }
@@ -868,7 +857,7 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; opacity: 0.75; } }
 
 .community-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 24px; }
-.community-page:not(.is-reels) { max-width: 1360px; }
+.community-page:not(.is-reels):not(.community-browse) { max-width: 1360px; }
 .community-publication-total { margin-top: 6px; color: var(--text-muted); font-size: 12px; line-height: 1.4; }
 .community-card { min-width: 0; }
 .community-card .thumb { aspect-ratio: 4 / 5; background: var(--cinema-bg); color: var(--cinema-text); }
@@ -905,6 +894,7 @@ dialog .btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-
 .community-use { display: grid; place-items: center; flex: none; width: 44px; height: 44px; margin-top: 16px; padding: 0; }
 .community-prompt-action { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 12px 16px; }
 .community-card-foot { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+.community-card-foot:empty { display: none; }
 .community-card-foot > .community-use, .community-card-foot > .community-privacy { margin-top: 0; }
 .publication-actions { display: flex; align-items: center; gap: 4px; margin-left: auto; }
 .publication-action { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; border: 1px solid var(--line); border-radius: var(--r-sm); color: var(--text-muted); background: transparent; }
@@ -1015,13 +1005,7 @@ body[data-view="video"] .crumb .btn { color: var(--text); text-decoration: none;
 .community-inline-comment strong { font-weight: 600; }
 .community-inline-comments-empty { color: var(--text-muted); font-size: 14px; line-height: 20px; }
 @media (max-width: 760px), (pointer: coarse) and (max-width: 1000px) {
-  .community-inline-comments { --community-inline-comments-height: 148px; margin-top: 12px; padding-top: 0; color: var(--cinema-text); border-color: var(--cinema-line); }
-  .community-inline-comments-heading { margin-bottom: 4px; }
-  .community-inline-comments-heading h4 > span, .community-inline-comments-empty { color: var(--cinema-muted); }
-  .community-inline-comments-open { color: var(--cinema-text); }
-  .community-inline-comments-open:hover { background: var(--cinema-control); }
-  .community-inline-comment { height: auto; min-height: 24px; max-height: 40px; }
-  .community-inline-comment:nth-child(n+3) { display: none; }
+  .community-inline-comments { display: none; }
 }
 /* A viewer's discussion occupies its existing information column. */
 .community-comments-panel { position: fixed; inset: auto; z-index: 92; margin: 0; padding: 12px 16px 16px; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; overflow: hidden; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); color: var(--text); box-shadow: 0 12px 32px var(--shadow); font-family: var(--sans); }
@@ -1325,6 +1309,7 @@ body.community-reels .site-foot { display: none; }
   scroll-snap-type: y mandatory; scrollbar-width: none; touch-action: pan-y pinch-zoom;
   background: var(--cinema-bg); color: var(--cinema-text);
 }
+.community-browse.is-reels > .community-feed { margin-inline: var(--page-inline); }
 .community-page.is-reels .community-feed::-webkit-scrollbar { display: none; }
 .community-page.is-reels .community-card {
   position: relative; height: 100%; min-height: 180px; isolation: isolate;
@@ -1804,6 +1789,47 @@ html { scrollbar-gutter: stable; }
   .create-audio-preview { height: 120px; }
   .create-media-model-state { align-items: flex-start; flex-direction: column; gap: 12px; padding: 16px; }
   .create-media-foot > .go { width: 100%; min-width: 0; }
+}
+
+.prompt-dictation { min-height: 44px; }
+
+.home-create-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 24px; }
+.home-create-action { display: flex; align-items: center; gap: 12px; box-sizing: border-box; min-width: 0; height: 62px; padding: 0 16px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface); color: var(--text); font-weight: 600; text-decoration: none; }
+.home-create-action svg { flex: none; }
+.home-create-action:hover { background: var(--surface-2); }
+.home-create-action:focus-visible { outline-offset: -3px; }
+.community-page.is-reels .community-feed-toolbar:has(> .home-create-actions) { padding: var(--page-top) var(--page-inline) 0; }
+.community-page.is-reels .community-feed-toolbar:has(> .home-create-actions) h1 { font-size: var(--page-title-size); line-height: 1.15; }
+.mobile-create { display: none; }
+@media (max-width: 760px), (pointer: coarse) and (max-width: 1000px) {
+  .home-create-actions { display: none; }
+  .mobile-create {
+    display: block; position: fixed; z-index: 15; width: 100px;
+    inset-inline-end: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, calc(8px + env(safe-area-inset-bottom)));
+  }
+  .mobile-create > summary, .mobile-create-actions a {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    box-sizing: border-box; width: 100%; height: 44px; padding: 0 8px;
+    border: 1px solid var(--field-line); border-radius: var(--r-sm);
+    font-size: 14px; font-weight: 600; white-space: nowrap;
+  }
+  .mobile-create > summary { list-style: none; cursor: pointer; color: var(--on-fill); background: var(--fill); }
+  .mobile-create > summary::-webkit-details-marker { display: none; }
+  .mobile-create > summary > span { font-size: 20px; line-height: 1; }
+  .mobile-create-actions {
+    position: absolute; inset-inline-end: 0; bottom: calc(100% + 8px);
+    width: 100%; display: grid; gap: 8px;
+  }
+  .mobile-create:not([open]) > .mobile-create-actions { display: none; }
+  .mobile-create-actions a { justify-content: flex-start; color: var(--text); background: var(--surface); text-decoration: none; }
+  .mobile-create-actions a:hover { background: var(--surface-2); }
+  .mobile-create-actions svg { flex: none; }
+  .community-browse.is-reels:has(.mobile-create[open]) .community-metrics { visibility: hidden; }
+  .home-workspace, body[data-view="history"] main > .page { padding-bottom: 76px; }
+}
+@media (orientation: landscape) and (max-height: 560px) {
+  .community-page.is-reels .community-feed-toolbar:has(> .home-create-actions) { display: block; }
 }
 
 .prototype-options { margin-top: 16px; color: var(--text-muted); font-size: var(--fs-caption); }
@@ -2851,8 +2877,8 @@ const videoCard = v => `<article class="vcard" data-vid="${v.id}">${thumb(v, tru
 function viewCreate(main) {
   if (!availableModels().length) {
     clearCommunitySetupIntent();
-    main.innerHTML = `<section class="hero"><h1 id="title" tabindex="-1">Create video</h1><p class="lead">Your draft stays here while models are unavailable.</p><div class="composer"><label class="sr" for="prompt">Describe your video</label><div class="prompt-wrap"><textarea id="prompt" rows="4" maxlength="1000">${esc(S.draft.prompt)}</textarea></div><div class="empty" role="status"><h2>No models available right now</h2><p>You can keep writing. Try again to check the catalog.</p><button class="btn" id="retry-models" type="button">Try again</button></div></div></section>`;
-    return () => { restorePrivateVideoReturn(); $("#prompt").oninput = e => { S.draft.prompt = e.target.value; save(); }; $("#retry-models").onclick = () => route(); };
+    main.innerHTML = `<section class="hero"><h1 id="title" tabindex="-1">Create video</h1><p class="lead">Your draft stays here while models are unavailable.</p><div class="composer"><label class="sr" for="prompt">Describe your video</label><div class="prompt-wrap"><textarea id="prompt" rows="4" maxlength="1000">${esc(S.draft.prompt)}</textarea></div><div class="tools">${promptDictationButton()}</div><div class="empty" role="status"><h2>No models available right now</h2><p>You can keep writing. Try again to check the catalog.</p><button class="btn" id="retry-models" type="button">Try again</button></div></div></section>`;
+    return () => { restorePrivateVideoReturn(); $("#prompt").oninput = e => { S.draft.prompt = e.target.value; save(); }; $("#retry-models").onclick = () => route(); return bindPromptDictation($("#prompt"), $("#btn-speak")); };
   }
   const sourceParams = new URLSearchParams(location.hash.split("?")[1] || "");
   const sourceId = sourceParams.get("scene");
@@ -2881,7 +2907,7 @@ function viewCreate(main) {
         <span class="attached" id="attached" hidden></span>
         <button class="chip" type="button" id="btn-image" ${!(selectedModel.inputs || ["text", "image"]).includes("image") ? "disabled" : ""}>${icon("image")}Add image</button>
         <input type="file" id="file" accept="image/*" hidden>
-        <button class="chip" type="button" id="btn-speak" aria-pressed="false">${icon("mic")}<span>Speak</span></button>
+        ${promptDictationButton()}
       </div>
       <p class="err image-compatibility" id="image-compatibility" role="alert" hidden>This model uses text only. Remove your image or choose a model that accepts images.</p>
       ${renderModelPicker(d)}
@@ -2956,15 +2982,7 @@ function initCreate() {
   $("#fail-generation").onchange = e => { S.draft.failDemo = e.target.checked; save(); };
   $("#btn-image").onclick = () => $("#file").click();
   $("#file").onchange = e => { const file = e.target.files[0]; if (!file) return; if (attachedUrl) URL.revokeObjectURL(attachedUrl); attachedUrl = URL.createObjectURL(file); S.draft.imageName = file.name; save(); showAttached(file.name, attachedUrl); };
-  let rec = null;
-  $("#btn-speak").onclick = () => {
-    const b = $("#btn-speak");
-    if (rec) { clearTimeout(rec); finish(); return; }
-    b.setAttribute("aria-pressed", "true"); $("span", b).textContent = "Listening… tap to stop";
-    rec = setTimeout(finish, 3200);
-    function finish() { rec = null; b.setAttribute("aria-pressed", "false"); $("span", b).textContent = "Speak";
-      const add = "A slow dolly shot through a quiet market at dawn, warm light, soft focus."; ta.value = ((ta.value.trim() ? ta.value.trim() + " " : "") + add).slice(0, 1000); ta.dispatchEvent(new Event("input")); toast("Description added."); }
-  };
+  const disposeDictation = bindPromptDictation(ta, $("#btn-speak"));
   f.addEventListener("submit", e => {
     e.preventDefault();
     const d = S.draft, c = cost(d);
@@ -2986,7 +3004,7 @@ function initCreate() {
     const retry = e.target.closest("[data-retry]");
     if (retry) { const v = S.videos.find(x => x.id === Number(retry.dataset.retry)); delete S.draft.scenePresetId; Object.assign(S.draft, { prompt: v.prompt, model: v.model, len: v.len, quality: v.quality, format: v.format, failDemo: false }); normalizeDraft(S.draft); save(); route(); toast("Settings restored. Press Generate video to try again."); }
   });
-  return () => { if (rec) clearTimeout(rec); disposePicker?.(); };
+  return () => { disposeDictation(); disposePicker?.(); };
 }
 function showAttached(name, url) {
   const el = $("#attached"); if (!el) return;
@@ -3012,7 +3030,8 @@ function viewHistory(main, arg) {
   if (params.get("model") && params.get("model") !== "all" && !historyModels.some(([id]) => id === params.get("model"))) historyModels.push([params.get("model"), model(params.get("model")).name]);
   hFilter = historyModels.some(([id]) => id === params.get("model")) ? params.get("model") : "all";
   hQuery = params.get("q") || "";
-  main.innerHTML = `<div class="page"><header><h1 id="title" tabindex="-1">My videos</h1></header>
+  main.innerHTML = `<div class="page">${createMediaShortcuts()}
+  <header><h1 id="title" tabindex="-1">My videos</h1></header>
   ${historyNavigation()}<div class="filters"><label class="sr" for="history-model">Filter by model</label><select class="history-model" id="history-model">${[["all", "All models"], ...historyModels].map(([k, l]) => `<option value="${esc(k)}" ${hFilter === k ? "selected" : ""}>${esc(l)}</option>`).join("")}</select>
   <label class="sr" for="q">Search your prompts</label><input class="search" id="q" type="search" placeholder="Search your prompts" value="${esc(hQuery)}"></div>
   <div id="h-body"></div></div>`;
@@ -3618,7 +3637,7 @@ function viewHome(main) {
   const cards = scenes.map((scene, index) => communityCardMarkup(scene, { featured: true, index })).join("");
 
   main.innerHTML = `<div class="landing home-workspace">
-    <nav class="home-create-actions" aria-label="Create media">${["image", "video", "audio"].map(id => { const type = CREATE_MEDIA_TYPES.find(item => item.id === id); return `<a href="#/${type.route}" class="home-create-action">${icon(type.icon, 24)}<span>Create <span class="home-create-kind">${id}</span></span></a>`; }).join("")}</nav>
+    ${createMediaShortcuts()}
     <header class="home-heading"><h1 id="title" tabindex="-1">Trending</h1><div class="home-heading-actions"><a class="btn" href="#/community">View feed</a></div></header>
     <section class="home-scenes" aria-label="Ready-made scenes"><div class="community-grid home-scene-grid">${cards}</div></section>
     ${REVIEW ? '<div class="home-review"><button class="linkbtn" id="explore-demo" type="button">Explore workspace</button></div>' : ""}
@@ -4031,7 +4050,7 @@ function communityLikeContinuation(destination) {
 function communityMetricItems(p) {
   const counts = communityCounts(p.id);
   const like = `<button class="community-metric community-like" data-community-metric="likes" data-community-like="${esc(p.id)}" type="button" aria-pressed="${communityLiked(p.id)}" aria-label="${communityLikeLabel(p.id, counts.likes)}">${icon("heart", 18)}<span class="num" data-community-count="likes" aria-hidden="true">${fmt(counts.likes)}</span></button>`;
-  return `${like}${typeof communityCommentsTrigger === "function" ? communityCommentsTrigger(p) : ""}${p.includePrompt && p.prompt ? `<a class="community-metric" href="#/community/${encodeURIComponent(p.id)}?prompt=show" data-community-tooltip="View and reuse prompt" aria-label="View and reuse prompt, ${fmt(counts.promptUses)} uses">${icon("reuse", 16)}<span class="num" data-community-count="promptUses">${fmt(counts.promptUses)}</span></a>` : ""}`;
+  return `${like}${typeof communityCommentsTrigger === "function" ? communityCommentsTrigger(p) : ""}${p.includePrompt && p.prompt ? `<a class="community-metric" data-reuse-prompt href="#/create?scene=${encodeURIComponent(p.id)}" data-community-tooltip="Use prompt" aria-label="Use prompt, ${fmt(counts.promptUses)} ${counts.promptUses === 1 ? "use" : "uses"}">${icon("reuse", 16)}<span class="num" data-community-count="promptUses">${fmt(counts.promptUses)}</span></a>` : ""}`;
 }
 function communityMetrics(p, live = false) {
   return `<p class="community-metrics" data-community-post="${esc(p.id)}" ${live ? 'aria-live="polite" aria-atomic="true"' : ""}>${communityMetricItems(p)}</p>`;
@@ -4167,7 +4186,7 @@ function communitySetupContinuation(fallback) {
   return `create?scene=${encodeURIComponent(intent.postId)}&setup=${encodeURIComponent(intent.token)}${intent.preset === "scene" ? "&preset=scene" : ""}`;
 }
 document.addEventListener("click", e => {
-  const link = e.target.closest("a.community-use");
+  const link = e.target.closest("a.community-use, a[data-reuse-prompt]");
   if (!link || e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
   e.preventDefault();
   const params = new URLSearchParams(link.hash.split("?")[1] || "");
@@ -4186,10 +4205,8 @@ document.addEventListener("click", event => {
 });
 /* The same publication card serves Trending, Feed and the explicit viewer. */
 function communityCardMarkup(p, { mine = false, immersive = false, featured = false, index = 0 } = {}) {
-  const preview = recordOfficialExample(p), poster = officialPoster(preview), setupAvailable = isModelAvailable(p.model);
-  const readyScene = featured || (immersive && currentRoute().arg === "watch" && communityViewerReturn?.path?.split("?")[0] === "#/home" && p.official);
-  const actionLabel = readyScene ? "Use scene" : setupAvailable ? "Use setup" : "Use prompt";
-  const promptAction = p.includePrompt && p.prompt ? `<a class="btn community-use${featured ? " home-scene-use" : ""}" href="#/create?scene=${encodeURIComponent(p.id)}${readyScene ? "&preset=scene" : ""}" aria-label="${actionLabel} for ${esc(p.caption)}" data-community-tooltip="${actionLabel}">${icon("setup", 18)}<span class="community-use-label scene-card-action-label">${actionLabel}</span></a>` : `<p class="community-privacy"><button class="community-metric" type="button" data-community-metric="private" aria-label="Private prompt">${icon("lock", 16)}</button></p>`;
+  const preview = recordOfficialExample(p), poster = officialPoster(preview);
+  const promptPrivacy = p.includePrompt && p.prompt ? "" : `<p class="community-privacy"><button class="community-metric" type="button" data-community-metric="private" aria-label="Private prompt">${icon("lock", 16)}</button></p>`;
   const facts = preview ? videoFactsMarkup(immersive && currentRoute().arg === "watch" ? preview : { format: preview.format }) : "";
   const frameClass = sceneFrameNumber(preview?.format || p.format) < 1 ? " home-portrait-card" : " home-wide-card";
   const mediaClass = featured ? ` home-scene-watch${poster ? " is-loading" : " has-no-poster"}` : "";
@@ -4197,7 +4214,7 @@ function communityCardMarkup(p, { mine = false, immersive = false, featured = fa
   const fallback = featured ? `<span class="home-scene-fallback" aria-hidden="true">${icon("play", 24)}<span>Preview unavailable</span></span><span class="skeleton home-poster-loading" aria-hidden="true"></span>` : !poster ? '<span>Preview unavailable</span>' : "";
   return `<article class="community-card scene-card${featured ? ` home-scene-card${frameClass}` : ""}" data-reel-post="${esc(p.id)}" data-source-format="${esc(preview?.format || p.format || "")}"${featured ? ` data-home-scene="${esc(p.id)}"` : ""}${p.official ? ' data-official-example="true"' : ""}>
     <a class="thumb community-watch${mediaClass}${poster ? "" : " community-no-preview"}" href="${communityWatchHref(p.id, mine, currentRoute().name === 'create')}" aria-label="Watch ${esc(p.caption)}">${fallback}${image}${poster && Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}</a>
-    <div class="community-reel-copy${featured ? " home-scene-heading" : ""}">${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview, { withAvatar: false }) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${facts}</p>${featured ? "" : communityMetrics(p)}<div class="community-card-foot">${promptAction}${publicationActionsMarkup(p)}</div>${immersive && currentRoute().arg === 'watch' ? communityCommentPreviewMarkup(p) : ''}</div>
+    <div class="community-reel-copy${featured ? " home-scene-heading" : ""}">${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview, { withAvatar: false }) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${facts}</p>${featured ? "" : communityMetrics(p)}<div class="community-card-foot">${promptPrivacy}${publicationActionsMarkup(p)}</div>${immersive && currentRoute().arg === 'watch' ? communityCommentPreviewMarkup(p) : ''}</div>
   </article>`;
 }
 function communityCards(limit = 6, mine = false, immersive = false) {
@@ -4345,23 +4362,20 @@ function viewCommunity(main, arg) {
     }
     const tabs = [["trending", "Trending"], ["latest", "Latest"], ["shuffle", "Shuffle"], ["mine", "My"]];
     const shuffleHref = communityFeedHref("shuffle", communityNewShuffleSeed());
-    main.innerHTML = `<div class="page community-page"><div class="community-feed-toolbar"><header class="account-heading"><div><h1 id="title" tabindex="-1">${mine ? "Your publications" : "Feed"}</h1>${mine ? `<p class="community-publication-total" id="my-publication-count"><span class="num">${fmt(S.posts.length)}</span> published</p>` : ""}</div><a class="btn primary community-create" href="#/create">Create video</a></header><nav class="community-tabs" aria-label="Feed">${tabs.map(([sort, label]) => `<a href="${sort === "mine" ? "#/community/mine" : sort === "shuffle" ? shuffleHref : communityFeedHref(sort)}" ${(mine ? sort === "mine" : sort === settings.sort) ? 'aria-current="page"' : ""}>${label}</a>`).join("")}</nav></div>${communityCards(100, mine, true)}</div>`;
+    main.innerHTML = `<div class="page community-page community-browse"><div class="community-feed-toolbar">${createMediaShortcuts()}<header class="account-heading"><div><h1 id="title" tabindex="-1">${mine ? "Your publications" : "Feed"}</h1>${mine ? `<p class="community-publication-total" id="my-publication-count"><span class="num">${fmt(S.posts.length)}</span> published</p>` : ""}</div></header><nav class="community-tabs" aria-label="Feed">${tabs.map(([sort, label]) => `<a href="${sort === "mine" ? "#/community/mine" : sort === "shuffle" ? shuffleHref : communityFeedHref(sort)}" ${(mine ? sort === "mine" : sort === settings.sort) ? 'aria-current="page"' : ""}>${label}</a>`).join("")}</nav></div>${communityCards(100, mine, true)}</div>`;
     return () => initCommunityReels(main);
   }
   const p = communityPosts(false).find(x => x.id === arg);
   if (!p) { main.innerHTML = '<div class="page"><h1 id="title" tabindex="-1">Publication unavailable</h1><div class="publication-empty"><p>The creator may have removed this scene.</p><a class="btn" href="#/community">Back</a></div></div>'; return null; }
   const preview = recordOfficialExample(p);
-  const setupAvailable = isModelAvailable(p.model);
-  const promptActionLabel = S.signedIn ? setupAvailable ? "Use this setup" : "Use prompt" : setupAvailable ? "Sign in to use this setup" : "Sign in to use prompt";
   const player = preview ? officialMediaMarkup(preview, { id: "community-example-media", playerId: "community-player", playId: "community-play", errorId: "community-media-error", mediaIdPrefix: "community-example", playerClass: "community-official-player", showMetadata: !p.official }) : previewUnavailableMarkup(p, { id: "community-example-media" });
   main.innerHTML = `<div class="page"><a class="btn" href="#/community">Back</a><div class="community-detail"><div class="community-detail-media">${player}${videoQualityBadgeMarkup(preview)}</div><aside>
     <h1 id="title" tabindex="-1">${esc(p.caption)}</h1>${communityPublisherMarkup(p)}${communityMetrics(p, true)}
     <dl class="facts"><div><dt>Model</dt><dd>${esc(recordModel(p).name)}</dd></div>${preview && Number.isFinite(preview.len) && preview.len > 0 ? `<div><dt>${p.official ? "Length" : "Preview length"}</dt><dd class="num">${preview.len} s</dd></div>` : ""}${preview && (preview.quality || preview.format) ? `<div><dt>Frame</dt><dd>${[preview.quality, preview.format].filter(Boolean).map(esc).join(" · ")}</dd></div>` : ""}</dl>
-    <section class="community-prompt" id="shared-prompt" tabindex="-1"><h2>${p.includePrompt ? p.promptKind === "suggested" ? "Suggested prompt" : "Creator’s prompt" : "A private prompt"}</h2><p>${p.includePrompt ? esc(p.prompt) : "The creator has chosen not to share the prompt."}</p>${p.includePrompt && !setupAvailable ? '<p>Choose an available model in Create.</p>' : ""}${p.includePrompt ? `<button class="btn primary community-prompt-action" id="use-community-prompt" type="button" aria-label="${promptActionLabel}">${icon("setup", 20)}<span>${setupAvailable ? "Use this setup" : "Use prompt"}</span></button>` : '<a class="btn" href="#/create">Create your own scene</a>'}</section>
+    <section class="community-prompt" id="shared-prompt" tabindex="-1"><h2>${p.includePrompt ? p.promptKind === "suggested" ? "Suggested prompt" : "Creator’s prompt" : "A private prompt"}</h2><p>${p.includePrompt ? esc(p.prompt) : "The creator has chosen not to share the prompt."}</p></section>
     ${publicationActionsMarkup(p, { detail: true })}</aside></div></div>`;
   return () => {
     if (new URLSearchParams(location.hash.split("?")[1] || "").get("prompt") === "show") { $("#shared-prompt")?.focus(); }
-    $("#use-community-prompt")?.addEventListener("click", () => beginCommunitySetup(p.id));
     return preview ? initOfficialMedia(preview, { id: "community-example-media", autoplay: true, onPlay: () => recordCommunityView(p.id) }) : null;
   };
 }
@@ -4704,6 +4718,29 @@ const CREATE_MEDIA_TYPES = Object.freeze([
   Object.freeze({ id: 'image', label: 'Image', icon: 'image', route: 'create/image', heading: 'Create image', promptLabel: 'Describe your image', placeholder: 'A ceramic cup on a linen table, soft window light.', empty: 'No image models available', generate: 'Generate image' }),
   Object.freeze({ id: 'audio', label: 'Audio', icon: 'createAudio', route: 'create/audio', heading: 'Create audio', promptLabel: 'Describe your audio', placeholder: 'Gentle rain on a window, with a quiet room in the background.', empty: 'No audio models available', generate: 'Generate audio' }),
 ]);
+function createMediaShortcuts() {
+  const types = ["image", "video", "audio"].map(id => CREATE_MEDIA_TYPES.find(type => type.id === id));
+  const tiles = types.map(type => `<a href="#/${type.route}" class="home-create-action">${icon(type.icon, 24)}<span>Create ${type.id}</span></a>`);
+  const actions = types.map(type => `<a href="#/${type.route}">${icon(type.icon, 18)}<span>${type.label}</span></a>`);
+  return `<nav class="home-create-actions" aria-label="Create media">${tiles.join("")}</nav>
+    <details class="mobile-create">
+      <summary><span aria-hidden="true">+</span> Create</summary>
+      <nav class="mobile-create-actions" aria-label="Create media">${actions.join("")}</nav>
+    </details>`;
+}
+
+document.addEventListener("click", event => {
+  const menu = $(".mobile-create[open]");
+  if (menu && (!menu.contains(event.target) || event.target.closest(".mobile-create-actions a"))) menu.open = false;
+});
+
+document.addEventListener("keydown", event => {
+  const menu = $(".mobile-create[open]");
+  if (event.key !== "Escape" || !menu || !menu.contains(document.activeElement)) return;
+  event.preventDefault();
+  menu.open = false;
+  $("summary", menu).focus();
+});
 const CREATE_MEDIA_DRAFT_STORE = 'aurora-create-media-drafts-v1:';
 const CREATE_IMAGE_FORMATS = Object.freeze(['16:9', '9:16', '1:1']);
 ICONS.createAudio = '<path d="M2 6v4M5 3v10M8 1v14M11 4v8M14 6v4"/>';
@@ -4766,7 +4803,7 @@ function viewCreateMediaType(main, arg) {
   const controls = type.id === 'image'
     ? `<fieldset class="create-media-control"><legend>Canvas</legend><div class="seg">${CREATE_IMAGE_FORMATS.map(format => `<label><input type="radio" name="media-format" value="${format}" ${draft.format === format ? 'checked' : ''}><span class="num">${format}</span></label>`).join('')}</div></fieldset>`
     : `<div class="create-media-control"><label for="create-audio-seconds">Target length</label><div class="create-audio-duration"><input class="num" id="create-audio-seconds" type="number" inputmode="numeric" min="1" max="600" step="1" value="${draft.seconds}"><span>seconds</span></div></div>`;
-  main.innerHTML = `<section class="hero create-media-workspace" aria-labelledby="title">${createMediaNavigation(type.id)}<h1 class="display" id="title" tabindex="-1">${type.heading}</h1><form class="composer create-media-composer" id="create-media-form" novalidate><label class="sr" for="create-media-prompt">${type.promptLabel}</label><div class="prompt-wrap"><textarea id="create-media-prompt" rows="4" maxlength="1000" placeholder="${type.placeholder}">${esc(draft.prompt)}</textarea></div><div class="tools create-media-tools"><span class="count num"><span id="create-media-count">${draft.prompt.length}</span> / 1,000</span><span class="create-media-draft-status" id="create-media-draft-status" role="status"></span></div><div class="create-media-settings">${controls}<div id="create-media-preview">${type.id === 'image' ? createMediaFormatPreview(draft.format) : createAudioTargetPreview(draft.seconds)}</div></div><section class="create-media-model-state" aria-labelledby="create-media-model-title"><h2 id="create-media-model-title">${type.empty}</h2></section><div class="foot create-media-foot"><button class="go" type="submit" id="create-media-generate" aria-describedby="create-media-model-title" disabled>${type.generate}</button></div></form></section>`;
+  main.innerHTML = `<section class="hero create-media-workspace" aria-labelledby="title">${createMediaNavigation(type.id)}<h1 class="display" id="title" tabindex="-1">${type.heading}</h1><form class="composer create-media-composer" id="create-media-form" novalidate><label class="sr" for="create-media-prompt">${type.promptLabel}</label><div class="prompt-wrap"><textarea id="create-media-prompt" rows="4" maxlength="1000" placeholder="${type.placeholder}">${esc(draft.prompt)}</textarea></div><div class="tools create-media-tools">${promptDictationButton()}<span class="count num"><span id="create-media-count">${draft.prompt.length}</span> / 1,000</span><span class="create-media-draft-status" id="create-media-draft-status" role="status"></span></div><div class="create-media-settings">${controls}<div id="create-media-preview">${type.id === 'image' ? createMediaFormatPreview(draft.format) : createAudioTargetPreview(draft.seconds)}</div></div><section class="create-media-model-state" aria-labelledby="create-media-model-title"><h2 id="create-media-model-title">${type.empty}</h2></section><div class="foot create-media-foot"><button class="go" type="submit" id="create-media-generate" aria-describedby="create-media-model-title" disabled>${type.generate}</button></div></form></section>`;
   return () => {
     const controller = new AbortController(), signal = controller.signal;
     const form = $('#create-media-form', main), field = $('#create-media-prompt', main);
@@ -4799,7 +4836,68 @@ function viewCreateMediaType(main, arg) {
       }
     }, { signal });
     form.addEventListener('submit', event => event.preventDefault(), { signal });
-    return () => controller.abort();
+    const disposeDictation = bindPromptDictation(field, $('#btn-speak', main));
+    return () => { disposeDictation(); controller.abort(); };
+  };
+}
+
+function promptDictationButton() {
+  return `<button class="chip prompt-dictation" type="button" id="btn-speak" aria-pressed="false">${icon("mic")}<span>Dictate</span></button>`;
+}
+
+function bindPromptDictation(field, button) {
+  const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const label = $("span", button);
+  let recognition = null;
+
+  function reset() {
+    recognition = null;
+    button.setAttribute("aria-pressed", "false");
+    label.textContent = "Dictate";
+  }
+
+  button.onclick = () => {
+    if (!Recognition) {
+      toast("Dictation is unavailable in this browser. You can type your prompt.");
+      return;
+    }
+    if (recognition) {
+      recognition.stop();
+      return;
+    }
+    const session = new Recognition();
+    recognition = session;
+    session.lang = navigator.language || document.documentElement.lang;
+    session.onresult = event => {
+      if (recognition !== session) return;
+      const transcript = Array.from(event.results).slice(event.resultIndex)
+        .filter(result => result.isFinal).map(result => result[0].transcript.trim()).filter(Boolean).join(" ");
+      if (!transcript) return;
+      const separator = field.value && !/\s$/.test(field.value) ? " " : "";
+      field.value = (field.value + separator + transcript).slice(0, field.maxLength);
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+    };
+    session.onerror = event => {
+      if (recognition !== session) return;
+      reset();
+      toast(event.error === "not-allowed" ? "Allow microphone access to dictate." : "Dictation could not hear you. Try again.");
+    };
+    session.onend = () => { if (recognition === session) reset(); };
+    try {
+      session.start();
+      button.setAttribute("aria-pressed", "true");
+      label.textContent = "Stop dictation";
+    } catch (_) {
+      reset();
+      toast("Dictation could not start. Try again.");
+    }
+  };
+
+  return () => {
+    const session = recognition;
+    recognition = null;
+    session?.abort();
+    button.onclick = null;
   };
 }
 
