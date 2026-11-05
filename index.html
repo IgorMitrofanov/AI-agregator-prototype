@@ -1552,6 +1552,25 @@ body.community-reels .site-foot { display: none; }
 .community-browse.is-reels .community-metric > .ic { width: 16px; height: 16px; }
 
 @media (max-width: 760px), (pointer: coarse) and (max-width: 1000px) {
+  .community-browse.is-reels .community-reel-copy { padding-bottom: max(8px, env(safe-area-inset-bottom)); }
+  .community-browse.is-reels .mobile-create { bottom: max(8px, env(safe-area-inset-bottom)); }
+}
+@media (orientation: landscape) and (max-height: 560px) {
+  /* The hidden creation shelf must not keep its former stacked toolbar. */
+  .community-page.community-browse.is-reels .community-feed-toolbar:has(> .home-create-actions) {
+    display: flex; align-items: center; gap: 16px; padding: 0 16px;
+  }
+  .community-page.community-browse.is-reels .community-feed-toolbar:has(> .home-create-actions) h1 {
+    font-size: 23px; line-height: 1.2;
+  }
+  /* Keep Create beside the media, clear of the right-hand caption/actions. */
+  .community-browse.is-reels .mobile-create { right: calc(40% + 16px); }
+  .community-page.community-browse.is-reels .thumb > .video-duration {
+    top: calc(var(--duration-inset-y, 0px) + 8px); bottom: auto;
+  }
+}
+
+@media (max-width: 760px), (pointer: coarse) and (max-width: 1000px) {
   .community-viewer.is-reels .community-viewer-scene { display: block; position: relative; }
   .community-viewer.is-reels .community-card .thumb { position: absolute; inset: 0; width: 100%; height: 100%; }
   .community-viewer.is-reels .thumb > img,
@@ -1576,6 +1595,62 @@ body.community-reels .site-foot { display: none; }
     width: 18px; height: 18px;
     filter: drop-shadow(0 1px 2px var(--cinema-bg));
   }
+}
+
+/* Duration belongs to the painted media, including contain letterboxing. */
+.community-card .thumb > .video-duration,
+.community-page.is-reels .thumb > .video-duration {
+  top: auto; left: auto;
+  right: calc(var(--duration-inset-x, 0px) + 8px);
+  bottom: calc(var(--duration-inset-y, 0px) + 8px);
+  z-index: 4; display: inline-flex; align-items: center;
+  padding: 3px 6px; border-radius: var(--r-sm);
+  background: var(--cinema-control); color: var(--cinema-text);
+  font-size: 12px; font-weight: 600; line-height: 16px;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+  pointer-events: none;
+}
+@media (max-width: 760px), (pointer: coarse) and (max-width: 1000px) {
+  .community-viewer.is-reels .thumb > .video-duration {
+    top: calc(max(12px, env(safe-area-inset-top)) + 60px);
+    right: max(16px, env(safe-area-inset-right)); bottom: auto;
+  }
+}
+
+/* The selected portrait browse layout keeps the full source behind its caption.
+   Short landscape screens retain the existing side-by-side composition. */
+@media (max-width: 760px) and (orientation: portrait),
+       (pointer: coarse) and (max-width: 1000px) and (orientation: portrait) {
+  .community-browse.is-reels .community-card { display: block; }
+  .community-browse.is-reels .community-card > .thumb {
+    position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto;
+  }
+  .community-browse.is-reels .thumb > img,
+  .community-browse.is-reels .thumbnail-live-preview > video { object-fit: contain; }
+  .community-browse.is-reels .community-reel-copy {
+    position: absolute; inset: auto 0 0; width: 100%; height: auto;
+    padding: 24px 16px max(8px, env(safe-area-inset-bottom));
+    background: linear-gradient(transparent, color-mix(in srgb, var(--cinema-bg) 78%, transparent) 24px, var(--cinema-scrim));
+    pointer-events: none;
+  }
+  .community-browse.is-reels .community-reel-copy::before { display: none; }
+  .community-browse.is-reels :is(.community-author-kind, .community-date-line, .community-publication-date) { display: none; }
+  .community-browse.is-reels .community-author { margin: 0; }
+  .community-browse.is-reels h3 { margin: 0 0 4px; font-size: 16px; line-height: 1.3; }
+  .community-browse.is-reels .community-card-meta { font-size: 11px; line-height: 1.4; }
+  .community-browse.is-reels .community-metrics { max-width: calc(100% - 120px); margin-top: 4px; }
+  .community-browse.is-reels .community-card-foot {
+    position: relative; max-width: calc(100% - 120px); margin-top: 4px; padding-top: 0; gap: 8px;
+  }
+  .community-browse.is-reels .community-privacy { position: static; margin: 0; flex: none; }
+  .community-browse.is-reels .publication-actions { flex: 1 1 auto; width: auto; min-width: 0; gap: 4px; }
+  .community-browse.is-reels .thumb > .video-duration {
+    top: calc(var(--duration-inset-y, 0px) + 8px);
+    right: calc(var(--duration-inset-x, 0px) + 8px); bottom: auto;
+  }
+  .community-browse.is-reels .community-author-name,
+  .community-browse.is-reels h3,
+  .community-browse.is-reels .community-card-meta { text-shadow: 0 1px 3px var(--cinema-bg); }
 }
 
 /* Direction D: three simultaneous network depths, with earnings in USD.
@@ -4259,7 +4334,7 @@ function communityCardMarkup(p, { mine = false, immersive = false, featured = fa
   const image = poster ? `<img src="${esc(poster)}" data-hover-example="${esc(preview.id)}" alt="${esc(preview.alt)}" loading="${index === 0 ? "eager" : "lazy"}" fetchpriority="${index === 0 ? "high" : "auto"}" decoding="async">` : "";
   const fallback = featured ? `<span class="home-scene-fallback" aria-hidden="true">${icon("play", 24)}<span>Preview unavailable</span></span><span class="skeleton home-poster-loading" aria-hidden="true"></span>` : !poster ? '<span>Preview unavailable</span>' : "";
   return `<article class="community-card scene-card${featured ? ` home-scene-card${frameClass}` : ""}" data-reel-post="${esc(p.id)}" data-source-format="${esc(preview?.format || p.format || "")}"${featured ? ` data-home-scene="${esc(p.id)}"` : ""}${p.official ? ' data-official-example="true"' : ""}>
-    <a class="thumb community-watch${mediaClass}${poster ? "" : " community-no-preview"}" href="${communityWatchHref(p.id, mine, currentRoute().name === 'create')}" aria-label="Watch ${esc(p.caption)}">${fallback}${image}${poster && Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num">${tc(preview.len)}</span>` : ""}</a>
+    <a class="thumb community-watch${mediaClass}${poster ? "" : " community-no-preview"}" href="${communityWatchHref(p.id, mine, currentRoute().name === 'create')}" aria-label="Watch ${esc(p.caption)}">${fallback}${image}${poster && Number.isFinite(preview.len) && preview.len > 0 ? `<span class="badge num video-duration">${tc(preview.len)}</span>` : ""}</a>
     <div class="community-reel-copy${featured ? " home-scene-heading" : ""}">${p.official ? communitySourceMarkup(preview) : communityPublisherMarkup(p) + (preview ? communitySourceMarkup(preview, { withAvatar: false }) : "")}<h3><a href="#/community/${p.id}">${esc(p.caption)}</a></h3><p class="community-card-meta"><span>${esc(recordModel(p).name)}</span>${facts}</p>${featured ? "" : communityMetrics(p)}<div class="community-card-foot">${promptPrivacy}${publicationActionsMarkup(p)}</div>${immersive && currentRoute().arg === 'watch' ? communityCommentPreviewMarkup(p) : ''}</div>
   </article>`;
 }
@@ -5283,6 +5358,64 @@ const hoverPreviewController = (() => {
   const boundedLocal = source => Boolean(source?.local && Number.isInteger(source.bytes) && source.bytes > 0 && source.bytes <= 512 * 1024);
   const exampleFor = image => OFFICIAL_EXAMPLES.find(example => example.official && example.id === image?.dataset.hoverExample);
   const hostFor = image => image?.closest(".thumb,#landing-frame,.estimate-visual") || image?.parentElement;
+  // Duration overlays follow the painted frame, including contain letterboxes.
+  // These coordinates never affect the image, preview layer or decoder state.
+  const durationMediaInsets = (image, host, example, video = null) => {
+    const zero = { x: 0, y: 0 }, mediaStyle = getComputedStyle(video || image);
+    if (mediaStyle.objectFit !== 'contain' && mediaStyle.objectFit !== 'scale-down') return zero;
+    const intrinsicWidth = video?.videoWidth || image.naturalWidth || Number(example?.sourceWidth);
+    const intrinsicHeight = video?.videoHeight || image.naturalHeight || Number(example?.sourceHeight);
+    const format = String(example?.format || '').split(':').map(Number);
+    const ratio = intrinsicWidth > 0 && intrinsicHeight > 0 ? intrinsicWidth / intrinsicHeight
+      : format.length === 2 && format.every(n => Number.isFinite(n) && n > 0) ? format[0] / format[1] : 0;
+    if (!ratio || !host.clientWidth || !host.clientHeight) return zero;
+    const imageStyle = getComputedStyle(image), box = image.getBoundingClientRect(), parent = host.getBoundingClientRect();
+    const number = value => parseFloat(value) || 0;
+    const width = Math.max(0, image.clientWidth - number(imageStyle.paddingLeft) - number(imageStyle.paddingRight));
+    const height = Math.max(0, image.clientHeight - number(imageStyle.paddingTop) - number(imageStyle.paddingBottom));
+    if (!width || !height) return zero;
+    let paintedWidth = Math.min(width, height * ratio), paintedHeight = paintedWidth / ratio;
+    if (mediaStyle.objectFit === 'scale-down' && intrinsicWidth > 0 && intrinsicHeight > 0 && paintedWidth > intrinsicWidth) {
+      paintedWidth = intrinsicWidth; paintedHeight = intrinsicHeight;
+    }
+    // Current posters and previews share centred object-position.
+    const left = box.left - parent.left - host.clientLeft + host.scrollLeft + image.clientLeft + number(imageStyle.paddingLeft);
+    const top = box.top - parent.top - host.clientTop + host.scrollTop + image.clientTop + number(imageStyle.paddingTop);
+    return {
+      x: Math.max(0, Math.min(host.clientWidth, host.clientWidth - left - (width + paintedWidth) / 2)),
+      y: Math.max(0, Math.min(host.clientHeight, host.clientHeight - top - (height + paintedHeight) / 2)),
+    };
+  };
+  const durationHosts = new Set(), durationEvents = new AbortController();
+  let durationFrame = 0, durationNeedsScan = false;
+  const queueDurationGeometry = (scan = false) => {
+    if (disposed) return;
+    durationNeedsScan ||= scan;
+    if (durationFrame) return;
+    durationFrame = requestAnimationFrame(() => {
+      durationFrame = 0;
+      if (disposed) return;
+      if (durationNeedsScan) {
+        durationNeedsScan = false;
+        const current = new Set([...document.querySelectorAll('.thumb > .video-duration')].map(badge => badge.parentElement).filter(host => host.querySelector(HOOK)));
+        for (const host of durationHosts) if (!current.has(host)) { durationObserver.unobserve(host); durationHosts.delete(host); }
+        for (const host of current) if (!durationHosts.has(host)) { durationHosts.add(host); durationObserver.observe(host); }
+      }
+      for (const host of durationHosts) {
+        if (!host.isConnected) { durationObserver.unobserve(host); durationHosts.delete(host); continue; }
+        const image = host.querySelector(HOOK);
+        if (!image) continue;
+        const video = active?.host === host && active.layer.classList.contains('is-ready') ? active.video : null;
+        const insets = durationMediaInsets(image, host, exampleFor(image), video);
+        for (const [axis, value] of Object.entries(insets)) {
+          const name = `--duration-inset-${axis}`, next = `${Math.round(value * 100) / 100}px`;
+          if (host.style.getPropertyValue(name) !== next) host.style.setProperty(name, next);
+        }
+      }
+    });
+  };
+  const durationObserver = new ResizeObserver(() => queueDurationGeometry());
+  document.addEventListener('load', event => { if (event.target.matches?.(HOOK)) queueDurationGeometry(); }, { capture: true, signal: durationEvents.signal });
   const mobileImage = image => Boolean(image?.closest(".community-card .thumb,.vcard .thumb")) && !image.closest(".hist");
   const reelImage = image => Boolean(image?.closest('.community-page.is-reels [data-reel-toggle]'));
   const reelsVisible = () => Boolean(document.querySelector('.community-page.is-reels .community-feed'));
@@ -5336,6 +5469,7 @@ const hoverPreviewController = (() => {
     previous.layer.remove();
     if (previous.positionAdded && previous.host.style.position === "relative") previous.host.style.position = previous.originalPosition;
     previous.image.removeAttribute("data-preview-state");
+    queueDurationGeometry();
     reelState(previous.image, false);
     reelBusy(previous.image, false);
   };
@@ -5356,6 +5490,7 @@ const hoverPreviewController = (() => {
     reelState(session.image, true);
     reelBusy(session.image, false);
     session.layer.classList.add("is-ready");
+    queueDurationGeometry();
     if (session.image.matches('[data-home-preview]')) {
       session.layer.style.opacity = session.image.style.opacity;
       session.layer.style.transition = session.image.style.transition || 'opacity 420ms ease-out';
@@ -5637,10 +5772,10 @@ const hoverPreviewController = (() => {
   document.addEventListener("toggle", () => { stop(); armMobile(); }, true);
   document.addEventListener("visibilitychange", () => { stop(); hoverImage = null; armMobile(); });
   window.addEventListener("hashchange", () => { stop(); hoverImage = null; lastReelIndex = -1; reelDirection = 1; armMobile(reelsVisible() ? 0 : SETTLE_DELAY); });
-  window.addEventListener("resize", () => { stop(); hoverImage = null; armMobile(); });
+  window.addEventListener("resize", () => { stop(); hoverImage = null; armMobile(); queueDurationGeometry(); });
   window.addEventListener("pagehide", () => { stop(); hoverImage = null; });
   window.addEventListener("pageshow", () => armMobile());
-  for (const query of [fine, coarse, motion]) query.addEventListener("change", () => { stop(); hoverImage = null; armMobile(); });
+  for (const query of [fine, coarse, motion]) query.addEventListener("change", () => { stop(); hoverImage = null; armMobile(); queueDurationGeometry(); });
   connection?.addEventListener?.("change", () => { stop(); armMobile(); });
   let observedHero = null;
   const heroObserver = new IntersectionObserver(entries => {
@@ -5658,23 +5793,34 @@ const hoverPreviewController = (() => {
     observeHero();
     if (active && (!active.image.isConnected || active.image.dataset.hoverExample !== active.example.id || blocked(active.manual))) release();
     if (warm && (!warm.image.isConnected || warm.image.dataset.hoverExample !== warm.example.id || blocked())) releaseWarm();
-    let changed = false;
+    let changed = false, durationChanged = false, durationScan = false;
     for (const record of records) {
       if (record.type === "attributes") {
+        if (record.attributeName === 'class') {
+          if (record.target.matches('.community-page') || durationHosts.has(record.target)) durationChanged = true;
+          continue;
+        }
+        if (record.target.matches(HOOK)) durationChanged = true;
         if (record.attributeName === 'style' && record.target === active?.image && record.target.matches('[data-home-preview]') && active.layer.classList.contains('is-ready')) {
           active.layer.style.opacity = record.target.style.opacity;
           active.layer.style.transition = record.target.style.transition || 'opacity 420ms ease-out';
         }
         if (record.target.matches(HOOK)) { changed = true; if (record.target === hoverImage && fine.matches) { const image = hoverImage; stop(); hoverImage = null; scheduleHover(image); } }
         else if (record.target.matches("#publish-panel,#destructive-panel,#community-comments-panel,#mobile-navigation,#menu,dialog")) changed = true;
-      } else if ([...record.addedNodes, ...record.removedNodes].some(node => node instanceof Element && (node.matches(HOOK + ",#publish-panel,#destructive-panel,#community-comments-panel,#mobile-navigation,#menu,dialog") || node.querySelector(HOOK + ",#publish-panel,#destructive-panel,#community-comments-panel,#mobile-navigation,#menu,dialog")))) changed = true;
+      } else {
+        const nodes = [...record.addedNodes, ...record.removedNodes].filter(node => node instanceof Element);
+        if (nodes.some(node => node.matches('.thumb,.video-duration,' + HOOK) || node.querySelector('.thumb,.video-duration,' + HOOK))) durationScan = true;
+        if (nodes.some(node => node.matches(HOOK + ",#publish-panel,#destructive-panel,#community-comments-panel,#mobile-navigation,#menu,dialog") || node.querySelector(HOOK + ",#publish-panel,#destructive-panel,#community-comments-panel,#mobile-navigation,#menu,dialog"))) changed = true;
+      }
     }
+    if (durationChanged || durationScan) queueDurationGeometry(durationScan);
     if (changed) armMobile();
   });
-  observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["data-hover-example", "src", "style", "hidden", "open", "aria-expanded"] });
+  observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["data-hover-example", "src", "style", "class", "hidden", "open", "aria-expanded"] });
   observeHero();
+  queueDurationGeometry(true);
   armMobile();
-  return { stop, refresh: () => armMobile(reelsVisible() ? 0 : heroImage() ? 180 : SETTLE_DELAY), toggleReel, destroy() { disposed = true; stop(); observer.disconnect(); heroObserver.disconnect(); } };
+  return { stop, refresh: () => { queueDurationGeometry(true); armMobile(reelsVisible() ? 0 : heroImage() ? 180 : SETTLE_DELAY); }, toggleReel, destroy() { disposed = true; stop(); observer.disconnect(); heroObserver.disconnect(); cancelAnimationFrame(durationFrame); durationObserver.disconnect(); durationEvents.abort(); durationHosts.clear(); } };
 })();
 
 /* Native scroll snap keeps swipe, assistive technology and keyboard scrolling.
@@ -5752,12 +5898,15 @@ function initCommunityReels(main) {
     card.appendChild(scene);
   });
   const abort = new AbortController(), signal = abort.signal;
-  let enabled = false, frame = 0, restoreFrame = 0, entryFrame = 0, settleTimer = null, singleTap = null, lastLikeGesture = null, lastMediaPointerType = '', lastHeight = 0;
+  let enabled = false, frame = 0, reflowFrame = 0, restoreFrame = 0, entryFrame = 0, settleTimer = null, singleTap = null, lastLikeGesture = null, lastMediaPointerType = '', lastHeight = 0;
   const requestedScene = viewer ? page.dataset.viewerScene : params.get('scene');
   const requestedIndex = cards.findIndex(card => card.dataset.reelPost === requestedScene), initial = Math.max(0, requestedIndex);
   const nearest = () => Math.max(0, Math.min(cards.length - 1, Math.round(feed.scrollTop / Math.max(1, feed.clientHeight))));
+  let activeIndex = Math.max(0, Math.min(cards.length - 1, viewer || requestedIndex >= 0 ? initial : communityReelPositions.get(key) || 0));
+  let reflowing = false, viewportWidth = innerWidth, viewportHeight = innerHeight;
+  const sameGeometry = () => lastHeight === feed.clientHeight && viewportWidth === innerWidth && viewportHeight === innerHeight;
   const syncViewer = () => {
-    if (!viewer || !feed.clientHeight) return;
+    if (!viewer || !feed.clientHeight || reflowing || !sameGeometry()) return;
     const index = nearest(), card = cards[index], id = card.dataset.reelPost;
     const sceneWidth = card.querySelector('.community-viewer-scene').getBoundingClientRect().width;
     if (sceneWidth > 0) page.style.setProperty('--viewer-unit-width', `${sceneWidth}px`);
@@ -5773,20 +5922,33 @@ function initCommunityReels(main) {
     communityViewerSnapshot = { path: href, index };
   };
   const resize = () => {
-    if (!enabled || !feed.isConnected) return;
+    frame = 0;
+    if (!enabled || !feed.isConnected) { reflowing = false; return; }
     const selectedIndex = viewer ? cards.findIndex(card => card.dataset.reelPost === new URLSearchParams(location.hash.split('?')[1] || '').get('scene')) : -1;
-    const index = selectedIndex >= 0 ? selectedIndex : lastHeight ? Math.round(feed.scrollTop / lastHeight) : viewer || requestedIndex >= 0 ? initial : communityReelPositions.get(key) || 0;
+    // Scroll anchoring may already have changed scrollTop before resize fires.
+    // Keep the last selection from stable geometry instead of dividing by an old height.
+    activeIndex = selectedIndex >= 0 ? selectedIndex : activeIndex;
+    reflowing = true;
     const top = Math.max(0, feed.getBoundingClientRect().top);
     page.style.setProperty('--community-feed-top', `${top}px`);
     lastHeight = feed.clientHeight;
+    viewportWidth = innerWidth; viewportHeight = innerHeight;
     if (viewer) cards.forEach(card => {
       const scene = card.querySelector('.community-viewer-scene');
       scene.style.setProperty('--scene-unit-width', `${Math.max(0, Math.min(1180, feed.clientWidth - 48, (lastHeight - 24) * Number(scene.dataset.mediaRatio) + 300))}px`);
     });
-    feed.scrollTop = Math.min(cards.length - 1, index) * lastHeight;
-    syncViewer();
+    feed.scrollTop = activeIndex * lastHeight;
+    cancelAnimationFrame(reflowFrame);
+    reflowFrame = requestAnimationFrame(() => {
+      reflowFrame = 0;
+      if (signal.aborted || !feed.isConnected) return;
+      feed.scrollTop = activeIndex * lastHeight;
+      reflowing = false;
+      communityReelPositions.set(key, activeIndex);
+      syncViewer();
+    });
   };
-  const scheduleResize = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(resize); };
+  const scheduleResize = () => { reflowing = true; cancelAnimationFrame(reflowFrame); cancelAnimationFrame(frame); frame = requestAnimationFrame(resize); };
   const update = () => {
     enabled = viewer || communityReelsQuery.matches;
     page.classList.toggle('is-reels', enabled);
@@ -5873,13 +6035,15 @@ function initCommunityReels(main) {
   feed.addEventListener('scroll', () => {
     cancelSingleTap();
     clearLikeFeedback();
-    if (!enabled) return;
-    communityReelPositions.set(key, nearest());
+    if (!enabled || reflowing || !sameGeometry()) return;
+    activeIndex = nearest();
+    communityReelPositions.set(key, activeIndex);
     if (viewer) { clearTimeout(settleTimer); settleTimer = setTimeout(syncViewer, 320); }
   }, { passive: true, signal });
   feed.addEventListener('scrollend', syncViewer, { passive: true, signal });
   const move = change => {
-    const next = Math.max(0, Math.min(cards.length - 1, nearest() + change));
+    const next = Math.max(0, Math.min(cards.length - 1, (reflowing ? activeIndex : nearest()) + change));
+    activeIndex = next;
     feed.scrollTo({ top: next * feed.clientHeight, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   };
   (viewer ? page : feed).addEventListener('keydown', event => {
@@ -5941,7 +6105,11 @@ function initCommunityReels(main) {
     const restore = () => {
       if (signal.aborted) return;
       const card = cards.find(card => card.dataset.reelPost === communityViewerReturn.postId);
-      if (enabled) feed.scrollTop = Math.max(0, cards.indexOf(card)) * feed.clientHeight;
+      if (enabled) {
+        activeIndex = Math.max(0, cards.indexOf(card));
+        communityReelPositions.set(key, activeIndex);
+        feed.scrollTop = activeIndex * feed.clientHeight;
+      }
       if (communityViewerReturn.scrollY === null && !enabled) card?.scrollIntoView({ block: 'center', behavior: 'instant' });
       else window.scrollTo(communityViewerReturn.scrollX, communityViewerReturn.scrollY || 0);
       card?.querySelector(':scope > .thumb')?.focus({ preventScroll: true });
@@ -5949,7 +6117,7 @@ function initCommunityReels(main) {
     restore();
     restoreFrame = requestAnimationFrame(restore);
   }
-  return () => { cancelSingleTap(); clearLikeFeedback(); abort.abort(); observer.disconnect(); clearTimeout(settleTimer); cancelAnimationFrame(frame); cancelAnimationFrame(restoreFrame); cancelAnimationFrame(entryFrame); document.body.classList.remove('community-reels'); };
+  return () => { cancelSingleTap(); clearLikeFeedback(); abort.abort(); observer.disconnect(); clearTimeout(settleTimer); cancelAnimationFrame(frame); cancelAnimationFrame(reflowFrame); cancelAnimationFrame(restoreFrame); cancelAnimationFrame(entryFrame); document.body.classList.remove('community-reels'); };
 }
 
 /* One left navigation for workspace and account; the portrait is a profile shortcut. */
